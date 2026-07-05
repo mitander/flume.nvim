@@ -1,7 +1,39 @@
-local palette = require("flume.palette").colors
 local M = {}
 
--- Helper to convert hex to RGB
+local function get_palette()
+    return require("flume.palette").colors
+end
+
+local function get_plugin_dir()
+    local source = debug.getinfo(1).source:sub(2)
+    if source:sub(1, 1) == "@" then
+        source = source:sub(2)
+    end
+    return vim.fs.dirname(vim.fs.dirname(vim.fs.dirname(source)))
+end
+
+local function write_file_if_changed(path, content)
+    local existing = nil
+    local current = io.open(path, "rb")
+    if current then
+        existing = current:read("*a")
+        current:close()
+    end
+
+    if existing == content then
+        return false
+    end
+
+    vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
+    local file = io.open(path, "wb")
+    if not file then
+        error("Could not write to file: " .. path)
+    end
+    file:write(content)
+    file:close()
+    return true
+end
+
 local function hex_to_rgb(hex)
     hex = hex:gsub("#", "")
     return tonumber(hex:sub(1, 2), 16), tonumber(hex:sub(3, 4), 16), tonumber(hex:sub(5, 6), 16)
@@ -64,6 +96,7 @@ local function hex_to_xterm(hex)
 end
 
 function M.compile_ghostty()
+    local palette = get_palette()
     local template = [[# Flume Theme for Ghostty
 background = %s
 foreground = %s
@@ -115,17 +148,12 @@ palette = 15=%s
         palette.bright_white
     )
 
-    local path = "extras/ghostty/flume"
-    local file = io.open(path, "w")
-    if file then
-        file:write(content)
-        file:close()
-    else
-        error("Could not write to file: " .. path)
-    end
+    local path = get_plugin_dir() .. "/extras/ghostty/flume"
+    return write_file_if_changed(path, content)
 end
 
 function M.compile_tmux()
+    local palette = get_palette()
     local template = [[# Flume tmux color variables.
 
 %%hidden thm_bg="%s"
@@ -159,17 +187,12 @@ function M.compile_tmux()
         palette.bright_red -- thm_orange
     )
 
-    local path = "extras/tmux/colors.conf"
-    local file = io.open(path, "w")
-    if file then
-        file:write(content)
-        file:close()
-    else
-        error("Could not write to file: " .. path)
-    end
+    local path = get_plugin_dir() .. "/extras/tmux/colors.conf"
+    return write_file_if_changed(path, content)
 end
 
 function M.compile_lsd()
+    local palette = get_palette()
     local template = [[# Flume colors for lsd.
 # lsd 1.1.x uses crossterm color values; use xterm-256 approximations
 # instead of #RRGGBB so the theme is actually applied.
@@ -323,24 +346,232 @@ git-status:
         palette.bright_red
     )
 
-    local path = "extras/lsd/colors.yaml"
-    local file = io.open(path, "w")
-    if file then
-        file:write(content)
-        file:close()
-    else
-        error("Could not write to file: " .. path)
-    end
+    local path = get_plugin_dir() .. "/extras/lsd/colors.yaml"
+    return write_file_if_changed(path, content)
 end
 
-function M.compile_all()
-    -- Create extras directories if they don't exist
-    os.execute("mkdir -p extras/ghostty extras/tmux extras/lsd")
+function M.compile_pi()
+    local palette = get_palette()
+    local template = [[{
+  "$schema": "https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/src/modes/interactive/theme/theme-schema.json",
+  "name": "flume",
+  "vars": {
+    "bg": "%s",
+    "surface": "%s",
+    "surfaceAlt": "%s",
+    "elementActive": "%s",
+    "border": "%s",
+    "borderMuted": "%s",
+    "fg": "%s",
+    "softFg": "%s",
+    "muted": "%s",
+    "dim": "%s",
+    "accent": "%s",
+    "blue": "%s",
+    "cyan": "%s",
+    "green": "%s",
+    "yellow": "%s",
+    "red": "%s",
+    "pink": "%s",
+    "magenta": "%s",
+    "property": "%s",
+    "punctuation": "%s",
+    "punctuationMuted": "%s",
+    "diffAddBg": "%s",
+    "diffChangeBg": "%s",
+    "diffDeleteBg": "%s",
+    "warnBg": "%s"
+  },
+  "colors": {
+    "accent": "accent",
+    "border": "border",
+    "borderAccent": "cyan",
+    "borderMuted": "borderMuted",
+    "success": "green",
+    "error": "red",
+    "warning": "yellow",
+    "muted": "muted",
+    "dim": "dim",
+    "text": "fg",
+    "thinkingText": "muted",
 
-    M.compile_ghostty()
-    M.compile_tmux()
-    M.compile_lsd()
-    print("Flume extras successfully compiled!")
+    "selectedBg": "surfaceAlt",
+    "userMessageBg": "surface",
+    "userMessageText": "fg",
+    "customMessageBg": "surface",
+    "customMessageText": "fg",
+    "customMessageLabel": "accent",
+    "toolPendingBg": "surfaceAlt",
+    "toolSuccessBg": "diffAddBg",
+    "toolErrorBg": "diffDeleteBg",
+    "toolTitle": "accent",
+    "toolOutput": "softFg",
+
+    "mdHeading": "property",
+    "mdLink": "blue",
+    "mdLinkUrl": "cyan",
+    "mdCode": "cyan",
+    "mdCodeBlock": "softFg",
+    "mdCodeBlockBorder": "borderMuted",
+    "mdQuote": "muted",
+    "mdQuoteBorder": "borderMuted",
+    "mdHr": "borderMuted",
+    "mdListBullet": "cyan",
+
+    "toolDiffAdded": "green",
+    "toolDiffRemoved": "red",
+    "toolDiffContext": "muted",
+
+    "syntaxComment": "dim",
+    "syntaxKeyword": "magenta",
+    "syntaxFunction": "blue",
+    "syntaxVariable": "fg",
+    "syntaxString": "green",
+    "syntaxNumber": "pink",
+    "syntaxType": "yellow",
+    "syntaxOperator": "cyan",
+    "syntaxPunctuation": "punctuationMuted",
+
+    "thinkingOff": "dim",
+    "thinkingMinimal": "borderMuted",
+    "thinkingLow": "border",
+    "thinkingMedium": "muted",
+    "thinkingHigh": "border",
+    "thinkingXhigh": "magenta",
+
+    "bashMode": "yellow"
+  },
+  "export": {
+    "pageBg": "bg",
+    "cardBg": "surface",
+    "infoBg": "diffChangeBg"
+  }
+}
+]]
+    local content = string.format(
+        template,
+        palette.bg,
+        palette.surface,
+        palette.surface_alt,
+        palette.element_active,
+        palette.border,
+        palette.border_variant,
+        palette.syntax_primary,
+        palette.fg,
+        palette.muted,
+        palette.syntax_comment,
+        palette.accent,
+        palette.syntax_function,
+        palette.cyan,
+        palette.syntax_string,
+        palette.syntax_type,
+        palette.red,
+        palette.syntax_boolean,
+        palette.syntax_keyword,
+        palette.syntax_property,
+        palette.syntax_punctuation,
+        palette.syntax_punctuation_bracket,
+        palette.diff_add_bg,
+        palette.diff_change_bg,
+        palette.diff_delete_bg,
+        palette.warn_bg
+    )
+
+    local path = get_plugin_dir() .. "/extras/pi/flume.json"
+    return write_file_if_changed(path, content)
+end
+
+function M.compile_tuxedo()
+    local palette = get_palette()
+    local template = [[# Flume theme for Tuxedo.
+name = Flume
+bg = %s
+panel = %s
+border = %s
+fg = %s
+dim = %s
+accent = %s
+cursor = %s
+selection = %s
+statusbar = %s
+status_fg = %s
+mode_fg = %s
+mode_bg = %s
+pri_a = %s
+pri_b = %s
+pri_c = %s
+pri_d = %s
+pri_other = %s
+project = %s
+context = %s
+due = %s
+overdue = %s
+today = %s
+done = %s
+selected = %s
+matched = %s
+]]
+    local content = string.format(
+        template,
+        palette.bg,
+        palette.surface,
+        palette.border,
+        palette.syntax_primary,
+        palette.muted,
+        palette.accent,
+        palette.element_active,
+        palette.element_active,
+        palette.surface_alt,
+        palette.text,
+        palette.bg,
+        palette.accent,
+        palette.red,
+        palette.syntax_type,
+        palette.syntax_string,
+        palette.syntax_function,
+        palette.syntax_keyword,
+        palette.cyan,
+        palette.syntax_keyword,
+        palette.syntax_type,
+        palette.red,
+        palette.bright_red,
+        palette.syntax_comment,
+        palette.element_active,
+        palette.syntax_type
+    )
+
+    local path = get_plugin_dir() .. "/extras/tuxedo/flume.toml"
+    return write_file_if_changed(path, content)
+end
+
+function M.compile_all(opts)
+    opts = opts or {}
+    local changed = {
+        ghostty = M.compile_ghostty(),
+        tmux = M.compile_tmux(),
+        lsd = M.compile_lsd(),
+        pi = M.compile_pi(),
+        tuxedo = M.compile_tuxedo(),
+    }
+
+    local count = 0
+    for _, did_change in pairs(changed) do
+        if did_change then
+            count = count + 1
+        end
+    end
+    changed.count = count
+    changed.any = count > 0
+
+    if not opts.quiet then
+        if changed.any then
+            print("Flume extras compiled: " .. count .. " file(s) updated")
+        else
+            print("Flume extras already up to date")
+        end
+    end
+
+    return changed
 end
 
 return M

@@ -1,0 +1,149 @@
+local M = {}
+
+local uv = vim.uv or vim.loop
+
+function M.get_plugin_dir()
+    local source = debug.getinfo(1).source:sub(2)
+    -- Remove '@' if present at the start of source path
+    if source:sub(1, 1) == "@" then
+        source = source:sub(2)
+    end
+    return vim.fs.dirname(vim.fs.dirname(vim.fs.dirname(source)))
+end
+
+local apps = {
+    ghostty = {
+        src = "extras/ghostty/flume",
+        dest = "~/.config/ghostty/themes/flume",
+    },
+    tmux = {
+        src = "extras/tmux/colors.conf",
+        dest = "~/.tmux/flume-theme.conf",
+    },
+    lsd = {
+        src = "extras/lsd/colors.yaml",
+        dest = "~/.config/lsd/colors.yaml",
+    },
+}
+
+function M.get_apps()
+    return apps
+end
+
+function M.install(name)
+    local app = apps[name]
+    if not app then
+        vim.notify("Unknown extra: " .. tostring(name), vim.log.levels.ERROR)
+        return
+    end
+
+    local plugin_dir = M.get_plugin_dir()
+    local src_path = plugin_dir .. "/" .. app.src
+    local dest_path = vim.fn.expand(app.dest)
+
+    local dest_dir = vim.fn.fnamemodify(dest_path, ":h")
+    vim.fn.mkdir(dest_dir, "p")
+
+    if vim.fn.filereadable(src_path) == 0 then
+        vim.notify("Source file not found: " .. src_path .. "\nHave you compiled the extras?", vim.log.levels.ERROR)
+        return
+    end
+
+    local existing_type = vim.fn.getftype(dest_path)
+    if existing_type ~= "" then
+        if existing_type ~= "link" then
+            vim.notify(
+                "Refusing to replace existing file: "
+                    .. dest_path
+                    .. "\n"
+                    .. "Move it aside or link "
+                    .. src_path
+                    .. " manually.",
+                vim.log.levels.ERROR
+            )
+            return
+        end
+
+        local target = uv.fs_readlink(dest_path)
+        if target == src_path or vim.fn.resolve(dest_path) == src_path then
+            vim.notify(name .. " extra is already linked to " .. app.dest, vim.log.levels.INFO)
+            return
+        end
+
+        local ok_unlink, unlink_err = uv.fs_unlink(dest_path)
+        if not ok_unlink then
+            vim.notify(
+                "Failed to replace existing symlink " .. dest_path .. ": " .. tostring(unlink_err),
+                vim.log.levels.ERROR
+            )
+            return
+        end
+    end
+
+    local ok, err = uv.fs_symlink(src_path, dest_path, { dir = false, junction = false })
+    if ok then
+        vim.notify("Successfully linked " .. name .. " extra to " .. app.dest, vim.log.levels.INFO)
+    else
+        vim.notify("Failed to link " .. name .. ": " .. tostring(err), vim.log.levels.ERROR)
+    end
+end
+
+function M.install_all()
+    for name, _ in pairs(apps) do
+        M.install(name)
+    end
+end
+
+function M.show_instructions()
+    local plugin_dir = M.get_plugin_dir()
+    local lines = {
+        "# Flume Theme Extras Configuration",
+        "",
+        "You can link or copy the compiled theme files to their respective application folders.",
+        "",
+        "## Option 1: Link directly from Neovim",
+        "Run the following command to link all configurations:",
+        "```vim",
+        ":FlumeInstallExtras",
+        "```",
+        "Or link a specific application theme:",
+        "```vim",
+        ":FlumeInstallExtras ghostty",
+        ":FlumeInstallExtras tmux",
+        ":FlumeInstallExtras lsd",
+        "```",
+        "",
+        "## Option 2: Copy-paste terminal commands",
+        "Run these commands in your shell to symlink the themes manually:",
+        "",
+    }
+
+    local keys = {}
+    for k in pairs(apps) do
+        table.insert(keys, k)
+    end
+    table.sort(keys)
+
+    for _, name in ipairs(keys) do
+        local app = apps[name]
+        local src_path = plugin_dir .. "/" .. app.src
+        table.insert(lines, "### " .. name:sub(1, 1):upper() .. name:sub(2))
+        table.insert(lines, "```bash")
+        table.insert(lines, "mkdir -p " .. vim.fn.fnamemodify(app.dest, ":h"))
+        table.insert(lines, "ln -sf " .. src_path .. " " .. app.dest)
+        table.insert(lines, "```")
+        table.insert(lines, "")
+    end
+
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+    vim.api.nvim_set_option_value("filetype", "markdown", { buf = buf })
+    vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
+    vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+
+    vim.cmd("vsplit")
+    local win = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_buf(win, buf)
+end
+
+return M

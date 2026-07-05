@@ -47,11 +47,42 @@ open -na Ghostty.app --args \
     --window-save-state=never \
     --quit-after-last-window-closed=true \
     --theme=flume \
-    --font-size=15 \
-    --window-width=100 \
-    --window-height=27 \
+    --font-size=19 \
+    --window-width=102 \
+    --window-height=28 \
     --window-padding-x=16 \
     --window-padding-y=16 \
     --working-directory="$WORKING_DIR" \
     --env="PATH=$TERMINAL_PATH" \
     --input="path:$INPUT_FILE"
+
+# Give Ghostty and Neovim time to load LSP/Tree-sitter and draw
+echo "Waiting for window to render..."
+sleep 2.5
+
+# Bring Ghostty to front and capture its window ID
+WINDOW_ID=$(osascript -e '
+tell application "Ghostty"
+    activate
+    try
+        return id of window 1
+    on error
+        return ""
+    end try
+end tell')
+
+if [ -n "$WINDOW_ID" ]; then
+    echo "Capturing Ghostty window ID $WINDOW_ID..."
+    # Capture only the window, omitting the drop shadow (-o)
+    screencapture -o -l "$WINDOW_ID" screenshot.png
+    echo "Screenshot successfully saved to screenshot.png"
+    
+    # Gracefully close the Ghostty window
+    osascript -e '
+    tell application "Ghostty"
+        close window 1
+    end tell'
+else
+    echo "Error: Could not retrieve Ghostty window ID. Please take screenshot manually."
+fi
+

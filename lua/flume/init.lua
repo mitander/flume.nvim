@@ -32,6 +32,98 @@ local function is_type_like_namespace(text)
     return text:match("^[A-Z]") ~= nil
 end
 
+local function clear_flume_modules()
+    for name in pairs(package.loaded) do
+        if name == "flume" or name:match("^flume%.") then
+            package.loaded[name] = nil
+        end
+    end
+end
+
+local function system_success(cmd)
+    vim.fn.system(cmd)
+    return vim.v.shell_error == 0
+end
+
+local function reload_ghostty()
+    if vim.fn.has("macunix") == 0 or vim.fn.executable("osascript") == 0 then
+        vim.notify("Flume compiled Ghostty theme. Reload Ghostty manually.", vim.log.levels.INFO)
+        return
+    end
+
+    local script = [[
+tell application "System Events"
+    if exists process "Ghostty" then
+        tell process "Ghostty"
+            set frontmost to true
+            keystroke "," using {command down, shift down}
+        end tell
+    end if
+end tell
+]]
+    if not system_success({ "osascript", "-e", script }) then
+        vim.notify("Flume compiled Ghostty theme, but Ghostty config reload failed", vim.log.levels.WARN)
+    end
+end
+
+local function reload_tmux()
+    if vim.fn.executable("tmux") == 0 or not system_success({ "tmux", "has-session" }) then
+        return
+    end
+
+    local paths = {
+        vim.fn.expand("~/.config/tmux/tmux.conf"),
+        vim.fn.expand("~/.tmux.conf"),
+        vim.fn.expand("~/.tmux/flume-theme.conf"),
+    }
+
+    local sourced = false
+    for _, path in ipairs(paths) do
+        if vim.fn.filereadable(path) == 1 then
+            sourced = system_success({ "tmux", "source-file", path }) or sourced
+        end
+    end
+
+    if not sourced then
+        vim.notify("Flume compiled Tmux theme, but no tmux config file was found to source", vim.log.levels.WARN)
+    end
+end
+
+local function reload_external_apps(changed)
+    if not changed or not changed.any then
+        return
+    end
+    if changed.ghostty then
+        reload_ghostty()
+    end
+    if changed.tmux then
+        reload_tmux()
+    end
+end
+
+function M.reload()
+    local config = vim.deepcopy(M.config)
+    package.loaded["flume.palette"] = nil
+    package.loaded["flume.compiler"] = nil
+
+    local ok, changed = pcall(function()
+        return require("flume.compiler").compile_all({ quiet = true })
+    end)
+    if not ok then
+        vim.notify("Flume extras compile failed: " .. tostring(changed), vim.log.levels.ERROR)
+        changed = nil
+    end
+
+    clear_flume_modules()
+    require("flume").setup(config)
+
+    reload_external_apps(changed)
+    local extras_status = changed
+            and (changed.any and (changed.count .. " extra file(s) updated") or "extras unchanged")
+        or "extras not updated"
+    vim.notify("Flume theme reloaded (" .. extras_status .. ")", vim.log.levels.INFO)
+end
+
 function M.setup(opts)
     M.config = vim.tbl_deep_extend("force", M.config, opts or {})
     M.load()
@@ -53,9 +145,9 @@ function M.load()
 
     hi("Normal", { fg = c.syntax_primary, bg = c.bg })
     hi("NormalNC", { fg = c.syntax_primary, bg = c.bg })
-    hi("NormalFloat", { fg = c.fg, bg = c.surface })
+    hi("NormalFloat", { fg = c.fg, bg = c.bg })
     hi("FloatBorder", { fg = c.border, bg = c.bg })
-    hi("FloatTitle", { fg = c.text, bg = c.surface, bold = true })
+    hi("FloatTitle", { fg = c.text, bg = c.bg, bold = true })
     hi("WinSeparator", { fg = c.border_variant, bg = c.bg })
     hi("SignColumn", { bg = c.bg })
     hi("FoldColumn", { fg = c.placeholder, bg = c.bg })
@@ -75,7 +167,7 @@ function M.load()
     hi("CurSearch", { fg = c.terminal_bg, bg = c.yellow })
     hi("MatchParen", { fg = c.text, bg = c.element_active, bold = true })
     hi("Directory", { fg = c.accent })
-    hi("Title", { fg = c.syntax_property })
+    hi("Title", { fg = c.accent, bold = true })
 
     hi("StatusLine", { fg = c.text, bg = c.surface_alt })
     hi("StatusLineNC", { fg = c.muted, bg = c.surface })
@@ -130,7 +222,7 @@ function M.load()
     hi("Conditional", { fg = c.syntax_keyword })
     hi("Repeat", { fg = c.syntax_keyword })
     hi("Label", { fg = c.accent })
-    hi("Operator", { fg = c.syntax_type })
+    hi("Operator", { fg = c.syntax_punctuation })
     hi("Keyword", { fg = c.syntax_keyword })
     hi("Exception", { fg = c.syntax_keyword })
     hi("PreProc", { fg = c.syntax_keyword })
@@ -144,7 +236,7 @@ function M.load()
     hi("Typedef", { fg = c.syntax_type })
     hi("Special", { fg = c.syntax_special })
     hi("SpecialChar", { fg = c.syntax_special })
-    hi("Tag", { fg = c.accent })
+    hi("Tag", { fg = c.syntax_constant })
     hi("Delimiter", { fg = c.syntax_punctuation })
     hi("SpecialComment", { fg = c.syntax_doc_comment })
     hi("Debug", { fg = c.red })
@@ -180,20 +272,20 @@ function M.load()
     hi("@namespace", { fg = c.syntax_primary })
     hi("@number", { fg = c.syntax_boolean })
     hi("@number.float", { fg = c.syntax_boolean })
-    hi("@operator", { fg = c.syntax_type })
+    hi("@operator", { fg = c.syntax_punctuation })
     hi("@property", { fg = c.syntax_property })
     hi("@field", { fg = c.syntax_property })
     hi("@punctuation.bracket", { fg = c.syntax_punctuation_bracket })
-    hi("@punctuation.delimiter", { fg = c.syntax_punctuation_bracket })
+    hi("@punctuation.delimiter", { fg = c.syntax_punctuation })
     hi("@punctuation.special", { fg = c.syntax_punctuation_special })
     hi("@string", { fg = c.syntax_string })
     hi("@string.documentation", { fg = c.syntax_string })
     hi("@string.escape", { fg = c.syntax_doc_comment })
     hi("@string.regexp", { fg = c.syntax_boolean })
     hi("@string.special", { fg = c.syntax_boolean })
-    hi("@tag", { fg = c.accent })
+    hi("@tag", { fg = c.syntax_constant })
     hi("@tag.attribute", { fg = c.syntax_attribute })
-    hi("@tag.delimiter", { fg = c.syntax_property })
+    hi("@tag.delimiter", { fg = c.syntax_punctuation_special })
     hi("@text.literal", { fg = c.syntax_string })
     hi("@type", { fg = c.syntax_type })
     hi("@type.builtin", { fg = c.syntax_type })
@@ -202,11 +294,11 @@ function M.load()
     hi("@variable.member", { fg = c.syntax_property })
     hi("@variable.readonly", { link = "Constant" })
     hi("@variable.member.readonly", { link = "Constant" })
-    hi("@markup.heading", { fg = c.syntax_property, bold = true })
+    hi("@markup.heading", { fg = c.accent, bold = true })
     hi("@markup.italic", { italic = true })
     hi("@markup.link", { fg = c.syntax_function, italic = true })
     hi("@markup.link.url", { fg = c.syntax_type, underline = true })
-    hi("@markup.list", { fg = c.syntax_property })
+    hi("@markup.list", { fg = c.accent })
     hi("@markup.raw", { fg = c.syntax_string })
 
     hi("GitSignsAdd", { fg = c.green, bg = c.bg })
@@ -229,8 +321,8 @@ function M.load()
     hi("@lsp.type.method", { link = "Function" })
     hi("@lsp.type.builtin", { fg = c.syntax_special })
     hi("@lsp.type.builtin.zig", { fg = c.syntax_special })
-    -- Avoid flattening dotted Zig namespaces like render.camera into one color;
-    -- Tree-sitter can still color the member side via @variable.member.
+    -- Avoid flattening dotted Zig namespaces like render.camera into one color,
+    -- tree-sitter can still color the member side via @variable.member.
     hi("@lsp.type.namespace", {})
     hi("@lsp.type.parameter", { fg = c.syntax_primary })
     hi("@lsp.type.property", { fg = c.syntax_property })
@@ -292,16 +384,27 @@ function M.load()
         vim.g["terminal_color_" .. (i - 1)] = color
     end
 
-    local function reload()
-        package.loaded["flume"] = nil
-        package.loaded["flume.palette"] = nil
-        vim.cmd("colorscheme flume")
-        vim.notify("Flume theme reloaded!", vim.log.levels.INFO)
-    end
-
-    vim.api.nvim_create_user_command("FlumeReload", reload, {})
+    vim.api.nvim_create_user_command("FlumeReload", M.reload, {})
     vim.api.nvim_create_user_command("FlumeCompile", function()
+        package.loaded["flume.palette"] = nil
+        package.loaded["flume.compiler"] = nil
         require("flume.compiler").compile_all()
+    end, {})
+    vim.api.nvim_create_user_command("FlumeInstallExtras", function(opts)
+        local arg = opts.args
+        if arg == "" then
+            require("flume.extras").install_all()
+        else
+            require("flume.extras").install(arg)
+        end
+    end, {
+        nargs = "?",
+        complete = function()
+            return vim.tbl_keys(require("flume.extras").get_apps())
+        end,
+    })
+    vim.api.nvim_create_user_command("FlumeExtras", function()
+        require("flume.extras").show_instructions()
     end, {})
 end
 

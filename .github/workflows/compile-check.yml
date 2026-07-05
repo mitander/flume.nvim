@@ -1,0 +1,30 @@
+name: Compile Check
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  check-extras:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: stable
+
+      - name: Compile Extras
+        run: nvim --headless --cmd "set rtp+=." -c "lua require('flume.compiler').compile_all()" -c "qa"
+
+      - name: Verify Compiled Extras are Up to Date
+        run: |
+          if ! git diff --exit-code; then
+            echo "::error::Compiled theme files under extras/ are out of date! Please run :FlumeCompile locally in Neovim and commit the changes."
+            exit 1
+          fi

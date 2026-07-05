@@ -4,20 +4,20 @@
 
 name:
   file: 253            # syntax_primary (#d6d2e8)
-  dir: 73             # accent (#6aa6bc)
+  dir: 73             # accent (#73a6b6)
   pipe: 116            # cyan (#8fc9d2)
   symlink: 116         # cyan (#8fc9d2)
   block-device: 140    # magenta (#b99add)
   char-device: 140     # magenta (#b99add)
   socket: 140          # magenta (#b99add)
-  special: 175         # syntax_special (#df8fbc)
+  special: 74         # syntax_special (#6fa8dc)
 
 user: 103              # muted (#8a85a6)
 group: 60             # placeholder/comment (#67627d)
 
 permission:
   read: 103            # muted (#8a85a6)
-  write: 180           # yellow (#d8b574)
+  write: 179           # yellow (#dfb86b)
   exec: 144            # green (#a3be8c)
   exec-sticky: 140     # magenta (#b99add)
   no-access: 60       # placeholder/comment (#67627d)
@@ -34,7 +34,7 @@ size:
   none: 60            # placeholder/comment (#67627d)
   small: 103           # muted (#8a85a6)
   medium: 116          # cyan (#8fc9d2)
-  large: 180           # yellow (#d8b574)
+  large: 179           # yellow (#dfb86b)
 
 inode:
   valid: 103           # muted (#8a85a6)
@@ -44,7 +44,7 @@ links:
   valid: 103           # muted (#8a85a6)
   invalid: 60         # placeholder/comment (#67627d)
 
-tree-edge: 238         # border_variant (#3a3650)
+tree-edge: 237         # border_variant (#343949)
 
 git-status:
   default: 60         # placeholder/comment (#67627d)
@@ -52,8 +52,8 @@ git-status:
   ignored: 60         # placeholder/comment (#67627d)
   new-in-index: 144    # green (#a3be8c)
   new-in-workdir: 144  # green (#a3be8c)
-  typechange: 180      # yellow (#d8b574)
-  deleted: 174         # red (#d47b86)
-  renamed: 73         # accent (#6aa6bc)
-  modified: 180        # yellow (#d8b574)
-  conflicted: 174      # bright_red (#e18a94)
+  typechange: 179      # yellow (#dfb86b)
+  deleted: 210         # red (#ee7583)
+  renamed: 73         # accent (#73a6b6)
+  modified: 179        # yellow (#dfb86b)
+  conflicted: 210      # bright_red (#f48a94)
