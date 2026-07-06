@@ -29,7 +29,7 @@ M.colors = {
     red = "#ee7583",
     bright_red = "#f48a94",
     dim_red = "#b65360",
-    green = "#a3be8c",
+    green = "#a4b78a",
     bright_green = "#b0ca9b",
     dim_green = "#71885f",
     yellow = "#dfb86b",
@@ -63,7 +63,7 @@ M.colors = {
     syntax_punctuation = "#9899b5",
     syntax_punctuation_bracket = "#8c8ea6",
     syntax_punctuation_special = "#a65a55",
-    syntax_string = "#a3be8c",
+    syntax_string = "#a4b78a",
     syntax_special = "#73a6b6",
     predictive = "#536178",
 
