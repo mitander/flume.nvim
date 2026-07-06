@@ -10,7 +10,7 @@ name:
   block-device: 140    # magenta (#b99add)
   char-device: 140     # magenta (#b99add)
   socket: 140          # magenta (#b99add)
-  special: 74         # syntax_special (#6fa8dc)
+  special: 73         # syntax_special (#73a6b6)
 
 user: 103              # muted (#8a85a6)
 group: 60             # placeholder/comment (#67627d)

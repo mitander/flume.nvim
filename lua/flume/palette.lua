@@ -49,12 +49,12 @@ M.colors = {
     dim_white = "#8a85a6",
 
     -- Syntax Highlighting
-    syntax_attribute = "#6fa8dc",
+    syntax_attribute = "#73a6b6",
     syntax_boolean = "#ea9f8c",
     syntax_comment = "#8d8a9e",
     syntax_doc_comment = "#81889a",
     syntax_constant = "#73a6b6",
-    syntax_function = "#6fa8dc",
+    syntax_function = "#73a6b6",
     syntax_type = "#dfb86b",
     syntax_keyword = "#b391d6",
     syntax_namespace = "#bd707b",
@@ -64,7 +64,7 @@ M.colors = {
     syntax_punctuation_bracket = "#8c8ea6",
     syntax_punctuation_special = "#a65a55",
     syntax_string = "#a3be8c",
-    syntax_special = "#6fa8dc",
+    syntax_special = "#73a6b6",
     predictive = "#536178",
 
     -- Git Diff / Diagnostics
