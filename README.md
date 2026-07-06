@@ -1,23 +1,39 @@
 <div align="center">
-  <!-- <h1>flume.nvim</h1> -->
-  <p>
-    <strong>Organic synthesis. Soft contrast. Resonant code.</strong><br>
-    Inspired by One Dark, Duskfox and Kanagawa.
-  </p>
+  <h1>flume.nvim</h1>
+  <p><strong>Organic synthesis. Soft contrast. Resonant code.</strong></p>
+  <p>A single dark Neovim theme tuned for quiet focus and warm spectral edges.</p>
 </div>
-
-<br>
 
 <div align="center">
   <img src="screenshot.png" alt="Flume Theme Screenshot" width="1200">
-  <p><sub>Screenshot uses the <a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a> font.</sub></p>
+  <p><sub>Screenshot uses <a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a>.</sub></p>
 </div>
+
+<div align="center">
+<table>
+<tr>
+<td bgcolor="#232136" width="84">&nbsp;</td>
+<td bgcolor="#73a6b6" width="84">&nbsp;</td>
+<td bgcolor="#a4b78a" width="84">&nbsp;</td>
+<td bgcolor="#dfb86b" width="84">&nbsp;</td>
+<td bgcolor="#ea9f8c" width="84">&nbsp;</td>
+<td bgcolor="#b391d6" width="84">&nbsp;</td>
+<td bgcolor="#d6d2e8" width="84">&nbsp;</td>
+</tr>
+</table>
+</div>
+
+## Features
+
+- One intentional dark palette: one current, one source of truth.
+- Tree-sitter, LSP semantic tokens, diagnostics, GitSigns, Oil, and terminal ANSI colors.
+- Palette overrides, highlight overrides, transparent mode, optional terminal colors, and simple style hooks.
+- Generated extras for Ghostty, Tmux, LSD, Pi, and Tuxedo.
+- Reload/compile commands for theme work without leaving Neovim.
 
 ## Install
 
-### nvim
-
-#### Install from GitHub
+Requires Neovim 0.9+.
 
 Using `lazy.nvim`:
 
@@ -26,10 +42,7 @@ Using `lazy.nvim`:
     "mitander/flume.nvim",
     lazy = false,
     priority = 1000,
-    opts = {
-        transparent = false, -- Set to true to disable background colors
-        overrides = {},      -- Map highlight groups or colors to override
-    },
+    opts = {},
     config = function(_, opts)
         require("flume").setup(opts)
         vim.cmd.colorscheme("flume")
@@ -37,7 +50,7 @@ Using `lazy.nvim`:
 }
 ```
 
-#### Local clone
+Local development:
 
 ```lua
 {
@@ -45,9 +58,7 @@ Using `lazy.nvim`:
     dir = "~/path/to/flume.nvim",
     lazy = false,
     priority = 1000,
-    opts = {
-        transparent = false,
-    },
+    opts = {},
     config = function(_, opts)
         require("flume").setup(opts)
         vim.cmd.colorscheme("flume")
@@ -55,97 +66,115 @@ Using `lazy.nvim`:
 }
 ```
 
-### Hacking on the theme
+## Configure
 
-If you are modifying colors or configurations:
-
-1. Edit colors in `lua/flume/palette.lua` (the palette is the source of truth).
-2. Reload theme with `:FlumeReload`. This recompiles generated extras, reloads nvim, reloads Ghostty with its macOS `Cmd+Shift+,` action when the generated Ghostty theme changed, and sources Tmux config when the generated Tmux theme changed. If you use a mapping like `<leader>rl`, map it to the command or public API:
+Defaults:
 
 ```lua
-vim.keymap.set("n", "<leader>rl", "<cmd>FlumeReload<cr>")
--- or: vim.keymap.set("n", "<leader>rl", require("flume").reload)
+require("flume").setup({
+    transparent = false,
+    terminal_colors = true,
+    overrides = {},
+    highlights = {},
+    styles = {
+        comments = {},
+        functions = {},
+        keywords = {},
+        strings = {},
+        types = {},
+        variables = {},
+    },
+})
 ```
 
-3. Compile the theme for other applications without reloading anything with `:FlumeCompile`, or from a shell:
+| Option | Purpose |
+| --- | --- |
+| `transparent` | Removes editor background colors. |
+| `terminal_colors` | Sets `vim.g.terminal_color_0` through `15`. |
+| `overrides` | Overrides palette keys from `lua/flume/palette.lua`. |
+| `highlights` | Overrides highlight groups; values may be tables or `function(colors)`. |
+| `styles` | Adds style attrs to broad syntax roles, e.g. `{ italic = true }`. |
+
+Example:
+
+```lua
+require("flume").setup({
+    transparent = true,
+    styles = {
+        comments = { italic = true },
+        keywords = { bold = true },
+    },
+    overrides = {
+        accent = "#73a6b6",
+    },
+    highlights = {
+        FloatBorder = function(c)
+            return { fg = c.accent, bg = c.bg }
+        end,
+    },
+})
+```
+
+## Integrations
+
+| Surface | Status |
+| --- | --- |
+| Neovim UI, diagnostics, terminal ANSI | Built in |
+| Tree-sitter captures | Built in |
+| LSP semantic tokens | Built in |
+| GitSigns | Built in |
+| Oil | Built in |
+| Ghostty, Tmux, LSD, Pi, Tuxedo | Generated extras |
+
+## Commands
+
+| Command | Does |
+| --- | --- |
+| `:FlumeReload` | Recompile extras, reload the theme, and refresh Ghostty/Tmux when possible. |
+| `:FlumeCompile` | Regenerate files in `extras/`. |
+| `:FlumeInstallExtras [ghostty\|tmux\|lsd]` | Symlink supported extras into standard config paths. |
+| `:FlumeExtras` | Open copy-paste install commands for extras. |
+| `:checkhealth flume` | Check terminal color support and generated extra files. |
+
+## Extras
+
+Generated files live in `extras/` and are checked in:
+
+```text
+extras/ghostty/flume
+extras/tmux/colors.conf
+extras/lsd/colors.yaml
+extras/pi/flume.json
+extras/tuxedo/flume.toml
+```
+
+Install supported extras from Neovim:
+
+```vim
+:FlumeInstallExtras
+:FlumeInstallExtras ghostty
+```
+
+## Hacking
+
+Palette source:
+
+```text
+lua/flume/palette.lua
+```
+
+Compile everything:
 
 ```sh
 nvim --headless --cmd "set rtp+=." -c "lua require('flume.compiler').compile_all()" -c "qa"
 ```
 
-4. Launch the Ghostty screenshot environment: `./scripts/screenshot-window.sh`.
+Refresh the header screenshot:
 
-## Extras
-
-Flume includes theme configurations for other applications (such as Ghostty, Tmux, and LSD) under the `extras/` directory. Since these are pre-compiled and checked into the repository, you do not need to compile them unless you are customizing the color palette.
-
-### Setup using nvim commands
-
-You can automatically symlink the extras to their standard locations from within nvim. Existing regular files are never overwritten; move them aside first if you want Flume to manage that path.
-
-To symlink **all** extras:
-
-```vim
-:FlumeInstallExtras
-```
-
-To symlink a **specific** extra:
-
-```vim
-:FlumeInstallExtras ghostty
-:FlumeInstallExtras tmux
-:FlumeInstallExtras lsd
-```
-
-To view the exact, expanded terminal commands tailored to your machine's installation path:
-
-```vim
-:FlumeExtras
-```
-
-### Manual setup (terminal)
-
-If you prefer to configure manually, you can run the following terminal commands. Replace `<flume_dir>` with the path where the plugin is installed (typically `~/.local/share/nvim/lazy/flume.nvim` on macOS/Linux if using `lazy.nvim`).
-
-#### Ghostty
-
-Symlink the theme into Ghostty's theme directory:
-
-```bash
-mkdir -p ~/.config/ghostty/themes
-ln -sf <flume_dir>/extras/ghostty/flume ~/.config/ghostty/themes/flume
-```
-
-Then enable it in `~/.config/ghostty/config`:
-
-```ini
-theme = flume
-```
-
-#### Tmux
-
-Symlink the tmux theme variables into your tmux config directory:
-
-```bash
-mkdir -p ~/.tmux
-ln -sf <flume_dir>/extras/tmux/colors.conf ~/.tmux/flume-theme.conf
-```
-
-Then source it in your `~/.tmux.conf`:
-
-```tmux
-source-file "~/.tmux/flume-theme.conf"
-```
-
-#### LSD
-
-Symlink the lsd theme variables:
-
-```bash
-mkdir -p ~/.config/lsd
-ln -sf <flume_dir>/extras/lsd/colors.yaml ~/.config/lsd/colors.yaml
+```sh
+./scripts/screenshot-window.sh
 ```
 
 ## License
 
-Licensed under the MIT License. See [LICENSE](LICENSE) for details.
+MIT. See [LICENSE](LICENSE).

@@ -3,11 +3,25 @@ local M = {}
 M.colors = {}
 M.config = {
     transparent = false,
+    terminal_colors = true,
     overrides = {},
+    highlights = {},
+    styles = {
+        comments = {},
+        functions = {},
+        keywords = {},
+        strings = {},
+        types = {},
+        variables = {},
+    },
 }
 
 local function hi(group, opts)
     vim.api.nvim_set_hl(0, group, opts)
+end
+
+local function styled(opts, style)
+    return vim.tbl_deep_extend("force", opts, style or {})
 end
 
 local function get_zig_namespace_token_context(ev)
@@ -129,10 +143,15 @@ function M.setup(opts)
     M.load()
 end
 
-function M.load()
+function M.get_colors()
     local palette = require("flume.palette")
-    M.colors = vim.tbl_deep_extend("force", {}, palette.colors, M.config.overrides or {})
+    return vim.tbl_deep_extend("force", {}, palette.colors, M.config.overrides or {})
+end
+
+function M.load()
+    M.colors = M.get_colors()
     local c = M.colors
+    local styles = M.config.styles or {}
 
     if M.config.transparent then
         c.bg = "NONE"
@@ -209,31 +228,31 @@ function M.load()
     hi("DiagnosticUnderlineInfo", { sp = c.accent, undercurl = true })
     hi("DiagnosticUnderlineHint", { sp = c.hint, undercurl = true })
 
-    hi("Comment", { fg = c.syntax_comment })
+    hi("Comment", styled({ fg = c.syntax_comment }, styles.comments))
     hi("Constant", { fg = c.syntax_constant })
-    hi("String", { fg = c.syntax_string })
-    hi("Character", { fg = c.syntax_string })
+    hi("String", styled({ fg = c.syntax_string }, styles.strings))
+    hi("Character", styled({ fg = c.syntax_string }, styles.strings))
     hi("Number", { fg = c.syntax_boolean })
     hi("Boolean", { fg = c.syntax_boolean })
     hi("Float", { fg = c.syntax_boolean })
-    hi("Identifier", { fg = c.syntax_primary })
-    hi("Function", { fg = c.syntax_function })
-    hi("Statement", { fg = c.syntax_keyword })
-    hi("Conditional", { fg = c.syntax_keyword })
-    hi("Repeat", { fg = c.syntax_keyword })
+    hi("Identifier", styled({ fg = c.syntax_primary }, styles.variables))
+    hi("Function", styled({ fg = c.syntax_function }, styles.functions))
+    hi("Statement", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("Conditional", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("Repeat", styled({ fg = c.syntax_keyword }, styles.keywords))
     hi("Label", { fg = c.accent })
     hi("Operator", { fg = c.syntax_punctuation })
-    hi("Keyword", { fg = c.syntax_keyword })
-    hi("Exception", { fg = c.syntax_keyword })
-    hi("PreProc", { fg = c.syntax_keyword })
-    hi("Include", { fg = c.syntax_keyword })
-    hi("Define", { fg = c.syntax_keyword })
-    hi("Macro", { fg = c.syntax_keyword })
-    hi("PreCondit", { fg = c.syntax_keyword })
-    hi("Type", { fg = c.syntax_type })
-    hi("StorageClass", { fg = c.syntax_keyword })
-    hi("Structure", { fg = c.syntax_type })
-    hi("Typedef", { fg = c.syntax_type })
+    hi("Keyword", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("Exception", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("PreProc", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("Include", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("Define", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("Macro", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("PreCondit", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("Type", styled({ fg = c.syntax_type }, styles.types))
+    hi("StorageClass", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("Structure", styled({ fg = c.syntax_type }, styles.types))
+    hi("Typedef", styled({ fg = c.syntax_type }, styles.types))
     hi("Special", { fg = c.syntax_special })
     hi("SpecialChar", { fg = c.syntax_special })
     hi("Tag", { fg = c.syntax_constant })
@@ -251,22 +270,22 @@ function M.load()
 
     hi("@attribute", { fg = c.syntax_attribute })
     hi("@boolean", { fg = c.syntax_boolean })
-    hi("@character", { fg = c.syntax_string })
-    hi("@comment", { fg = c.syntax_comment })
-    hi("@comment.documentation", { fg = c.syntax_doc_comment })
+    hi("@character", styled({ fg = c.syntax_string }, styles.strings))
+    hi("@comment", styled({ fg = c.syntax_comment }, styles.comments))
+    hi("@comment.documentation", styled({ fg = c.syntax_doc_comment }, styles.comments))
     hi("@constant", { fg = c.syntax_constant })
     hi("@constant.builtin", { fg = c.syntax_boolean })
-    hi("@constructor", { fg = c.syntax_function })
-    hi("@function", { fg = c.syntax_function })
-    hi("@function.builtin", { fg = c.syntax_function })
-    hi("@function.call", { fg = c.syntax_function })
-    hi("@function.macro", { fg = c.syntax_function })
-    hi("@keyword", { fg = c.syntax_keyword })
-    hi("@keyword.conditional", { fg = c.syntax_keyword })
-    hi("@keyword.function", { fg = c.syntax_keyword })
-    hi("@keyword.operator", { fg = c.syntax_keyword })
-    hi("@keyword.repeat", { fg = c.syntax_keyword })
-    hi("@keyword.return", { fg = c.syntax_keyword })
+    hi("@constructor", styled({ fg = c.syntax_function }, styles.functions))
+    hi("@function", styled({ fg = c.syntax_function }, styles.functions))
+    hi("@function.builtin", styled({ fg = c.syntax_function }, styles.functions))
+    hi("@function.call", styled({ fg = c.syntax_function }, styles.functions))
+    hi("@function.macro", styled({ fg = c.syntax_function }, styles.functions))
+    hi("@keyword", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("@keyword.conditional", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("@keyword.function", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("@keyword.operator", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("@keyword.repeat", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("@keyword.return", styled({ fg = c.syntax_keyword }, styles.keywords))
     hi("@label", { fg = c.accent })
     hi("@module", { fg = c.syntax_primary })
     hi("@namespace", { fg = c.syntax_primary })
@@ -278,18 +297,18 @@ function M.load()
     hi("@punctuation.bracket", { fg = c.syntax_punctuation_bracket })
     hi("@punctuation.delimiter", { fg = c.syntax_punctuation })
     hi("@punctuation.special", { fg = c.syntax_punctuation_special })
-    hi("@string", { fg = c.syntax_string })
-    hi("@string.documentation", { fg = c.syntax_string })
+    hi("@string", styled({ fg = c.syntax_string }, styles.strings))
+    hi("@string.documentation", styled({ fg = c.syntax_string }, styles.strings))
     hi("@string.escape", { fg = c.syntax_doc_comment })
     hi("@string.regexp", { fg = c.syntax_boolean })
     hi("@string.special", { fg = c.syntax_boolean })
     hi("@tag", { fg = c.syntax_constant })
     hi("@tag.attribute", { fg = c.syntax_attribute })
     hi("@tag.delimiter", { fg = c.syntax_punctuation_special })
-    hi("@text.literal", { fg = c.syntax_string })
-    hi("@type", { fg = c.syntax_type })
-    hi("@type.builtin", { fg = c.syntax_type })
-    hi("@variable", { fg = c.syntax_primary })
+    hi("@text.literal", styled({ fg = c.syntax_string }, styles.strings))
+    hi("@type", styled({ fg = c.syntax_type }, styles.types))
+    hi("@type.builtin", styled({ fg = c.syntax_type }, styles.types))
+    hi("@variable", styled({ fg = c.syntax_primary }, styles.variables))
     hi("@variable.builtin", { fg = c.syntax_boolean })
     hi("@variable.member", { fg = c.syntax_property })
     hi("@variable.readonly", { link = "Constant" })
@@ -324,19 +343,19 @@ function M.load()
     -- Avoid flattening dotted Zig namespaces like render.camera into one color,
     -- tree-sitter can still color the member side via @variable.member.
     hi("@lsp.type.namespace", {})
-    hi("@lsp.type.parameter", { fg = c.syntax_primary })
+    hi("@lsp.type.parameter", styled({ fg = c.syntax_primary }, styles.variables))
     hi("@lsp.type.property", { fg = c.syntax_property })
     hi("@lsp.type.property.readonly", { link = "Constant" })
     hi("@lsp.type.struct", { link = "Type" })
     hi("@lsp.type.type", { link = "Type" })
     hi("@lsp.type.typeParameter", { link = "Type" })
-    hi("@lsp.type.variable", { fg = c.syntax_primary })
+    hi("@lsp.type.variable", styled({ fg = c.syntax_primary }, styles.variables))
     hi("@lsp.type.variable.readonly", { link = "Constant" })
     hi("@lsp.typemod.variable.static", { link = "Constant" })
     hi("@lsp.typemod.property.static", { link = "Constant" })
 
     hi("FlumeDottedNamespace", { fg = c.syntax_namespace })
-    hi("FlumeTypeLikeNamespace", { fg = c.syntax_type })
+    hi("FlumeTypeLikeNamespace", styled({ fg = c.syntax_type }, styles.types))
 
     local semantic_tokens = vim.lsp and vim.lsp.semantic_tokens
     if semantic_tokens and semantic_tokens.highlight_token then
@@ -361,27 +380,38 @@ function M.load()
         end
     end
 
-    local terminal_colors = {
-        c.black,
-        c.red,
-        c.green,
-        c.yellow,
-        c.blue,
-        c.magenta,
-        c.cyan,
-        c.white,
-        c.bright_black,
-        c.bright_red,
-        c.bright_green,
-        c.bright_yellow,
-        c.bright_blue,
-        c.bright_magenta,
-        c.bright_cyan,
-        c.bright_white,
-    }
+    if M.config.terminal_colors then
+        local terminal_colors = {
+            c.black,
+            c.red,
+            c.green,
+            c.yellow,
+            c.blue,
+            c.magenta,
+            c.cyan,
+            c.white,
+            c.bright_black,
+            c.bright_red,
+            c.bright_green,
+            c.bright_yellow,
+            c.bright_blue,
+            c.bright_magenta,
+            c.bright_cyan,
+            c.bright_white,
+        }
 
-    for i, color in ipairs(terminal_colors) do
-        vim.g["terminal_color_" .. (i - 1)] = color
+        for i, color in ipairs(terminal_colors) do
+            vim.g["terminal_color_" .. (i - 1)] = color
+        end
+    end
+
+    for group, opts in pairs(M.config.highlights or {}) do
+        if type(opts) == "function" then
+            opts = opts(c)
+        end
+        if opts then
+            hi(group, opts)
+        end
     end
 
     vim.api.nvim_create_user_command("FlumeReload", M.reload, {})
