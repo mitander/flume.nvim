@@ -1,7 +1,11 @@
 <div align="center">
-  <h1>flume.nvim</h1>
+  <h1>FLUME</h1>
   <p><strong>Organic synthesis. Soft contrast. Resonant code.</strong></p>
-  <p>A single dark Neovim theme tuned for quiet focus and warm spectral edges.</p>
+  <p>A moody nvim theme tuned for quiet focus and warm spectral edges.</p>
+</div>
+
+<div align="center">
+  <img src="assets/palette.svg" alt="Flume palette swatches" width="600">
 </div>
 
 <div align="center">
@@ -9,24 +13,10 @@
   <p><sub>Screenshot uses <a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a>.</sub></p>
 </div>
 
-<div align="center">
-<table>
-<tr>
-<td bgcolor="#232136" width="84">&nbsp;</td>
-<td bgcolor="#73a6b6" width="84">&nbsp;</td>
-<td bgcolor="#a4b78a" width="84">&nbsp;</td>
-<td bgcolor="#dfb86b" width="84">&nbsp;</td>
-<td bgcolor="#ea9f8c" width="84">&nbsp;</td>
-<td bgcolor="#b391d6" width="84">&nbsp;</td>
-<td bgcolor="#d6d2e8" width="84">&nbsp;</td>
-</tr>
-</table>
-</div>
-
 ## Features
 
 - One intentional dark palette: one current, one source of truth.
-- Tree-sitter, LSP semantic tokens, diagnostics, GitSigns, Oil, and terminal ANSI colors.
+- Tree-sitter, LSP semantic tokens, diagnostics, common plugin highlights, and terminal ANSI colors.
 - Palette overrides, highlight overrides, transparent mode, optional terminal colors, and simple style hooks.
 - Generated extras for Ghostty, Tmux, LSD, Pi, and Tuxedo.
 - Reload/compile commands for theme work without leaving Neovim.
@@ -87,13 +77,13 @@ require("flume").setup({
 })
 ```
 
-| Option | Purpose |
-| --- | --- |
-| `transparent` | Removes editor background colors. |
-| `terminal_colors` | Sets `vim.g.terminal_color_0` through `15`. |
-| `overrides` | Overrides palette keys from `lua/flume/palette.lua`. |
-| `highlights` | Overrides highlight groups; values may be tables or `function(colors)`. |
-| `styles` | Adds style attrs to broad syntax roles, e.g. `{ italic = true }`. |
+| Option            | Purpose                                                                 |
+| ----------------- | ----------------------------------------------------------------------- |
+| `transparent`     | Removes editor background colors.                                       |
+| `terminal_colors` | Sets `vim.g.terminal_color_0` through `15`.                             |
+| `overrides`       | Overrides palette keys from `lua/flume/palette.lua`.                    |
+| `highlights`      | Overrides highlight groups; values may be tables or `function(colors)`. |
+| `styles`          | Adds style attrs to broad syntax roles, e.g. `{ italic = true }`.       |
 
 Example:
 
@@ -117,24 +107,27 @@ require("flume").setup({
 
 ## Integrations
 
-| Surface | Status |
-| --- | --- |
-| Neovim UI, diagnostics, terminal ANSI | Built in |
-| Tree-sitter captures | Built in |
-| LSP semantic tokens | Built in |
-| GitSigns | Built in |
-| Oil | Built in |
-| Ghostty, Tmux, LSD, Pi, Tuxedo | Generated extras |
+| Surface                               | Status           |
+| ------------------------------------- | ---------------- |
+| Neovim UI, diagnostics, terminal ANSI | Built in         |
+| Tree-sitter captures                  | Built in         |
+| LSP semantic tokens                   | Built in         |
+| GitSigns, Oil                         | Built in         |
+| Telescope, cmp, lazy.nvim, WhichKey   | Built in         |
+| Mason, Trouble, Neo-tree, nvim-tree   | Built in         |
+| Snacks picker                         | Built in         |
+| Ghostty, Tmux, LSD, Pi, Tuxedo        | Generated extras |
 
 ## Commands
 
-| Command | Does |
-| --- | --- |
-| `:FlumeReload` | Recompile extras, reload the theme, and refresh Ghostty/Tmux when possible. |
-| `:FlumeCompile` | Regenerate files in `extras/`. |
-| `:FlumeInstallExtras [ghostty\|tmux\|lsd]` | Symlink supported extras into standard config paths. |
-| `:FlumeExtras` | Open copy-paste install commands for extras. |
-| `:checkhealth flume` | Check terminal color support and generated extra files. |
+| Command                                    | Does                                                                        |
+| ------------------------------------------ | --------------------------------------------------------------------------- |
+| `:FlumeReload`                             | Recompile extras, reload the theme, and refresh Ghostty/Tmux when possible. |
+| `:FlumeCompile`                            | Regenerate files in `extras/`.                                              |
+| `:FlumeInstallExtras [ghostty\|tmux\|lsd]` | Symlink supported extras into standard config paths.                        |
+| `:FlumeExtras`                             | Open copy-paste install commands for extras.                                |
+| `:checkhealth flume`                       | Check terminal color support and generated extra files.                     |
+| `:help flume`                              | Open the reference docs.                                                    |
 
 ## Extras
 

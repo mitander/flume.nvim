@@ -1,0 +1,141 @@
+*flume.nvim* *flume*            Organic synthesis. Soft contrast. Resonant code.
+
+==============================================================================
+CONTENTS                                                        *flume-contents*
+
+1. Setup ......................... |flume-setup|
+2. Options ....................... |flume-options|
+3. Commands ...................... |flume-commands|
+4. Extras ........................ |flume-extras|
+5. Highlights .................... |flume-highlights|
+
+==============================================================================
+SETUP                                                              *flume-setup*
+
+Install with your plugin manager, then load the theme:
+>
+    require("flume").setup({})
+    vim.cmd.colorscheme("flume")
+<
+
+Flume targets Neovim 0.9+ and expects 'termguicolors' for accurate color.
+
+==============================================================================
+OPTIONS                                                          *flume-options*
+
+Defaults:
+>
+    require("flume").setup({
+        transparent = false,
+        terminal_colors = true,
+        overrides = {},
+        highlights = {},
+        styles = {
+            comments = {},
+            functions = {},
+            keywords = {},
+            strings = {},
+            types = {},
+            variables = {},
+        },
+    })
+<
+
+transparent ~
+    Removes editor background colors.
+
+terminal_colors ~
+    Sets g:terminal_color_0 through g:terminal_color_15 from the palette.
+
+overrides ~
+    Overrides palette keys from lua/flume/palette.lua.
+>
+    require("flume").setup({
+        overrides = {
+            accent = "#73a6b6",
+        },
+    })
+<
+
+highlights ~
+    Overrides highlight groups after Flume has applied its defaults. Values may
+    be highlight tables or functions that receive the resolved color table.
+>
+    require("flume").setup({
+        highlights = {
+            FloatBorder = function(c)
+                return { fg = c.accent, bg = c.bg }
+            end,
+        },
+    })
+<
+
+styles ~
+    Adds style attributes to broad syntax roles.
+>
+    require("flume").setup({
+        styles = {
+            comments = { italic = true },
+            keywords = { bold = true },
+        },
+    })
+<
+
+==============================================================================
+COMMANDS                                                        *flume-commands*
+
+:FlumeReload                                                      *:FlumeReload*
+    Recompile extras, reload the theme, and refresh Ghostty/Tmux when possible.
+
+:FlumeCompile                                                    *:FlumeCompile*
+    Regenerate files under extras/.
+
+:FlumeInstallExtras [app]                                  *:FlumeInstallExtras*
+    Symlink generated extras into standard config locations. Supported app
+    arguments: ghostty, tmux, lsd. With no argument, installs all supported
+    extras.
+
+:FlumeExtras                                                      *:FlumeExtras*
+    Open copy-paste install commands for extras.
+
+:checkhealth flume                                           *flume-checkhealth*
+    Check terminal color support and generated extra files.
+
+==============================================================================
+EXTRAS                                                            *flume-extras*
+
+Generated files are checked into extras/:
+
+    extras/ghostty/flume
+    extras/tmux/colors.conf
+    extras/lsd/colors.yaml
+    extras/pi/flume.json
+    extras/tuxedo/flume.toml
+
+If you edit lua/flume/palette.lua, run :FlumeCompile or :FlumeReload.
+
+==============================================================================
+HIGHLIGHTS                                                    *flume-highlights*
+
+Built in surfaces:
+
+    Neovim UI
+    diagnostics
+    Tree-sitter captures
+    LSP semantic tokens
+    GitSigns
+    Oil
+    Telescope
+    nvim-cmp
+    lazy.nvim
+    WhichKey
+    Mason
+    Trouble
+    Neo-tree
+    nvim-tree
+    Snacks picker
+
+Use `:highlight GroupName` to inspect a group and `highlights` to override it.
+
+==============================================================================
+vim:tw=78:ts=8:noet:ft=help:norl:

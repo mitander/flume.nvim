@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="108" viewBox="0 0 840 108" role="img" aria-labelledby="title desc">
+  <title id="title">Flume palette</title>
+  <desc id="desc">Seven Flume color swatches: deep violet, blue smoke, olive green, resin yellow, warm peach, spectral violet, and pale text.</desc>
+  <rect x="1" y="1" width="838" height="106" rx="22" fill="#17151f" stroke="#343949"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" text-anchor="middle">
+    <g transform="translate(24 18)">
+      <rect width="108" height="54" rx="14" fill="#232136"/>
+      <text x="54" y="82" fill="#8a85a6">#232136</text>
+    </g>
+    <g transform="translate(138 18)">
+      <rect width="108" height="54" rx="14" fill="#73a6b6"/>
+      <text x="54" y="82" fill="#8a85a6">#73a6b6</text>
+    </g>
+    <g transform="translate(252 18)">
+      <rect width="108" height="54" rx="14" fill="#a4b78a"/>
+      <text x="54" y="82" fill="#8a85a6">#a4b78a</text>
+    </g>
+    <g transform="translate(366 18)">
+      <rect width="108" height="54" rx="14" fill="#dfb86b"/>
+      <text x="54" y="82" fill="#8a85a6">#dfb86b</text>
+    </g>
+    <g transform="translate(480 18)">
+      <rect width="108" height="54" rx="14" fill="#ea9f8c"/>
+      <text x="54" y="82" fill="#8a85a6">#ea9f8c</text>
+    </g>
+    <g transform="translate(594 18)">
+      <rect width="108" height="54" rx="14" fill="#b391d6"/>
+      <text x="54" y="82" fill="#8a85a6">#b391d6</text>
+    </g>
+    <g transform="translate(708 18)">
+      <rect width="108" height="54" rx="14" fill="#d6d2e8"/>
+      <text x="54" y="82" fill="#8a85a6">#d6d2e8</text>
+    </g>
+  </g>
+</svg>

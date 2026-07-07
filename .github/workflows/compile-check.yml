@@ -19,6 +19,33 @@ jobs:
           neovim: true
           version: stable
 
+      - name: Smoke Test Theme
+        run: |
+          nvim --headless --cmd "set rtp+=." -c "colorscheme flume" -c "qa"
+          nvim --headless --cmd "set rtp+=." -c "checkhealth flume" -c "qa"
+          nvim --headless --cmd "set rtp+=." -c "helptags doc" -c "help flume" -c "qa"
+          rm -f doc/tags
+
+      - name: Smoke Test Configuration
+        run: |
+          cat > /tmp/flume-smoke.lua <<'LUA'
+          vim.g.terminal_color_0 = nil
+          require("flume").setup({
+            terminal_colors = false,
+            styles = {
+              comments = { italic = true },
+              keywords = { bold = true },
+            },
+            highlights = {
+              FloatBorder = function(c)
+                return { fg = c.accent, bg = c.bg }
+              end,
+            },
+          })
+          assert(vim.g.terminal_color_0 == nil)
+          LUA
+          nvim --headless --cmd "set rtp+=." -c "luafile /tmp/flume-smoke.lua" -c "qa"
+
       - name: Compile Extras
         run: nvim --headless --cmd "set rtp+=." -c "lua require('flume.compiler').compile_all()" -c "qa"
 

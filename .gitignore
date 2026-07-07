@@ -2,3 +2,4 @@ screenshot_raw.png
 Session.vim
 __pycache__/
 *.py[cod]
+doc/tags
