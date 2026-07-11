@@ -82,7 +82,7 @@ require("flume").setup({
 | `transparent`     | Removes editor background colors.                                       |
 | `terminal_colors` | Sets `vim.g.terminal_color_0` through `15`.                             |
 | `overrides`       | Overrides palette keys from `lua/flume/palette.lua`.                    |
-| `highlights`      | Overrides highlight groups; values may be tables or `function(colors)`. |
+| `highlights`      | Overrides exact, case-sensitive Neovim highlight groups.                |
 | `styles`          | Adds style attrs to broad syntax roles, e.g. `{ italic = true }`.       |
 
 Example:
@@ -99,12 +99,21 @@ require("flume").setup({
         syntax_namespace = "#f48a94", -- @module and legacy @namespace
     },
     highlights = {
+        Comment = { fg = "#333333", bg = "#ffff00" },
+        ["@comment"] = function(c)
+            return { fg = c.syntax_comment, italic = true }
+        end,
         FloatBorder = function(c)
             return { fg = c.accent, bg = c.bg }
         end,
     },
 })
 ```
+
+Highlight names must match Neovim's groups exactly: use `Comment` (singular,
+capitalized) for the legacy syntax group and `["@comment"]` for the Tree-sitter
+capture. `comments` is a `styles` role, not a highlight group. Use
+`:Inspect` at the cursor or `:highlight GroupName` to find the active group.
 
 Semantic palette keys include `syntax_attribute`, `syntax_boolean`,
 `syntax_comment`, `syntax_doc_comment`, `syntax_constant`, `syntax_function`,

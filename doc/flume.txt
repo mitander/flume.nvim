@@ -64,17 +64,26 @@ overrides ~
     syntax_punctuation_special, syntax_string, and syntax_special.
 
 highlights ~
-    Overrides highlight groups after Flume has applied its defaults. Values may
-    be highlight tables or functions that receive the resolved color table.
+    Overrides exact, case-sensitive Neovim highlight groups after Flume has
+    applied its defaults. Values may be highlight tables or functions that
+    receive the resolved color table.
 >
     require("flume").setup({
         highlights = {
+            Comment = { fg = "#333333", bg = "#ffff00" },
+            ["@comment"] = function(c)
+                return { fg = c.syntax_comment, italic = true }
+            end,
             FloatBorder = function(c)
                 return { fg = c.accent, bg = c.bg }
             end,
         },
     })
 <
+    Use Comment (singular, capitalized) for the legacy syntax group and
+    ["@comment"] for the Tree-sitter capture. "comments" is a styles role, not
+    a highlight group. Use :Inspect or :highlight GroupName to find the active
+    group.
 
 styles ~
     Adds style attributes to broad syntax roles.
