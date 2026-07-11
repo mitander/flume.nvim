@@ -114,6 +114,7 @@ launch_ghostty() {
         --window-padding-y=16 \
         --working-directory="$example_dir" \
         --env="PATH=$terminal_path" \
+        --env="NVIM_SCREENSHOT_MODE=1" \
         --input="path:$INPUT_FILE" &
     GHOSTTY_PID=$!
     disown "$GHOSTTY_PID" 2>/dev/null || true
