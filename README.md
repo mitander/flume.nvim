@@ -96,6 +96,7 @@ require("flume").setup({
     },
     overrides = {
         accent = "#73a6b6",
+        syntax_namespace = "#f48a94", -- @module and legacy @namespace
     },
     highlights = {
         FloatBorder = function(c)
@@ -104,6 +105,14 @@ require("flume").setup({
     },
 })
 ```
+
+Semantic palette keys include `syntax_attribute`, `syntax_boolean`,
+`syntax_comment`, `syntax_doc_comment`, `syntax_constant`, `syntax_function`,
+`syntax_type`, `syntax_keyword`, `syntax_namespace`, `syntax_primary`,
+`syntax_property`, `syntax_punctuation`, `syntax_punctuation_bracket`,
+`syntax_punctuation_special`, `syntax_string`, and `syntax_special`. More
+specific Tree-sitter captures inherit these roles; `highlights` remains
+available when you want to override an individual capture directly.
 
 ## Integrations
 

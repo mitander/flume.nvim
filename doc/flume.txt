@@ -53,9 +53,15 @@ overrides ~
     require("flume").setup({
         overrides = {
             accent = "#73a6b6",
+            syntax_namespace = "#f48a94", -- @module and @namespace
         },
     })
 <
+    Semantic syntax keys include syntax_attribute, syntax_boolean,
+    syntax_comment, syntax_doc_comment, syntax_constant, syntax_function,
+    syntax_type, syntax_keyword, syntax_namespace, syntax_primary,
+    syntax_property, syntax_punctuation, syntax_punctuation_bracket,
+    syntax_punctuation_special, syntax_string, and syntax_special.
 
 highlights ~
     Overrides highlight groups after Flume has applied its defaults. Values may
