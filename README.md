@@ -2,7 +2,7 @@
   <h1>FLUME</h1>
   <p><strong>Organic synthesis. Soft contrast. Resonant code.</strong></p>
   <p>A dark Neovim theme tuned for quiet focus and warm spectral edges.</p>
-  <img src="assets/palette.svg" alt="Flume palette" width="600">
+  <img src="assets/palette.svg" alt="Flume color palette in a glitch collage" width="560">
   <img src="screenshot.png" alt="Flume theme in Neovim" width="1200">
   <p><sub>JetBrains Mono · Zig</sub></p>
 </div>
@@ -12,9 +12,8 @@
 Flume takes its name and visual direction from [Jonathan Zawada's artwork for
 Flume](https://zawada.art/work/flume-skin/): organic forms meeting synthetic
 surfaces, spectral color, and digital interruption. Kanagawa and Jellybeans
-informed the palette's balance and long-session readability, while Zed's One
-Dark syntax highlighting influenced how colors are assigned across semantic
-code groups.
+informed the palette's balance and long-session readability. One Dark syntax
+highlighting influenced how colors are assigned across semantic code groups.
 
 The theme builds on one quiet violet-dark foundation, with muted smoke blue,
 moss, resin, coral, rose, and spectral violet assigned by semantic role. The
@@ -74,7 +73,7 @@ require("flume").setup({
 
 | Option            | Purpose                                                           |
 | ----------------- | ----------------------------------------------------------------- |
-| `transparent`     | Removes the primary editor and sign-column backgrounds.            |
+| `transparent`     | Removes the primary editor and sign-column backgrounds.           |
 | `terminal_colors` | Sets `vim.g.terminal_color_0` through `15`.                       |
 | `overrides`       | Overrides palette keys from `lua/flume/palette.lua`.              |
 | `highlights`      | Overrides exact, case-sensitive Neovim highlight groups.          |
@@ -112,7 +111,7 @@ require("flume").setup({
 | `syntax_doc_comment`         | Documentation comments        |
 | `syntax_constant`            | Constants and symbols         |
 | `syntax_function`            | Functions and methods         |
-| `syntax_keyword`             | Keywords and directives       |
+| `syntax_keyword`             | Keywords and control flow     |
 | `syntax_namespace`           | Modules and namespaces        |
 | `syntax_primary`             | Variables and identifiers     |
 | `syntax_property`            | Properties and fields         |
@@ -162,23 +161,23 @@ Group names are case-sensitive. `Comment` is the legacy syntax group;
 
 ## Integrations
 
-| Surface                               | Status           |
-| ------------------------------------- | ---------------- |
-| Neovim UI, diagnostics, terminal ANSI | Built in         |
-| Tree-sitter captures                  | Built in         |
-| LSP semantic tokens                   | Built in         |
-| GitSigns, Oil                         | Built in         |
-| Telescope, cmp, lazy.nvim, WhichKey   | Built in         |
-| Mason, Trouble, Neo-tree, nvim-tree   | Built in         |
-| Snacks picker                         | Built in         |
-| Ghostty, LSD, Pi, Tuxedo               | Generated themes |
-| Tmux                                   | Generated color variables |
+| Surface                               | Status                    |
+| ------------------------------------- | ------------------------- |
+| Neovim UI, diagnostics, terminal ANSI | Built in                  |
+| Tree-sitter captures                  | Built in                  |
+| LSP semantic tokens                   | Built in                  |
+| GitSigns, Oil                         | Built in                  |
+| Telescope, cmp, lazy.nvim, WhichKey   | Built in                  |
+| Mason, Trouble, Neo-tree, nvim-tree   | Built in                  |
+| Snacks picker                         | Built in                  |
+| Ghostty, LSD, Pi, Tuxedo              | Generated themes          |
+| Tmux                                  | Generated color variables |
 
 ## Commands
 
 | Command                                    | Does                                                                        |
 | ------------------------------------------ | --------------------------------------------------------------------------- |
-| `:FlumeReload`                             | Recompile extras, reload the theme, and refresh Ghostty/Tmux when possible. |
+| `:FlumeReload`                             | Reload the editor theme and notify integrations.                           |
 | `:FlumeCompile`                            | Regenerate files in `extras/`.                                              |
 | `:FlumeInstallExtras [ghostty\|tmux\|lsd]` | Symlink supported extras into standard config paths.                        |
 | `:FlumeExtras`                             | Open copy-paste install commands for extras.                                |
@@ -195,13 +194,13 @@ Automated installation is available for Ghostty, Tmux, and LSD:
 :FlumeInstallExtras ghostty
 ```
 
-| App | Generated file | Activation |
-| --- | --- | --- |
-| Ghostty | `extras/ghostty/flume` | Install, then set `theme = flume`. |
-| Tmux | `extras/tmux/colors.conf` | Source `~/.tmux/flume-theme.conf`; it defines `thm_*` color variables for your status-line config. |
-| LSD | `extras/lsd/colors.yaml` | Install to the standard LSD color path. |
-| Pi | `extras/pi/flume.json` | Copy or link into your Pi themes directory. |
-| Tuxedo | `extras/tuxedo/flume.toml` | Copy or link into your Tuxedo themes directory. |
+| App     | Generated file             | Activation                                                                                         |
+| ------- | -------------------------- | -------------------------------------------------------------------------------------------------- |
+| Ghostty | `extras/ghostty/flume`     | Install, then set `theme = flume`.                                                                 |
+| Tmux    | `extras/tmux/colors.conf`  | Source `~/.tmux/flume-theme.conf`; it defines `thm_*` color variables for your status-line config. |
+| LSD     | `extras/lsd/colors.yaml`   | Install to the standard LSD color path.                                                            |
+| Pi      | `extras/pi/flume.json`     | Copy or link into your Pi themes directory.                                                        |
+| Tuxedo  | `extras/tuxedo/flume.toml` | Copy or link into your Tuxedo themes directory.                                                    |
 
 `:FlumeCompile` regenerates these files after changes to the canonical palette.
 The installer refuses to replace regular files.

@@ -29,7 +29,17 @@ Flume uses one resolved color table, but its roles belong to four distinct layer
 | Values | `syntax_string`, `syntax_boolean`, `syntax_constant`, `syntax_property` |
 | Detail | `syntax_attribute`, `syntax_special`, `syntax_punctuation*` |
 
-Specific Tree-sitter captures and LSP token types resolve through these families. Exact group overrides remain available for language-specific exceptions.
+Specific Tree-sitter captures and LSP token types resolve through these families. Provider mappings follow these rules:
+
+- Constructors use `syntax_type`; they create typed values rather than behaving like ordinary functions.
+- Enumeration members remain `syntax_constant` by default because most language servers model them as values. A language-qualified override may use `syntax_type` when a server also uses that token for constructors, as rust-analyzer does for enum variants.
+- Modules and namespaces use `syntax_namespace`. Any workaround for an inaccurate language-server token must be language-qualified rather than weakening the generic group.
+- Broad LSP variable tokens defer to Tree-sitter, which can distinguish calls, members, and other syntactic roles more precisely. Python namespace tokens also defer because language servers commonly apply them to imported modules, classes, and callables alike.
+- Import keywords follow namespaces, word-like operators follow punctuation, and preprocessor directives follow attributes. This keeps keyword-heavy languages from collapsing into one dominant hue.
+
+Exact group overrides remain available for further language-specific exceptions. Such exceptions should correct a parser or language-server mismatch, not establish a new language-specific color system.
+
+Language-qualified corrections live in `lua/flume/languages/`, one file per language, so they remain independently reviewable. The initial set covers Lua table constructors, Python namespaces, Rust enum constructors, TSX component constructors, and zls namespace behavior. Languages that are represented correctly by the generic Tree-sitter and LSP groups should not receive an empty override file.
 
 ### Terminal colors
 

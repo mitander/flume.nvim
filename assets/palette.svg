@@ -1,52 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="840" height="96" viewBox="0 0 840 96" role="img" aria-labelledby="title desc">
-  <title id="title">Flume palette</title>
-  <desc id="desc">Seven Flume colors arranged as a square-edged glitch signal: deep violet, blue smoke, olive green, resin yellow, warm peach, spectral violet, and pale text.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="124" viewBox="0 0 840 124" role="img" aria-labelledby="title desc">
+  <title id="title">Flume color palette</title>
+  <desc id="desc">Seven Flume colors in a transparent glitch collage with pixel steps, stippled noise, and spectral fragments.</desc>
 
   <defs>
-    <pattern id="stipple" width="12" height="10" patternUnits="userSpaceOnUse">
-      <rect x="1" y="2" width="1" height="1" fill="#17151f"/>
-      <rect x="8" y="6" width="1" height="1" fill="#17151f"/>
-      <rect x="4" y="9" width="1" height="1" fill="#17151f"/>
+    <pattern id="light-noise" width="13" height="11" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="2" r="1" fill="#d6d2e8"/>
+      <circle cx="8" cy="1" r=".7" fill="#d6d2e8"/>
+      <circle cx="5" cy="7" r=".8" fill="#d6d2e8"/>
+      <circle cx="11" cy="9" r="1" fill="#d6d2e8"/>
+      <circle cx="2" cy="10" r=".6" fill="#d6d2e8"/>
     </pattern>
+    <pattern id="dark-noise" width="12" height="10" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="1" r=".9" fill="#232136"/>
+      <circle cx="9" cy="3" r=".7" fill="#232136"/>
+      <circle cx="5" cy="6" r="1" fill="#232136"/>
+      <circle cx="11" cy="9" r=".7" fill="#232136"/>
+      <circle cx="1" cy="8" r=".6" fill="#232136"/>
+    </pattern>
+    <linearGradient id="foil" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#73a6b6"/>
+      <stop offset=".2" stop-color="#d6d2e8"/>
+      <stop offset=".38" stop-color="#ea9f8c"/>
+      <stop offset=".56" stop-color="#dfb86b"/>
+      <stop offset=".74" stop-color="#a4b78a"/>
+      <stop offset="1" stop-color="#b391d6"/>
+    </linearGradient>
   </defs>
 
-  <rect width="840" height="96" fill="#17151f"/>
-
+  <!-- Palette blocks: hard-edged, offset, and deliberately imperfect. -->
   <g shape-rendering="crispEdges">
-    <!-- primary signal -->
-    <path fill="#232136" d="M0 19h108v-5h12v48h-9v6H0z"/>
-    <path fill="#73a6b6" d="M120 12h111v4h9v48h-7v5h-18v-4h-95z"/>
-    <path fill="#a4b78a" d="M240 16h112v-5h8v53h-12v4h-15v-4h-93z"/>
-    <path fill="#dfb86b" d="M360 14h108v-4h12v48h-7v8H360z"/>
-    <path fill="#ea9f8c" d="M480 17h9v-7h111v54h-18v4H480z"/>
-    <path fill="#b391d6" d="M600 14h105v-4h15v51h-8v7h-20v-4h-92z"/>
-    <path fill="#d6d2e8" d="M720 11h9v4h111v53h-13v-4H720z"/>
+    <path fill="#232136" stroke="#464c5e" stroke-width="2" d="M1 20h101v-8h18v58h-9v10H1z"/>
+    <path fill="#73a6b6" d="M120 15h111v5h9v54h-19v7H120z"/>
+    <path fill="#a4b78a" d="M240 20h10v-8h110v57h-8v11H240z"/>
+    <path fill="#dfb86b" d="M360 17h103v-6h17v60h-12v7H360z"/>
+    <path fill="#ea9f8c" d="M480 13h21v5h99v56h-17v7H480z"/>
+    <path fill="#b391d6" d="M600 18h9v-7h111v60h-8v10H600z"/>
+    <path fill="#d6d2e8" d="M720 14h17v5h103v61h-14v-6H720z"/>
 
-    <!-- displaced horizontal slices -->
-    <path fill="#73a6b6" d="M104 8h25v4h-25zM105 33h37v3h-37zM224 67h29v4h-29z"/>
-    <path fill="#a4b78a" d="M231 20h24v3h-24zM335 8h29v4h-29zM345 52h31v3h-31z"/>
-    <path fill="#dfb86b" d="M348 29h35v3h-35zM467 7h22v4h-22zM469 45h29v3h-29z"/>
-    <path fill="#ea9f8c" d="M467 61h27v4h-27zM582 12h30v3h-30zM586 37h32v3h-32z"/>
-    <path fill="#b391d6" d="M585 66h27v4h-27zM706 7h20v4h-20zM701 49h34v3h-34z"/>
-    <path fill="#d6d2e8" d="M705 23h28v3h-28zM825 69h15v4h-15z"/>
+    <!-- Dense printed noise, echoing the stippled regions in the background artwork. -->
+    <path fill="url(#light-noise)" opacity=".42" d="M2 21h46v48H2zM88 13h31v42H88z"/>
+    <path fill="url(#dark-noise)" opacity=".4" d="M121 16h38v58h-38zM286 13h47v66h-47zM405 12h55v59h-55zM528 18h46v56h-46zM648 12h46v59h-46zM788 19h51v55h-51z"/>
 
-    <!-- scan interruptions -->
-    <path fill="#17151f" d="M40 28h80v2H40zM0 48h72v2H0zM93 55h36v2H93zM207 42h58v2h-58zM286 26h64v2h-64zM336 57h42v2h-42zM447 35h71v2h-71zM535 53h56v2h-56zM574 25h58v2h-58zM675 39h68v2h-68zM758 55h82v2h-82z"/>
+    <!-- Scan-line holes and displaced slices. -->
+    <path fill="#232136" opacity=".78" d="M0 46h73v3H0zM102 61h42v3h-42zM207 35h58v3h-58zM332 58h51v3h-51zM449 31h70v3h-70zM568 57h61v3h-61zM689 39h55v3h-55zM801 60h39v3h-39z"/>
+    <path fill="#73a6b6" d="M104 8h31v5h-31zM222 76h42v5h-42z"/>
+    <path fill="#a4b78a" d="M229 25h30v4h-30zM344 8h35v5h-35z"/>
+    <path fill="#dfb86b" d="M348 43h39v4h-39zM465 6h27v5h-27z"/>
+    <path fill="#ea9f8c" d="M463 69h37v5h-37zM582 10h34v4h-34z"/>
+    <path fill="#b391d6" d="M582 48h45v4h-45zM704 6h27v5h-27z"/>
+    <path fill="#d6d2e8" d="M702 65h37v5h-37z"/>
 
-    <!-- sparse pixel dust -->
-    <g fill="#8a85a6" opacity=".55">
-      <path d="M96 11h2v2h-2zM110 5h2v2h-2zM116 72h2v2h-2zM228 9h2v2h-2zM236 74h3v2h-3zM346 6h2v2h-2zM357 72h2v2h-2zM468 4h2v2h-2zM476 72h3v2h-3zM588 6h2v2h-2zM597 74h2v2h-2zM708 5h3v2h-3zM716 72h2v2h-2zM830 8h2v2h-2z"/>
+    <!-- Small spectral “foil” shards keep the strip playful. -->
+    <path fill="url(#foil)" d="M77 10h16L62 44H49zM267 52h13l-23 27h-13zM505 7h15l-25 30h-13zM742 48h18l-28 32h-15z"/>
+    <g fill="#8a85a6">
+      <path d="M112 4h3v3h-3zM231 7h2v2h-2zM354 84h3v3h-3zM474 83h2v2h-2zM592 5h3v3h-3zM713 85h2v2h-2zM829 7h3v3h-3z"/>
     </g>
-    <path fill="url(#stipple)" opacity=".42" d="M0 19h46v43H0zM270 16h42v48h-42zM512 10h39v54h-39zM641 14h36v50h-36zM792 15h48v49h-48z"/>
   </g>
 
-  <g fill="#8a85a6" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">
-    <text x="60" y="88">#232136</text>
-    <text x="180" y="88">#73a6b6</text>
-    <text x="300" y="88">#a4b78a</text>
-    <text x="420" y="88">#dfb86b</text>
-    <text x="540" y="88">#ea9f8c</text>
-    <text x="660" y="88">#b391d6</text>
-    <text x="780" y="88">#d6d2e8</text>
+  <g fill="#8a85a6" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" text-anchor="middle">
+    <text x="60" y="112">#232136</text>
+    <text x="180" y="112">#73a6b6</text>
+    <text x="300" y="112">#a4b78a</text>
+    <text x="420" y="112">#dfb86b</text>
+    <text x="540" y="112">#ea9f8c</text>
+    <text x="660" y="112">#b391d6</text>
+    <text x="780" y="112">#d6d2e8</text>
   </g>
 </svg>

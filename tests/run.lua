@@ -77,6 +77,7 @@ test("palette has valid explicit colors", function()
         truthy(type(value) == "string" and value:match("^#%x%x%x%x%x%x$"), key .. " is not #RRGGBB")
     end
     for _, key in ipairs(required_roles) do
+        truthy(palette[key], "missing required palette role " .. key)
     end
 end)
 
@@ -147,14 +148,73 @@ test("styles and exact highlight overrides are applied last", function()
             ["@comment"] = function(colors)
                 return { fg = colors.syntax_comment, underline = true }
             end,
+            ["@constructor.lua"] = { fg = "#fedcba" },
         },
     })
     local comment = vim.api.nvim_get_hl(0, { name = "Comment", link = false })
     local capture = vim.api.nvim_get_hl(0, { name = "@comment", link = false })
+    local language_capture = vim.api.nvim_get_hl(0, { name = "@constructor.lua", link = false })
     equal(comment.fg, 0xabcdef)
     equal(comment.bold, true)
     equal(capture.fg, color_number(palette.syntax_comment))
     equal(capture.underline, true)
+    equal(language_capture.fg, 0xfedcba)
+end)
+
+test("syntax roles stay consistent across language providers", function()
+    require("flume").setup({ styles = { types = { bold = true } } })
+
+    local constructor = vim.api.nvim_get_hl(0, { name = "@constructor", link = false })
+    equal(constructor.fg, color_number(palette.syntax_type), "constructor foreground")
+    equal(constructor.bold, true, "constructor type style")
+
+    local enum_member = vim.api.nvim_get_hl(0, { name = "@lsp.type.enumMember", link = false })
+    equal(enum_member.fg, color_number(palette.syntax_constant), "generic enum member foreground")
+
+    local rust_variant = vim.api.nvim_get_hl(0, { name = "@lsp.type.enumMember.rust", link = false })
+    equal(rust_variant.fg, color_number(palette.syntax_type), "Rust constructor foreground")
+    equal(rust_variant.bold, true, "Rust constructor type style")
+
+    local lua_constructor = vim.api.nvim_get_hl(0, { name = "@constructor.lua", link = false })
+    equal(lua_constructor.fg, color_number(palette.syntax_punctuation_bracket), "Lua constructor foreground")
+
+    local python_namespace = vim.api.nvim_get_hl(0, { name = "@lsp.type.namespace.python", link = false })
+    equal(next(python_namespace), nil, "Python namespace defers to Tree-sitter")
+
+    local lsp_variable = vim.api.nvim_get_hl(0, { name = "@lsp.type.variable", link = false })
+    equal(next(lsp_variable), nil, "generic LSP variable defers to Tree-sitter")
+
+    local lsp_decorator = vim.api.nvim_get_hl(0, { name = "@lsp.type.decorator", link = false })
+    equal(lsp_decorator.fg, color_number(palette.syntax_attribute), "decorator foreground")
+
+    local readonly_variable = vim.api.nvim_get_hl(0, { name = "@lsp.typemod.variable.readonly", link = false })
+    equal(readonly_variable.fg, color_number(palette.syntax_constant), "readonly variable foreground")
+    local readonly_property = vim.api.nvim_get_hl(0, { name = "@lsp.typemod.property.readonly", link = false })
+    equal(readonly_property.fg, color_number(palette.syntax_constant), "readonly property foreground")
+
+    local tsx_constructor = vim.api.nvim_get_hl(0, { name = "@constructor.tsx", link = false })
+    equal(tsx_constructor.fg, color_number(palette.syntax_constant), "TSX constructor foreground")
+
+    local namespace = vim.api.nvim_get_hl(0, { name = "@lsp.type.namespace", link = false })
+    equal(namespace.fg, color_number(palette.syntax_namespace), "generic namespace foreground")
+    local zig_namespace = vim.api.nvim_get_hl(0, { name = "@lsp.type.namespace.zig", link = false })
+    equal(next(zig_namespace), nil, "Zig namespace exception")
+
+    equal(
+        vim.api.nvim_get_hl(0, { name = "@keyword.import", link = false }).fg,
+        color_number(palette.syntax_namespace),
+        "import keyword foreground"
+    )
+    equal(
+        vim.api.nvim_get_hl(0, { name = "@keyword.operator", link = false }).fg,
+        color_number(palette.syntax_punctuation),
+        "keyword operator foreground"
+    )
+    equal(
+        vim.api.nvim_get_hl(0, { name = "@keyword.directive", link = false }).fg,
+        color_number(palette.syntax_attribute),
+        "directive foreground"
+    )
 end)
 
 test("public commands are registered", function()
@@ -164,8 +224,14 @@ test("public commands are registered", function()
     end
 end)
 
-test("reload notifies plugins through ColorScheme", function()
+test("reload stays editor-local and notifies plugins", function()
     local count = 0
+    local compiler_loaded = false
+    package.loaded["flume.compiler"] = nil
+    package.preload["flume.compiler"] = function()
+        compiler_loaded = true
+        error("reload must not compile extras")
+    end
     local group = vim.api.nvim_create_augroup("FlumeReloadContract", { clear = true })
     vim.api.nvim_create_autocmd("ColorScheme", {
         group = group,
@@ -175,6 +241,8 @@ test("reload notifies plugins through ColorScheme", function()
         end,
     })
     require("flume").reload()
+    package.preload["flume.compiler"] = nil
+    equal(compiler_loaded, false, "compiler loaded during reload")
     equal(count, 1, "ColorScheme event count")
     vim.api.nvim_del_augroup_by_id(group)
 end)
@@ -246,7 +314,23 @@ end)
 
 test("health check runs without errors", function()
     require("flume").setup({})
-    vim.cmd("checkhealth flume")
+
+    local original_health = vim.health
+    local errors = {}
+    vim.health = {
+        start = function() end,
+        ok = function() end,
+        warn = function() end,
+        error = function(message)
+            errors[#errors + 1] = message
+        end,
+    }
+    package.loaded["flume.health"] = nil
+    require("flume.health").check()
+    package.loaded["flume.health"] = nil
+    vim.health = original_health
+
+    equal(#errors, 0, "health errors")
 end)
 
 if #failures > 0 then

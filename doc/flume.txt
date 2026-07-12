@@ -102,7 +102,7 @@ highlights ~
 COMMANDS                                                        *flume-commands*
 
 :FlumeReload                                                      *:FlumeReload*
-    Recompile extras, reload the theme, and refresh Ghostty/Tmux when possible.
+    Reload the editor theme and notify ColorScheme integrations.
 
 :FlumeCompile                                                    *:FlumeCompile*
     Regenerate files under extras/.
@@ -134,7 +134,7 @@ The Tmux file defines thm_* color variables; it is not a complete status-line
 configuration. Automated installation supports Ghostty, Tmux, and LSD and
 refuses to replace regular files.
 
-If you edit lua/flume/palette.lua, run :FlumeCompile or :FlumeReload.
+If you edit lua/flume/palette.lua, run :FlumeCompile to regenerate extras.
 
 ==============================================================================
 HIGHLIGHTS                                                    *flume-highlights*

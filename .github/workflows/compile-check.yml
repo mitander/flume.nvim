@@ -3,6 +3,7 @@ name: Quality
 on:
   push:
     branches: [master, main]
+    tags: ["v*"]
   pull_request:
     branches: [master, main]
 
@@ -29,13 +30,5 @@ jobs:
           neovim: true
           version: ${{ matrix.neovim }}
 
-      - name: Run contract tests
-        run: nvim --headless --clean -c "lua dofile('tests/run.lua')"
-
-      - name: Verify generated extras
-        if: matrix.neovim == 'stable'
-        run: |
-          if ! git diff --exit-code -- extras; then
-            echo "::error::Generated files are out of date. Run :FlumeCompile and commit the result."
-            exit 1
-          fi
+      - name: Run release quality gate
+        run: ./scripts/check

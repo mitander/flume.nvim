@@ -36,7 +36,7 @@ The primary syntax accents above meet or exceed 4.5:1 against the proposed backg
 - Surfaces remain close together, with hierarchy created by small luminance steps.
 - Glitch and spectral references stay in the presentation, not at the expense of editor clarity.
 
-## Architecture required before release
+## Architecture required before a light release
 
 1. Resolve `dark` or `light` before applying user overrides.
 2. Keep one shared highlight map driven by semantic roles.

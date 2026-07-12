@@ -26,28 +26,6 @@ local function styled(opts, style)
     return vim.tbl_deep_extend("force", opts, style or {})
 end
 
-local function get_zig_namespace_token_context(ev)
-    local token = ev.data and ev.data.token
-    if not token or token.type ~= "namespace" or vim.bo[ev.buf].filetype ~= "zig" then
-        return nil
-    end
-
-    local line = vim.api.nvim_buf_get_lines(ev.buf, token.line, token.line + 1, false)[1] or ""
-    local start_col = token.start_col or 0
-    local end_col = token.end_col or (start_col + (token.length or 1))
-    local text = line:sub(start_col + 1, end_col)
-
-    return token, line, text
-end
-
-local function is_dotted_namespace_token(token, line)
-    return line:sub(1, token.start_col):match("%.$") ~= nil
-end
-
-local function is_type_like_namespace(text)
-    return text:match("^[A-Z]") ~= nil
-end
-
 local function clear_flume_modules()
     for name in pairs(package.loaded) do
         if name == "flume" or name:match("^flume%.") then
@@ -56,89 +34,28 @@ local function clear_flume_modules()
     end
 end
 
-local function system_success(cmd)
-    vim.fn.system(cmd)
-    return vim.v.shell_error == 0
-end
-
-local function reload_ghostty()
-    if vim.fn.has("macunix") == 0 or vim.fn.executable("osascript") == 0 then
-        vim.notify("Flume compiled Ghostty theme. Reload Ghostty manually.", vim.log.levels.INFO)
-        return
-    end
-
-    local script = [[
-tell application "System Events"
-    if exists process "Ghostty" then
-        tell process "Ghostty"
-            set frontmost to true
-            keystroke "," using {command down, shift down}
-        end tell
-    end if
-end tell
-]]
-    if not system_success({ "osascript", "-e", script }) then
-        vim.notify("Flume compiled Ghostty theme, but Ghostty config reload failed", vim.log.levels.WARN)
-    end
-end
-
-local function reload_tmux()
-    if vim.fn.executable("tmux") == 0 or not system_success({ "tmux", "has-session" }) then
-        return
-    end
-
-    local paths = {
-        vim.fn.expand("~/.config/tmux/tmux.conf"),
-        vim.fn.expand("~/.tmux.conf"),
-        vim.fn.expand("~/.tmux/flume-theme.conf"),
-    }
-
-    local sourced = false
-    for _, path in ipairs(paths) do
-        if vim.fn.filereadable(path) == 1 then
-            sourced = system_success({ "tmux", "source-file", path }) or sourced
-        end
-    end
-
-    if not sourced then
-        vim.notify("Flume compiled Tmux theme, but no tmux config file was found to source", vim.log.levels.WARN)
-    end
-end
-
-local function reload_external_apps(changed)
-    if not changed or not changed.any then
-        return
-    end
-    if changed.ghostty then
-        reload_ghostty()
-    end
-    if changed.tmux then
-        reload_tmux()
-    end
-end
-
 function M.reload()
     local config = vim.deepcopy(M.config)
-    package.loaded["flume.palette"] = nil
-    package.loaded["flume.compiler"] = nil
-
-    local ok, changed = pcall(function()
-        return require("flume.compiler").compile_all({ quiet = true })
-    end)
-    if not ok then
-        vim.notify("Flume extras compile failed: " .. tostring(changed), vim.log.levels.ERROR)
-        changed = nil
-    end
+    local colorscheme_emitted = false
+    local probe = vim.api.nvim_create_augroup("FlumeReloadProbe", { clear = true })
+    vim.api.nvim_create_autocmd("ColorScheme", {
+        group = probe,
+        pattern = "flume",
+        once = true,
+        callback = function()
+            colorscheme_emitted = true
+        end,
+    })
 
     clear_flume_modules()
     require("flume").setup(config)
-    vim.api.nvim_exec_autocmds("ColorScheme", { pattern = "flume", modeline = false })
+    pcall(vim.api.nvim_del_augroup_by_id, probe)
 
-    reload_external_apps(changed)
-    local extras_status = changed
-            and (changed.any and (changed.count .. " extra file(s) updated") or "extras unchanged")
-        or "extras not updated"
-    vim.notify("Flume theme reloaded (" .. extras_status .. ")", vim.log.levels.INFO)
+    -- Older Neovim versions may emit ColorScheme while resetting syntax.
+    if not colorscheme_emitted then
+        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = "flume", modeline = false })
+    end
+    vim.notify("Flume theme reloaded", vim.log.levels.INFO)
 end
 
 function M.setup(opts)
@@ -270,10 +187,6 @@ function M.load()
     hi("Error", { fg = c.error })
     hi("Todo", { fg = c.warning, bg = "NONE", bold = true })
 
-    -- Legacy Zig syntax group for @builtins when tree-sitter/LSP semantic
-    -- highlighting is unavailable or disabled.
-    hi("zigBuiltinFn", { fg = c.syntax_special })
-
     hi("@attribute", { fg = c.syntax_attribute })
     hi("@attribute.builtin", { fg = c.syntax_special })
     hi("@boolean", { fg = c.syntax_boolean })
@@ -288,7 +201,7 @@ function M.load()
     hi("@constant", { fg = c.syntax_constant })
     hi("@constant.builtin", { fg = c.syntax_boolean })
     hi("@constant.macro", { fg = c.syntax_constant })
-    hi("@constructor", styled({ fg = c.syntax_function }, styles.functions))
+    hi("@constructor", styled({ fg = c.syntax_type }, styles.types))
     hi("@function", styled({ fg = c.syntax_function }, styles.functions))
     hi("@function.builtin", styled({ fg = c.syntax_function }, styles.functions))
     hi("@function.call", styled({ fg = c.syntax_function }, styles.functions))
@@ -297,12 +210,13 @@ function M.load()
     hi("@function.method.call", styled({ fg = c.syntax_function }, styles.functions))
     hi("@keyword", styled({ fg = c.syntax_keyword }, styles.keywords))
     hi("@keyword.conditional", styled({ fg = c.syntax_keyword }, styles.keywords))
-    hi("@keyword.directive", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("@keyword.directive", { fg = c.syntax_attribute })
+    hi("@keyword.directive.define", { fg = c.syntax_attribute })
     hi("@keyword.exception", styled({ fg = c.syntax_keyword }, styles.keywords))
     hi("@keyword.function", styled({ fg = c.syntax_keyword }, styles.keywords))
-    hi("@keyword.import", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("@keyword.import", { fg = c.syntax_namespace })
     hi("@keyword.modifier", styled({ fg = c.syntax_keyword }, styles.keywords))
-    hi("@keyword.operator", styled({ fg = c.syntax_keyword }, styles.keywords))
+    hi("@keyword.operator", { fg = c.syntax_punctuation })
     hi("@keyword.repeat", styled({ fg = c.syntax_keyword }, styles.keywords))
     hi("@keyword.return", styled({ fg = c.syntax_keyword }, styles.keywords))
     hi("@keyword.type", styled({ fg = c.syntax_keyword }, styles.keywords))
@@ -458,7 +372,7 @@ function M.load()
 
     -- LSP semantic tokens mapping
     hi("@lsp.type.class", { link = "Type" })
-    hi("@lsp.type.decorator", { link = "Identifier" })
+    hi("@lsp.type.decorator", { link = "@attribute" })
     hi("@lsp.type.enum", { link = "Type" })
     hi("@lsp.type.enumMember", { link = "Constant" })
     hi("@lsp.type.function", { link = "Function" })
@@ -466,46 +380,24 @@ function M.load()
     hi("@lsp.type.macro", { link = "Macro" })
     hi("@lsp.type.method", { link = "Function" })
     hi("@lsp.type.builtin", { fg = c.syntax_special })
-    hi("@lsp.type.builtin.zig", { fg = c.syntax_special })
-    -- Avoid flattening dotted Zig namespaces like render.camera into one color,
-    -- tree-sitter can still color the member side via @variable.member.
-    hi("@lsp.type.namespace", {})
+    hi("@lsp.type.namespace", { fg = c.syntax_namespace })
     hi("@lsp.type.parameter", styled({ fg = c.syntax_primary }, styles.variables))
     hi("@lsp.type.property", { fg = c.syntax_property })
-    hi("@lsp.type.property.readonly", { link = "Constant" })
+    hi("@lsp.typemod.property.readonly", { link = "Constant" })
     hi("@lsp.type.struct", { link = "Type" })
     hi("@lsp.type.type", { link = "Type" })
     hi("@lsp.type.typeParameter", { link = "Type" })
-    hi("@lsp.type.variable", styled({ fg = c.syntax_primary }, styles.variables))
-    hi("@lsp.type.variable.readonly", { link = "Constant" })
+    -- Regular variable tokens are often less precise than Tree-sitter. An
+    -- empty group lets captures such as function.call and variable.member win.
+    hi("@lsp.type.variable", {})
+    hi("@lsp.typemod.variable.readonly", { link = "Constant" })
     hi("@lsp.typemod.variable.static", { link = "Constant" })
     hi("@lsp.typemod.property.static", { link = "Constant" })
 
-    hi("FlumeDottedNamespace", { fg = c.syntax_namespace })
-    hi("FlumeTypeLikeNamespace", styled({ fg = c.syntax_type }, styles.types))
-
-    local semantic_tokens = vim.lsp and vim.lsp.semantic_tokens
-    if semantic_tokens and semantic_tokens.highlight_token then
-        local augroup = vim.api.nvim_create_augroup("FlumeSemanticTokens", { clear = true })
-        vim.api.nvim_create_autocmd("LspTokenUpdate", {
-            group = augroup,
-            callback = function(ev)
-                local token, line, text = get_zig_namespace_token_context(ev)
-                if not token then
-                    return
-                end
-
-                if is_type_like_namespace(text) then
-                    semantic_tokens.highlight_token(token, ev.buf, ev.data.client_id, "FlumeTypeLikeNamespace")
-                elseif is_dotted_namespace_token(token, line) then
-                    semantic_tokens.highlight_token(token, ev.buf, ev.data.client_id, "FlumeDottedNamespace")
-                end
-            end,
-        })
-        if semantic_tokens.force_refresh then
-            pcall(semantic_tokens.force_refresh, 0)
-        end
-    end
+    require("flume.languages").setup({
+        colors = c,
+        set_highlight = hi,
+    })
 
     if M.config.terminal_colors then
         local terminal_colors = {
