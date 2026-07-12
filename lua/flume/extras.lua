@@ -69,23 +69,25 @@ function M.install(name)
             vim.notify(name .. " extra is already linked to " .. app.dest, vim.log.levels.INFO)
             return
         end
-
-        local ok_unlink, unlink_err = uv.fs_unlink(dest_path)
-        if not ok_unlink then
-            vim.notify(
-                "Failed to replace existing symlink " .. dest_path .. ": " .. tostring(unlink_err),
-                vim.log.levels.ERROR
-            )
-            return
-        end
     end
 
-    local ok, err = uv.fs_symlink(src_path, dest_path, { dir = false, junction = false })
-    if ok then
-        vim.notify("Successfully linked " .. name .. " extra to " .. app.dest, vim.log.levels.INFO)
-    else
-        vim.notify("Failed to link " .. name .. ": " .. tostring(err), vim.log.levels.ERROR)
+    -- Build the replacement beside the destination, then rename it atomically.
+    -- A failed link or rename leaves an existing user symlink untouched.
+    local temp_path = dest_path .. ".flume-" .. tostring(uv.hrtime())
+    local ok_link, link_err = uv.fs_symlink(src_path, temp_path, { dir = false, junction = false })
+    if not ok_link then
+        vim.notify("Failed to link " .. name .. ": " .. tostring(link_err), vim.log.levels.ERROR)
+        return
     end
+
+    local ok_rename, rename_err = uv.fs_rename(temp_path, dest_path)
+    if not ok_rename then
+        uv.fs_unlink(temp_path)
+        vim.notify("Failed to install " .. name .. ": " .. tostring(rename_err), vim.log.levels.ERROR)
+        return
+    end
+
+    vim.notify("Successfully linked " .. name .. " extra to " .. app.dest, vim.log.levels.INFO)
 end
 
 function M.install_all()
