@@ -132,6 +132,7 @@ function M.reload()
 
     clear_flume_modules()
     require("flume").setup(config)
+    vim.api.nvim_exec_autocmds("ColorScheme", { pattern = "flume", modeline = false })
 
     reload_external_apps(changed)
     local extras_status = changed

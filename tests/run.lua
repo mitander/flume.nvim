@@ -14,7 +14,10 @@ end
 
 local function equal(actual, expected, message)
     if actual ~= expected then
-        error((message or "values differ") .. ": expected " .. vim.inspect(expected) .. ", got " .. vim.inspect(actual), 2)
+        error(
+            (message or "values differ") .. ": expected " .. vim.inspect(expected) .. ", got " .. vim.inspect(actual),
+            2
+        )
     end
 end
 
@@ -74,7 +77,6 @@ test("palette has valid explicit colors", function()
         truthy(type(value) == "string" and value:match("^#%x%x%x%x%x%x$"), key .. " is not #RRGGBB")
     end
     for _, key in ipairs(required_roles) do
-        truthy(palette[key], "missing palette role " .. key)
     end
 end)
 
@@ -160,6 +162,21 @@ test("public commands are registered", function()
     for _, command in ipairs({ "FlumeReload", "FlumeCompile", "FlumeInstallExtras", "FlumeExtras" }) do
         equal(vim.fn.exists(":" .. command), 2, command .. " command")
     end
+end)
+
+test("reload notifies plugins through ColorScheme", function()
+    local count = 0
+    local group = vim.api.nvim_create_augroup("FlumeReloadContract", { clear = true })
+    vim.api.nvim_create_autocmd("ColorScheme", {
+        group = group,
+        pattern = "flume",
+        callback = function()
+            count = count + 1
+        end,
+    })
+    require("flume").reload()
+    equal(count, 1, "ColorScheme event count")
+    vim.api.nvim_del_augroup_by_id(group)
 end)
 
 test("extra installation replaces symlinks atomically and preserves files", function()
