@@ -3,3 +3,4 @@ Session.vim
 __pycache__/
 *.py[cod]
 doc/tags
+.pi-subagents/

@@ -1,57 +1,41 @@
-name: Compile Check
+name: Quality
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [master, main]
   pull_request:
-    branches: [ master, main ]
+    branches: [master, main]
+
+permissions:
+  contents: read
 
 jobs:
-  check-extras:
+  test:
+    name: Neovim ${{ matrix.neovim }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        neovim: [v0.9.5, stable]
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Neovim
         uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
-          version: stable
+          version: ${{ matrix.neovim }}
 
-      - name: Smoke Test Theme
+      - name: Run contract tests
+        run: nvim --headless --clean -c "lua dofile('tests/run.lua')"
+
+      - name: Verify generated extras
+        if: matrix.neovim == 'stable'
         run: |
-          nvim --headless --cmd "set rtp+=." -c "colorscheme flume" -c "qa"
-          nvim --headless --cmd "set rtp+=." -c "checkhealth flume" -c "qa"
-          nvim --headless --cmd "set rtp+=." -c "helptags doc" -c "help flume" -c "qa"
-          rm -f doc/tags
-
-      - name: Smoke Test Configuration
-        run: |
-          cat > /tmp/flume-smoke.lua <<'LUA'
-          vim.g.terminal_color_0 = nil
-          require("flume").setup({
-            terminal_colors = false,
-            styles = {
-              comments = { italic = true },
-              keywords = { bold = true },
-            },
-            highlights = {
-              FloatBorder = function(c)
-                return { fg = c.accent, bg = c.bg }
-              end,
-            },
-          })
-          assert(vim.g.terminal_color_0 == nil)
-          LUA
-          nvim --headless --cmd "set rtp+=." -c "luafile /tmp/flume-smoke.lua" -c "qa"
-
-      - name: Compile Extras
-        run: nvim --headless --cmd "set rtp+=." -c "lua require('flume.compiler').compile_all()" -c "qa"
-
-      - name: Verify Compiled Extras are Up to Date
-        run: |
-          if ! git diff --exit-code; then
-            echo "::error::Compiled theme files under extras/ are out of date! Please run :FlumeCompile locally in Neovim and commit the changes."
+          if ! git diff --exit-code -- extras; then
+            echo "::error::Generated files are out of date. Run :FlumeCompile and commit the result."
             exit 1
           fi
