@@ -124,12 +124,12 @@ palette = 15=%s
 ]]
     local content = string.format(
         template,
-        palette.bg,
+        palette.terminal_bg,
         palette.fg,
         palette.black, -- selection-background
         palette.fg, -- selection-foreground
         palette.accent,
-        palette.bg, -- cursor-text
+        palette.on_accent, -- cursor-text
         palette.black,
         palette.red,
         palette.green,

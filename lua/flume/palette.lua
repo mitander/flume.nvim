@@ -21,6 +21,17 @@ M.colors = {
     element = "#232136",
     element_hover = "#262938",
     element_active = "#35394c",
+    on_accent = "#232136",
+
+    -- Semantic states
+    error = "#ee7583",
+    warning = "#dfb86b",
+    success = "#a4b78a",
+    info = "#73a6b6",
+    match = "#dfb86b",
+    diff_add = "#a4b78a",
+    diff_change = "#dfb86b",
+    diff_delete = "#ee7583",
 
     -- Terminal / Base 16 Palette
     black = "#343949",

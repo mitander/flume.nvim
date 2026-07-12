@@ -1,7 +1,6 @@
 local M = {}
 
-M.colors = {}
-M.config = {
+local default_config = {
     transparent = false,
     terminal_colors = true,
     overrides = {},
@@ -15,6 +14,9 @@ M.config = {
         variables = {},
     },
 }
+
+M.colors = {}
+M.config = vim.deepcopy(default_config)
 
 local function hi(group, opts)
     vim.api.nvim_set_hl(0, group, opts)
@@ -139,7 +141,7 @@ function M.reload()
 end
 
 function M.setup(opts)
-    M.config = vim.tbl_deep_extend("force", M.config, opts or {})
+    M.config = vim.tbl_deep_extend("force", vim.deepcopy(default_config), opts or {})
     M.load()
 end
 
@@ -155,11 +157,14 @@ function M.load()
 
     if M.config.transparent then
         c.bg = "NONE"
-        c.terminal_bg = "NONE"
         c.element = "NONE"
     end
 
     vim.o.background = "dark"
+    vim.cmd("highlight clear")
+    if vim.fn.exists("syntax_on") == 1 then
+        vim.cmd("syntax reset")
+    end
     vim.g.colors_name = "flume"
 
     hi("Normal", { fg = c.syntax_primary, bg = c.bg })
@@ -168,7 +173,7 @@ function M.load()
     hi("FloatBorder", { fg = c.border, bg = c.bg })
     hi("FloatTitle", { fg = c.text, bg = c.bg, bold = true })
     hi("WinSeparator", { fg = c.border_variant, bg = c.bg })
-    hi("SignColumn", { bg = c.bg })
+    hi("SignColumn", { bg = c.element })
     hi("FoldColumn", { fg = c.placeholder, bg = c.bg })
     hi("Folded", { fg = c.muted, bg = c.surface })
     hi("EndOfBuffer", { fg = c.bg, bg = c.bg })
@@ -181,9 +186,9 @@ function M.load()
     hi("CursorLineNr", { fg = c.active_line_number, bg = c.active_line, bold = true })
     hi("LineNr", { fg = c.line_number, bg = c.bg })
     hi("Visual", { bg = c.element_active })
-    hi("Search", { fg = c.text, bg = c.dim_blue })
-    hi("IncSearch", { fg = c.terminal_bg, bg = c.yellow })
-    hi("CurSearch", { fg = c.terminal_bg, bg = c.yellow })
+    hi("Search", { fg = c.on_accent, bg = c.accent })
+    hi("IncSearch", { fg = c.on_accent, bg = c.match })
+    hi("CurSearch", { fg = c.on_accent, bg = c.match })
     hi("MatchParen", { fg = c.text, bg = c.element_active, bold = true })
     hi("Directory", { fg = c.accent })
     hi("Title", { fg = c.accent, bold = true })
@@ -200,32 +205,32 @@ function M.load()
     hi("PmenuThumb", { bg = c.bright_black })
     hi("WildMenu", { fg = c.text, bg = c.element_active })
 
-    hi("Question", { fg = c.green })
-    hi("MoreMsg", { fg = c.green })
-    hi("WarningMsg", { fg = c.yellow })
-    hi("ErrorMsg", { fg = c.red })
+    hi("Question", { fg = c.success })
+    hi("MoreMsg", { fg = c.success })
+    hi("WarningMsg", { fg = c.warning })
+    hi("ErrorMsg", { fg = c.error })
     hi("ModeMsg", { fg = c.text })
 
     hi("DiffAdd", { bg = c.diff_add_bg })
     hi("DiffChange", { bg = c.diff_change_bg })
-    hi("DiffDelete", { fg = c.red, bg = c.diff_delete_bg })
+    hi("DiffDelete", { fg = c.diff_delete, bg = c.diff_delete_bg })
     hi("DiffText", { bg = c.dim_blue })
-    hi("Added", { fg = c.green })
-    hi("Changed", { fg = c.yellow })
-    hi("Removed", { fg = c.red })
+    hi("Added", { fg = c.diff_add })
+    hi("Changed", { fg = c.diff_change })
+    hi("Removed", { fg = c.diff_delete })
 
-    hi("DiagnosticError", { fg = c.red })
-    hi("DiagnosticWarn", { fg = c.yellow })
-    hi("DiagnosticInfo", { fg = c.accent })
+    hi("DiagnosticError", { fg = c.error })
+    hi("DiagnosticWarn", { fg = c.warning })
+    hi("DiagnosticInfo", { fg = c.info })
     hi("DiagnosticHint", { fg = c.hint })
-    hi("DiagnosticOk", { fg = c.green })
-    hi("DiagnosticVirtualTextError", { fg = c.red, bg = c.diff_delete_bg })
-    hi("DiagnosticVirtualTextWarn", { fg = c.yellow, bg = c.warn_bg })
-    hi("DiagnosticVirtualTextInfo", { fg = c.accent, bg = c.hint_bg })
+    hi("DiagnosticOk", { fg = c.success })
+    hi("DiagnosticVirtualTextError", { fg = c.error, bg = c.diff_delete_bg })
+    hi("DiagnosticVirtualTextWarn", { fg = c.warning, bg = c.warn_bg })
+    hi("DiagnosticVirtualTextInfo", { fg = c.info, bg = c.hint_bg })
     hi("DiagnosticVirtualTextHint", { fg = c.hint, bg = c.hint_bg })
-    hi("DiagnosticUnderlineError", { sp = c.red, undercurl = true })
-    hi("DiagnosticUnderlineWarn", { sp = c.yellow, undercurl = true })
-    hi("DiagnosticUnderlineInfo", { sp = c.accent, undercurl = true })
+    hi("DiagnosticUnderlineError", { sp = c.error, undercurl = true })
+    hi("DiagnosticUnderlineWarn", { sp = c.warning, undercurl = true })
+    hi("DiagnosticUnderlineInfo", { sp = c.info, undercurl = true })
     hi("DiagnosticUnderlineHint", { sp = c.hint, undercurl = true })
 
     hi("Comment", styled({ fg = c.syntax_comment }, styles.comments))
@@ -258,11 +263,11 @@ function M.load()
     hi("Tag", { fg = c.syntax_constant })
     hi("Delimiter", { fg = c.syntax_punctuation })
     hi("SpecialComment", { fg = c.syntax_doc_comment })
-    hi("Debug", { fg = c.red })
+    hi("Debug", { fg = c.error })
     hi("Underlined", { fg = c.accent, underline = true })
     hi("Ignore", { fg = c.placeholder })
-    hi("Error", { fg = c.red })
-    hi("Todo", { fg = c.yellow, bg = "NONE", bold = true })
+    hi("Error", { fg = c.error })
+    hi("Todo", { fg = c.warning, bg = "NONE", bold = true })
 
     -- Legacy Zig syntax group for @builtins when tree-sitter/LSP semantic
     -- highlighting is unavailable or disabled.
@@ -275,10 +280,10 @@ function M.load()
     hi("@character.special", { fg = c.syntax_special })
     hi("@comment", styled({ fg = c.syntax_comment }, styles.comments))
     hi("@comment.documentation", styled({ fg = c.syntax_doc_comment }, styles.comments))
-    hi("@comment.error", { fg = c.red })
-    hi("@comment.note", { fg = c.accent })
-    hi("@comment.todo", { fg = c.yellow, bold = true })
-    hi("@comment.warning", { fg = c.yellow })
+    hi("@comment.error", { fg = c.error })
+    hi("@comment.note", { fg = c.info })
+    hi("@comment.todo", { fg = c.warning, bold = true })
+    hi("@comment.warning", { fg = c.warning })
     hi("@constant", { fg = c.syntax_constant })
     hi("@constant.builtin", { fg = c.syntax_boolean })
     hi("@constant.macro", { fg = c.syntax_constant })
@@ -343,13 +348,13 @@ function M.load()
     hi("@markup.strong", { bold = true })
     hi("@markup.strikethrough", { strikethrough = true })
     hi("@markup.underline", { underline = true })
-    hi("@diff.plus", { fg = c.green })
-    hi("@diff.minus", { fg = c.red })
-    hi("@diff.delta", { fg = c.yellow })
+    hi("@diff.plus", { fg = c.diff_add })
+    hi("@diff.minus", { fg = c.diff_delete })
+    hi("@diff.delta", { fg = c.diff_change })
 
-    hi("GitSignsAdd", { fg = c.green, bg = c.bg })
-    hi("GitSignsChange", { fg = c.yellow, bg = c.bg })
-    hi("GitSignsDelete", { fg = c.red, bg = c.bg })
+    hi("GitSignsAdd", { fg = c.diff_add, bg = c.bg })
+    hi("GitSignsChange", { fg = c.diff_change, bg = c.bg })
+    hi("GitSignsDelete", { fg = c.diff_delete, bg = c.bg })
     hi("OilDir", { fg = c.accent })
     hi("OilFile", { fg = c.fg })
     hi("OilHidden", { fg = c.placeholder })
@@ -360,13 +365,14 @@ function M.load()
     hi("TelescopeBorder", { fg = c.border, bg = c.bg })
     hi("TelescopeTitle", { fg = c.accent, bg = c.bg, bold = true })
     hi("TelescopePromptNormal", { fg = c.fg, bg = c.surface })
-    hi("TelescopePromptBorder", { fg = c.border, bg = c.surface })
+    hi("TelescopePromptBorder", { fg = c.border_focused, bg = c.surface })
     hi("TelescopePromptPrefix", { fg = c.accent, bg = c.surface })
     hi("TelescopeSelection", { fg = c.text, bg = c.element_active })
-    hi("TelescopeMatching", { fg = c.yellow, bold = true })
+    hi("TelescopeMatching", { fg = c.match, bold = true })
 
     hi("CmpItemAbbr", { fg = c.fg })
-    hi("CmpItemAbbrDeprecated", { fg = c.placeholder, strikethrough = true })
+    hi("CmpItemAbbrDeprecated", { fg = c.predictive, strikethrough = true })
+    hi("BlinkCmpGhostText", { fg = c.predictive })
     hi("CmpItemAbbrMatch", { fg = c.accent, bold = true })
     hi("CmpItemAbbrMatchFuzzy", { fg = c.accent, bold = true })
     hi("CmpItemKind", { fg = c.syntax_type })
@@ -389,24 +395,24 @@ function M.load()
     hi("WhichKeyBorder", { fg = c.border, bg = c.bg })
 
     hi("LazyNormal", { fg = c.fg, bg = c.bg })
-    hi("LazyButton", { fg = c.fg, bg = c.surface })
+    hi("LazyButton", { fg = c.fg, bg = c.element_hover })
     hi("LazyButtonActive", { fg = c.text, bg = c.element_active, bold = true })
-    hi("LazyH1", { fg = c.terminal_bg, bg = c.accent, bold = true })
+    hi("LazyH1", { fg = c.on_accent, bg = c.accent, bold = true })
     hi("LazyH2", { fg = c.accent, bold = true })
     hi("LazySpecial", { fg = c.syntax_special })
     hi("LazyReasonPlugin", { fg = c.magenta })
     hi("LazyReasonRuntime", { fg = c.cyan })
-    hi("LazyProgressDone", { fg = c.green })
+    hi("LazyProgressDone", { fg = c.success })
     hi("LazyProgressTodo", { fg = c.border })
 
     hi("MasonNormal", { fg = c.fg, bg = c.bg })
-    hi("MasonHeader", { fg = c.terminal_bg, bg = c.accent, bold = true })
-    hi("MasonHeaderSecondary", { fg = c.terminal_bg, bg = c.magenta, bold = true })
+    hi("MasonHeader", { fg = c.on_accent, bg = c.accent, bold = true })
+    hi("MasonHeaderSecondary", { fg = c.on_accent, bg = c.magenta, bold = true })
     hi("MasonHighlight", { fg = c.accent })
-    hi("MasonHighlightBlock", { fg = c.terminal_bg, bg = c.accent })
+    hi("MasonHighlightBlock", { fg = c.on_accent, bg = c.accent })
     hi("MasonMuted", { fg = c.muted })
-    hi("MasonError", { fg = c.red })
-    hi("MasonWarning", { fg = c.yellow })
+    hi("MasonError", { fg = c.error })
+    hi("MasonWarning", { fg = c.warning })
 
     hi("TroubleNormal", { fg = c.fg, bg = c.bg })
     hi("TroubleText", { fg = c.fg })
@@ -422,9 +428,9 @@ function M.load()
     hi("NeoTreeFileName", { fg = c.fg })
     hi("NeoTreeRootName", { fg = c.text, bold = true })
     hi("NeoTreeIndentMarker", { fg = c.indent_guide })
-    hi("NeoTreeGitAdded", { fg = c.green })
-    hi("NeoTreeGitModified", { fg = c.yellow })
-    hi("NeoTreeGitDeleted", { fg = c.red })
+    hi("NeoTreeGitAdded", { fg = c.diff_add })
+    hi("NeoTreeGitModified", { fg = c.diff_change })
+    hi("NeoTreeGitDeleted", { fg = c.diff_delete })
     hi("NeoTreeGitUntracked", { fg = c.syntax_boolean })
     hi("NeoTreeGitIgnored", { fg = c.placeholder })
 
@@ -435,16 +441,16 @@ function M.load()
     hi("NvimTreeFileName", { fg = c.fg })
     hi("NvimTreeRootFolder", { fg = c.text, bold = true })
     hi("NvimTreeIndentMarker", { fg = c.indent_guide })
-    hi("NvimTreeGitNew", { fg = c.green })
-    hi("NvimTreeGitDirty", { fg = c.yellow })
-    hi("NvimTreeGitDeleted", { fg = c.red })
+    hi("NvimTreeGitNew", { fg = c.diff_add })
+    hi("NvimTreeGitDirty", { fg = c.diff_change })
+    hi("NvimTreeGitDeleted", { fg = c.diff_delete })
     hi("NvimTreeGitIgnored", { fg = c.placeholder })
 
     hi("SnacksPicker", { fg = c.fg, bg = c.bg })
     hi("SnacksPickerNormal", { fg = c.fg, bg = c.bg })
     hi("SnacksPickerBorder", { fg = c.border, bg = c.bg })
     hi("SnacksPickerTitle", { fg = c.accent, bg = c.bg, bold = true })
-    hi("SnacksPickerMatch", { fg = c.yellow, bold = true })
+    hi("SnacksPickerMatch", { fg = c.match, bold = true })
     hi("SnacksPickerCursorLine", { bg = c.element_active })
     hi("SnacksPickerDir", { fg = c.muted })
     hi("SnacksPickerFile", { fg = c.fg })
@@ -522,6 +528,10 @@ function M.load()
 
         for i, color in ipairs(terminal_colors) do
             vim.g["terminal_color_" .. (i - 1)] = color
+        end
+    else
+        for i = 0, 15 do
+            vim.g["terminal_color_" .. i] = nil
         end
     end
 
