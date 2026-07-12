@@ -1,27 +1,20 @@
 <div align="center">
   <h1>FLUME</h1>
   <p><strong>Organic synthesis. Soft contrast. Resonant code.</strong></p>
-  <p>A moody nvim theme tuned for quiet focus and warm spectral edges.</p>
-</div>
-
-<div align="center">
-  <img src="assets/palette.svg" alt="Flume palette swatches" width="600">
-</div>
-
-<div align="center">
-  <img src="screenshot.png" alt="Flume Theme Screenshot" width="1200">
-  <p><sub>Screenshot uses <a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a>.</sub></p>
+  <p>A dark Neovim theme tuned for quiet focus and warm spectral edges.</p>
+  <img src="assets/palette.svg" alt="Flume palette" width="600">
+  <img src="screenshot.png" alt="Flume theme in Neovim" width="1200">
+  <p><sub>JetBrains Mono · Zig</sub></p>
 </div>
 
 ## Features
 
-- One intentional dark palette: one current, one source of truth.
-- Tree-sitter, LSP semantic tokens, diagnostics, common plugin highlights, and terminal ANSI colors.
-- Palette overrides, highlight overrides, transparent mode, optional terminal colors, and simple style hooks.
-- Generated extras for Ghostty, Tmux, LSD, Pi, and Tuxedo.
-- Reload/compile commands for theme work without leaving Neovim.
+- Tree-sitter, LSP semantic tokens, diagnostics, terminal colors, and common plugins.
+- Palette and highlight overrides, transparent mode, and syntax style hooks.
+- Generated themes for Ghostty, Tmux, LSD, Pi, and Tuxedo.
+- One maintained dark palette and a fast reload workflow for theme development.
 
-## Install
+## Installation
 
 Requires Neovim 0.9+.
 
@@ -40,23 +33,7 @@ Using `lazy.nvim`:
 }
 ```
 
-Local development:
-
-```lua
-{
-    "mitander/flume.nvim",
-    dir = "~/path/to/flume.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {},
-    config = function(_, opts)
-        require("flume").setup(opts)
-        vim.cmd.colorscheme("flume")
-    end,
-}
-```
-
-## Configure
+## Configuration
 
 Defaults:
 
@@ -77,51 +54,91 @@ require("flume").setup({
 })
 ```
 
-| Option            | Purpose                                                                 |
-| ----------------- | ----------------------------------------------------------------------- |
-| `transparent`     | Removes editor background colors.                                       |
-| `terminal_colors` | Sets `vim.g.terminal_color_0` through `15`.                             |
-| `overrides`       | Overrides palette keys from `lua/flume/palette.lua`.                    |
-| `highlights`      | Overrides exact, case-sensitive Neovim highlight groups.                |
-| `styles`          | Adds style attrs to broad syntax roles, e.g. `{ italic = true }`.       |
+| Option            | Purpose                                                           |
+| ----------------- | ----------------------------------------------------------------- |
+| `transparent`     | Removes editor background colors.                                 |
+| `terminal_colors` | Sets `vim.g.terminal_color_0` through `15`.                       |
+| `overrides`       | Overrides palette keys from `lua/flume/palette.lua`.              |
+| `highlights`      | Overrides exact, case-sensitive Neovim highlight groups.          |
+| `styles`          | Adds style attrs to broad syntax roles, e.g. `{ italic = true }`. |
 
-Example:
+### Choosing an override
+
+- `overrides` changes a semantic color across languages.
+- `styles` adds broad attributes such as italic or bold.
+- `highlights` changes one exact Neovim group.
+
+#### Palette colors
+
+Use `overrides` when a color should follow the same semantic role everywhere.
+For example, this changes modules and namespaces across supported languages:
 
 ```lua
 require("flume").setup({
-    transparent = true,
+    overrides = {
+        syntax_namespace = "#f48a94",
+    },
+})
+```
+
+<details>
+<summary>Syntax palette roles</summary>
+
+| Key                          | Role                          |
+| ---------------------------- | ----------------------------- |
+| `syntax_attribute`           | Attributes and annotations    |
+| `syntax_boolean`             | Booleans and numeric literals |
+| `syntax_comment`             | Comments                      |
+| `syntax_doc_comment`         | Documentation comments        |
+| `syntax_constant`            | Constants and symbols         |
+| `syntax_function`            | Functions and methods         |
+| `syntax_keyword`             | Keywords and directives       |
+| `syntax_namespace`           | Modules and namespaces        |
+| `syntax_primary`             | Variables and identifiers     |
+| `syntax_property`            | Properties and fields         |
+| `syntax_punctuation`         | Delimiters and operators      |
+| `syntax_punctuation_bracket` | Brackets                      |
+| `syntax_punctuation_special` | Special punctuation           |
+| `syntax_special`             | Built-ins and special values  |
+| `syntax_string`              | Strings and characters        |
+| `syntax_type`                | Types and constructors        |
+
+All palette keys are defined in [`lua/flume/palette.lua`](lua/flume/palette.lua).
+
+</details>
+
+#### Syntax styles
+
+Use `styles` for broad text attributes:
+
+```lua
+require("flume").setup({
     styles = {
         comments = { italic = true },
         keywords = { bold = true },
     },
-    overrides = {
-        accent = "#73a6b6",
-        syntax_namespace = "#f48a94", -- @module and legacy @namespace
-    },
+})
+```
+
+#### Exact highlight groups
+
+Use `highlights` when you need to target a specific Neovim group or Tree-sitter
+capture:
+
+```lua
+require("flume").setup({
     highlights = {
-        Comment = { fg = "#333333", bg = "#ffff00" },
-        ["@comment"] = function(c)
-            return { fg = c.syntax_comment, italic = true }
-        end,
-        FloatBorder = function(c)
-            return { fg = c.accent, bg = c.bg }
+        Comment = { fg = "#f48a94" },
+        ["@comment"] = function(colors)
+            return { fg = colors.syntax_comment, italic = true }
         end,
     },
 })
 ```
 
-Highlight names must match Neovim's groups exactly: use `Comment` (singular,
-capitalized) for the legacy syntax group and `["@comment"]` for the Tree-sitter
-capture. `comments` is a `styles` role, not a highlight group. Use
-`:Inspect` at the cursor or `:highlight GroupName` to find the active group.
-
-Semantic palette keys include `syntax_attribute`, `syntax_boolean`,
-`syntax_comment`, `syntax_doc_comment`, `syntax_constant`, `syntax_function`,
-`syntax_type`, `syntax_keyword`, `syntax_namespace`, `syntax_primary`,
-`syntax_property`, `syntax_punctuation`, `syntax_punctuation_bracket`,
-`syntax_punctuation_special`, `syntax_string`, and `syntax_special`. More
-specific Tree-sitter captures inherit these roles; `highlights` remains
-available when you want to override an individual capture directly.
+Group names are case-sensitive. `Comment` is the legacy syntax group;
+`["@comment"]` is the Tree-sitter capture. Use `:Inspect` under the cursor or
+`:highlight GroupName` to find the active group.
 
 ## Integrations
 
@@ -166,7 +183,22 @@ Install supported extras from Neovim:
 :FlumeInstallExtras ghostty
 ```
 
-## Hacking
+## Development
+
+Use a local checkout with your plugin manager's `dir` option:
+
+```lua
+{
+    "mitander/flume.nvim",
+    dir = "~/path/to/flume.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+        require("flume").setup()
+        vim.cmd.colorscheme("flume")
+    end,
+}
+```
 
 Palette source:
 

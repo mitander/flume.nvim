@@ -1,35 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="840" height="108" viewBox="0 0 840 108" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="96" viewBox="0 0 840 96" role="img" aria-labelledby="title desc">
   <title id="title">Flume palette</title>
-  <desc id="desc">Seven Flume color swatches: deep violet, blue smoke, olive green, resin yellow, warm peach, spectral violet, and pale text.</desc>
-  <rect x="1" y="1" width="838" height="106" rx="22" fill="#17151f" stroke="#343949"/>
-  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" text-anchor="middle">
-    <g transform="translate(24 18)">
-      <rect width="108" height="54" rx="14" fill="#232136"/>
-      <text x="54" y="82" fill="#8a85a6">#232136</text>
+  <desc id="desc">Seven Flume colors arranged as a square-edged glitch signal: deep violet, blue smoke, olive green, resin yellow, warm peach, spectral violet, and pale text.</desc>
+
+  <defs>
+    <pattern id="stipple" width="12" height="10" patternUnits="userSpaceOnUse">
+      <rect x="1" y="2" width="1" height="1" fill="#17151f"/>
+      <rect x="8" y="6" width="1" height="1" fill="#17151f"/>
+      <rect x="4" y="9" width="1" height="1" fill="#17151f"/>
+    </pattern>
+  </defs>
+
+  <rect width="840" height="96" fill="#17151f"/>
+
+  <g shape-rendering="crispEdges">
+    <!-- primary signal -->
+    <path fill="#232136" d="M0 19h108v-5h12v48h-9v6H0z"/>
+    <path fill="#73a6b6" d="M120 12h111v4h9v48h-7v5h-18v-4h-95z"/>
+    <path fill="#a4b78a" d="M240 16h112v-5h8v53h-12v4h-15v-4h-93z"/>
+    <path fill="#dfb86b" d="M360 14h108v-4h12v48h-7v8H360z"/>
+    <path fill="#ea9f8c" d="M480 17h9v-7h111v54h-18v4H480z"/>
+    <path fill="#b391d6" d="M600 14h105v-4h15v51h-8v7h-20v-4h-92z"/>
+    <path fill="#d6d2e8" d="M720 11h9v4h111v53h-13v-4H720z"/>
+
+    <!-- displaced horizontal slices -->
+    <path fill="#73a6b6" d="M104 8h25v4h-25zM105 33h37v3h-37zM224 67h29v4h-29z"/>
+    <path fill="#a4b78a" d="M231 20h24v3h-24zM335 8h29v4h-29zM345 52h31v3h-31z"/>
+    <path fill="#dfb86b" d="M348 29h35v3h-35zM467 7h22v4h-22zM469 45h29v3h-29z"/>
+    <path fill="#ea9f8c" d="M467 61h27v4h-27zM582 12h30v3h-30zM586 37h32v3h-32z"/>
+    <path fill="#b391d6" d="M585 66h27v4h-27zM706 7h20v4h-20zM701 49h34v3h-34z"/>
+    <path fill="#d6d2e8" d="M705 23h28v3h-28zM825 69h15v4h-15z"/>
+
+    <!-- scan interruptions -->
+    <path fill="#17151f" d="M40 28h80v2H40zM0 48h72v2H0zM93 55h36v2H93zM207 42h58v2h-58zM286 26h64v2h-64zM336 57h42v2h-42zM447 35h71v2h-71zM535 53h56v2h-56zM574 25h58v2h-58zM675 39h68v2h-68zM758 55h82v2h-82z"/>
+
+    <!-- sparse pixel dust -->
+    <g fill="#8a85a6" opacity=".55">
+      <path d="M96 11h2v2h-2zM110 5h2v2h-2zM116 72h2v2h-2zM228 9h2v2h-2zM236 74h3v2h-3zM346 6h2v2h-2zM357 72h2v2h-2zM468 4h2v2h-2zM476 72h3v2h-3zM588 6h2v2h-2zM597 74h2v2h-2zM708 5h3v2h-3zM716 72h2v2h-2zM830 8h2v2h-2z"/>
     </g>
-    <g transform="translate(138 18)">
-      <rect width="108" height="54" rx="14" fill="#73a6b6"/>
-      <text x="54" y="82" fill="#8a85a6">#73a6b6</text>
-    </g>
-    <g transform="translate(252 18)">
-      <rect width="108" height="54" rx="14" fill="#a4b78a"/>
-      <text x="54" y="82" fill="#8a85a6">#a4b78a</text>
-    </g>
-    <g transform="translate(366 18)">
-      <rect width="108" height="54" rx="14" fill="#dfb86b"/>
-      <text x="54" y="82" fill="#8a85a6">#dfb86b</text>
-    </g>
-    <g transform="translate(480 18)">
-      <rect width="108" height="54" rx="14" fill="#ea9f8c"/>
-      <text x="54" y="82" fill="#8a85a6">#ea9f8c</text>
-    </g>
-    <g transform="translate(594 18)">
-      <rect width="108" height="54" rx="14" fill="#b391d6"/>
-      <text x="54" y="82" fill="#8a85a6">#b391d6</text>
-    </g>
-    <g transform="translate(708 18)">
-      <rect width="108" height="54" rx="14" fill="#d6d2e8"/>
-      <text x="54" y="82" fill="#8a85a6">#d6d2e8</text>
-    </g>
+    <path fill="url(#stipple)" opacity=".42" d="M0 19h46v43H0zM270 16h42v48h-42zM512 10h39v54h-39zM641 14h36v50h-36zM792 15h48v49h-48z"/>
+  </g>
+
+  <g fill="#8a85a6" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">
+    <text x="60" y="88">#232136</text>
+    <text x="180" y="88">#73a6b6</text>
+    <text x="300" y="88">#a4b78a</text>
+    <text x="420" y="88">#dfb86b</text>
+    <text x="540" y="88">#ea9f8c</text>
+    <text x="660" y="88">#b391d6</text>
+    <text x="780" y="88">#d6d2e8</text>
   </g>
 </svg>

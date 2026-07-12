@@ -47,46 +47,28 @@ transparent ~
 terminal_colors ~
     Sets g:terminal_color_0 through g:terminal_color_15 from the palette.
 
+Choosing an override ~
+
+    overrides   change a semantic color across languages
+    styles      add broad attributes such as italic or bold
+    highlights  change one exact Neovim group
+
 overrides ~
-    Overrides palette keys from lua/flume/palette.lua.
+    Changes palette colors by semantic role. This example affects modules and
+    namespaces across supported languages:
 >
     require("flume").setup({
         overrides = {
-            accent = "#73a6b6",
-            syntax_namespace = "#f48a94", -- @module and @namespace
+            syntax_namespace = "#f48a94",
         },
     })
 <
-    Semantic syntax keys include syntax_attribute, syntax_boolean,
-    syntax_comment, syntax_doc_comment, syntax_constant, syntax_function,
-    syntax_type, syntax_keyword, syntax_namespace, syntax_primary,
-    syntax_property, syntax_punctuation, syntax_punctuation_bracket,
-    syntax_punctuation_special, syntax_string, and syntax_special.
-
-highlights ~
-    Overrides exact, case-sensitive Neovim highlight groups after Flume has
-    applied its defaults. Values may be highlight tables or functions that
-    receive the resolved color table.
->
-    require("flume").setup({
-        highlights = {
-            Comment = { fg = "#333333", bg = "#ffff00" },
-            ["@comment"] = function(c)
-                return { fg = c.syntax_comment, italic = true }
-            end,
-            FloatBorder = function(c)
-                return { fg = c.accent, bg = c.bg }
-            end,
-        },
-    })
-<
-    Use Comment (singular, capitalized) for the legacy syntax group and
-    ["@comment"] for the Tree-sitter capture. "comments" is a styles role, not
-    a highlight group. Use :Inspect or :highlight GroupName to find the active
-    group.
+    Common roles include syntax_comment, syntax_function, syntax_keyword,
+    syntax_namespace, syntax_string, and syntax_type. See
+    lua/flume/palette.lua for the complete palette.
 
 styles ~
-    Adds style attributes to broad syntax roles.
+    Adds broad text attributes to syntax roles.
 >
     require("flume").setup({
         styles = {
@@ -95,6 +77,23 @@ styles ~
         },
     })
 <
+
+highlights ~
+    Changes an exact, case-sensitive Neovim group or Tree-sitter capture.
+    Values may be tables or functions that receive the resolved palette.
+>
+    require("flume").setup({
+        highlights = {
+            Comment = { fg = "#f48a94" },
+            ["@comment"] = function(colors)
+                return { fg = colors.syntax_comment, italic = true }
+            end,
+        },
+    })
+<
+    Comment is the legacy syntax group; ["@comment"] is the Tree-sitter
+    capture. Use :Inspect under the cursor or :highlight GroupName to find the
+    active group.
 
 ==============================================================================
 COMMANDS                                                        *flume-commands*
