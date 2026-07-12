@@ -7,16 +7,34 @@
   <p><sub>JetBrains Mono · Zig</sub></p>
 </div>
 
+## Design
+
+Flume takes its name and visual direction from [Jonathan Zawada's artwork for
+Flume](https://zawada.art/work/flume-skin/): organic forms meeting synthetic
+surfaces, spectral color, and digital interruption. Kanagawa and Jellybeans
+informed the palette's balance and long-session readability, while Zed's One
+Dark syntax highlighting influenced how colors are assigned across semantic
+code groups.
+
+The theme builds on one quiet violet-dark foundation, with muted smoke blue,
+moss, resin, coral, rose, and spectral violet assigned by semantic role. The
+goal is color that gives code structure without making every token compete for
+attention.
+
 ## Features
 
 - Tree-sitter, LSP semantic tokens, diagnostics, terminal colors, and common plugins.
 - Palette and highlight overrides, transparent mode, and syntax style hooks.
-- Generated themes for Ghostty, Tmux, LSD, Pi, and Tuxedo.
+- Generated palette integrations for Ghostty, Tmux, LSD, Pi, and Tuxedo.
 - One maintained dark palette and a fast reload workflow for theme development.
 
 ## Installation
 
-Requires Neovim 0.9+.
+Requires Neovim 0.9+ with true-color support:
+
+```lua
+vim.opt.termguicolors = true
+```
 
 Using `lazy.nvim`:
 
@@ -56,7 +74,7 @@ require("flume").setup({
 
 | Option            | Purpose                                                           |
 | ----------------- | ----------------------------------------------------------------- |
-| `transparent`     | Removes editor background colors.                                 |
+| `transparent`     | Removes the primary editor and sign-column backgrounds.            |
 | `terminal_colors` | Sets `vim.g.terminal_color_0` through `15`.                       |
 | `overrides`       | Overrides palette keys from `lua/flume/palette.lua`.              |
 | `highlights`      | Overrides exact, case-sensitive Neovim highlight groups.          |
@@ -71,7 +89,9 @@ require("flume").setup({
 #### Palette colors
 
 Use `overrides` when a color should follow the same semantic role everywhere.
-For example, this changes modules and namespaces across supported languages:
+Flume separates UI surfaces, semantic states, syntax, and ANSI colors; see the
+[color-system guide](docs/color-system.md) for the full contract. For example,
+this changes modules and namespaces across supported languages:
 
 ```lua
 require("flume").setup({
@@ -151,7 +171,8 @@ Group names are case-sensitive. `Comment` is the legacy syntax group;
 | Telescope, cmp, lazy.nvim, WhichKey   | Built in         |
 | Mason, Trouble, Neo-tree, nvim-tree   | Built in         |
 | Snacks picker                         | Built in         |
-| Ghostty, Tmux, LSD, Pi, Tuxedo        | Generated extras |
+| Ghostty, LSD, Pi, Tuxedo               | Generated themes |
+| Tmux                                   | Generated color variables |
 
 ## Commands
 
@@ -166,22 +187,30 @@ Group names are case-sensitive. `Comment` is the legacy syntax group;
 
 ## Extras
 
-Generated files live in `extras/` and are checked in:
-
-```text
-extras/ghostty/flume
-extras/tmux/colors.conf
-extras/lsd/colors.yaml
-extras/pi/flume.json
-extras/tuxedo/flume.toml
-```
-
-Install supported extras from Neovim:
+Generated files are checked in and can be used without running the compiler.
+Automated installation is available for Ghostty, Tmux, and LSD:
 
 ```vim
 :FlumeInstallExtras
 :FlumeInstallExtras ghostty
 ```
+
+| App | Generated file | Activation |
+| --- | --- | --- |
+| Ghostty | `extras/ghostty/flume` | Install, then set `theme = flume`. |
+| Tmux | `extras/tmux/colors.conf` | Source `~/.tmux/flume-theme.conf`; it defines `thm_*` color variables for your status-line config. |
+| LSD | `extras/lsd/colors.yaml` | Install to the standard LSD color path. |
+| Pi | `extras/pi/flume.json` | Copy or link into your Pi themes directory. |
+| Tuxedo | `extras/tuxedo/flume.toml` | Copy or link into your Tuxedo themes directory. |
+
+`:FlumeCompile` regenerates these files after changes to the canonical palette.
+The installer refuses to replace regular files.
+
+## Wallpaper
+
+The generated artwork is available as [`background.png`](background.png) at its
+original 1376×768 resolution. There is no higher-resolution source; enlarging it
+requires upscaling and may soften the detail.
 
 ## Development
 
@@ -200,17 +229,23 @@ Use a local checkout with your plugin manager's `dir` option:
 }
 ```
 
-Palette source:
+Palette source and design contract:
 
 ```text
 lua/flume/palette.lua
 ```
 
-Compile everything:
+See [`docs/color-system.md`](docs/color-system.md) for the role system and
+contrast rules. The proposed light direction is documented in
+[`docs/light-scheme.md`](docs/light-scheme.md); it is not shipped yet.
+
+Run the local quality gate:
 
 ```sh
-nvim --headless --cmd "set rtp+=." -c "lua require('flume.compiler').compile_all()" -c "qa"
+./scripts/check
 ```
+
+Compile extras explicitly with `:FlumeCompile`.
 
 Refresh the header screenshot:
 

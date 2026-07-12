@@ -19,6 +19,7 @@ Install with your plugin manager, then load the theme:
 <
 
 Flume targets Neovim 0.9+ and expects 'termguicolors' for accurate color.
+It currently ships one dark scheme.
 
 ==============================================================================
 OPTIONS                                                          *flume-options*
@@ -42,7 +43,8 @@ Defaults:
 <
 
 transparent ~
-    Removes editor background colors.
+    Removes the primary editor and sign-column backgrounds. Raised surfaces,
+    selections, diffs, and diagnostic backgrounds remain visible.
 
 terminal_colors ~
     Sets g:terminal_color_0 through g:terminal_color_15 from the palette.
@@ -63,9 +65,10 @@ overrides ~
         },
     })
 <
-    Common roles include syntax_comment, syntax_function, syntax_keyword,
-    syntax_namespace, syntax_string, and syntax_type. See
-    lua/flume/palette.lua for the complete palette.
+    Syntax roles include syntax_comment, syntax_function, syntax_keyword,
+    syntax_namespace, syntax_string, and syntax_type. State roles include
+    error, warning, success, info, match, and diff_add/diff_change/diff_delete.
+    See lua/flume/palette.lua and docs/color-system.md for the full contract.
 
 styles ~
     Adds broad text attributes to syntax roles.
@@ -118,13 +121,18 @@ COMMANDS                                                        *flume-commands*
 ==============================================================================
 EXTRAS                                                            *flume-extras*
 
-Generated files are checked into extras/:
+Generated files are checked into extras/ and can be used without compiling:
 
-    extras/ghostty/flume
-    extras/tmux/colors.conf
-    extras/lsd/colors.yaml
-    extras/pi/flume.json
-    extras/tuxedo/flume.toml
+    APP       FILE                         ACTIVATION
+    Ghostty   extras/ghostty/flume         set theme = flume
+    Tmux      extras/tmux/colors.conf      source ~/.tmux/flume-theme.conf
+    LSD       extras/lsd/colors.yaml        install to the standard color path
+    Pi        extras/pi/flume.json          copy/link into the themes directory
+    Tuxedo    extras/tuxedo/flume.toml      copy/link into the themes directory
+
+The Tmux file defines thm_* color variables; it is not a complete status-line
+configuration. Automated installation supports Ghostty, Tmux, and LSD and
+refuses to replace regular files.
 
 If you edit lua/flume/palette.lua, run :FlumeCompile or :FlumeReload.
 

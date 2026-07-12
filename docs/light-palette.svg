@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="96" viewBox="0 0 840 96" role="img" aria-labelledby="title desc">
+  <title id="title">Proposed Flume light palette</title>
+  <desc id="desc">Seven proposed light Flume colors arranged as a square-edged glitch signal: violet paper, smoke blue, moss, resin, coral, spectral violet, and charcoal text.</desc>
+  <defs>
+    <pattern id="stipple" width="12" height="10" patternUnits="userSpaceOnUse">
+      <rect x="1" y="2" width="1" height="1" fill="#e1dbe3"/>
+      <rect x="8" y="6" width="1" height="1" fill="#e1dbe3"/>
+      <rect x="4" y="9" width="1" height="1" fill="#e1dbe3"/>
+    </pattern>
+  </defs>
+  <rect width="840" height="96" fill="#e7e1e8"/>
+  <g shape-rendering="crispEdges">
+    <path fill="#f3eff2" d="M0 19h108v-5h12v48h-9v6H0z"/>
+    <path fill="#3f7180" d="M120 12h111v4h9v48h-7v5h-18v-4h-95z"/>
+    <path fill="#557245" d="M240 16h112v-5h8v53h-12v4h-15v-4h-93z"/>
+    <path fill="#815f1d" d="M360 14h108v-4h12v48h-7v8H360z"/>
+    <path fill="#9b5146" d="M480 17h9v-7h111v54h-18v4H480z"/>
+    <path fill="#72518f" d="M600 14h105v-4h15v51h-8v7h-20v-4h-92z"/>
+    <path fill="#413b49" d="M720 11h9v4h111v53h-13v-4H720z"/>
+    <path fill="#3f7180" d="M104 8h25v4h-25zM105 33h37v3h-37zM224 67h29v4h-29z"/>
+    <path fill="#557245" d="M231 20h24v3h-24zM335 8h29v4h-29zM345 52h31v3h-31z"/>
+    <path fill="#815f1d" d="M348 29h35v3h-35zM467 7h22v4h-22zM469 45h29v3h-29z"/>
+    <path fill="#9b5146" d="M467 61h27v4h-27zM582 12h30v3h-30zM586 37h32v3h-32z"/>
+    <path fill="#72518f" d="M585 66h27v4h-27zM706 7h20v4h-20zM701 49h34v3h-34z"/>
+    <path fill="#413b49" d="M705 23h28v3h-28zM825 69h15v4h-15z"/>
+    <path fill="#e1dbe3" d="M40 28h80v2H40zM0 48h72v2H0zM93 55h36v2H93zM207 42h58v2h-58zM286 26h64v2h-64zM336 57h42v2h-42zM447 35h71v2h-71zM535 53h56v2h-56zM574 25h58v2h-58zM675 39h68v2h-68zM758 55h82v2H758z"/>
+    <path fill="url(#stipple)" opacity=".7" d="M0 19h46v43H0zM270 16h42v48h-42zM512 10h39v54h-39zM641 14h36v50h-36zM792 15h48v49h-48z"/>
+  </g>
+  <g fill="#625b69" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">
+    <text x="60" y="88">#f3eff2</text>
+    <text x="180" y="88">#3f7180</text>
+    <text x="300" y="88">#557245</text>
+    <text x="420" y="88">#815f1d</text>
+    <text x="540" y="88">#9b5146</text>
+    <text x="660" y="88">#72518f</text>
+    <text x="780" y="88">#413b49</text>
+  </g>
+</svg>
