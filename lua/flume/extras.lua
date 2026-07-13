@@ -16,6 +16,10 @@ local apps = {
         src = "extras/ghostty/flume",
         dest = "~/.config/ghostty/themes/flume",
     },
+    kitty = {
+        src = "extras/kitty/flume.conf",
+        dest = "~/.config/kitty/themes/flume.conf",
+    },
     tmux = {
         src = "extras/tmux/colors.conf",
         dest = "~/.tmux/flume-theme.conf",
