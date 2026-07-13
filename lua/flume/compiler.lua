@@ -152,6 +152,94 @@ palette = 15=%s
     return write_file_if_changed(path, content)
 end
 
+function M.compile_kitty()
+    local palette = get_palette()
+    local template = [[# Flume Theme for Kitty
+background            %s
+foreground            %s
+selection_background  %s
+selection_foreground  %s
+cursor                %s
+cursor_text_color     %s
+
+# Black
+color0  %s
+color8  %s
+
+# Red
+color1  %s
+color9  %s
+
+# Green
+color2  %s
+color10 %s
+
+# Yellow
+color3  %s
+color11 %s
+
+# Blue
+color4  %s
+color12 %s
+
+# Magenta
+color5  %s
+color13 %s
+
+# Cyan
+color6  %s
+color14 %s
+
+# White
+color7  %s
+color15 %s
+
+# Tab bar
+tab_bar_background        %s
+tab_bar_margin_color      %s
+active_tab_foreground     %s
+active_tab_background     %s
+active_tab_font_style     bold
+inactive_tab_foreground   %s
+inactive_tab_background   %s
+inactive_tab_font_style   normal
+]]
+    local content = string.format(
+        template,
+        palette.terminal_bg,
+        palette.fg,
+        palette.black, -- selection_background
+        palette.fg, -- selection_foreground
+        palette.accent,
+        palette.on_accent, -- cursor_text_color
+        palette.black,
+        palette.bright_black,
+        palette.red,
+        palette.bright_red,
+        palette.green,
+        palette.bright_green,
+        palette.yellow,
+        palette.bright_yellow,
+        palette.blue,
+        palette.bright_blue,
+        palette.magenta,
+        palette.bright_magenta,
+        palette.cyan,
+        palette.bright_cyan,
+        palette.white,
+        palette.bright_white,
+        palette.surface,          -- tab_bar_background
+        palette.surface,          -- tab_bar_margin_color
+        palette.fg,               -- active_tab_foreground
+        palette.element_active,   -- active_tab_background
+        palette.muted,            -- inactive_tab_foreground
+        palette.surface           -- inactive_tab_background
+    )
+
+    local path = get_plugin_dir() .. "/extras/kitty/flume.conf"
+    return write_file_if_changed(path, content)
+end
+
 function M.compile_tmux()
     local palette = get_palette()
     local template = [[# Flume tmux color variables.
@@ -548,6 +636,7 @@ function M.compile_all(opts)
     opts = opts or {}
     local changed = {
         ghostty = M.compile_ghostty(),
+        kitty = M.compile_kitty(),
         tmux = M.compile_tmux(),
         lsd = M.compile_lsd(),
         pi = M.compile_pi(),
