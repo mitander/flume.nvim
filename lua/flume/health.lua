@@ -44,6 +44,8 @@ function M.check()
 
     local root = plugin_root()
     check_file("Ghostty extra", root .. "/extras/ghostty/flume")
+    check_file("Kitty extra", root .. "/extras/kitty/flume.conf")
+    check_file("OpenCode extra", root .. "/extras/opencode/flume.json")
     check_file("Tmux extra", root .. "/extras/tmux/colors.conf")
     check_file("LSD extra", root .. "/extras/lsd/colors.yaml")
     check_file("Pi extra", root .. "/extras/pi/flume.json")

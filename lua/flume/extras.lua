@@ -16,6 +16,10 @@ local apps = {
         src = "extras/ghostty/flume",
         dest = "~/.config/ghostty/themes/flume",
     },
+    kitty = {
+        src = "extras/kitty/flume.conf",
+        dest = "~/.config/kitty/themes/flume.conf",
+    },
     opencode = {
         src = "extras/opencode/flume.json",
         dest = "~/.config/opencode/themes/flume.json",
@@ -115,6 +119,8 @@ function M.show_instructions()
         "Or link a specific application theme:",
         "```vim",
         ":FlumeInstallExtras ghostty",
+        ":FlumeInstallExtras kitty",
+        ":FlumeInstallExtras opencode",
         ":FlumeInstallExtras tmux",
         ":FlumeInstallExtras lsd",
         "```",
