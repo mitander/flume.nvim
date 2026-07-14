@@ -16,6 +16,10 @@ local apps = {
         src = "extras/ghostty/flume",
         dest = "~/.config/ghostty/themes/flume",
     },
+    opencode = {
+        src = "extras/opencode/flume.json",
+        dest = "~/.config/opencode/themes/flume.json",
+    },
     tmux = {
         src = "extras/tmux/colors.conf",
         dest = "~/.tmux/flume-theme.conf",
