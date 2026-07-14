@@ -1,6 +1,6 @@
 # Flume color system
 
-Flume uses one resolved color table, but its roles belong to four distinct layers. Keeping those layers separate makes overrides predictable and gives a future light palette the same semantic contract.
+Flume resolves each named palette through one schema contract. Its roles belong to four distinct layers, keeping overrides predictable across all four appearances. The [palette origins](palette-origins.md) explain how downstream design work informed Mira and Mesa without owning their public names. The [generated palette manifest](palette-manifest.md) lists every exact role and tested contrast pair directly from the canonical Lua table.
 
 ## Principles
 
@@ -8,7 +8,8 @@ Flume uses one resolved color table, but its roles belong to four distinct layer
 2. **Semantic color.** Diagnostics, diffs, matches, and syntax use named roles rather than terminal color slots.
 3. **Controlled saturation.** Stronger color marks state or structure; ordinary identifiers remain neutral.
 4. **Stable hierarchy.** Color families keep the same meaning across Tree-sitter, LSP, plugins, and generated extras.
-5. **Explicit contrast.** Primary text and filled labels target 4.5:1 contrast. State-bearing secondary text and boundaries target 3:1 where the subdued design allows it.
+5. **Palette intensity.** A palette may change chroma, as Opal does, without changing semantic assignments or surface hierarchy.
+6. **Explicit contrast.** Primary text and filled labels target 4.5:1 contrast. Focused, state-bearing boundaries target 3:1. Decorative separators remain intentionally quieter and do not carry state by color alone.
 
 ## Layers
 
@@ -41,6 +42,10 @@ Exact group overrides remain available for further language-specific exceptions.
 
 Language-qualified corrections live in `lua/flume/languages/`, one file per language, so they remain independently reviewable. The initial set covers Lua table constructors, Python namespaces, Rust enum constructors, TSX component constructors, and zls namespace behavior. Languages that are represented correctly by the generic Tree-sitter and LSP groups should not receive an empty override file.
 
+### Integration colors
+
+Plugin integrations must resolve visible colors through semantic roles instead of accepting plugin-provided named colors. Actions and key bindings use `accent`; descriptions and secondary metadata use `muted`; search matches use `match`; selections use `element_active`; success and version-control state use their corresponding semantic roles. This prevents light-mode defaults such as fzf-lua's `MediumSpringGreen` from leaking into any schema.
+
 ### Terminal colors
 
 `black` through `bright_white` are the sixteen ANSI slots. They are terminal primitives, not diagnostic or diff roles. The explicit `dim_*` values are retained as palette primitives for future terminal and integration work.
@@ -53,3 +58,4 @@ Language-qualified corrections live in `lua/flume/languages/`, one file per lang
 - `overrides` are applied after the base palette resolves.
 - User `highlights` are applied last and therefore win.
 - Generated extras compile from the canonical palette, not editor-local overrides.
+- Global saturation/chroma transforms are not a v0.2.0 API; exact role-level overrides remain the supported customization boundary.

@@ -1,7 +1,25 @@
 local M = {}
 
-local function get_palette()
-    return require("flume.palette").colors
+local uv = vim.uv or vim.loop
+
+local function normalize_schema(schema)
+    return require("flume.palette").resolve(schema or "dusk")
+end
+
+local function get_schema(schema)
+    return require("flume.palette").get(normalize_schema(schema))
+end
+
+local function get_palette(schema)
+    return get_schema(schema).colors
+end
+
+local function schema_suffix(schema)
+    return get_schema(schema).suffix
+end
+
+local function is_light(schema)
+    return get_schema(schema).appearance == "light"
 end
 
 local function get_plugin_dir()
@@ -25,12 +43,28 @@ local function write_file_if_changed(path, content)
     end
 
     vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
-    local file = io.open(path, "wb")
+    local temporary = path .. ".flume-" .. tostring(uv.hrtime())
+    local file = io.open(temporary, "wb")
     if not file then
-        error("Could not write to file: " .. path)
+        error("Could not write temporary file for: " .. path)
     end
-    file:write(content)
-    file:close()
+    local written, write_error = file:write(content)
+    if not written then
+        file:close()
+        uv.fs_unlink(temporary)
+        error("Could not write temporary file for " .. path .. ": " .. tostring(write_error))
+    end
+    local closed, close_error = file:close()
+    if not closed then
+        uv.fs_unlink(temporary)
+        error("Could not flush temporary file for " .. path .. ": " .. tostring(close_error))
+    end
+
+    local renamed, rename_error = uv.fs_rename(temporary, path)
+    if not renamed then
+        uv.fs_unlink(temporary)
+        error("Could not atomically replace " .. path .. ": " .. tostring(rename_error))
+    end
     return true
 end
 
@@ -95,8 +129,9 @@ local function hex_to_xterm(hex)
     return closest_idx
 end
 
-function M.compile_ghostty()
-    local palette = get_palette()
+function M.compile_ghostty(schema)
+    local palette = get_palette(schema)
+    local selection_foreground = is_light(schema) and palette.on_accent or palette.fg
     local template = [[# Flume Theme for Ghostty
 background = %s
 foreground = %s
@@ -127,7 +162,7 @@ palette = 15=%s
         palette.terminal_bg,
         palette.fg,
         palette.black, -- selection-background
-        palette.fg, -- selection-foreground
+        selection_foreground,
         palette.accent,
         palette.on_accent, -- cursor-text
         palette.black,
@@ -148,12 +183,13 @@ palette = 15=%s
         palette.bright_white
     )
 
-    local path = get_plugin_dir() .. "/extras/ghostty/flume"
+    local path = get_plugin_dir() .. "/extras/ghostty/flume" .. schema_suffix(schema)
     return write_file_if_changed(path, content)
 end
 
-function M.compile_kitty()
-    local palette = get_palette()
+function M.compile_kitty(schema)
+    local palette = get_palette(schema)
+    local selection_foreground = is_light(schema) and palette.on_accent or palette.fg
     local template = [[# Flume Theme for Kitty
 background            %s
 foreground            %s
@@ -209,7 +245,7 @@ inactive_tab_font_style   normal
         palette.terminal_bg,
         palette.fg,
         palette.black, -- selection_background
-        palette.fg, -- selection_foreground
+        selection_foreground,
         palette.accent,
         palette.on_accent, -- cursor_text_color
         palette.black,
@@ -236,12 +272,12 @@ inactive_tab_font_style   normal
         palette.surface           -- inactive_tab_background
     )
 
-    local path = get_plugin_dir() .. "/extras/kitty/flume.conf"
+    local path = get_plugin_dir() .. "/extras/kitty/flume" .. schema_suffix(schema) .. ".conf"
     return write_file_if_changed(path, content)
 end
 
-function M.compile_tmux()
-    local palette = get_palette()
+function M.compile_tmux(schema)
+    local palette = get_palette(schema)
     local template = [[# Flume tmux color variables.
 
 %%hidden thm_bg="%s"
@@ -275,174 +311,123 @@ function M.compile_tmux()
         palette.bright_red -- thm_orange
     )
 
-    local path = get_plugin_dir() .. "/extras/tmux/colors.conf"
+    local path = get_plugin_dir() .. "/extras/tmux/colors" .. schema_suffix(schema) .. ".conf"
     return write_file_if_changed(path, content)
 end
 
-function M.compile_lsd()
-    local palette = get_palette()
+function M.compile_lsd(schema)
+    local palette = get_palette(schema)
+    local light = is_light(schema)
+    local permission_read = palette.muted
+    local permission_write = light and palette.muted or palette.yellow
+    local permission_exec = light and palette.muted or palette.green
+    local metadata = palette.muted
     local template = [[# Flume colors for lsd.
-# lsd 1.1.x uses crossterm color values; use xterm-256 approximations
-# instead of #RRGGBB so the theme is actually applied.
-
-name:
-  file: %d            # syntax_primary (%s)
-  dir: %d             # accent (%s)
-  pipe: %d            # cyan (%s)
-  symlink: %d         # cyan (%s)
-  block-device: %d    # magenta (%s)
-  char-device: %d     # magenta (%s)
-  socket: %d          # magenta (%s)
-  special: %d         # syntax_special (%s)
+# lsd color themes only style metadata; file names continue to use LS_COLORS.
+# Numeric values are xterm-256 approximations supported by crossterm.
 
 user: %d              # muted (%s)
-group: %d             # placeholder/comment (%s)
+group: %d             # muted (%s)
 
 permission:
-  read: %d            # muted (%s)
-  write: %d           # yellow (%s)
-  exec: %d            # green (%s)
-  exec-sticky: %d     # magenta (%s)
-  no-access: %d       # placeholder/comment (%s)
-  octal: %d           # bright_blue (%s)
-  acl: %d             # cyan (%s)
-  context: %d         # doc_comment (%s)
+  read: %d             # quiet metadata (%s)
+  write: %d            # quiet metadata (%s)
+  exec: %d             # quiet metadata (%s)
+  exec-sticky: %d      # error (%s)
+  no-access: %d        # placeholder (%s)
+  octal: %d            # muted (%s)
+  acl: %d              # accent (%s)
+  context: %d          # doc_comment (%s)
 
 date:
-  hour-old: %d        # syntax_primary (%s)
-  day-old: %d         # muted (%s)
-  older: %d           # placeholder/comment (%s)
+  hour-old: %d         # muted (%s)
+  day-old: %d          # muted (%s)
+  older: %d            # placeholder (%s)
 
 size:
-  none: %d            # placeholder/comment (%s)
-  small: %d           # muted (%s)
-  medium: %d          # cyan (%s)
-  large: %d           # yellow (%s)
+  none: %d             # placeholder (%s)
+  small: %d            # muted (%s)
+  medium: %d           # muted (%s)
+  large: %d            # warning (%s)
 
 inode:
-  valid: %d           # muted (%s)
-  invalid: %d         # placeholder/comment (%s)
+  valid: %d            # muted (%s)
+  invalid: %d          # placeholder (%s)
 
 links:
-  valid: %d           # muted (%s)
-  invalid: %d         # placeholder/comment (%s)
+  valid: %d            # muted (%s)
+  invalid: %d          # placeholder (%s)
 
-tree-edge: %d         # border_variant (%s)
+tree-edge: %d          # border_variant (%s)
 
 git-status:
-  default: %d         # placeholder/comment (%s)
-  unmodified: %d      # placeholder/comment (%s)
-  ignored: %d         # placeholder/comment (%s)
-  new-in-index: %d    # green (%s)
-  new-in-workdir: %d  # green (%s)
-  typechange: %d      # yellow (%s)
-  deleted: %d         # red (%s)
-  renamed: %d         # accent (%s)
-  modified: %d        # yellow (%s)
-  conflicted: %d      # bright_red (%s)
+  default: %d          # placeholder (%s)
+  unmodified: %d       # placeholder (%s)
+  ignored: %d          # placeholder (%s)
+  new-in-index: %d     # success (%s)
+  new-in-workdir: %d   # success (%s)
+  typechange: %d       # warning (%s)
+  deleted: %d          # error (%s)
+  renamed: %d          # accent (%s)
+  modified: %d         # warning (%s)
+  conflicted: %d       # error (%s)
 ]]
 
-    local content = string.format(
-        template,
-        hex_to_xterm(palette.syntax_primary),
-        palette.syntax_primary,
-        hex_to_xterm(palette.accent),
+    local args = {}
+    local function add(value)
+        args[#args + 1] = hex_to_xterm(value)
+        args[#args + 1] = value
+    end
+
+    for _, value in ipairs({
+        metadata,
+        metadata,
+        permission_read,
+        permission_write,
+        permission_exec,
+        palette.error,
+        palette.placeholder,
+        metadata,
         palette.accent,
-        hex_to_xterm(palette.cyan),
-        palette.cyan,
-        hex_to_xterm(palette.cyan),
-        palette.cyan,
-        hex_to_xterm(palette.magenta),
-        palette.magenta,
-        hex_to_xterm(palette.magenta),
-        palette.magenta,
-        hex_to_xterm(palette.magenta),
-        palette.magenta,
-        hex_to_xterm(palette.syntax_special),
-        palette.syntax_special,
-
-        hex_to_xterm(palette.muted),
-        palette.muted,
-        hex_to_xterm(palette.placeholder),
-        palette.placeholder,
-
-        hex_to_xterm(palette.muted),
-        palette.muted,
-        hex_to_xterm(palette.yellow),
-        palette.yellow,
-        hex_to_xterm(palette.green),
-        palette.green,
-        hex_to_xterm(palette.magenta),
-        palette.magenta,
-        hex_to_xterm(palette.placeholder),
-        palette.placeholder,
-        hex_to_xterm(palette.bright_blue),
-        palette.bright_blue,
-        hex_to_xterm(palette.cyan),
-        palette.cyan,
-        hex_to_xterm(palette.syntax_doc_comment),
         palette.syntax_doc_comment,
-
-        hex_to_xterm(palette.syntax_primary),
-        palette.syntax_primary,
-        hex_to_xterm(palette.muted),
-        palette.muted,
-        hex_to_xterm(palette.placeholder),
+        metadata,
+        metadata,
         palette.placeholder,
-
-        hex_to_xterm(palette.placeholder),
         palette.placeholder,
-        hex_to_xterm(palette.muted),
-        palette.muted,
-        hex_to_xterm(palette.cyan),
-        palette.cyan,
-        hex_to_xterm(palette.yellow),
-        palette.yellow,
-
-        hex_to_xterm(palette.muted),
-        palette.muted,
-        hex_to_xterm(palette.placeholder),
+        metadata,
+        metadata,
+        palette.warning,
+        metadata,
         palette.placeholder,
-
-        hex_to_xterm(palette.muted),
-        palette.muted,
-        hex_to_xterm(palette.placeholder),
+        metadata,
         palette.placeholder,
-
-        hex_to_xterm(palette.border_variant),
         palette.border_variant,
-
-        hex_to_xterm(palette.placeholder),
         palette.placeholder,
-        hex_to_xterm(palette.placeholder),
         palette.placeholder,
-        hex_to_xterm(palette.placeholder),
         palette.placeholder,
-        hex_to_xterm(palette.green),
-        palette.green,
-        hex_to_xterm(palette.green),
-        palette.green,
-        hex_to_xterm(palette.yellow),
-        palette.yellow,
-        hex_to_xterm(palette.red),
-        palette.red,
-        hex_to_xterm(palette.accent),
+        palette.success,
+        palette.success,
+        palette.warning,
+        palette.error,
         palette.accent,
-        hex_to_xterm(palette.yellow),
-        palette.yellow,
-        hex_to_xterm(palette.bright_red),
-        palette.bright_red
-    )
+        palette.warning,
+        palette.error,
+    }) do
+        add(value)
+    end
 
-    local path = get_plugin_dir() .. "/extras/lsd/colors.yaml"
+    local content = string.format(template, unpack(args))
+
+    local path = get_plugin_dir() .. "/extras/lsd/colors" .. schema_suffix(schema) .. ".yaml"
     return write_file_if_changed(path, content)
 end
 
-function M.compile_pi()
-    local palette = get_palette()
+function M.compile_pi(schema)
+    local schema_meta = get_schema(schema)
+    local palette = schema_meta.colors
     local template = [[{
   "$schema": "https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/src/modes/interactive/theme/theme-schema.json",
-  "name": "flume",
+  "name": "%s",
   "vars": {
     "bg": "%s",
     "surface": "%s",
@@ -460,6 +445,10 @@ function M.compile_pi()
     "green": "%s",
     "yellow": "%s",
     "red": "%s",
+    "success": "%s",
+    "error": "%s",
+    "diffAdd": "%s",
+    "diffDelete": "%s",
     "pink": "%s",
     "magenta": "%s",
     "property": "%s",
@@ -475,8 +464,8 @@ function M.compile_pi()
     "border": "border",
     "borderAccent": "cyan",
     "borderMuted": "borderMuted",
-    "success": "green",
-    "error": "red",
+    "success": "success",
+    "error": "error",
     "warning": "yellow",
     "muted": "muted",
     "dim": "dim",
@@ -495,7 +484,7 @@ function M.compile_pi()
     "toolTitle": "accent",
     "toolOutput": "softFg",
 
-    "mdHeading": "property",
+    "mdHeading": "accent",
     "mdLink": "blue",
     "mdLinkUrl": "cyan",
     "mdCode": "cyan",
@@ -506,8 +495,8 @@ function M.compile_pi()
     "mdHr": "borderMuted",
     "mdListBullet": "cyan",
 
-    "toolDiffAdded": "green",
-    "toolDiffRemoved": "red",
+    "toolDiffAdded": "diffAdd",
+    "toolDiffRemoved": "diffDelete",
     "toolDiffContext": "muted",
 
     "syntaxComment": "dim",
@@ -538,6 +527,7 @@ function M.compile_pi()
 ]]
     local content = string.format(
         template,
+        schema_meta.integration_name,
         palette.bg,
         palette.surface,
         palette.surface_alt,
@@ -554,6 +544,10 @@ function M.compile_pi()
         palette.syntax_string,
         palette.syntax_type,
         palette.red,
+        palette.success,
+        palette.error,
+        palette.diff_add,
+        palette.diff_delete,
         palette.syntax_boolean,
         palette.syntax_keyword,
         palette.syntax_property,
@@ -565,14 +559,130 @@ function M.compile_pi()
         palette.warn_bg
     )
 
-    local path = get_plugin_dir() .. "/extras/pi/flume.json"
+    local path = get_plugin_dir() .. "/extras/pi/flume" .. schema_suffix(schema) .. ".json"
     return write_file_if_changed(path, content)
 end
 
-function M.compile_tuxedo()
-    local palette = get_palette()
-    local template = [[# Flume theme for Tuxedo.
-name = Flume
+function M.compile_lazygit(schema)
+    local palette = get_palette(schema)
+    local template = [[# Generated by Flume. Load after your base Lazygit config.
+gui:
+  theme:
+    activeBorderColor: ["%s", bold]
+    inactiveBorderColor: ["%s"]
+    searchingActiveBorderColor: ["%s", bold]
+    optionsTextColor: ["%s"]
+    selectedLineBgColor: ["%s"]
+    inactiveViewSelectedLineBgColor: ["%s"]
+    cherryPickedCommitBgColor: ["%s"]
+    cherryPickedCommitFgColor: ["%s"]
+    unstagedChangesColor: ["%s"]
+    defaultFgColor: ["%s"]
+git:
+  pagers:
+    - colorArg: always
+      pager: 'delta --%s --features="" --paging=never --syntax-theme=ansi --minus-style="syntax %s" --minus-emph-style="syntax %s" --plus-style="syntax %s" --plus-emph-style="syntax %s" --line-numbers --line-numbers-minus-style=%s --line-numbers-plus-style=%s --line-numbers-left-style=%s --line-numbers-right-style=%s'
+]]
+    local content = string.format(
+        template,
+        palette.border_focused,
+        palette.border,
+        palette.match,
+        palette.muted,
+        palette.element_active,
+        palette.active_line,
+        palette.element_active,
+        palette.syntax_keyword,
+        palette.diff_delete,
+        palette.syntax_primary,
+        is_light(schema) and "light" or "dark",
+        palette.diff_delete_bg,
+        palette.diff_delete_emphasis,
+        palette.diff_add_bg,
+        palette.diff_add_emphasis,
+        palette.diff_delete,
+        palette.diff_add,
+        palette.border,
+        palette.border
+    )
+
+    return write_file_if_changed(get_plugin_dir() .. "/extras/lazygit/flume" .. schema_suffix(schema) .. ".yml", content)
+end
+
+function M.compile_fzf(schema)
+    local palette = get_palette(schema)
+    local colors = {
+        "fg:" .. palette.fg,
+        "bg:" .. palette.bg,
+        "hl:" .. palette.match,
+        "fg+:" .. palette.text,
+        "bg+:" .. palette.element_active,
+        "hl+:" .. palette.match,
+        "info:" .. palette.muted,
+        "prompt:" .. palette.accent,
+        "pointer:" .. palette.error,
+        "marker:" .. palette.success,
+        "spinner:" .. palette.syntax_keyword,
+        "header:" .. palette.muted,
+        "border:" .. palette.border,
+        "gutter:" .. palette.bg,
+        "query:" .. palette.text,
+    }
+    local opts = "--no-bold --color=" .. table.concat(colors, ",")
+    local path = get_plugin_dir() .. "/extras/fzf/flume" .. schema_suffix(schema) .. ".opts"
+    return write_file_if_changed(path, opts .. "\n")
+end
+
+function M.compile_delta(schema)
+    local palette = get_palette(schema)
+    local template = [[# Generated by Flume.
+[delta]
+    light = %s
+    features = flume
+    syntax-theme = ansi
+
+[delta "flume"]
+    minus-style = syntax "%s"
+    minus-emph-style = syntax "%s"
+    plus-style = syntax "%s"
+    plus-emph-style = syntax "%s"
+    line-numbers = true
+    line-numbers-minus-style = "%s"
+    line-numbers-plus-style = "%s"
+    line-numbers-left-style = "%s"
+    line-numbers-right-style = "%s"
+    commit-decoration-style = "%s" box
+    file-style = "%s"
+    file-decoration-style = "%s" ul
+    hunk-header-style = "%s"
+    hunk-header-decoration-style = "%s" box
+]]
+    local content = string.format(
+        template,
+        is_light(schema) and "true" or "false",
+        palette.diff_delete_bg,
+        palette.diff_delete_emphasis,
+        palette.diff_add_bg,
+        palette.diff_add_emphasis,
+        palette.diff_delete,
+        palette.diff_add,
+        palette.border,
+        palette.border,
+        palette.accent,
+        palette.syntax_primary,
+        palette.accent,
+        palette.syntax_primary,
+        palette.border
+    )
+
+    return write_file_if_changed(get_plugin_dir() .. "/extras/delta/flume" .. schema_suffix(schema) .. ".gitconfig", content)
+end
+
+function M.compile_tuxedo(schema)
+    local schema_meta = get_schema(schema)
+    local palette = schema_meta.colors
+    local template = [[# Generated by Flume for Tuxedo.
+name = %s
 bg = %s
 panel = %s
 border = %s
@@ -601,6 +711,7 @@ matched = %s
 ]]
     local content = string.format(
         template,
+        schema_meta.display_name,
         palette.bg,
         palette.surface,
         palette.border,
@@ -628,12 +739,12 @@ matched = %s
         palette.syntax_type
     )
 
-    local path = get_plugin_dir() .. "/extras/tuxedo/flume.toml"
+    local path = get_plugin_dir() .. "/extras/tuxedo/flume" .. schema_suffix(schema) .. ".toml"
     return write_file_if_changed(path, content)
 end
 
-function M.compile_opencode()
-    local palette = get_palette()
+function M.compile_opencode(schema)
+    local palette = get_palette(schema)
     local template = [[{
   "$schema": "https://opencode.ai/theme.json",
   "defs": {
@@ -754,34 +865,224 @@ function M.compile_opencode()
         palette.diff_delete_bg
     )
 
-    local path = get_plugin_dir() .. "/extras/opencode/flume.json"
+    local path = get_plugin_dir() .. "/extras/opencode/flume" .. schema_suffix(schema) .. ".json"
     return write_file_if_changed(path, content)
+end
+
+function M.activate(schema)
+    schema = normalize_schema(schema)
+    require("flume.palette").get(schema)
+    local root = get_plugin_dir()
+    local suffix = schema_suffix(schema)
+    local extras = root .. "/extras"
+    local current = extras .. "/current"
+    local token = tostring(vim.fn.getpid()) .. "-" .. string.format("%.0f", uv.hrtime())
+    local staged_name = ".current-stage-" .. token
+    local staged_set = extras .. "/" .. staged_name
+    local staged_link = extras .. "/.current-link-" .. token
+    local legacy_backup = extras .. "/.current-backup-" .. token
+    vim.fn.mkdir(staged_set, "p")
+
+    local function read_all(path)
+        local file = assert(io.open(path, "rb"))
+        local content = file:read("*a")
+        file:close()
+        return content
+    end
+
+    local ok, result = xpcall(function()
+        local manifest = { schema }
+        write_file_if_changed(staged_set .. "/schema", schema .. "\n")
+
+        local function copy(source, name)
+            local content = read_all(source)
+            -- Hash each text artifact before assembling the set identity. Passing
+            -- NUL-delimited strings to vim.fn.sha256() becomes a Blob on Neovim
+            -- 0.9, where sha256() only accepts String values.
+            manifest[#manifest + 1] = name .. ":" .. vim.fn.sha256(content)
+            local existing_file = io.open(current .. "/" .. name, "rb")
+            local existing = nil
+            if existing_file then
+                existing = existing_file:read("*a")
+                existing_file:close()
+            end
+            write_file_if_changed(staged_set .. "/" .. name, content)
+            return existing ~= content
+        end
+
+        local changes = {
+            ghostty = copy(root .. "/extras/ghostty/flume" .. suffix, "ghostty"),
+            kitty = copy(root .. "/extras/kitty/flume" .. suffix .. ".conf", "kitty.conf"),
+            tmux = copy(root .. "/extras/tmux/colors" .. suffix .. ".conf", "tmux.conf"),
+            lsd = copy(root .. "/extras/lsd/colors" .. suffix .. ".yaml", "lsd.yaml"),
+            opencode = copy(root .. "/extras/opencode/flume" .. suffix .. ".json", "opencode.json"),
+            lazygit = copy(root .. "/extras/lazygit/flume" .. suffix .. ".yml", "lazygit.yml"),
+            fzf = copy(root .. "/extras/fzf/flume" .. suffix .. ".opts", "fzf.opts"),
+            delta = copy(root .. "/extras/delta/flume" .. suffix .. ".gitconfig", "delta.gitconfig"),
+            pi = copy(root .. "/extras/pi/flume" .. suffix .. ".json", "pi.json"),
+            tuxedo = copy(root .. "/extras/tuxedo/flume" .. suffix .. ".toml", "tuxedo.toml"),
+        }
+
+        local set_name = ".current-set-" .. schema .. "-" .. vim.fn.sha256(table.concat(manifest, "\n")):sub(1, 16)
+        local set_path = extras .. "/" .. set_name
+        local promoted, promote_error = uv.fs_rename(staged_set, set_path)
+        if not promoted then
+            if not uv.fs_stat(set_path) then
+                error("Could not promote the staged integration set: " .. tostring(promote_error))
+            end
+
+            local names = {
+                "schema",
+                "ghostty",
+                "kitty.conf",
+                "tmux.conf",
+                "lsd.yaml",
+                "opencode.json",
+                "lazygit.yml",
+                "fzf.opts",
+                "delta.gitconfig",
+                "pi.json",
+                "tuxedo.toml",
+            }
+            local identical = true
+            for _, name in ipairs(names) do
+                local existing_ok, existing = pcall(read_all, set_path .. "/" .. name)
+                if not existing_ok or existing ~= read_all(staged_set .. "/" .. name) then
+                    identical = false
+                    break
+                end
+            end
+
+            if identical then
+                vim.fn.delete(staged_set, "rf")
+            else
+                -- Recover from a stale/corrupt immutable set left by an older
+                -- activator without disturbing a current symlink that may use it.
+                set_name = set_name .. "-" .. token
+                set_path = extras .. "/" .. set_name
+                local recovered, recover_error = uv.fs_rename(staged_set, set_path)
+                if not recovered then
+                    error("Could not promote recovered integration set: " .. tostring(recover_error))
+                end
+            end
+        end
+
+        local linked, link_error = uv.fs_symlink(set_name, staged_link, { dir = true, junction = false })
+        if not linked then
+            error("Could not stage the active integration link: " .. tostring(link_error))
+        end
+
+        local current_stat = uv.fs_lstat(current)
+        local migrated_directory = current_stat and current_stat.type == "directory"
+        if migrated_directory then
+            local moved, move_error = uv.fs_rename(current, legacy_backup)
+            if not moved then
+                error("Could not migrate the previous integration directory: " .. tostring(move_error))
+            end
+        end
+
+        local swapped, swap_error = uv.fs_rename(staged_link, current)
+        if not swapped then
+            if migrated_directory then
+                local restored, restore_error = uv.fs_rename(legacy_backup, current)
+                if not restored then
+                    error(
+                        "Could not activate integration set ("
+                            .. tostring(swap_error)
+                            .. ") or restore the previous set ("
+                            .. tostring(restore_error)
+                            .. ")"
+                    )
+                end
+            end
+            error("Could not activate integration set: " .. tostring(swap_error))
+        end
+
+        if migrated_directory then
+            vim.fn.delete(legacy_backup, "rf")
+        end
+        for name, kind in vim.fs.dir(extras) do
+            if kind == "directory" and name:match("^%.current%-set%-") and name ~= set_name then
+                vim.fn.delete(extras .. "/" .. name, "rf")
+            end
+        end
+        return changes
+    end, debug.traceback)
+
+    if uv.fs_lstat(staged_link) then
+        uv.fs_unlink(staged_link)
+    end
+    if not ok and uv.fs_stat(staged_set) then
+        vim.fn.delete(staged_set, "rf")
+    end
+    if uv.fs_stat(legacy_backup) and not uv.fs_lstat(current) then
+        local restored, restore_error = uv.fs_rename(legacy_backup, current)
+        if not restored then
+            error(result .. "\nCould not restore previous integrations: " .. tostring(restore_error))
+        end
+    end
+
+    if not ok then
+        error(result)
+    end
+    return result
+end
+
+local function count_changes(changes)
+    local count = 0
+    for _, changed in pairs(changes) do
+        if changed then
+            count = count + 1
+        end
+    end
+    return count
 end
 
 function M.compile_all(opts)
     opts = opts or {}
-    local changed = {
-        ghostty = M.compile_ghostty(),
-        kitty = M.compile_kitty(),
-        opencode = M.compile_opencode(),
-        tmux = M.compile_tmux(),
-        lsd = M.compile_lsd(),
-        pi = M.compile_pi(),
-        tuxedo = M.compile_tuxedo(),
+    local changed = {}
+    local compilers = { "ghostty", "kitty", "tmux", "lsd", "opencode", "lazygit", "fzf", "delta", "pi", "tuxedo" }
+    local schemas = require("flume.palette").schema_order
+    local paths = {
+        ghostty = "extras/ghostty/flume%s",
+        kitty = "extras/kitty/flume%s.conf",
+        tmux = "extras/tmux/colors%s.conf",
+        lsd = "extras/lsd/colors%s.yaml",
+        opencode = "extras/opencode/flume%s.json",
+        lazygit = "extras/lazygit/flume%s.yml",
+        fzf = "extras/fzf/flume%s.opts",
+        delta = "extras/delta/flume%s.gitconfig",
+        pi = "extras/pi/flume%s.json",
+        tuxedo = "extras/tuxedo/flume%s.toml",
     }
 
-    local count = 0
-    for _, did_change in pairs(changed) do
-        if did_change then
-            count = count + 1
+    for _, schema in ipairs(schemas) do
+        local suffix = schema_suffix(schema)
+        for _, name in ipairs(compilers) do
+            changed[paths[name]:format(suffix)] = M["compile_" .. name](schema)
         end
     end
+
+    local count = count_changes(changed)
+    local activated = {}
+    if opts.activate ~= false then
+        activated = M.activate(opts.schema or "dusk")
+        count = count + count_changes(activated)
+    end
+    changed.current = activated
     changed.count = count
     changed.any = count > 0
 
     if not opts.quiet then
         if changed.any then
-            print("Flume extras compiled: " .. count .. " file(s) updated")
+            local artifacts = {}
+            for name, did_change in pairs(changed) do
+                if name ~= "current" and name ~= "count" and name ~= "any" and did_change == true then
+                    artifacts[#artifacts + 1] = name
+                end
+            end
+            table.sort(artifacts)
+            print("Flume extras compiled: " .. count .. " file(s) updated: " .. table.concat(artifacts, ", "))
         else
             print("Flume extras already up to date")
         end

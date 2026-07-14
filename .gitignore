@@ -1,6 +1,12 @@
 screenshot_raw.png
+screenshot_raw-*.png
 Session.vim
 __pycache__/
 *.py[cod]
 doc/tags
+extras/current
+extras/.current-set-*/
+extras/.current-stage-*/
+extras/.current-link-*
+extras/.current-backup-*/
 .pi-subagents/

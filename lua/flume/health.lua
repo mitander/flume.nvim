@@ -11,14 +11,6 @@ local function plugin_root()
     return vim.fs.dirname(vim.fs.dirname(vim.fs.dirname(source)))
 end
 
-local function check_file(label, path)
-    if vim.fn.filereadable(path) == 1 then
-        ok(label .. ": " .. path)
-    else
-        warn(label .. " missing: " .. path)
-    end
-end
-
 function M.check()
     start("flume.nvim")
 
@@ -35,21 +27,42 @@ function M.check()
     end
 
     local loaded, flume = pcall(require, "flume")
-    if loaded and type(flume.get_colors) == "function" then
-        local colors = flume.get_colors()
-        ok("Palette loaded (bg " .. colors.bg .. ", fg " .. colors.syntax_primary .. ")")
-    else
+    if not loaded or type(flume.get_colors) ~= "function" then
         health_error("Could not load flume palette")
+        return
     end
 
+    local selected = flume.config.schema or "dusk"
+    local palette_ok, palette = pcall(require("flume.palette").get, selected)
+    if not palette_ok then
+        health_error("Unknown selected schema: " .. tostring(selected))
+        return
+    end
+    local colors = flume.get_colors(selected)
+    ok("Palette loaded: " .. palette.display_name .. " (bg " .. colors.bg .. ", fg " .. colors.syntax_primary .. ")")
+
+    local suffix = palette.suffix
     local root = plugin_root()
-    check_file("Ghostty extra", root .. "/extras/ghostty/flume")
-    check_file("Kitty extra", root .. "/extras/kitty/flume.conf")
-    check_file("OpenCode extra", root .. "/extras/opencode/flume.json")
-    check_file("Tmux extra", root .. "/extras/tmux/colors.conf")
-    check_file("LSD extra", root .. "/extras/lsd/colors.yaml")
-    check_file("Pi extra", root .. "/extras/pi/flume.json")
-    check_file("Tuxedo extra", root .. "/extras/tuxedo/flume.toml")
+    local files = {
+        Ghostty = "/extras/ghostty/flume" .. suffix,
+        Kitty = "/extras/kitty/flume" .. suffix .. ".conf",
+        Tmux = "/extras/tmux/colors" .. suffix .. ".conf",
+        LSD = "/extras/lsd/colors" .. suffix .. ".yaml",
+        OpenCode = "/extras/opencode/flume" .. suffix .. ".json",
+        Lazygit = "/extras/lazygit/flume" .. suffix .. ".yml",
+        fzf = "/extras/fzf/flume" .. suffix .. ".opts",
+        Delta = "/extras/delta/flume" .. suffix .. ".gitconfig",
+        Pi = "/extras/pi/flume" .. suffix .. ".json",
+        Tuxedo = "/extras/tuxedo/flume" .. suffix .. ".toml",
+    }
+    for label, relative in pairs(files) do
+        local path = root .. relative
+        if vim.fn.filereadable(path) == 1 then
+            ok(label .. " extra for " .. selected .. ": " .. path)
+        else
+            health_error(label .. " extra missing for " .. selected .. ": " .. path)
+        end
+    end
 end
 
 return M

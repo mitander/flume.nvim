@@ -1,3 +1,4 @@
+/// A tiny expression tree with constant folding.
 const std = @import("std");
 
 const Ast = union(enum) {
@@ -5,6 +6,7 @@ const Ast = union(enum) {
     ident: []const u8,
     add: struct { lhs: *const Ast, rhs: *const Ast },
 
+    // Fold constants; identifiers remain dynamic.
     fn fold(self: *const Ast) ?i64 {
         return switch (self.*) {
             .num => |n| n,
@@ -19,6 +21,7 @@ const Ast = union(enum) {
 };
 
 pub fn main() void {
+    // Build and evaluate 40 + 2.
     const lhs = Ast{ .num = 40 };
     const rhs = Ast{ .num = 2 };
     const expr = Ast{ .add = .{ .lhs = &lhs, .rhs = &rhs } };

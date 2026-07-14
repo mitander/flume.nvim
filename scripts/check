@@ -8,10 +8,13 @@ git diff --check
 
 if git ls-files -z --cached --others --exclude-standard -- \
     '*.lua' '*.md' '*.txt' '*.yml' '*.yaml' '*.sh' 'scripts/check' \
-    | xargs -0 grep -nH '[[:blank:]]$'; then
+    | xargs -0 grep -nH '[[:blank:]]$' 2>/dev/null; then
     echo "Trailing whitespace found" >&2
     exit 1
 fi
 
 sh -n scripts/check
 bash -n scripts/screenshot-window.sh
+python3 -m py_compile scripts/check-links.py scripts/compose_showcase.py scripts/compose-contact-sheet.py scripts/preflight-screenshots.py
+python3 scripts/check-links.py
+python3 scripts/preflight-screenshots.py --source-only
