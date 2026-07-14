@@ -24,7 +24,7 @@ attention.
 
 - Tree-sitter, LSP semantic tokens, diagnostics, terminal colors, and common plugins.
 - Palette and highlight overrides, transparent mode, and syntax style hooks.
-- Generated palette integrations for Ghostty, Kitty, Tmux, LSD, Pi, and Tuxedo.
+- Generated palette integrations for Ghostty, Kitty, OpenCode, Tmux, LSD, Pi, and Tuxedo.
 - One maintained dark palette and a fast reload workflow for theme development.
 
 ## Installation
@@ -161,47 +161,50 @@ Group names are case-sensitive. `Comment` is the legacy syntax group;
 
 ## Integrations
 
-| Surface                               | Status                    |
-| ------------------------------------- | ------------------------- |
-| Neovim UI, diagnostics, terminal ANSI | Built in                  |
-| Tree-sitter captures                  | Built in                  |
-| LSP semantic tokens                   | Built in                  |
-| GitSigns, Oil                         | Built in                  |
-| Telescope, cmp, lazy.nvim, WhichKey   | Built in                  |
-| Mason, Trouble, Neo-tree, nvim-tree   | Built in                  |
-| Snacks picker                         | Built in                  |
-| Ghostty, Kitty, LSD, Pi, Tuxedo       | Generated themes          |
-| Tmux                                  | Generated color variables |
+| Surface                                  | Status                    |
+| ---------------------------------------- | ------------------------- |
+| Neovim UI, diagnostics, terminal ANSI    | Built in                  |
+| Tree-sitter captures                     | Built in                  |
+| LSP semantic tokens                      | Built in                  |
+| GitSigns, Oil                            | Built in                  |
+| Telescope, cmp, lazy.nvim, WhichKey      | Built in                  |
+| Mason, Trouble, Neo-tree, nvim-tree      | Built in                  |
+| Snacks picker                            | Built in                  |
+| Ghostty, Kitty, OpenCode, LSD, Pi, Tuxedo | Generated themes          |
+| Tmux                                     | Generated color variables |
 
 ## Commands
 
-| Command                                    | Does                                                                        |
-| ------------------------------------------ | --------------------------------------------------------------------------- |
-| `:FlumeReload`                             | Reload the editor theme and notify integrations.                           |
-| `:FlumeCompile`                            | Regenerate files in `extras/`.                                              |
-| `:FlumeInstallExtras [ghostty\|tmux\|lsd]` | Symlink supported extras into standard config paths.                        |
-| `:FlumeExtras`                             | Open copy-paste install commands for extras.                                |
-| `:checkhealth flume`                       | Check terminal color support and generated extra files.                     |
-| `:help flume`                              | Open the reference docs.                                                    |
+| Command                                                        | Does                                                     |
+| -------------------------------------------------------------- | -------------------------------------------------------- |
+| `:FlumeReload`                                                 | Reload the editor theme and notify integrations.        |
+| `:FlumeCompile`                                                | Regenerate files in `extras/`.                          |
+| `:FlumeInstallExtras [ghostty\|kitty\|opencode\|tmux\|lsd]` | Symlink supported extras into standard config paths.     |
+| `:FlumeExtras`                                                 | Open copy-paste install commands for extras.             |
+| `:checkhealth flume`                                           | Check terminal color support and generated extra files.  |
+| `:help flume`                                                  | Open the reference docs.                                 |
 
 ## Extras
 
 Generated files are checked in and can be used without running the compiler.
-Automated installation is available for Ghostty, Tmux, and LSD:
+Automated installation is available for Ghostty, Kitty, OpenCode, Tmux, and LSD:
 
 ```vim
 :FlumeInstallExtras
 :FlumeInstallExtras ghostty
+:FlumeInstallExtras kitty
+:FlumeInstallExtras opencode
 ```
 
-| App     | Generated file              | Activation                                                                                         |
-| ------- | --------------------------- | -------------------------------------------------------------------------------------------------- |
-| Ghostty | `extras/ghostty/flume`      | Install, then set `theme = flume`.                                                                 |
-| Kitty   | `extras/kitty/flume.conf`   | Install, then add `include themes/flume.conf` to `kitty.conf`.                                     |
-| Tmux    | `extras/tmux/colors.conf`   | Source `~/.tmux/flume-theme.conf`; it defines `thm_*` color variables for your status-line config. |
-| LSD     | `extras/lsd/colors.yaml`    | Install to the standard LSD color path.                                                            |
-| Pi      | `extras/pi/flume.json`      | Copy or link into your Pi themes directory.                                                        |
-| Tuxedo  | `extras/tuxedo/flume.toml`  | Copy or link into your Tuxedo themes directory.                                                    |
+| App      | Generated file                  | Activation                                                                                         |
+| -------- | ------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Ghostty  | `extras/ghostty/flume`          | Install, then set `theme = flume`.                                                                 |
+| Kitty    | `extras/kitty/flume.conf`       | Install, then add `include themes/flume.conf` to `kitty.conf`.                                     |
+| OpenCode | `extras/opencode/flume.json`    | Install, then set `"theme": "flume"` in `tui.json`.                                               |
+| Tmux     | `extras/tmux/colors.conf`       | Source `~/.tmux/flume-theme.conf`; it defines `thm_*` color variables for your status-line config. |
+| LSD      | `extras/lsd/colors.yaml`        | Install to the standard LSD color path.                                                            |
+| Pi       | `extras/pi/flume.json`          | Copy or link into your Pi themes directory.                                                        |
+| Tuxedo   | `extras/tuxedo/flume.toml`      | Copy or link into your Tuxedo themes directory.                                                    |
 
 `:FlumeCompile` regenerates these files after changes to the canonical palette.
 The installer refuses to replace regular files.
