@@ -1,0 +1,49 @@
+# Flume colors for lsd.
+# lsd color themes only style metadata; file names continue to use LS_COLORS.
+# Numeric values are xterm-256 approximations supported by crossterm.
+
+user: 242              # muted (#706976)
+group: 242             # muted (#706976)
+
+permission:
+  read: 242             # quiet metadata (#706976)
+  write: 242            # quiet metadata (#706976)
+  exec: 242             # quiet metadata (#706976)
+  exec-sticky: 95      # error (#974c68)
+  no-access: 8        # placeholder (#817988)
+  octal: 242            # muted (#706976)
+  acl: 60              # accent (#356f80)
+  context: 242          # doc_comment (#6c686d)
+
+date:
+  hour-old: 242         # muted (#706976)
+  day-old: 242          # muted (#706976)
+  older: 8            # placeholder (#817988)
+
+size:
+  none: 8             # placeholder (#817988)
+  small: 242            # muted (#706976)
+  medium: 242           # muted (#706976)
+  large: 94            # warning (#80541f)
+
+inode:
+  valid: 242            # muted (#706976)
+  invalid: 8          # placeholder (#817988)
+
+links:
+  valid: 242            # muted (#706976)
+  invalid: 8          # placeholder (#817988)
+
+tree-edge: 7          # border_variant (#c9bfbb)
+
+git-status:
+  default: 8          # placeholder (#817988)
+  unmodified: 8       # placeholder (#817988)
+  ignored: 8          # placeholder (#817988)
+  new-in-index: 59     # success (#4b6d65)
+  new-in-workdir: 59   # success (#4b6d65)
+  typechange: 94       # warning (#80541f)
+  deleted: 95          # error (#974c68)
+  renamed: 60          # accent (#356f80)
+  modified: 94         # warning (#80541f)
+  conflicted: 95       # error (#974c68)

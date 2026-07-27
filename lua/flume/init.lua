@@ -1,6 +1,7 @@
 local M = {}
 
 local default_config = {
+    schema = "dusk",
     transparent = false,
     terminal_colors = true,
     overrides = {},
@@ -36,11 +37,12 @@ end
 
 function M.reload()
     local config = vim.deepcopy(M.config)
+    local colors_name = config.colorscheme or require("flume.palette").get(config.schema).colorscheme
     local colorscheme_emitted = false
     local probe = vim.api.nvim_create_augroup("FlumeReloadProbe", { clear = true })
     vim.api.nvim_create_autocmd("ColorScheme", {
         group = probe,
-        pattern = "flume",
+        pattern = colors_name,
         once = true,
         callback = function()
             colorscheme_emitted = true
@@ -53,23 +55,33 @@ function M.reload()
 
     -- Older Neovim versions may emit ColorScheme while resetting syntax.
     if not colorscheme_emitted then
-        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = "flume", modeline = false })
+        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = colors_name, modeline = false })
     end
     vim.notify("Flume theme reloaded", vim.log.levels.INFO)
 end
 
 function M.setup(opts)
-    M.config = vim.tbl_deep_extend("force", vim.deepcopy(default_config), opts or {})
+    opts = vim.deepcopy(opts or {})
+    opts.schema = require("flume.palette").resolve(opts.schema or default_config.schema)
+    M.config = vim.tbl_deep_extend("force", vim.deepcopy(default_config), opts)
     M.load()
+    vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name, modeline = false })
 end
 
-function M.get_colors()
-    local palette = require("flume.palette")
+function M.get_colors(schema)
+    local palette = require("flume.palette").get(schema or M.config.schema)
     return vim.tbl_deep_extend("force", {}, palette.colors, M.config.overrides or {})
 end
 
-function M.load()
-    M.colors = M.get_colors()
+function M.load(schema, colorscheme)
+    if schema then
+        local palette_module = require("flume.palette")
+        M.config.schema = palette_module.resolve(schema)
+        M.config.colorscheme = colorscheme
+    end
+    local palette = require("flume.palette").get(M.config.schema)
+    local colors_name = M.config.colorscheme or palette.colorscheme
+    M.colors = M.get_colors(M.config.schema)
     local c = M.colors
     local styles = M.config.styles or {}
 
@@ -78,12 +90,13 @@ function M.load()
         c.element = "NONE"
     end
 
-    vim.o.background = "dark"
+    vim.g.colors_name = nil
+    vim.o.background = palette.appearance
     vim.cmd("highlight clear")
     if vim.fn.exists("syntax_on") == 1 then
         vim.cmd("syntax reset")
     end
-    vim.g.colors_name = "flume"
+    vim.g.colors_name = colors_name
 
     hi("Normal", { fg = c.syntax_primary, bg = c.bg })
     hi("NormalNC", { fg = c.syntax_primary, bg = c.bg })
@@ -99,6 +112,7 @@ function M.load()
     hi("Whitespace", { fg = c.line_number })
     hi("IblIndent", { fg = c.indent_guide })
     hi("IblWhitespace", { fg = c.indent_guide })
+    hi("IblScope", { fg = c.line_number, bg = c.bg })
     hi("ColorColumn", { bg = c.surface })
     hi("CursorLine", { bg = c.active_line })
     hi("CursorLineNr", { fg = c.active_line_number, bg = c.active_line, bold = true })
@@ -270,6 +284,14 @@ function M.load()
     hi("GitSignsAdd", { fg = c.diff_add, bg = c.bg })
     hi("GitSignsChange", { fg = c.diff_change, bg = c.bg })
     hi("GitSignsDelete", { fg = c.diff_delete, bg = c.bg })
+    for _, suffix in ipairs({ "", "Cul", "Nr" }) do
+        hi("GitSignsStagedAdd" .. suffix, { fg = c.dim_green, bg = c.bg })
+        hi("GitSignsStagedUntracked" .. suffix, { fg = c.dim_green, bg = c.bg })
+        hi("GitSignsStagedChange" .. suffix, { fg = c.dim_yellow, bg = c.bg })
+        hi("GitSignsStagedChangedelete" .. suffix, { fg = c.dim_yellow, bg = c.bg })
+        hi("GitSignsStagedDelete" .. suffix, { fg = c.dim_red, bg = c.bg })
+        hi("GitSignsStagedTopdelete" .. suffix, { fg = c.dim_red, bg = c.bg })
+    end
     hi("OilDir", { fg = c.accent })
     hi("OilFile", { fg = c.fg })
     hi("OilHidden", { fg = c.placeholder })
@@ -284,6 +306,28 @@ function M.load()
     hi("TelescopePromptPrefix", { fg = c.accent, bg = c.surface })
     hi("TelescopeSelection", { fg = c.text, bg = c.element_active })
     hi("TelescopeMatching", { fg = c.match, bold = true })
+
+    -- fzf-lua ships named light-theme colors such as MediumSpringGreen.
+    -- Resolve every visible picker role through Flume so plugin defaults cannot
+    -- introduce colors outside the active Flume palette.
+    hi("FzfLuaNormal", { fg = c.fg, bg = c.bg })
+    hi("FzfLuaBackdrop", { bg = c.bg })
+    hi("FzfLuaBorder", { fg = c.border, bg = c.bg })
+    hi("FzfLuaTitle", { fg = c.accent, bg = c.bg, bold = true })
+    hi("FzfLuaCursorLine", { fg = c.text, bg = c.element_active })
+    hi("FzfLuaFzfCursorLine", { fg = c.text, bg = c.element_active })
+    hi("FzfLuaSearch", { fg = c.match, bold = true })
+    hi("FzfLuaHeaderBind", { fg = c.accent })
+    hi("FzfLuaHeaderText", { fg = c.muted })
+    hi("FzfLuaPathColNr", { fg = c.syntax_type })
+    hi("FzfLuaPathLineNr", { fg = c.muted })
+    hi("FzfLuaLivePrompt", { fg = c.accent })
+    hi("FzfLuaLiveSym", { fg = c.syntax_namespace })
+    hi("FzfLuaBufNr", { fg = c.muted })
+    hi("FzfLuaBufFlagCur", { fg = c.syntax_property })
+    hi("FzfLuaBufFlagAlt", { fg = c.accent })
+    hi("FzfLuaTabTitle", { fg = c.accent, bold = true })
+    hi("FzfLuaTabMarker", { fg = c.success, bold = true })
 
     hi("CmpItemAbbr", { fg = c.fg })
     hi("CmpItemAbbrDeprecated", { fg = c.predictive, strikethrough = true })
@@ -360,6 +404,7 @@ function M.load()
     hi("NvimTreeGitDirty", { fg = c.diff_change })
     hi("NvimTreeGitDeleted", { fg = c.diff_delete })
     hi("NvimTreeGitIgnored", { fg = c.placeholder })
+    hi("NvimTreeWindowPicker", { fg = c.on_accent, bg = c.accent, bold = true })
 
     hi("SnacksPicker", { fg = c.fg, bg = c.bg })
     hi("SnacksPickerNormal", { fg = c.fg, bg = c.bg })
@@ -441,8 +486,25 @@ function M.load()
     vim.api.nvim_create_user_command("FlumeCompile", function()
         package.loaded["flume.palette"] = nil
         package.loaded["flume.compiler"] = nil
-        require("flume.compiler").compile_all()
+        require("flume.compiler").compile_all({ activate = false })
     end, {})
+    vim.api.nvim_create_user_command("FlumeSync", function(opts)
+        local explicit = opts.args ~= ""
+        local schema = explicit and opts.args or M.config.schema
+        local colorscheme = nil
+        if not explicit then
+            colorscheme = M.config.colorscheme
+        end
+        require("flume.palette").get(schema)
+        require("flume.sync").run({ schema = schema })
+        M.load(schema, colorscheme)
+        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name, modeline = false })
+    end, {
+        nargs = "?",
+        complete = function()
+            return require("flume.palette").schema_order
+        end,
+    })
     vim.api.nvim_create_user_command("FlumeInstallExtras", function(opts)
         local arg = opts.args
         if arg == "" then

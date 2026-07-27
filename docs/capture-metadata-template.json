@@ -1,0 +1,13 @@
+{
+  "app": "APP_NAME",
+  "app_version": "VERSION",
+  "os": "OS_AND_VERSION",
+  "terminal": "TERMINAL_AND_VERSION",
+  "font": "FONT_AND_SIZE",
+  "dimensions": "PIXELS_OR_COLUMNS_ROWS",
+  "scale": "100%",
+  "fixture_revision": "GIT_COMMIT_OR_WORKTREE",
+  "capture_date": "YYYY-MM-DD",
+  "unsupported_regions": [],
+  "manual_action": "Exact launch/capture action when automation is unavailable"
+}

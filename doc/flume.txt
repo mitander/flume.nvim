@@ -4,22 +4,40 @@
 CONTENTS                                                        *flume-contents*
 
 1. Setup ......................... |flume-setup|
-2. Options ....................... |flume-options|
-3. Commands ...................... |flume-commands|
-4. Extras ........................ |flume-extras|
-5. Highlights .................... |flume-highlights|
+2. Palettes ...................... |flume-palettes|
+3. Options ....................... |flume-options|
+4. Commands ...................... |flume-commands|
+5. Extras ........................ |flume-extras|
+6. Highlights .................... |flume-highlights|
 
 ==============================================================================
 SETUP                                                              *flume-setup*
 
-Install with your plugin manager, then load the theme:
+Configure and apply one palette with a single setup call:
 >
-    require("flume").setup({})
-    vim.cmd.colorscheme("flume")
+    require("flume").setup({ schema = "dusk" })
 <
 
-Flume targets Neovim 0.9+ and expects 'termguicolors' for accurate color.
-It currently ships one dark scheme.
+Do not follow setup() with :colorscheme. When no Lua options are needed, a
+colorscheme command is the alternative:
+>
+    colorscheme flume-dusk
+<
+
+Flume targets Neovim 0.9+ and expects 'termguicolors'.
+
+==============================================================================
+PALETTES                                                        *flume-palettes*
+
+Canonical schema IDs:
+
+    dusk    dark   original quiet violet Flume
+    opal    light  vivid inks on cool opalescent paper
+    mira    dark   technical plum with cyan, teal, and magenta
+    mesa    light  warm rose-mineral paper
+
+Canonical colorscheme entry points are "flume-dusk", "flume-opal",
+"flume-mira", and "flume-mesa".
 
 ==============================================================================
 OPTIONS                                                          *flume-options*
@@ -27,139 +45,113 @@ OPTIONS                                                          *flume-options*
 Defaults:
 >
     require("flume").setup({
+        schema = "dusk",
         transparent = false,
         terminal_colors = true,
         overrides = {},
         highlights = {},
         styles = {
-            comments = {},
-            functions = {},
-            keywords = {},
-            strings = {},
-            types = {},
-            variables = {},
+            comments = {}, functions = {}, keywords = {}, strings = {},
+            types = {}, variables = {},
         },
     })
 <
 
+schema ~
+    Selects "dusk", "opal", "mira", or "mesa".
+
 transparent ~
-    Removes the primary editor and sign-column backgrounds. Raised surfaces,
+    Removes primary editor and sign-column backgrounds. Raised surfaces,
     selections, diffs, and diagnostic backgrounds remain visible.
 
 terminal_colors ~
     Sets g:terminal_color_0 through g:terminal_color_15 from the palette.
 
-Choosing an override ~
-
-    overrides   change a semantic color across languages
-    styles      add broad attributes such as italic or bold
-    highlights  change one exact Neovim group
-
 overrides ~
-    Changes palette colors by semantic role. This example affects modules and
-    namespaces across supported languages:
+    Changes colors by semantic role. Generated extras continue to use canonical
+    palettes; runtime saturation transforms are intentionally absent.
 >
     require("flume").setup({
+        schema = "opal",
         overrides = {
+            syntax_comment = "#7a747a",
             syntax_namespace = "#f48a94",
         },
     })
 <
-    Syntax roles include syntax_comment, syntax_function, syntax_keyword,
-    syntax_namespace, syntax_string, and syntax_type. State roles include
-    error, warning, success, info, match, and diff_add/diff_change/diff_delete.
-    See lua/flume/palette.lua and docs/color-system.md for the full contract.
 
 styles ~
     Adds broad text attributes to syntax roles.
 >
-    require("flume").setup({
-        styles = {
-            comments = { italic = true },
-            keywords = { bold = true },
-        },
-    })
+    require("flume").setup({ styles = { comments = { italic = true } } })
 <
 
 highlights ~
-    Changes an exact, case-sensitive Neovim group or Tree-sitter capture.
-    Values may be tables or functions that receive the resolved palette.
+    Changes an exact, case-sensitive group or Tree-sitter capture. Values may
+    be tables or functions receiving the resolved palette colors.
+
+SYSTEM APPEARANCE ~
+    Flume does not install an OS watcher. Call setup() from an existing
+    appearance hook after that hook updates 'background':
 >
     require("flume").setup({
-        highlights = {
-            Comment = { fg = "#f48a94" },
-            ["@comment"] = function(colors)
-                return { fg = colors.syntax_comment, italic = true }
-            end,
-        },
+        schema = vim.o.background == "light" and "opal" or "dusk",
     })
 <
-    Comment is the legacy syntax group; ["@comment"] is the Tree-sitter
-    capture. Use :Inspect under the cursor or :highlight GroupName to find the
-    active group.
 
 ==============================================================================
 COMMANDS                                                        *flume-commands*
 
 :FlumeReload                                                      *:FlumeReload*
-    Reload the editor theme and notify ColorScheme integrations.
+    Reload the editor-local palette and notify ColorScheme integrations.
 
 :FlumeCompile                                                    *:FlumeCompile*
-    Regenerate files under extras/.
+    Regenerate forty canonical files without changing the active palette.
+
+:FlumeSync [schema]                                                 *:FlumeSync*
+    Apply a canonical palette and activate supported live integrations.
 
 :FlumeInstallExtras [app]                                  *:FlumeInstallExtras*
-    Symlink generated extras into standard config locations. Supported app
-    arguments: ghostty, kitty, opencode, tmux, lsd. With no argument, installs
-    all supported extras.
+    Symlink generated extras into safe standard locations. Supported app
+    arguments: ghostty, kitty, opencode, tmux, lsd.
 
 :FlumeExtras                                                      *:FlumeExtras*
-    Open copy-paste install commands for extras.
+    Open refusal-safe copy/link instructions for extras.
 
 :checkhealth flume                                           *flume-checkhealth*
-    Check terminal color support and generated extra files.
+    Check the selected palette and all ten generated files.
 
 ==============================================================================
 EXTRAS                                                            *flume-extras*
 
-Generated files are checked into extras/ and can be used without compiling:
+Every canonical artifact includes its palette suffix. The active set is
+atomically linked under extras/current/ and records its canonical schema in
+extras/current/schema.
 
-    APP       FILE                         ACTIVATION
-    Ghostty   extras/ghostty/flume         set theme = flume
-    Kitty     extras/kitty/flume.conf      include themes/flume.conf
-    OpenCode  extras/opencode/flume.json   set "theme": "flume" in tui.json
-    Tmux      extras/tmux/colors.conf      source ~/.tmux/flume-theme.conf
-    LSD       extras/lsd/colors.yaml        install to the standard color path
-    Pi        extras/pi/flume.json          copy/link into the themes directory
-    Tuxedo    extras/tuxedo/flume.toml      copy/link into the themes directory
+    APP       DUSK ARTIFACT
+    Ghostty   extras/ghostty/flume-dusk
+    Kitty     extras/kitty/flume-dusk.conf
+    Tmux      extras/tmux/colors-dusk.conf
+    LSD       extras/lsd/colors-dusk.yaml
+    OpenCode  extras/opencode/flume-dusk.json
+    Lazygit   extras/lazygit/flume-dusk.yml
+    fzf       extras/fzf/flume-dusk.opts
+    Delta     extras/delta/flume-dusk.gitconfig
+    Pi        extras/pi/flume-dusk.json
+    Tuxedo    extras/tuxedo/flume-dusk.toml
 
-The Tmux file defines thm_* color variables; it is not a complete status-line
-configuration. Automated installation supports Ghostty, Kitty, OpenCode, Tmux,
-and LSD and refuses to replace regular files.
-
-If you edit lua/flume/palette.lua, run :FlumeCompile to regenerate extras.
+Only Ghostty, Kitty, OpenCode, Tmux, and LSD have safe installer destinations.
+The other tools support multiple include locations, so Flume does not guess.
 
 ==============================================================================
 HIGHLIGHTS                                                    *flume-highlights*
 
-Built in surfaces:
+Built-in surfaces include Neovim UI, diagnostics, Tree-sitter, LSP semantic
+tokens, GitSigns, Oil, Telescope, nvim-cmp, lazy.nvim, WhichKey, Mason, Trouble,
+Neo-tree, nvim-tree, Snacks, and fzf-lua.
 
-    Neovim UI
-    diagnostics
-    Tree-sitter captures
-    LSP semantic tokens
-    GitSigns
-    Oil
-    Telescope
-    nvim-cmp
-    lazy.nvim
-    WhichKey
-    Mason
-    Trouble
-    Neo-tree
-    nvim-tree
-    Snacks picker
-
-Use `:highlight GroupName` to inspect a group and `highlights` to override it.
+Use :Inspect or :highlight GroupName and the `highlights` option for exact
+changes. See docs/color-system.md for the semantic schema contract.
 
 ==============================================================================
 vim:tw=78:ts=8:noet:ft=help:norl:

@@ -13,23 +13,23 @@ end
 
 local apps = {
     ghostty = {
-        src = "extras/ghostty/flume",
+        src = "extras/current/ghostty",
         dest = "~/.config/ghostty/themes/flume",
     },
     kitty = {
-        src = "extras/kitty/flume.conf",
+        src = "extras/current/kitty.conf",
         dest = "~/.config/kitty/themes/flume.conf",
     },
     opencode = {
-        src = "extras/opencode/flume.json",
+        src = "extras/current/opencode.json",
         dest = "~/.config/opencode/themes/flume.json",
     },
     tmux = {
-        src = "extras/tmux/colors.conf",
+        src = "extras/current/tmux.conf",
         dest = "~/.tmux/flume-theme.conf",
     },
     lsd = {
-        src = "extras/lsd/colors.yaml",
+        src = "extras/current/lsd.yaml",
         dest = "~/.config/lsd/colors.yaml",
     },
 }
@@ -48,6 +48,17 @@ function M.install(name)
     local plugin_dir = M.get_plugin_dir()
     local src_path = plugin_dir .. "/" .. app.src
     local dest_path = vim.fn.expand(app.dest)
+
+    -- `extras/current` is runtime state and is intentionally not checked in.
+    -- Materialize it on first install from the editor's selected schema.
+    if app.src:match("^extras/current/") and vim.fn.filereadable(src_path) == 0 then
+        local flume = require("flume")
+        local activated, activate_error = pcall(require("flume.compiler").activate, flume.config.schema)
+        if not activated then
+            vim.notify("Could not activate Flume extras: " .. tostring(activate_error), vim.log.levels.ERROR)
+            return
+        end
+    end
 
     local dest_dir = vim.fn.fnamemodify(dest_path, ":h")
     vim.fn.mkdir(dest_dir, "p")
@@ -99,12 +110,16 @@ function M.install(name)
 end
 
 function M.install_all()
-    for name, _ in pairs(apps) do
+    for name in pairs(apps) do
         M.install(name)
     end
 end
 
-function M.show_instructions()
+local function shell_quote(value)
+    return "'" .. value:gsub("'", "'\"'\"'") .. "'"
+end
+
+function M.get_instruction_lines()
     local plugin_dir = M.get_plugin_dir()
     local lines = {
         "# Flume Theme Extras Configuration",
@@ -141,12 +156,21 @@ function M.show_instructions()
         local src_path = plugin_dir .. "/" .. app.src
         table.insert(lines, "### " .. name:sub(1, 1):upper() .. name:sub(2))
         table.insert(lines, "```bash")
-        table.insert(lines, "mkdir -p " .. vim.fn.fnamemodify(app.dest, ":h"))
-        table.insert(lines, "ln -sf " .. src_path .. " " .. app.dest)
+        local destination = vim.fn.expand(app.dest)
+        table.insert(lines, "if [ -e " .. shell_quote(destination) .. " ] || [ -L " .. shell_quote(destination) .. " ]; then")
+        table.insert(lines, "  echo " .. shell_quote("Refusing to replace existing path: " .. destination) .. " >&2")
+        table.insert(lines, "else")
+        table.insert(lines, "  mkdir -p " .. shell_quote(vim.fn.fnamemodify(destination, ":h")))
+        table.insert(lines, "  ln -s " .. shell_quote(src_path) .. " " .. shell_quote(destination))
+        table.insert(lines, "fi")
         table.insert(lines, "```")
         table.insert(lines, "")
     end
+    return lines
+end
 
+function M.show_instructions()
+    local lines = M.get_instruction_lines()
     local buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
     vim.api.nvim_set_option_value("filetype", "markdown", { buf = buf })
