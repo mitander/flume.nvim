@@ -35,7 +35,10 @@ end
 -- Pi needs to hot-reload the newly activated palette.
 local function notify_pi()
     local uv = vim.uv or vim.loop
-    local path = vim.fn.expand("~/.pi/agent/themes/flume.json")
+    if not vim.env.HOME or vim.env.HOME == "" then
+        return false
+    end
+    local path = vim.env.HOME .. "/.pi/agent/themes/flume.json"
     if vim.fn.getftype(path) ~= "link" then
         return false
     end

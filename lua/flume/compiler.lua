@@ -678,6 +678,120 @@ function M.compile_delta(schema)
     return write_file_if_changed(get_plugin_dir() .. "/extras/delta/flume" .. schema_suffix(schema) .. ".gitconfig", content)
 end
 
+function M.compile_tracker_tui(schema)
+    local schema_meta = get_schema(schema)
+    local palette = schema_meta.colors
+    local template = [[{
+  "name": "%s",
+  "dark": %s,
+  "primary": "%s",
+  "secondary": "%s",
+  "accent": "%s",
+  "background": "%s",
+  "surface": "%s",
+  "panel": "%s",
+  "foreground": "%s",
+  "success": "%s",
+  "warning": "%s",
+  "error": "%s",
+  "variables": {
+    "border": "%s",
+    "border_focus": "%s",
+    "border_detail": "%s",
+    "modal_bg": "%s",
+    "cursor": "%s",
+    "overlay": "%s",
+    "scrollbar": "%s",
+    "scrollbar_hover": "%s",
+    "scrollbar_active": "%s",
+    "scrollbar_background": "%s",
+    "selection_background": "%s",
+    "selection_foreground": "%s"
+  },
+  "roles": {
+    "text": "%s",
+    "text_subtle": "%s",
+    "text_muted": "%s",
+    "border": "%s",
+    "border_subtle": "%s",
+    "accent": "%s",
+    "accent_secondary": "%s",
+    "accent_tertiary": "%s",
+    "success": "%s",
+    "warning": "%s",
+    "error": "%s",
+    "status_triage": "%s",
+    "status_started": "%s",
+    "status_unstarted": "%s",
+    "status_backlog": "%s",
+    "status_completed": "%s",
+    "status_canceled": "%s",
+    "team": "%s",
+    "project": "%s",
+    "initiative": "%s",
+    "label": "%s",
+    "blocked": "%s",
+    "blocking": "%s",
+    "priority_urgent": "%s"
+  }
+}
+]]
+    local content = string.format(
+        template,
+        schema_meta.integration_name,
+        is_light(schema) and "false" or "true",
+        palette.accent,
+        palette.syntax_keyword,
+        palette.cyan,
+        palette.bg,
+        palette.surface_alt,
+        palette.surface,
+        palette.text,
+        palette.success,
+        palette.warning,
+        palette.error,
+        palette.border,
+        palette.border_focused,
+        palette.cyan,
+        palette.surface,
+        palette.element_active,
+        is_light(schema) and "black 15%" or "black 40%",
+        palette.border_variant,
+        palette.border,
+        palette.border_focused,
+        palette.bg,
+        palette.accent,
+        palette.on_accent,
+        palette.text,
+        palette.fg,
+        palette.syntax_comment,
+        palette.border,
+        palette.border_variant,
+        palette.accent,
+        palette.syntax_keyword,
+        palette.cyan,
+        palette.success,
+        palette.warning,
+        palette.error,
+        palette.warning,
+        palette.warning,
+        palette.accent,
+        palette.syntax_comment,
+        palette.success,
+        palette.syntax_comment,
+        palette.accent,
+        palette.syntax_type,
+        palette.syntax_keyword,
+        palette.cyan,
+        palette.error,
+        palette.warning,
+        palette.error
+    )
+
+    local path = get_plugin_dir() .. "/extras/tracker-tui/flume" .. schema_suffix(schema) .. ".json"
+    return write_file_if_changed(path, content)
+end
+
 function M.compile_tuxedo(schema)
     local schema_meta = get_schema(schema)
     local palette = schema_meta.colors
@@ -920,6 +1034,7 @@ function M.activate(schema)
             fzf = copy(root .. "/extras/fzf/flume" .. suffix .. ".opts", "fzf.opts"),
             delta = copy(root .. "/extras/delta/flume" .. suffix .. ".gitconfig", "delta.gitconfig"),
             pi = copy(root .. "/extras/pi/flume" .. suffix .. ".json", "pi.json"),
+            tracker_tui = copy(root .. "/extras/tracker-tui/flume" .. suffix .. ".json", "tracker-tui.json"),
             tuxedo = copy(root .. "/extras/tuxedo/flume" .. suffix .. ".toml", "tuxedo.toml"),
         }
 
@@ -942,6 +1057,7 @@ function M.activate(schema)
                 "fzf.opts",
                 "delta.gitconfig",
                 "pi.json",
+                "tracker-tui.json",
                 "tuxedo.toml",
             }
             local identical = true
@@ -1041,7 +1157,19 @@ end
 function M.compile_all(opts)
     opts = opts or {}
     local changed = {}
-    local compilers = { "ghostty", "kitty", "tmux", "lsd", "opencode", "lazygit", "fzf", "delta", "pi", "tuxedo" }
+    local compilers = {
+        "ghostty",
+        "kitty",
+        "tmux",
+        "lsd",
+        "opencode",
+        "lazygit",
+        "fzf",
+        "delta",
+        "pi",
+        "tracker_tui",
+        "tuxedo",
+    }
     local schemas = require("flume.palette").schema_order
     local paths = {
         ghostty = "extras/ghostty/flume%s",
@@ -1053,6 +1181,7 @@ function M.compile_all(opts)
         fzf = "extras/fzf/flume%s.opts",
         delta = "extras/delta/flume%s.gitconfig",
         pi = "extras/pi/flume%s.json",
+        tracker_tui = "extras/tracker-tui/flume%s.json",
         tuxedo = "extras/tuxedo/flume%s.toml",
     }
 

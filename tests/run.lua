@@ -397,6 +397,78 @@ test("sync applies schemas and preserves a no-argument entry point", function()
     equal(vim.g.colors_name, "flume-opal", "editor colorscheme after sync")
 end)
 
+test("active editors follow externally synchronized schemas", function()
+    local flume = require("flume")
+    local original = "dusk"
+    local synchronized = "opal"
+    require("flume.compiler").activate(original)
+    flume.setup({ schema = original })
+
+    require("flume.compiler").activate(synchronized)
+    truthy(vim.wait(2000, function()
+        return flume.config.schema == synchronized
+    end, 10), "filesystem watcher did not apply the synchronized schema")
+    equal(vim.g.colors_name, "flume-opal", "watched colorscheme")
+
+    require("flume.compiler").activate(original)
+    truthy(vim.wait(2000, function()
+        return flume.config.schema == original
+    end, 10), "filesystem watcher did not restore the original schema")
+end)
+
+test("disabled sync watcher ignores queued schema changes", function()
+    local flume = require("flume")
+    require("flume.compiler").activate("dusk")
+    flume.setup({ schema = "dusk" })
+
+    local original_schedule = vim.schedule
+    local queued = {}
+    local ok, err = xpcall(function()
+        vim.schedule = function(callback)
+            queued[#queued + 1] = callback
+        end
+        require("flume.compiler").activate("opal")
+        truthy(vim.wait(2000, function()
+            return #queued > 0
+        end, 10), "watcher did not schedule a schema change")
+        flume.setup({ schema = "mira", watch_sync = false })
+        for _, callback in ipairs(queued) do
+            callback()
+        end
+        equal(flume.config.schema, "mira", "queued change overrode independent palette")
+        -- Restarting must not make callbacks from the old watcher valid again.
+        flume.setup({ schema = "mira" })
+        for _, callback in ipairs(queued) do
+            callback()
+        end
+        equal(flume.config.schema, "mira", "stale callback survived watcher restart")
+    end, debug.traceback)
+    vim.schedule = original_schedule
+    require("flume.compiler").activate("dusk")
+    flume.setup({ schema = "dusk" })
+    if not ok then
+        error(err)
+    end
+end)
+
+test("sync watcher ignores unrelated integration activity", function()
+    local flume = require("flume")
+    require("flume.compiler").activate("dusk")
+    flume.setup({ schema = "mira" })
+    local unrelated = "extras/.watch-test-" .. vim.fn.getpid()
+    vim.fn.mkdir(unrelated)
+    vim.fn.delete(unrelated, "d")
+    vim.wait(200, function() return false end, 10)
+    equal(flume.config.schema, "mira", "unrelated filesystem event changed the palette")
+
+    require("flume.compiler").activate("opal")
+    truthy(vim.wait(2000, function()
+        return flume.config.schema == "opal"
+    end, 10), "watcher did not follow a successful activation")
+    require("flume.compiler").activate("dusk")
+    flume.setup({ schema = "dusk" })
+end)
+
 test("reload preserves colorscheme entry identity", function()
     for _, entry in ipairs({ "flume-dusk", "flume-opal", "flume-mira", "flume-mesa" }) do
         vim.cmd.colorscheme(entry)
@@ -541,6 +613,10 @@ test("generated extras are current and machine-readable", function()
         fzf = { source = "extras/fzf/flume%s.opts", current = "extras/current/fzf.opts" },
         delta = { source = "extras/delta/flume%s.gitconfig", current = "extras/current/delta.gitconfig" },
         pi = { source = "extras/pi/flume%s.json", current = "extras/current/pi.json" },
+        tracker_tui = {
+            source = "extras/tracker-tui/flume%s.json",
+            current = "extras/current/tracker-tui.json",
+        },
         tuxedo = { source = "extras/tuxedo/flume%s.toml", current = "extras/current/tuxedo.toml" },
     }
     for _, schema in ipairs(require("flume.palette").schema_order) do

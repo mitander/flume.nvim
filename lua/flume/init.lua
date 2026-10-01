@@ -4,6 +4,7 @@ local default_config = {
     schema = "dusk",
     transparent = false,
     terminal_colors = true,
+    watch_sync = true,
     overrides = {},
     highlights = {},
     styles = {
@@ -28,6 +29,10 @@ local function styled(opts, style)
 end
 
 local function clear_flume_modules()
+    local watch = package.loaded["flume.watch"]
+    if watch then
+        watch.stop()
+    end
     for name in pairs(package.loaded) do
         if name == "flume" or name:match("^flume%.") then
             package.loaded[name] = nil
@@ -66,6 +71,14 @@ function M.setup(opts)
     M.config = vim.tbl_deep_extend("force", vim.deepcopy(default_config), opts)
     M.load()
     vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name, modeline = false })
+    if M.config.watch_sync then
+        require("flume.watch").start()
+    else
+        local watch = package.loaded["flume.watch"]
+        if watch then
+            watch.stop()
+        end
+    end
 end
 
 function M.get_colors(schema)
