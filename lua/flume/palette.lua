@@ -89,103 +89,30 @@ M.dusk = {
     warn_bg = "#3b3429",
 }
 
-local function make_light_palette(paper, surface, surface_strong)
-    return {
-        -- Base UI
-        bg = paper,
-        terminal_bg = paper,
-        fg = "#554e5d",
-        text = "#413b49",
-        muted = "#706878",
-        placeholder = "#817987",
-        active_line = surface,
-        line_number = "#766f7d",
-        active_line_number = "#413b49",
-        indent_guide = "#d3ccd5",
-        border = "#8b8491",
-        border_variant = "#c8c0ca",
-        border_focused = "#3f7180",
-        accent = "#3f7180",
-        surface = surface,
-        surface_alt = surface_strong,
-        element = paper,
-        element_hover = surface,
-        element_active = surface_strong,
-        on_accent = "#fbf8fa",
-
-        -- Semantic states
-        error = "#934d5b",
-        warning = "#815f1d",
-        success = "#557245",
-        info = "#3f7180",
-        match = "#815f1d",
-        diff_add = "#557245",
-        diff_change = "#815f1d",
-        diff_delete = "#934d5b",
-
-        -- Terminal / Base 16 Palette
-        black = "#413b49",
-        bright_black = "#706878",
-        dim_black = "#817987",
-        red = "#934d5b",
-        bright_red = "#934d5b",
-        dim_red = "#743b48",
-        green = "#557245",
-        bright_green = "#557245",
-        dim_green = "#405c33",
-        yellow = "#815f1d",
-        bright_yellow = "#815f1d",
-        dim_yellow = "#684b13",
-        blue = "#3f7180",
-        bright_blue = "#3f7180",
-        dim_blue = "#315c69",
-        magenta = "#72518f",
-        bright_magenta = "#72518f",
-        dim_magenta = "#5d3f77",
-        cyan = "#3f7180",
-        bright_cyan = "#3f7180",
-        dim_cyan = "#315c69",
-        -- ANSI white must remain visible on a light terminal background. Programs
-        -- commonly use slots 7/15 as foregrounds rather than literal paper white.
-        white = "#554e5d",
-        bright_white = "#413b49",
-        dim_white = "#706878",
-
-        -- Syntax Highlighting
-        syntax_attribute = "#3f7180",
-        syntax_boolean = "#9b5146",
-        syntax_comment = "#706878",
-        syntax_doc_comment = "#686775",
-        syntax_constant = "#3f7180",
-        syntax_function = "#3f7180",
-        syntax_type = "#815f1d",
-        syntax_keyword = "#72518f",
-        syntax_namespace = "#934d5b",
-        syntax_primary = "#413b49",
-        syntax_property = "#934d5b",
-        syntax_punctuation = "#625b69",
-        syntax_punctuation_bracket = "#6d6674",
-        syntax_punctuation_special = "#9b5146",
-        syntax_string = "#557245",
-        syntax_special = "#3f7180",
-        predictive = "#817987",
-
-        -- Git Diff / Diagnostics
-        diff_add_bg = "#e0e8dc",
-        diff_add_emphasis = "#cadbc3",
-        diff_change_bg = "#e8e0cf",
-        diff_delete_bg = "#eadadd",
-        diff_delete_emphasis = "#dfc4ca",
-        hint = "#3f7180",
-        hint_bg = "#dce7e9",
-        warn_bg = "#e8e0cf",
-    }
-end
-
-M.opal = make_light_palette("#f2eff7", "#ebe6f0", "#ddd6e3")
-local opal_overrides = {
+M.opal = {
+    -- Base UI
+    bg = "#f2eff7",
+    terminal_bg = "#f2eff7",
+    fg = "#554e5d",
+    text = "#413b49",
+    muted = "#706878",
+    placeholder = "#817987",
+    active_line = "#ebe6f0",
+    line_number = "#766f7d",
+    active_line_number = "#413b49",
+    indent_guide = "#d3ccd5",
+    border = "#8b8491",
+    border_variant = "#c8c0ca",
     border_focused = "#006b85",
     accent = "#006b85",
+    surface = "#ebe6f0",
+    surface_alt = "#ddd6e3",
+    element = "#f2eff7",
+    element_hover = "#ebe6f0",
+    element_active = "#ddd6e3",
+    on_accent = "#fbf8fa",
+
+    -- Semantic states
     error = "#a43b62",
     warning = "#895c00",
     success = "#256f24",
@@ -194,6 +121,11 @@ local opal_overrides = {
     diff_add = "#256f24",
     diff_change = "#895c00",
     diff_delete = "#a43b62",
+
+    -- Terminal / Base 16 Palette
+    black = "#413b49",
+    bright_black = "#706878",
+    dim_black = "#817987",
     red = "#a43b62",
     bright_red = "#b5365b",
     dim_red = "#7e304b",
@@ -212,6 +144,13 @@ local opal_overrides = {
     cyan = "#006b85",
     bright_cyan = "#00728c",
     dim_cyan = "#00566c",
+    -- ANSI white must remain visible on a light terminal background. Programs
+    -- commonly use slots 7/15 as foregrounds rather than literal paper white.
+    white = "#554e5d",
+    bright_white = "#413b49",
+    dim_white = "#706878",
+
+    -- Syntax Highlighting
     syntax_attribute = "#006b85",
     syntax_boolean = "#a84332",
     syntax_comment = "#706b70",
@@ -221,15 +160,25 @@ local opal_overrides = {
     syntax_type = "#895c00",
     syntax_keyword = "#7540a3",
     syntax_namespace = "#a43b62",
+    syntax_primary = "#413b49",
     syntax_property = "#a43b62",
+    syntax_punctuation = "#625b69",
+    syntax_punctuation_bracket = "#6d6674",
     syntax_punctuation_special = "#a84332",
     syntax_string = "#256f24",
     syntax_special = "#006b85",
+    predictive = "#817987",
+
+    -- Git Diff / Diagnostics
+    diff_add_bg = "#e0e8dc",
+    diff_add_emphasis = "#cadbc3",
+    diff_change_bg = "#e8e0cf",
+    diff_delete_bg = "#eadadd",
+    diff_delete_emphasis = "#dfc4ca",
     hint = "#006b85",
+    hint_bg = "#dce7e9",
+    warn_bg = "#e8e0cf",
 }
-for role, color in pairs(opal_overrides) do
-    M.opal[role] = color
-end
 
 local function complete_palette(colors)
     colors.terminal_bg = colors.bg
@@ -412,8 +361,6 @@ M.schemas = {
         colorscheme = "flume-dusk",
         display_name = "Dusk",
         integration_name = "flume-dusk",
-        source_project = "flume",
-        rationale = "Flume's original quiet violet palette",
         suffix = "-dusk",
     },
     opal = {
@@ -422,8 +369,6 @@ M.schemas = {
         colorscheme = "flume-opal",
         display_name = "Opal",
         integration_name = "flume-opal",
-        source_project = "flume",
-        rationale = "Vivid Flume inks on cool opalescent paper",
         suffix = "-opal",
     },
     mira = {
@@ -432,8 +377,6 @@ M.schemas = {
         colorscheme = "flume-mira",
         display_name = "Mira",
         integration_name = "flume-mira",
-        source_project = "kapsel",
-        rationale = "A plum and mineral palette inspired by Kapsel's accent language",
         suffix = "-mira",
     },
     mesa = {
@@ -442,8 +385,6 @@ M.schemas = {
         colorscheme = "flume-mesa",
         display_name = "Mesa",
         integration_name = "flume-mesa",
-        source_project = "kapsel",
-        rationale = "Warm mineral paper inspired by Kapsel's accent language",
         suffix = "-mesa",
     },
 }

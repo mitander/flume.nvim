@@ -6,13 +6,7 @@ local debounce = nil
 local generation = 0
 local active_set = nil
 
-local function plugin_dir()
-    local source = debug.getinfo(1).source:sub(2)
-    if source:sub(1, 1) == "@" then
-        source = source:sub(2)
-    end
-    return vim.fs.dirname(vim.fs.dirname(vim.fs.dirname(source)))
-end
+local plugin_dir = require("flume.extras").get_plugin_dir
 
 local function read_active_schema()
     local file = io.open(plugin_dir() .. "/extras/current/schema", "rb")

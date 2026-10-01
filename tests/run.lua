@@ -677,6 +677,32 @@ test("generated extras are current and machine-readable", function()
     equal((vim.uv or vim.loop).fs_lstat("extras/current").type, "link", "active set is not atomically linked")
 end)
 
+test("activation reuses intact sets and recovers the final integration", function()
+    local compiler = require("flume.compiler")
+    local uv = vim.uv or vim.loop
+    local schema = vim.fn.readfile("extras/current/schema")[1]
+    local current = "extras/current/tracker-tui.json"
+    local expected = vim.fn.readfile("extras/tracker-tui/flume-" .. schema .. ".json", "b")
+    local original_set = uv.fs_readlink("extras/current")
+    local ok, err = xpcall(function()
+        local changes = compiler.activate(schema)
+        equal(uv.fs_readlink("extras/current"), original_set, "intact set identity")
+        equal(vim.tbl_count(changes), 10, "activation result inventory")
+        for name, changed in pairs(changes) do
+            equal(changed, false, name .. " unchanged artifact")
+        end
+        vim.fn.writefile({ "corrupt" }, current)
+        compiler.activate(schema)
+        truthy(uv.fs_readlink("extras/current") ~= original_set, "corrupt set was reused")
+        equal(table.concat(vim.fn.readfile(current, "b"), "\n"), table.concat(expected, "\n"), "recovered artifact")
+    end, debug.traceback)
+    if not ok then
+        vim.fn.writefile(expected, current, "b")
+        compiler.activate(schema)
+        error(err)
+    end
+end)
+
 require("tests.extras").register(test, equal, truthy)
 
 test("Vim help tags build", function()

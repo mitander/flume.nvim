@@ -11,6 +11,19 @@ function M.get_plugin_dir()
     return vim.fs.dirname(vim.fs.dirname(vim.fs.dirname(source)))
 end
 
+M.integrations = {
+    { name = "ghostty", label = "Ghostty", source = "extras/ghostty/flume%s", current = "ghostty" },
+    { name = "kitty", label = "Kitty", source = "extras/kitty/flume%s.conf", current = "kitty.conf" },
+    { name = "tmux", label = "Tmux", source = "extras/tmux/colors%s.conf", current = "tmux.conf" },
+    { name = "lsd", label = "LSD", source = "extras/lsd/colors%s.yaml", current = "lsd.yaml" },
+    { name = "opencode", label = "OpenCode", source = "extras/opencode/flume%s.json", current = "opencode.json" },
+    { name = "lazygit", label = "Lazygit", source = "extras/lazygit/flume%s.yml", current = "lazygit.yml" },
+    { name = "fzf", label = "fzf", source = "extras/fzf/flume%s.opts", current = "fzf.opts" },
+    { name = "delta", label = "Delta", source = "extras/delta/flume%s.gitconfig", current = "delta.gitconfig" },
+    { name = "pi", label = "Pi", source = "extras/pi/flume%s.json", current = "pi.json" },
+    { name = "tracker_tui", label = "ltui / jtui", source = "extras/tracker-tui/flume%s.json", current = "tracker-tui.json" },
+}
+
 local apps = {
     ghostty = {
         src = "extras/current/ghostty",

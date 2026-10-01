@@ -6,10 +6,7 @@ local ok = health.ok or health.report_ok
 local warn = health.warn or health.report_warn
 local health_error = health.error or health.report_error
 
-local function plugin_root()
-    local source = debug.getinfo(1).source:sub(2)
-    return vim.fs.dirname(vim.fs.dirname(vim.fs.dirname(source)))
-end
+local extras = require("flume.extras")
 
 function M.check()
     start("flume.nvim")
@@ -42,21 +39,10 @@ function M.check()
     ok("Palette loaded: " .. palette.display_name .. " (bg " .. colors.bg .. ", fg " .. colors.syntax_primary .. ")")
 
     local suffix = palette.suffix
-    local root = plugin_root()
-    local files = {
-        Ghostty = "/extras/ghostty/flume" .. suffix,
-        Kitty = "/extras/kitty/flume" .. suffix .. ".conf",
-        Tmux = "/extras/tmux/colors" .. suffix .. ".conf",
-        LSD = "/extras/lsd/colors" .. suffix .. ".yaml",
-        OpenCode = "/extras/opencode/flume" .. suffix .. ".json",
-        Lazygit = "/extras/lazygit/flume" .. suffix .. ".yml",
-        fzf = "/extras/fzf/flume" .. suffix .. ".opts",
-        Delta = "/extras/delta/flume" .. suffix .. ".gitconfig",
-        Pi = "/extras/pi/flume" .. suffix .. ".json",
-        ["ltui / jtui"] = "/extras/tracker-tui/flume" .. suffix .. ".json",
-    }
-    for label, relative in pairs(files) do
-        local path = root .. relative
+    local root = extras.get_plugin_dir()
+    for _, integration in ipairs(extras.integrations) do
+        local label = integration.label
+        local path = root .. "/" .. integration.source:format(suffix)
         if vim.fn.filereadable(path) == 1 then
             ok(label .. " extra for " .. selected .. ": " .. path)
         else

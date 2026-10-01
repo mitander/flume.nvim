@@ -22,13 +22,9 @@ local function is_light(schema)
     return get_schema(schema).appearance == "light"
 end
 
-local function get_plugin_dir()
-    local source = debug.getinfo(1).source:sub(2)
-    if source:sub(1, 1) == "@" then
-        source = source:sub(2)
-    end
-    return vim.fs.dirname(vim.fs.dirname(vim.fs.dirname(source)))
-end
+local extras_config = require("flume.extras")
+local get_plugin_dir = extras_config.get_plugin_dir
+local integrations = extras_config.integrations
 
 local function write_file_if_changed(path, content)
     local existing = nil
@@ -959,18 +955,10 @@ function M.activate(schema)
             return existing ~= content
         end
 
-        local changes = {
-            ghostty = copy(root .. "/extras/ghostty/flume" .. suffix, "ghostty"),
-            kitty = copy(root .. "/extras/kitty/flume" .. suffix .. ".conf", "kitty.conf"),
-            tmux = copy(root .. "/extras/tmux/colors" .. suffix .. ".conf", "tmux.conf"),
-            lsd = copy(root .. "/extras/lsd/colors" .. suffix .. ".yaml", "lsd.yaml"),
-            opencode = copy(root .. "/extras/opencode/flume" .. suffix .. ".json", "opencode.json"),
-            lazygit = copy(root .. "/extras/lazygit/flume" .. suffix .. ".yml", "lazygit.yml"),
-            fzf = copy(root .. "/extras/fzf/flume" .. suffix .. ".opts", "fzf.opts"),
-            delta = copy(root .. "/extras/delta/flume" .. suffix .. ".gitconfig", "delta.gitconfig"),
-            pi = copy(root .. "/extras/pi/flume" .. suffix .. ".json", "pi.json"),
-            tracker_tui = copy(root .. "/extras/tracker-tui/flume" .. suffix .. ".json", "tracker-tui.json"),
-        }
+        local changes = {}
+        for _, integration in ipairs(integrations) do
+            changes[integration.name] = copy(root .. "/" .. integration.source:format(suffix), integration.current)
+        end
 
         local set_name = ".current-set-" .. schema .. "-" .. vim.fn.sha256(table.concat(manifest, "\n")):sub(1, 16)
         local set_path = extras .. "/" .. set_name
@@ -980,19 +968,10 @@ function M.activate(schema)
                 error("Could not promote the staged integration set: " .. tostring(promote_error))
             end
 
-            local names = {
-                "schema",
-                "ghostty",
-                "kitty.conf",
-                "tmux.conf",
-                "lsd.yaml",
-                "opencode.json",
-                "lazygit.yml",
-                "fzf.opts",
-                "delta.gitconfig",
-                "pi.json",
-                "tracker-tui.json",
-            }
+            local names = { "schema" }
+            for _, integration in ipairs(integrations) do
+                names[#names + 1] = integration.current
+            end
             local identical = true
             for _, name in ipairs(names) do
                 local existing_ok, existing = pcall(read_all, set_path .. "/" .. name)
@@ -1090,36 +1069,11 @@ end
 function M.compile_all(opts)
     opts = opts or {}
     local changed = {}
-    local compilers = {
-        "ghostty",
-        "kitty",
-        "tmux",
-        "lsd",
-        "opencode",
-        "lazygit",
-        "fzf",
-        "delta",
-        "pi",
-        "tracker_tui",
-    }
     local schemas = require("flume.palette").schema_order
-    local paths = {
-        ghostty = "extras/ghostty/flume%s",
-        kitty = "extras/kitty/flume%s.conf",
-        tmux = "extras/tmux/colors%s.conf",
-        lsd = "extras/lsd/colors%s.yaml",
-        opencode = "extras/opencode/flume%s.json",
-        lazygit = "extras/lazygit/flume%s.yml",
-        fzf = "extras/fzf/flume%s.opts",
-        delta = "extras/delta/flume%s.gitconfig",
-        pi = "extras/pi/flume%s.json",
-        tracker_tui = "extras/tracker-tui/flume%s.json",
-    }
-
     for _, schema in ipairs(schemas) do
         local suffix = schema_suffix(schema)
-        for _, name in ipairs(compilers) do
-            changed[paths[name]:format(suffix)] = M["compile_" .. name](schema)
+        for _, integration in ipairs(integrations) do
+            changed[integration.source:format(suffix)] = M["compile_" .. integration.name](schema)
         end
     end
 
