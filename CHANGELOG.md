@@ -9,6 +9,10 @@
   clients can follow `:FlumeSync` while running.
 - Let running Neovim instances follow synchronized palettes by default;
   disable this with `watch_sync = false`.
+- Stop synchronization watching when another colorscheme takes over,
+  including already queued palette changes.
+- Retain immutable integration sets so concurrent activations cannot delete
+  each other's files.
 - Remove Tuxedo themes and integration support.
 
 ## v0.2.0 — 2026-07-27

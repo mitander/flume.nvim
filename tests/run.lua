@@ -469,6 +469,60 @@ test("sync watcher ignores unrelated integration activity", function()
     flume.setup({ schema = "dusk" })
 end)
 
+test("sync watcher stops when another colorscheme takes over", function()
+    local flume = require("flume")
+    local compiler = require("flume.compiler")
+    compiler.activate("dusk")
+    flume.setup({ schema = "dusk" })
+    local ok, err = xpcall(function()
+        -- Switching between Flume entry points must keep watching.
+        vim.cmd.colorscheme("flume-mira")
+        compiler.activate("opal")
+        truthy(vim.wait(2000, function()
+            return vim.g.colors_name == "flume-opal"
+        end, 10), "Flume entry-point switch stopped watching")
+
+        vim.cmd.colorscheme("habamax")
+        compiler.activate("mesa")
+        vim.wait(200, function() return false end, 10)
+        equal(vim.g.colors_name, "habamax", "sync replaced another colorscheme")
+        local watching = pcall(vim.api.nvim_get_autocmds, { group = "FlumeSyncWatch" })
+        equal(watching, false, "inactive Flume watcher was not stopped")
+
+        flume.setup({ schema = "dusk" })
+        compiler.activate("mira")
+        truthy(vim.wait(2000, function()
+            return vim.g.colors_name == "flume-mira"
+        end, 10), "setup did not restart watching")
+    end, debug.traceback)
+    compiler.activate("dusk")
+    flume.setup({ schema = "dusk" })
+    if not ok then error(err) end
+end)
+
+test("queued sync cannot replace another colorscheme", function()
+    local flume = require("flume")
+    local compiler = require("flume.compiler")
+    compiler.activate("dusk")
+    flume.setup({ schema = "dusk" })
+    local schedule = vim.schedule
+    local queued = {}
+    local ok, err = xpcall(function()
+        vim.schedule = function(callback)
+            queued[#queued + 1] = callback
+        end
+        compiler.activate("opal")
+        truthy(vim.wait(2000, function() return #queued > 0 end, 10), "no queued sync callback")
+        vim.cmd.colorscheme("habamax")
+        for _, callback in ipairs(queued) do callback() end
+        equal(vim.g.colors_name, "habamax", "queued sync replaced another colorscheme")
+    end, debug.traceback)
+    vim.schedule = schedule
+    compiler.activate("dusk")
+    flume.setup({ schema = "dusk" })
+    if not ok then error(err) end
+end)
+
 test("reload preserves colorscheme entry identity", function()
     for _, entry in ipairs({ "flume-dusk", "flume-opal", "flume-mira", "flume-mesa" }) do
         vim.cmd.colorscheme(entry)
@@ -677,6 +731,55 @@ test("generated extras are current and machine-readable", function()
     equal((vim.uv or vim.loop).fs_lstat("extras/current").type, "link", "active set is not atomically linked")
 end)
 
+test("interleaved activations preserve complete immutable sets", function()
+    local compiler = require("flume.compiler")
+    local uv = vim.uv or vim.loop
+    local rename = uv.fs_rename
+    local original_schema = vim.fn.readfile("extras/current/schema")[1]
+    local ok, err = xpcall(function()
+        for _, timing in ipairs({ "before", "after" }) do
+            for _, second_schema in ipairs({ "opal", "dusk" }) do
+                local interleaved = false
+                local first_set, second_set
+                uv.fs_rename = function(source, destination, ...)
+                    local swapping = destination:match("/extras/current$") and not interleaved
+                    if swapping then
+                        first_set = uv.fs_readlink(source)
+                        interleaved = true
+                        if timing == "before" then
+                            compiler.activate(second_schema)
+                            second_set = uv.fs_readlink("extras/current")
+                        end
+                    end
+                    local result, rename_error = rename(source, destination, ...)
+                    if swapping and result and timing == "after" then
+                        compiler.activate(second_schema)
+                        second_set = uv.fs_readlink("extras/current")
+                    end
+                    return result, rename_error
+                end
+                compiler.activate("dusk")
+                uv.fs_rename = rename
+                truthy(interleaved, "second activation was not interleaved")
+                local expected_schema = timing == "before" and "dusk" or second_schema
+                local current_schema = vim.fn.readfile("extras/current/schema")[1]
+                equal(current_schema, expected_schema, "last swap did not win")
+                for set, schema in pairs({ [first_set] = "dusk", [second_set] = second_schema }) do
+                    equal(vim.fn.readfile("extras/" .. set .. "/schema")[1], schema, "immutable schema was deleted")
+                    for _, integration in ipairs(require("flume.extras").integrations) do
+                        local actual = vim.fn.readfile("extras/" .. set .. "/" .. integration.current, "b")
+                        local expected = vim.fn.readfile(integration.source:format("-" .. schema), "b")
+                        equal(table.concat(actual, "\n"), table.concat(expected, "\n"), "interleaved " .. integration.name)
+                    end
+                end
+            end
+        end
+    end, debug.traceback)
+    uv.fs_rename = rename
+    compiler.activate(original_schema)
+    if not ok then error(err) end
+end)
+
 test("activation reuses intact sets and recovers the final integration", function()
     local compiler = require("flume.compiler")
     local uv = vim.uv or vim.loop
@@ -695,12 +798,17 @@ test("activation reuses intact sets and recovers the final integration", functio
         compiler.activate(schema)
         truthy(uv.fs_readlink("extras/current") ~= original_set, "corrupt set was reused")
         equal(table.concat(vim.fn.readfile(current, "b"), "\n"), table.concat(expected, "\n"), "recovered artifact")
-    end, debug.traceback)
-    if not ok then
-        vim.fn.writefile(expected, current, "b")
+        local recovered_set = uv.fs_readlink("extras/current")
         compiler.activate(schema)
-        error(err)
-    end
+        equal(uv.fs_readlink("extras/current"), recovered_set, "active recovery set was not reused")
+        compiler.activate(schema == "opal" and "dusk" or "opal")
+        compiler.activate(schema)
+        equal(uv.fs_readlink("extras/current"), recovered_set, "inactive recovery set was not reused")
+    end, debug.traceback)
+    -- Restore the deliberately corrupted immutable set, not the current link.
+    vim.fn.writefile(expected, "extras/" .. original_set .. "/tracker-tui.json", "b")
+    compiler.activate(schema)
+    if not ok then error(err) end
 end)
 
 require("tests.extras").register(test, equal, truthy)

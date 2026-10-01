@@ -8,6 +8,12 @@ local active_set = nil
 
 local plugin_dir = require("flume.extras").get_plugin_dir
 
+local function flume_is_active()
+    local flume = require("flume")
+    local name = flume.config.colorscheme or require("flume.palette").get(flume.config.schema).colorscheme
+    return vim.g.colors_name == name
+end
+
 local function read_active_schema()
     local file = io.open(plugin_dir() .. "/extras/current/schema", "rb")
     if not file then
@@ -21,6 +27,10 @@ end
 local function apply_active_schema()
     -- A callback can already be scheduled when setup() disables the watcher.
     if not watcher then
+        return
+    end
+    if not flume_is_active() then
+        M.stop()
         return
     end
     local current_set = uv.fs_readlink(plugin_dir() .. "/extras/current")
@@ -103,6 +113,14 @@ function M.start()
     end
 
     local group = vim.api.nvim_create_augroup("FlumeSyncWatch", { clear = true })
+    vim.api.nvim_create_autocmd("ColorScheme", {
+        group = group,
+        callback = function()
+            if not flume_is_active() then
+                M.stop()
+            end
+        end,
+    })
     vim.api.nvim_create_autocmd("VimLeavePre", {
         group = group,
         once = true,

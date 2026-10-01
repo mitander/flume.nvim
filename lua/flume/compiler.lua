@@ -972,20 +972,36 @@ function M.activate(schema)
             for _, integration in ipairs(integrations) do
                 names[#names + 1] = integration.current
             end
-            local identical = true
-            for _, name in ipairs(names) do
-                local existing_ok, existing = pcall(read_all, set_path .. "/" .. name)
-                if not existing_ok or existing ~= read_all(staged_set .. "/" .. name) then
-                    identical = false
-                    break
+            local function identical_set(path)
+                for _, name in ipairs(names) do
+                    local existing_ok, existing = pcall(read_all, path .. "/" .. name)
+                    if not existing_ok or existing ~= read_all(staged_set .. "/" .. name) then
+                        return false
+                    end
+                end
+                return true
+            end
+
+            local reusable = identical_set(set_path)
+            if not reusable then
+                -- A previous activation may already have recovered this content.
+                -- Verify its complete set before reusing it, even when inactive.
+                local prefix = set_name .. "-"
+                for name, kind in vim.fs.dir(extras) do
+                    if kind == "directory" and name:sub(1, #prefix) == prefix
+                        and identical_set(extras .. "/" .. name) then
+                        set_name = name
+                        set_path = extras .. "/" .. name
+                        reusable = true
+                        break
+                    end
                 end
             end
 
-            if identical then
+            if reusable then
                 vim.fn.delete(staged_set, "rf")
             else
-                -- Recover from a stale/corrupt immutable set left by an older
-                -- activator without disturbing a current symlink that may use it.
+                -- Never replace a corrupt set: another reader may still use it.
                 set_name = set_name .. "-" .. token
                 set_path = extras .. "/" .. set_name
                 local recovered, recover_error = uv.fs_rename(staged_set, set_path)
@@ -1029,11 +1045,9 @@ function M.activate(schema)
         if migrated_directory then
             vim.fn.delete(legacy_backup, "rf")
         end
-        for name, kind in vim.fs.dir(extras) do
-            if kind == "directory" and name:match("^%.current%-set%-") and name ~= set_name then
-                vim.fn.delete(extras .. "/" .. name, "rf")
-            end
-        end
+        -- Retain immutable sets: another process can be reading a previous set
+        -- or preparing to activate a newly promoted one. Unchanged sets are
+        -- content-addressed and reused, so ordinary switching adds no new sets.
         return changes
     end, debug.traceback)
 

@@ -72,6 +72,7 @@ watch_sync ~
     Watches the active integration set and applies schemas synchronized by
     other running Neovim instances. The watcher is event-driven and enabled by
     default. Set to false to keep this editor's palette independent.
+    Selecting another colorscheme stops watching. Call setup() to resume.
 
 overrides ~
     Changes colors by semantic role. Generated extras continue to use canonical
@@ -135,7 +136,8 @@ EXTRAS                                                            *flume-extras*
 
 Every canonical artifact includes its palette suffix. The active set is
 atomically linked under extras/current/ and records its canonical schema in
-extras/current/schema.
+extras/current/schema. Completed sets are retained so concurrent activations
+cannot delete each other's files. Unchanged palette content reuses its set.
 
     APP       DUSK ARTIFACT
     Ghostty   extras/ghostty/flume-dusk
