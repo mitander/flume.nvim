@@ -22,6 +22,10 @@ parser, language server, Git branch, or working tree.
 | Mira | Dark | [`screenshot-mira.png`](../screenshot-mira.png) |
 | Mesa | Light | [`screenshot-mesa.png`](../screenshot-mesa.png) |
 
+On macOS, install Ghostty and grant Screen Recording permission before capture.
+The script identifies the Ghostty window through CoreGraphics; no interactive
+window selection is needed.
+
 Capture and validate from the repository root:
 
 ```sh
@@ -34,9 +38,7 @@ python3 scripts/preflight-screenshots.py
 
 The preflight requires all four canonical filenames and equal dimensions,
 rejects old names, OCRs captures for stale branch/LSP text, and verifies that the
-fixture source has no Git or language-server dependency. macOS capture requires
-Screen Recording permission; the script identifies its Ghostty window through
-CoreGraphics and captures it without interactive window selection.
+fixture source has no Git or language-server dependency.
 
 For ANSI evidence, run `./examples/ansi.sh` in the fixed terminal window under
 each activated palette and save it with that terminal's native contact sheet.
@@ -47,17 +49,14 @@ each activated palette and save it with that terminal's native contact sheet.
 python3 scripts/compose_showcase.py
 ```
 
-This writes `screenshot-showcase.png`: Opal, Mesa, Mira, and Dusk cascade from
-the upper-left light foundation to the lower-right dark foundation in a
-2800 × 1720 frame. Each window overlaps the previous one heavily, exposing its
-comments, syntax, line numbers, and statusline while leaving Dusk as the fully
-readable foreground sample. The more vivid Flume artwork shows through a
-translucent palette blend, with restrained shadows and unmodified title bars.
+This writes `screenshot-showcase.png`, a 2800 × 1720 composite of Opal, Mesa,
+Mira, and Dusk. Dusk is the foreground sample. Application captures retain their
+original colors.
 
 ## Native integration contact sheets
 
 Visual integration review is manual release evidence, not a pixel-diff CI gate.
-The v0.2.0 native-capture checklist is explicit until evidence is committed:
+The checklist records missing native captures until evidence is committed:
 
 | Integration | Contact sheet | Required surface |
 | --- | --- | --- |
@@ -70,7 +69,7 @@ The v0.2.0 native-capture checklist is explicit until evidence is committed:
 | fzf | Pending | Selection, match, prompt, border |
 | Delta | Pending | Add/change/delete and line numbers |
 | Pi | Pending | Text hierarchy, tools, Markdown |
-| Tuxedo | Pending | Priorities, status, selection |
+| ltui / jtui | Pending | Workflow states, identity colors, selection |
 
 For each integration, capture the same deterministic app fixture with all four
 palettes:
@@ -97,9 +96,10 @@ unsupported or unthemeable regions.
 Prioritize:
 
 1. Delta and Lazygit diffs and line numbers;
-2. Pi, OpenCode, and Tuxedo text hierarchy, tool state, and Markdown;
-3. Ghostty and Kitty ANSI 0–15, selection, cursor, and tabs;
-4. Tmux status variables, LSD metadata, and fzf selection/search state.
+2. Pi and OpenCode text hierarchy, tool state, and Markdown;
+3. ltui / jtui workflow states, identity colors, and selection;
+4. Ghostty and Kitty ANSI 0–15, selection, cursor, and tabs;
+5. Tmux status variables, LSD metadata, and fzf selection/search state.
 
 When automation is unavailable, record the exact manual action and application
 version instead of fabricating evidence.

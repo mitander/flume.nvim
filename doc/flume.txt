@@ -48,6 +48,7 @@ Defaults:
         schema = "dusk",
         transparent = false,
         terminal_colors = true,
+        watch_sync = true,
         overrides = {},
         highlights = {},
         styles = {
@@ -66,6 +67,11 @@ transparent ~
 
 terminal_colors ~
     Sets g:terminal_color_0 through g:terminal_color_15 from the palette.
+
+watch_sync ~
+    Watches the active integration set and applies schemas synchronized by
+    other running Neovim instances. The watcher is event-driven and enabled by
+    default. Set to false to keep this editor's palette independent.
 
 overrides ~
     Changes colors by semantic role. Generated extras continue to use canonical
@@ -106,10 +112,13 @@ COMMANDS                                                        *flume-commands*
     Reload the editor-local palette and notify ColorScheme integrations.
 
 :FlumeCompile                                                    *:FlumeCompile*
-    Regenerate forty canonical files without changing the active palette.
+    Regenerate all canonical integration files without changing the active
+    palette.
 
 :FlumeSync [schema]                                                 *:FlumeSync*
     Apply a canonical palette and activate supported live integrations.
+    Running Neovim instances with watch_sync enabled follow the new schema.
+    See |flume-extras| for external live-sync requirements.
 
 :FlumeInstallExtras [app]                                  *:FlumeInstallExtras*
     Symlink generated extras into safe standard locations. Supported app
@@ -119,7 +128,7 @@ COMMANDS                                                        *flume-commands*
     Open refusal-safe copy/link instructions for extras.
 
 :checkhealth flume                                           *flume-checkhealth*
-    Check the selected palette and all ten generated files.
+    Check the selected palette and its generated integration files.
 
 ==============================================================================
 EXTRAS                                                            *flume-extras*
@@ -138,10 +147,18 @@ extras/current/schema.
     fzf       extras/fzf/flume-dusk.opts
     Delta     extras/delta/flume-dusk.gitconfig
     Pi        extras/pi/flume-dusk.json
-    Tuxedo    extras/tuxedo/flume-dusk.toml
+    ltui/jtui extras/tracker-tui/flume-dusk.json
 
-Only Ghostty, Kitty, OpenCode, Tmux, and LSD have safe installer destinations.
-The other tools support multiple include locations, so Flume does not guess.
+Only Ghostty, Kitty, OpenCode, Tmux, and LSD have safe automatic installer
+entries. The other tools support multiple include locations, so Flume does not
+guess. Use each tool's theme or include mechanism.
+
+LTUI / JTUI LIVE SYNC ~
+    Patched Pantheon ltui and jtui builds load all four themes from
+    extras/tracker-tui/.
+    They map workflow states and tracker-owned team, project, and label colors
+    onto canonical Flume roles. They follow the atomic extras/current switch
+    without polling or editing application state.
 
 ==============================================================================
 HIGHLIGHTS                                                    *flume-highlights*

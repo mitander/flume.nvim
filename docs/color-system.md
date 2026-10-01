@@ -59,3 +59,15 @@ Plugin integrations must resolve visible colors through semantic roles instead o
 - User `highlights` are applied last and therefore win.
 - Generated extras compile from the canonical palette, not editor-local overrides.
 - Global saturation/chroma transforms are not a v0.2.0 API; exact role-level overrides remain the supported customization boundary.
+
+## Regenerate the manifest
+
+After changing `lua/flume/palette.lua`, regenerate the exact roles and contrast
+pairs from the repository root:
+
+```sh
+nvim --headless --clean -c "lua dofile('scripts/generate-palette-manifest.lua')"
+```
+
+This updates `docs/palette-manifest.md`. Run `./scripts/check` to verify it matches
+the palette source.
