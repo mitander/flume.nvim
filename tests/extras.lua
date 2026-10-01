@@ -48,7 +48,6 @@ function M.register(test, equal, truthy)
         "delta",
         "pi",
         "tracker-tui",
-        "tuxedo",
     }
 
     local function suffix(schema)
@@ -68,12 +67,11 @@ function M.register(test, equal, truthy)
             delta = "extras/delta/flume%s.gitconfig",
             pi = "extras/pi/flume%s.json",
             ["tracker-tui"] = "extras/tracker-tui/flume%s.json",
-            tuxedo = "extras/tuxedo/flume%s.toml",
         }
         return patterns[app]:format(ending)
     end
 
-    test("generated inventory is exactly four schemas by eleven integrations", function()
+    test("generated inventory is exactly four schemas by ten integrations", function()
         local expected = {}
         for _, app in ipairs(apps) do
             for _, schema in ipairs(palettes.schema_order) do
@@ -89,7 +87,7 @@ function M.register(test, equal, truthy)
             end
         end
         equal(sorted_keys(actual), sorted_keys(expected), "generated integration inventory")
-        equal(vim.tbl_count(actual), 44, "generated artifact count")
+        equal(vim.tbl_count(actual), 40, "generated artifact count")
     end)
 
     test("tracker TUI themes parse for every schema", function()
@@ -350,7 +348,7 @@ function M.register(test, equal, truthy)
         end
     end)
 
-    test("Lazygit Delta and Tuxedo contracts parse for every schema", function()
+    test("Lazygit and Delta contracts parse for every schema", function()
         local lazygit_keys = keyset({
             "activeBorderColor", "inactiveBorderColor", "searchingActiveBorderColor", "optionsTextColor",
             "selectedLineBgColor", "inactiveViewSelectedLineBgColor", "cherryPickedCommitBgColor",
@@ -364,11 +362,6 @@ function M.register(test, equal, truthy)
             "delta.flume.line-numbers-right-style", "delta.flume.commit-decoration-style",
             "delta.flume.file-style", "delta.flume.file-decoration-style", "delta.flume.hunk-header-style",
             "delta.flume.hunk-header-decoration-style",
-        })
-        local tuxedo_keys = keyset({
-            "name", "bg", "panel", "border", "fg", "dim", "accent", "cursor", "selection", "statusbar",
-            "status_fg", "mode_fg", "mode_bg", "pri_a", "pri_b", "pri_c", "pri_d", "pri_other", "project",
-            "context", "due", "overdue", "today", "done", "selected", "matched",
         })
 
         for _, schema in ipairs(palettes.schema_order) do
@@ -411,21 +404,6 @@ function M.register(test, equal, truthy)
             local light = vim.fn.system({ "git", "config", "--file", delta_path, "--get", "delta.light" }):gsub("%s+$", "")
             equal(vim.v.shell_error, 0, schema .. " Delta light parse")
             equal(light, palettes.schemas[schema].appearance == "light" and "true" or "false", schema .. " Delta light mode")
-
-            local tuxedo = {}
-            for key, value in read_all(path("tuxedo", schema)):gmatch("^([%w_]+) = ([^\n]+)") do
-                tuxedo[key] = value
-            end
-            for key, value in read_all(path("tuxedo", schema)):gmatch("\n([%w_]+) = ([^\n]+)") do
-                tuxedo[key] = value
-            end
-            equal(sorted_keys(tuxedo), sorted_keys(tuxedo_keys), schema .. " Tuxedo keys")
-            equal(tuxedo.name, palettes.schemas[schema].display_name, schema .. " Tuxedo palette name")
-            for key, value in pairs(tuxedo) do
-                if key ~= "name" then
-                    truthy(value:match("^#%x%x%x%x%x%x$"), schema .. " Tuxedo " .. key .. " is not hex")
-                end
-            end
 
         end
     end)

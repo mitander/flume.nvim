@@ -54,7 +54,6 @@ function M.check()
         Delta = "/extras/delta/flume" .. suffix .. ".gitconfig",
         Pi = "/extras/pi/flume" .. suffix .. ".json",
         ["ltui / jtui"] = "/extras/tracker-tui/flume" .. suffix .. ".json",
-        Tuxedo = "/extras/tuxedo/flume" .. suffix .. ".toml",
     }
     for label, relative in pairs(files) do
         local path = root .. relative

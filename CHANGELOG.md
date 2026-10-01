@@ -9,6 +9,7 @@
   clients can follow `:FlumeSync` while running.
 - Let running Neovim instances follow synchronized palettes by default;
   disable this with `watch_sync = false`.
+- Remove Tuxedo themes and integration support.
 
 ## v0.2.0 — 2026-07-27
 

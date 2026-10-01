@@ -617,7 +617,6 @@ test("generated extras are current and machine-readable", function()
             source = "extras/tracker-tui/flume%s.json",
             current = "extras/current/tracker-tui.json",
         },
-        tuxedo = { source = "extras/tuxedo/flume%s.toml", current = "extras/current/tuxedo.toml" },
     }
     for _, schema in ipairs(require("flume.palette").schema_order) do
         local suffix = require("flume.palette").schemas[schema].suffix
@@ -648,6 +647,7 @@ test("generated extras are current and machine-readable", function()
 
         compiler.activate(schema)
         equal(read_all("extras/current/schema"), schema .. "\n", schema .. " active schema marker")
+        equal(vim.fn.filereadable("extras/current/tuxedo.toml"), 0, schema .. " obsolete active artifact")
         for adapter, paths in pairs(activation_contract) do
             equal(
                 read_all(paths.current),
@@ -661,7 +661,7 @@ test("generated extras are current and machine-readable", function()
     truthy(not invalid_ok, "invalid activation schema was accepted")
 
     compiler.activate("dusk")
-    local missing_source = "extras/tuxedo/flume-opal.toml"
+    local missing_source = "extras/pi/flume-opal.json"
     local held_source = missing_source .. ".contract"
     assert((vim.uv or vim.loop).fs_rename(missing_source, held_source))
     local partial_ok = pcall(compiler.activate, "opal")
