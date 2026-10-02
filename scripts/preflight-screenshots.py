@@ -2,6 +2,8 @@
 """Validate canonical screenshot inputs before release composition."""
 
 from pathlib import Path
+import hashlib
+import json
 import re
 import shutil
 import struct
@@ -23,11 +25,55 @@ def dimensions(path: Path) -> tuple[int, int]:
         return struct.unpack(">II", image.read(8))
 
 
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def theme_inputs(schema: str) -> dict[str, str]:
+    paths = [ROOT / "lua/flume/init.lua", ROOT / "lua/flume/palette.lua"]
+    paths += sorted((ROOT / "lua/flume/languages").glob("*.lua"))
+    paths.append(ROOT / f"extras/ghostty/flume-{schema}")
+    return {str(path.relative_to(ROOT)): digest(path) for path in paths}
+
+
+def record(schema: str, runtime_file: Path) -> None:
+    image = ROOT / f"screenshot-{schema}.png"
+    if image not in CAPTURES:
+        raise SystemExit("Unknown capture schema: " + schema)
+    runtime = json.loads(runtime_file.read_text())
+    parser = Path(runtime["parser"])
+    revision_file = parser.parent.parent / "parser-info/zig.revision"
+    metadata = {
+        "schema": schema,
+        "highlighting": "treesitter",
+        "nvim": runtime["nvim"],
+        "parser": {
+            "revision": revision_file.read_text().strip() if revision_file.exists() else None,
+            "sha256": digest(parser),
+        },
+        "queries": [
+            {"path": path.split("/queries/", 1)[-1], "sha256": digest(Path(path))}
+            for path in runtime["queries"]
+        ],
+        "fixture_sha256": digest(ROOT / "examples/flume.zig"),
+        "renderer_sha256": digest(ROOT / "examples/showcase.lua"),
+        "image_sha256": digest(image),
+        "theme_inputs": theme_inputs(schema),
+    }
+    image.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n")
+
+
 def main() -> None:
+    if len(sys.argv) == 4 and sys.argv[1] == "--record":
+        record(sys.argv[2], Path(sys.argv[3]))
+        return
     fixture = (ROOT / "examples/showcase.lua").read_text()
     screenshot_script = (ROOT / "scripts/screenshot-window.sh").read_text()
     if re.search(r"Gitsigns|git branch|\bzls\b|vim\.diagnostic|virtual_text|DiffAdd|Pmenu", fixture + screenshot_script, re.IGNORECASE):
         raise SystemExit("Screenshot fixture still contains Git/LSP dependencies or presentation noise")
+
+    if "vim.treesitter.start(" not in fixture or "nvim_buf_set_extmark" in fixture:
+        raise SystemExit("Canonical screenshots must use real Tree-sitter highlighting, not painted tokens")
 
     expected = {path.resolve() for path in CAPTURES}
     unexpected = [
@@ -50,6 +96,27 @@ def main() -> None:
     sizes = {path.name: dimensions(path) for path in CAPTURES}
     if len(set(sizes.values())) != 1:
         raise SystemExit("Canonical capture dimensions differ: " + repr(sizes))
+
+    runtime_fingerprints = set()
+    for path in CAPTURES:
+        sidecar = path.with_suffix(".json")
+        if not sidecar.exists():
+            raise SystemExit(f"{path.name} has no parser-backed capture metadata; recapture it")
+        metadata = json.loads(sidecar.read_text())
+        if metadata["schema"] != path.stem.removeprefix("screenshot-") or metadata["highlighting"] != "treesitter":
+            raise SystemExit(f"{sidecar.name} does not describe this Tree-sitter capture")
+        for key, source in (
+            ("image_sha256", path),
+            ("fixture_sha256", ROOT / "examples/flume.zig"),
+            ("renderer_sha256", ROOT / "examples/showcase.lua"),
+        ):
+            if metadata[key] != digest(source):
+                raise SystemExit(f"{path.name} has stale {key}; recapture it")
+        if metadata.get("theme_inputs") != theme_inputs(metadata["schema"]):
+            raise SystemExit(f"{path.name} has stale theme inputs; recapture it")
+        runtime_fingerprints.add(json.dumps({key: metadata[key] for key in ("nvim", "parser", "queries")}, sort_keys=True))
+    if len(runtime_fingerprints) != 1:
+        raise SystemExit("Canonical captures used different parser/query runtimes")
 
     tesseract = shutil.which("tesseract")
     if not tesseract:

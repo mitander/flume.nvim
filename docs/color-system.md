@@ -89,6 +89,9 @@ For LSP-backed checks, open the same fixtures with the relevant server and use
 | Go | Fields use the property role, methods use the function role, and gopls can resolve package qualifiers as namespaces. |
 | Elixir | Module aliases, function calls, atoms, and ordinary variables use distinct roles. |
 
+Do not infer live highlighting from hand-assigned screenshot colors. Canonical
+[captures](showcase.md) use actual Tree-sitter queries and record their runtime.
+
 ## Regenerate the manifest
 
 After changing `lua/flume/palette.lua`, regenerate the exact roles and contrast

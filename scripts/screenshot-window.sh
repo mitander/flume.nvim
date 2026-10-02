@@ -8,7 +8,7 @@ GHOSTTY_ROWS=32
 GHOSTTY_FONT_SIZE=19
 GHOSTTY_PID=""
 INPUT_FILE=""
-RESTORE_SCHEMA=""
+METADATA_FILE=""
 SCHEMA="${1:-dusk}"
 
 fail() {
@@ -34,12 +34,8 @@ cleanup() {
         rm -f "$INPUT_FILE"
     fi
 
-    if [ -n "$RESTORE_SCHEMA" ]; then
-        nvim --headless --clean \
-            -c "set runtimepath^=$(pwd)" \
-            -c "lua require('flume.compiler').activate('$RESTORE_SCHEMA')" \
-            -c "qa!" >/dev/null
-        RESTORE_SCHEMA=""
+    if [ -n "$METADATA_FILE" ]; then
+        rm -f "$METADATA_FILE"
     fi
 }
 
@@ -112,19 +108,18 @@ launch_ghostty() {
         nvim_bin="nvim"
     fi
 
-    terminal_path=$(/bin/zsh -lc 'print -r -- "$PATH"')
-    if [ -z "$terminal_path" ]; then
-        terminal_path="$PATH"
-    fi
+    terminal_path="$PATH"
 
     example_dir="$(pwd)/examples"
     INPUT_FILE=$(mktemp "${TMPDIR:-/tmp}/flume-screenshot-input.XXXXXX")
     runtime_cmd="+set runtimepath^=$(pwd)"
-    input_cmd="+lua vim.wait(500); require('flume').setup({ schema = '$SCHEMA' }); dofile('showcase.lua')"
+    input_cmd="+lua require('flume').setup({ schema = '$SCHEMA', watch_sync = false }); dofile('showcase.lua')"
 
-    printf '%q %q %q %q %q %q\n' \
+    printf '%q %q %q %q %q %q %q %q\n' \
         "env" \
         "FLUME_SHOWCASE_SCHEMA=$SCHEMA" \
+        "FLUME_TS_RUNTIME=${FLUME_TS_RUNTIME:-}" \
+        "FLUME_SHOWCASE_METADATA=$METADATA_FILE" \
         "$nvim_bin" \
         "--clean" \
         "$runtime_cmd" \
@@ -137,7 +132,7 @@ launch_ghostty() {
     "$ghostty_bin" \
         --window-save-state=never \
         --quit-after-last-window-closed=true \
-        --theme=flume \
+        --theme="$(pwd)/extras/ghostty/flume-$SCHEMA" \
         --font-size="$GHOSTTY_FONT_SIZE" \
         --window-width="$GHOSTTY_COLUMNS" \
         --window-height="$GHOSTTY_ROWS" \
@@ -159,16 +154,17 @@ osascript -e 'id of application "Ghostty"' &>/dev/null || fail "Ghostty is not i
 command -v magick >/dev/null || fail "ImageMagick is required to save the screenshot."
 command -v swift >/dev/null || fail "Swift is required to identify the Ghostty window."
 
+METADATA_FILE=$(mktemp "${TMPDIR:-/tmp}/flume-screenshot-metadata.XXXXXX")
+repo_root="$(pwd)"
+# Fail before opening a window if the real parser or highlight queries are missing.
+(cd examples && FLUME_SHOWCASE_METADATA="$METADATA_FILE" nvim --headless --clean \
+    -c "set runtimepath^=$repo_root" \
+    -c "lua require('flume').setup({schema = '$SCHEMA', watch_sync = false}); dofile('showcase.lua')" \
+    -c 'qa!')
+[ -s "$METADATA_FILE" ] || fail "Install the Zig parser and queries, or set FLUME_TS_RUNTIME."
 require_screen_recording
-RESTORE_SCHEMA=$( (cat extras/current/schema 2>/dev/null || true) | tr -d '\r\n' )
-RESTORE_SCHEMA="${RESTORE_SCHEMA:-dusk}"
-nvim --headless --clean \
-    -c "set runtimepath^=$(pwd)" \
-    -c "lua require('flume.compiler').activate('$SCHEMA')" \
-    -c "qa!" >/dev/null
-if [ "$RESTORE_SCHEMA" = "$SCHEMA" ]; then
-    RESTORE_SCHEMA=""
-fi
+# The GUI process must report its own successful initialization.
+: > "$METADATA_FILE"
 launch_ghostty
 
 rm -f "$RAW_SCREENSHOT"
@@ -177,10 +173,10 @@ echo "Waiting for window to render..."
 sleep 1.0
 osascript -e 'tell application "Ghostty" to activate'
 
+[ -s "$METADATA_FILE" ] || fail "The parser-backed fixture did not finish loading."
 capture_ghostty_window || fail "Capture cancelled or failed."
-
+magick "$RAW_SCREENSHOT" -strip "PNG24:$FINAL_SCREENSHOT"
+python3 scripts/preflight-screenshots.py --record "$SCHEMA" "$METADATA_FILE"
 cleanup
 trap - EXIT
-
-magick "$RAW_SCREENSHOT" -strip "PNG24:$FINAL_SCREENSHOT"
 echo "Updated $FINAL_SCREENSHOT"

@@ -13,6 +13,8 @@
   including already queued palette changes.
 - Retain immutable integration sets so concurrent activations cannot delete
   each other's files.
+- Use actual Tree-sitter highlighting for canonical screenshots and record
+  parser/query provenance instead of manually assigning token colors.
 - Add native parser fixtures and role checks for Zig, Rust, Python,
   TypeScript/TSX, Go, and Elixir.
 - Keep readonly/static bindings and fields in their normal syntax roles,

@@ -6,14 +6,17 @@ or recolor application captures.
 
 ## Canonical editor captures
 
-Every palette uses the same deterministic fixture, opaque background, Ghostty
-window geometry, font size, and padding. The fixture renders the valid
-`examples/flume.zig` program with documentation and ordinary comments, neutral
-identifiers, types, functions, properties, constants, numbers, strings,
-keywords, operators, punctuation, line numbers, an active line, and a restrained
-statusline. It deliberately excludes diagnostics, virtual text, diffs, menus,
-and notifications so the palette remains readable. It does not depend on a
-parser, language server, Git branch, or working tree.
+Every palette uses the same Zig source, Tree-sitter runtime, opaque background,
+Ghostty geometry, font size, and padding. Tree-sitter assigns the highlights;
+the fixture does not paint tokens manually. Captures exclude language servers,
+Git state, diagnostics, diffs, menus, and notifications.
+
+Install a Zig parser and its highlight queries before capture. Set
+`FLUME_TS_RUNTIME` to a runtime directory containing `parser/` and `queries/`
+if they are not on Neovim's default runtime path. Use a locked nvim-treesitter
+revision and its matching parser versions for all four palettes. See the
+[nvim-treesitter installation guide](https://github.com/nvim-treesitter/nvim-treesitter#setup).
+These are capture dependencies, not requirements for using Flume.
 
 | Palette | Appearance | Full-resolution capture |
 | --- | --- | --- |
@@ -26,7 +29,17 @@ On macOS, install Ghostty and grant Screen Recording permission before capture.
 The script identifies the Ghostty window through CoreGraphics; no interactive
 window selection is needed.
 
-Capture and validate from the repository root:
+Capture and validate from the repository root. If needed, replace the example
+runtime path with your parser/query installation:
+
+```sh
+export FLUME_TS_RUNTIME=/path/to/treesitter-runtime
+```
+
+The capture uses the selected Ghostty theme directly; it does not switch your
+active integrations or other editors.
+
+Capture all four palettes:
 
 ```sh
 ./scripts/screenshot-window.sh dusk
@@ -36,9 +49,18 @@ Capture and validate from the repository root:
 python3 scripts/preflight-screenshots.py
 ```
 
-The preflight requires all four canonical filenames and equal dimensions,
-rejects old names, OCRs captures for stale branch/LSP text, and verifies that the
-fixture source has no Git or language-server dependency.
+Each capture writes a matching `screenshot-<schema>.json` sidecar. It records
+Neovim's version, parser revision and checksum, query checksums, and source and
+image checksums. It also fingerprints Flume's palette, highlight definitions,
+language corrections, and selected Ghostty theme. The GUI must report its own
+successful fixture initialization; the headless probe cannot certify a capture.
+The preflight rejects stale inputs or images and mixed parser/query runtimes,
+checks equal dimensions, and OCRs captures for stale branch/LSP text.
+Source-only checks also reject manually assigned token highlights.
+
+These captures demonstrate Tree-sitter output, not LSP semantic highlighting.
+Use the [native language checks](color-system.md#verify-language-highlighting)
+to inspect language-specific roles.
 
 For ANSI evidence, run `./examples/ansi.sh` in the fixed terminal window under
 each activated palette and save it with that terminal's native contact sheet.
