@@ -276,8 +276,8 @@ function M.load(schema, colorscheme)
     hi("@variable", styled({ fg = c.syntax_primary }, styles.variables))
     hi("@variable.builtin", { fg = c.syntax_boolean })
     hi("@variable.member", { fg = c.syntax_property })
-    hi("@variable.readonly", { link = "Constant" })
-    hi("@variable.member.readonly", { link = "Constant" })
+    hi("@variable.readonly", styled({ fg = c.syntax_primary }, styles.variables))
+    hi("@variable.member.readonly", { fg = c.syntax_property })
     hi("@markup.heading", { fg = c.accent, bold = true })
     hi("@markup.italic", { italic = true })
     hi("@markup.link", { fg = c.syntax_function, italic = true })
@@ -441,16 +441,18 @@ function M.load(schema, colorscheme)
     hi("@lsp.type.namespace", { fg = c.syntax_namespace })
     hi("@lsp.type.parameter", styled({ fg = c.syntax_primary }, styles.variables))
     hi("@lsp.type.property", { fg = c.syntax_property })
-    hi("@lsp.typemod.property.readonly", { link = "Constant" })
+    hi("@lsp.typemod.property.readonly", {})
     hi("@lsp.type.struct", { link = "Type" })
     hi("@lsp.type.type", { link = "Type" })
     hi("@lsp.type.typeParameter", { link = "Type" })
     -- Regular variable tokens are often less precise than Tree-sitter. An
     -- empty group lets captures such as function.call and variable.member win.
     hi("@lsp.type.variable", {})
-    hi("@lsp.typemod.variable.readonly", { link = "Constant" })
-    hi("@lsp.typemod.variable.static", { link = "Constant" })
-    hi("@lsp.typemod.property.static", { link = "Constant" })
+    -- Mutability and storage are not semantic constants. Keep ordinary const
+    -- bindings neutral and readonly/static fields in their property family.
+    hi("@lsp.typemod.variable.readonly", {})
+    hi("@lsp.typemod.variable.static", {})
+    hi("@lsp.typemod.property.static", {})
 
     require("flume.languages").setup({
         colors = c,

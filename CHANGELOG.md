@@ -13,6 +13,10 @@
   including already queued palette changes.
 - Retain immutable integration sets so concurrent activations cannot delete
   each other's files.
+- Add native parser fixtures and role checks for Zig, Rust, Python,
+  TypeScript/TSX, Go, and Elixir.
+- Keep readonly/static bindings and fields in their normal syntax roles,
+  and let ZLS namespace tokens use the namespace color.
 - Remove Tuxedo themes and integration support.
 
 ## v0.2.0 — 2026-07-27

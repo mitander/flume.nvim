@@ -313,10 +313,10 @@ test("syntax roles stay consistent across language providers", function()
     local lsp_decorator = vim.api.nvim_get_hl(0, { name = "@lsp.type.decorator", link = false })
     equal(lsp_decorator.fg, color_number(palette.syntax_attribute), "decorator foreground")
 
-    local readonly_variable = vim.api.nvim_get_hl(0, { name = "@lsp.typemod.variable.readonly", link = false })
-    equal(readonly_variable.fg, color_number(palette.syntax_constant), "readonly variable foreground")
-    local readonly_property = vim.api.nvim_get_hl(0, { name = "@lsp.typemod.property.readonly", link = false })
-    equal(readonly_property.fg, color_number(palette.syntax_constant), "readonly property foreground")
+    local readonly_variable = vim.api.nvim_get_hl(0, { name = "@variable.readonly", link = false })
+    equal(readonly_variable.fg, color_number(palette.syntax_primary), "readonly variable foreground")
+    local readonly_property = vim.api.nvim_get_hl(0, { name = "@variable.member.readonly", link = false })
+    equal(readonly_property.fg, color_number(palette.syntax_property), "readonly property foreground")
 
     local tsx_constructor = vim.api.nvim_get_hl(0, { name = "@constructor.tsx", link = false })
     equal(tsx_constructor.fg, color_number(palette.syntax_constant), "TSX constructor foreground")
@@ -324,7 +324,13 @@ test("syntax roles stay consistent across language providers", function()
     local namespace = vim.api.nvim_get_hl(0, { name = "@lsp.type.namespace", link = false })
     equal(namespace.fg, color_number(palette.syntax_namespace), "generic namespace foreground")
     local zig_namespace = vim.api.nvim_get_hl(0, { name = "@lsp.type.namespace.zig", link = false })
-    equal(next(zig_namespace), nil, "Zig namespace exception")
+    equal(zig_namespace.fg, color_number(palette.syntax_namespace), "Zig namespaces keep their semantic role")
+    for _, group in ipairs({
+        "@lsp.typemod.variable.readonly", "@lsp.typemod.variable.static",
+        "@lsp.typemod.property.readonly", "@lsp.typemod.property.static",
+    }) do
+        equal(next(vim.api.nvim_get_hl(0, { name = group, link = false })), nil, group .. " must not recolor identifiers")
+    end
 
     equal(
         vim.api.nvim_get_hl(0, { name = "@keyword.import", link = false }).fg,

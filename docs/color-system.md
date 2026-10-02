@@ -35,12 +35,12 @@ Specific Tree-sitter captures and LSP token types resolve through these families
 - Constructors use `syntax_type`; they create typed values rather than behaving like ordinary functions.
 - Enumeration members remain `syntax_constant` by default because most language servers model them as values. A language-qualified override may use `syntax_type` when a server also uses that token for constructors, as rust-analyzer does for enum variants.
 - Modules and namespaces use `syntax_namespace`. Any workaround for an inaccurate language-server token must be language-qualified rather than weakening the generic group.
-- Broad LSP variable tokens defer to Tree-sitter, which can distinguish calls, members, and other syntactic roles more precisely. Python namespace tokens also defer because language servers commonly apply them to imported modules, classes, and callables alike.
+- Broad LSP variable tokens defer to Tree-sitter, which can distinguish calls, members, and other syntactic roles more precisely. Readonly and static modifiers do not turn ordinary bindings or fields into constants. Python namespace tokens also defer because some servers apply them to imported modules, classes, and callables alike.
 - Import keywords follow namespaces, word-like operators follow punctuation, and preprocessor directives follow attributes. This keeps keyword-heavy languages from collapsing into one dominant hue.
 
 Exact group overrides remain available for further language-specific exceptions. Such exceptions should correct a parser or language-server mismatch, not establish a new language-specific color system.
 
-Language-qualified corrections live in `lua/flume/languages/`, one file per language, so they remain independently reviewable. The initial set covers Lua table constructors, Python namespaces, Rust enum constructors, TSX component constructors, and zls namespace behavior. Languages that are represented correctly by the generic Tree-sitter and LSP groups should not receive an empty override file.
+Language-qualified corrections live in `lua/flume/languages/`, one file per language, so they remain independently reviewable. The set covers Lua table constructors, Python namespaces, Rust enum constructors, TSX component constructors, and Zig's legacy built-in fallback. ZLS namespace tokens use the generic namespace role. Languages that are represented correctly by the generic Tree-sitter and LSP groups should not receive an empty override file.
 
 ### Integration colors
 
@@ -59,6 +59,35 @@ Plugin integrations must resolve visible colors through semantic roles instead o
 - User `highlights` are applied last and therefore win.
 - Generated extras compile from the canonical palette, not editor-local overrides.
 - Global saturation/chroma transforms are not a v0.2.0 API; exact role-level overrides remain the supported customization boundary.
+
+## Verify language highlighting
+
+Role-definition tests do not prove which captures a parser emits. The optional
+native lane opens representative Zig, Rust, Python, TypeScript, TSX, Go, and
+Elixir sources from `examples/` and checks actual captures in all four palettes.
+
+Install the corresponding parsers and queries, then run from the repository root:
+
+```sh
+FLUME_TS_RUNTIME=/path/to/treesitter-runtime \
+    nvim --headless --clean -c "lua dofile('scripts/check-highlights.lua')"
+```
+
+Replace the example path with a runtime containing `parser/` and `queries/`.
+This lane does not run language servers or replace the parser-free
+`./scripts/check` gate.
+
+For LSP-backed checks, open the same fixtures with the relevant server and use
+`:Inspect`. Inspect semantic token modifiers as well as their base types.
+
+| Language | Expected distinction |
+| --- | --- |
+| Zig | Tree-sitter treats `std` as a variable at the call site and `debug` as a member. ZLS can resolve both as namespaces; `print` remains a function. |
+| Rust | Tree-sitter uses constant roles for enum variants; rust-analyzer's enum-member tokens use the type role for constructors. |
+| Python | Types and constructors use the type role; methods and members remain distinct. Pyright may provide no semantic tokens. |
+| TypeScript / TSX | Ordinary `const` bindings stay neutral. Namespace tokens use the namespace role; component tags keep their tag role. |
+| Go | Fields use the property role, methods use the function role, and gopls can resolve package qualifiers as namespaces. |
+| Elixir | Module aliases, function calls, atoms, and ordinary variables use distinct roles. |
 
 ## Regenerate the manifest
 
