@@ -7,14 +7,14 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "screenshot-showcase.png"
+OUTPUT = ROOT / "assets/screenshots/showcase.png"
 CANVAS = (2800, 1720)
 CARD = (1450, 1018)
 SOURCES = (
-    (ROOT / "screenshot-opal.png", 100, 35),
-    (ROOT / "screenshot-mesa.png", 500, 250),
-    (ROOT / "screenshot-mira.png", 900, 465),
-    (ROOT / "screenshot-dusk.png", 1300, 680),
+    (ROOT / "assets/screenshots/opal/zig.png", 100, 35),
+    (ROOT / "assets/screenshots/mesa/zig.png", 500, 250),
+    (ROOT / "assets/screenshots/mira/zig.png", 900, 465),
+    (ROOT / "assets/screenshots/dusk/zig.png", 1300, 680),
 )
 
 
@@ -23,6 +23,7 @@ def run(*args: str | Path) -> None:
 
 
 def main() -> None:
+    run("python3", ROOT / "scripts/preflight-screenshots.py")
     magick = shutil.which("magick")
     if not magick:
         raise SystemExit("ImageMagick is required to compose the showcase")
@@ -39,7 +40,7 @@ def main() -> None:
         # foundation preserves a light-to-dark path behind the cascade.
         run(
             magick,
-            ROOT / "background.png",
+            ROOT / "assets/background.png",
             "-resize", f"{CANVAS[0]}x{CANVAS[1]}^",
             "-gravity", "center",
             "-extent", f"{CANVAS[0]}x{CANVAS[1]}",

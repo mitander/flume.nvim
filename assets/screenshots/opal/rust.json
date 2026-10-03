@@ -1,20 +1,21 @@
 {
   "schema": "opal",
+  "language": "rust",
   "highlighting": "treesitter",
   "nvim": "0.12.5",
   "parser": {
-    "revision": "6479aa13f32f701c383083d8b28360ebd682fb7d",
-    "sha256": "69e0c61f5fc912cd6fdbc1717c518b7ddbae7c4eb6ea86c01c9b8508e97cdd9f"
+    "revision": "77a3747266f4d621d0757825e6b11edcbf991ca5",
+    "sha256": "6e690a9332c0907ab23fc29e8f495b460609e38a00dfecacacb576ae6fd9b707"
   },
   "queries": [
     {
-      "path": "zig/highlights.scm",
-      "sha256": "cbff0fe14e8aeffd64b146ac68fd797c1e38cd66f43a1e3273db8f4b4d753876"
+      "path": "rust/highlights.scm",
+      "sha256": "4e0f5994f30ee545fc63435054a0b029c7d0222632c5c787c4e9c249dc0ef20f"
     }
   ],
-  "fixture_sha256": "e675c1011329d4c1065eedd76815ee173bd683fa14121f264c68bd571bc37e7b",
-  "renderer_sha256": "efbebb6ec5694ed849de0bdf047005c41a7ce2a73bac423ee49d16638558be46",
-  "image_sha256": "fd72466239b267ca6b99e5955d195bcaa91381d1f7ba087dc654454619bfed87",
+  "fixture_sha256": "9628ac3e3072d0d2f862e47cf55edb5406cf103773b8d69c7329a3db0b87d887",
+  "renderer_sha256": "cef94cd5d74f35bda24a4cff008a499cca07a3f7985b6c5bc1580cc3548d14e1",
+  "image_sha256": "459a9fd7656409a24c1522887dfc8f34d9eab9fe8520a1c05f5173701c659f41",
   "theme_inputs": {
     "lua/flume/init.lua": "3ac95408acb60b0299ccc658d24dca48ebe83abeb7823b2f8661506656bba65b",
     "lua/flume/palette.lua": "f689bb7d2b6e1abdb332ab809bf6f0f5fa8574c8c140ff500a146affb35c3b3d",

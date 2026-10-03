@@ -1,16 +1,19 @@
--- Canonical capture: real Zig Tree-sitter highlighting, without a language server.
+-- Real Tree-sitter highlighting, without a language server.
 local schema = vim.env.FLUME_SHOWCASE_SCHEMA or "dusk"
+local language = vim.env.FLUME_SHOWCASE_LANGUAGE or "zig"
+local extensions = { zig = "zig", rust = "rs", tsx = "tsx", python = "py", go = "go" }
+local extension = assert(extensions[language], "Unsupported capture language: " .. language)
 vim.opt.termguicolors = true
 if vim.env.FLUME_TS_RUNTIME and vim.env.FLUME_TS_RUNTIME ~= "" then
     vim.opt.runtimepath:prepend(vim.env.FLUME_TS_RUNTIME)
 end
 
 local buf = vim.api.nvim_create_buf(true, false)
-local lines = vim.fn.readfile("flume.zig")
+local lines = vim.fn.readfile("flume." .. extension)
 vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-vim.api.nvim_buf_set_name(buf, "flume-" .. schema .. ".zig")
+vim.api.nvim_buf_set_name(buf, "flume-" .. schema .. "." .. extension)
 vim.api.nvim_set_current_buf(buf)
-vim.bo[buf].filetype = "zig"
+vim.bo[buf].filetype = language == "tsx" and "typescriptreact" or language
 vim.bo[buf].buftype = "nofile"
 vim.bo[buf].bufhidden = "wipe"
 vim.bo[buf].swapfile = false
@@ -24,18 +27,19 @@ vim.o.showmode = false
 vim.o.ruler = false
 vim.o.statusline = "  NORMAL  %t%=line %l  col %c  "
 
-local parser = vim.treesitter.get_parser(buf, "zig")
-assert(not parser:parse()[1]:root():has_error(), "Zig capture fixture contains a parse error")
-local query_files = vim.treesitter.query.get_files("zig", "highlights")
-assert(#query_files > 0, "Install Zig highlight queries or set FLUME_TS_RUNTIME")
-vim.treesitter.start(buf, "zig")
-vim.api.nvim_win_set_cursor(0, { 17, 0 })
+local parser = vim.treesitter.get_parser(buf, language)
+assert(not parser:parse()[1]:root():has_error(), language .. " capture fixture contains a parse error")
+local query_files = vim.treesitter.query.get_files(language, "highlights")
+assert(#query_files > 0, "Install " .. language .. " highlight queries or set FLUME_TS_RUNTIME")
+vim.treesitter.start(buf, language)
+vim.api.nvim_win_set_cursor(0, { math.min(17, #lines), 0 })
 vim.cmd("redraw")
 
 if vim.env.FLUME_SHOWCASE_METADATA then
     local metadata = {
         nvim = tostring(vim.version()),
-        parser = assert(vim.api.nvim_get_runtime_file("parser/zig.*", false)[1]),
+        language = language,
+        parser = assert(vim.api.nvim_get_runtime_file("parser/" .. language .. ".*", false)[1]),
         queries = query_files,
     }
     vim.fn.writefile({ vim.json.encode(metadata) }, vim.env.FLUME_SHOWCASE_METADATA)

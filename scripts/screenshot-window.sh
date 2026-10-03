@@ -10,6 +10,7 @@ GHOSTTY_PID=""
 INPUT_FILE=""
 METADATA_FILE=""
 SCHEMA="${1:-dusk}"
+LANGUAGE="${2:-zig}"
 
 fail() {
     echo "Error: $*" >&2
@@ -18,13 +19,20 @@ fail() {
 
 case "$SCHEMA" in
     dusk|opal|mira|mesa) ;;
-    *) fail "Usage: $0 [dusk|opal|mira|mesa]" ;;
+    *) fail "Usage: $0 [dusk|opal|mira|mesa] [zig|rust|tsx|python|go]" ;;
 esac
 
-RAW_SCREENSHOT="screenshot_raw-${SCHEMA}.png"
-FINAL_SCREENSHOT="screenshot-${SCHEMA}.png"
+case "$LANGUAGE" in
+    zig|rust|tsx|python|go) ;;
+    *) fail "Unsupported language: $LANGUAGE" ;;
+esac
+
+RAW_SCREENSHOT=$(mktemp "${TMPDIR:-/tmp}/flume-capture.XXXXXX")
+FINAL_SCREENSHOT="assets/screenshots/${SCHEMA}/${LANGUAGE}.png"
+mkdir -p "$(dirname "$FINAL_SCREENSHOT")"
 
 cleanup() {
+    rm -f "$RAW_SCREENSHOT"
     if [ -n "$GHOSTTY_PID" ] && kill -0 "$GHOSTTY_PID" &>/dev/null; then
         echo "Closing Ghostty..."
         kill "$GHOSTTY_PID" &>/dev/null || true
@@ -115,9 +123,10 @@ launch_ghostty() {
     runtime_cmd="+set runtimepath^=$(pwd)"
     input_cmd="+lua require('flume').setup({ schema = '$SCHEMA', watch_sync = false }); dofile('showcase.lua')"
 
-    printf '%q %q %q %q %q %q %q %q\n' \
+    printf '%q %q %q %q %q %q %q %q %q\n' \
         "env" \
         "FLUME_SHOWCASE_SCHEMA=$SCHEMA" \
+        "FLUME_SHOWCASE_LANGUAGE=$LANGUAGE" \
         "FLUME_TS_RUNTIME=${FLUME_TS_RUNTIME:-}" \
         "FLUME_SHOWCASE_METADATA=$METADATA_FILE" \
         "$nvim_bin" \
@@ -157,11 +166,11 @@ command -v swift >/dev/null || fail "Swift is required to identify the Ghostty w
 METADATA_FILE=$(mktemp "${TMPDIR:-/tmp}/flume-screenshot-metadata.XXXXXX")
 repo_root="$(pwd)"
 # Fail before opening a window if the real parser or highlight queries are missing.
-(cd examples && FLUME_SHOWCASE_METADATA="$METADATA_FILE" nvim --headless --clean \
+(cd examples && FLUME_SHOWCASE_LANGUAGE="$LANGUAGE" FLUME_SHOWCASE_METADATA="$METADATA_FILE" nvim --headless --clean \
     -c "set runtimepath^=$repo_root" \
     -c "lua require('flume').setup({schema = '$SCHEMA', watch_sync = false}); dofile('showcase.lua')" \
     -c 'qa!')
-[ -s "$METADATA_FILE" ] || fail "Install the Zig parser and queries, or set FLUME_TS_RUNTIME."
+[ -s "$METADATA_FILE" ] || fail "Install the $LANGUAGE parser and queries, or set FLUME_TS_RUNTIME."
 require_screen_recording
 # The GUI process must report its own successful initialization.
 : > "$METADATA_FILE"
@@ -176,7 +185,7 @@ osascript -e 'tell application "Ghostty" to activate'
 [ -s "$METADATA_FILE" ] || fail "The parser-backed fixture did not finish loading."
 capture_ghostty_window || fail "Capture cancelled or failed."
 magick "$RAW_SCREENSHOT" -strip "PNG24:$FINAL_SCREENSHOT"
-python3 scripts/preflight-screenshots.py --record "$SCHEMA" "$METADATA_FILE"
+python3 scripts/preflight-screenshots.py --record "$SCHEMA" "$LANGUAGE" "$METADATA_FILE"
 cleanup
 trap - EXIT
 echo "Updated $FINAL_SCREENSHOT"

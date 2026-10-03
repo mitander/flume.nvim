@@ -1,0 +1,42 @@
+{
+  "schema": "dusk",
+  "language": "tsx",
+  "highlighting": "treesitter",
+  "nvim": "0.12.5",
+  "parser": {
+    "revision": "75b3874edb2dc714fb1fd77a32013d0f8699989f",
+    "sha256": "61e38cf7591604e99c19f8875795e84eefdd7b1d10dfb3d3359a9c8d630d1bb2"
+  },
+  "queries": [
+    {
+      "path": "ecma/highlights.scm",
+      "sha256": "37834547ebaa9c160cad87eabd38387d4722b1b40d44bab54d8e71d1feff9b9e"
+    },
+    {
+      "path": "typescript/highlights.scm",
+      "sha256": "0caa2987e274d06aeb8f9a8a521c8348fc0dd92683b52a303338d066f0432137"
+    },
+    {
+      "path": "jsx/highlights.scm",
+      "sha256": "fbeaa6de60604615a8dc7c18eb6e0d33f32aee51628b57e6e03b0c8baf687568"
+    },
+    {
+      "path": "tsx/highlights.scm",
+      "sha256": "0631577ba119c6b1f9fbabe70d70ad17ae81e4e7d8afb0e2309bd8acee0f5f76"
+    }
+  ],
+  "fixture_sha256": "6d16654f209ddd0c4f44fc971c2427b65a926e519dd065edd00df264d5589084",
+  "renderer_sha256": "cef94cd5d74f35bda24a4cff008a499cca07a3f7985b6c5bc1580cc3548d14e1",
+  "image_sha256": "66b5a5d69a2f1dec51d4069afcab6deaa6893f68ede1ab701d5824df215a50fe",
+  "theme_inputs": {
+    "lua/flume/init.lua": "3ac95408acb60b0299ccc658d24dca48ebe83abeb7823b2f8661506656bba65b",
+    "lua/flume/palette.lua": "f689bb7d2b6e1abdb332ab809bf6f0f5fa8574c8c140ff500a146affb35c3b3d",
+    "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
+    "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
+    "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",
+    "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
+    "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
+    "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
+    "extras/ghostty/flume-dusk": "eb4485cb0ea063ff0d531fb142d0675db5584770c7234b8ac1240ab94f945f74"
+  }
+}

@@ -11,7 +11,10 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parent.parent
-CAPTURES = tuple(ROOT / f"screenshot-{schema}.png" for schema in ("dusk", "opal", "mira", "mesa"))
+SCHEMAS = ("dusk", "opal", "mira", "mesa")
+LANGUAGES = {"zig": "zig", "rust": "rs", "tsx": "tsx", "python": "py", "go": "go"}
+CAPTURES = tuple(ROOT / "assets/screenshots" / schema / f"{language}.png"
+                 for schema in SCHEMAS for language in LANGUAGES)
 STALE_TEXT = re.compile(r"feat/|issue[- ]?2|light-schemas|\bzls\b", re.IGNORECASE)
 
 
@@ -36,15 +39,18 @@ def theme_inputs(schema: str) -> dict[str, str]:
     return {str(path.relative_to(ROOT)): digest(path) for path in paths}
 
 
-def record(schema: str, runtime_file: Path) -> None:
-    image = ROOT / f"screenshot-{schema}.png"
-    if image not in CAPTURES:
-        raise SystemExit("Unknown capture schema: " + schema)
+def record(schema: str, language: str, runtime_file: Path) -> None:
+    image = ROOT / "assets/screenshots" / schema / f"{language}.png"
+    if schema not in SCHEMAS or language not in LANGUAGES:
+        raise SystemExit("Unknown capture schema or language")
     runtime = json.loads(runtime_file.read_text())
     parser = Path(runtime["parser"])
-    revision_file = parser.parent.parent / "parser-info/zig.revision"
+    if runtime["language"] != language:
+        raise SystemExit("Runtime metadata does not describe the requested language")
+    revision_file = parser.parent.parent / f"parser-info/{language}.revision"
     metadata = {
         "schema": schema,
+        "language": language,
         "highlighting": "treesitter",
         "nvim": runtime["nvim"],
         "parser": {
@@ -55,7 +61,7 @@ def record(schema: str, runtime_file: Path) -> None:
             {"path": path.split("/queries/", 1)[-1], "sha256": digest(Path(path))}
             for path in runtime["queries"]
         ],
-        "fixture_sha256": digest(ROOT / "examples/flume.zig"),
+        "fixture_sha256": digest(ROOT / f"examples/flume.{LANGUAGES[language]}"),
         "renderer_sha256": digest(ROOT / "examples/showcase.lua"),
         "image_sha256": digest(image),
         "theme_inputs": theme_inputs(schema),
@@ -64,8 +70,8 @@ def record(schema: str, runtime_file: Path) -> None:
 
 
 def main() -> None:
-    if len(sys.argv) == 4 and sys.argv[1] == "--record":
-        record(sys.argv[2], Path(sys.argv[3]))
+    if len(sys.argv) == 5 and sys.argv[1] == "--record":
+        record(sys.argv[2], sys.argv[3], Path(sys.argv[4]))
         return
     fixture = (ROOT / "examples/showcase.lua").read_text()
     screenshot_script = (ROOT / "scripts/screenshot-window.sh").read_text()
@@ -75,14 +81,7 @@ def main() -> None:
     if "vim.treesitter.start(" not in fixture or "nvim_buf_set_extmark" in fixture:
         raise SystemExit("Canonical screenshots must use real Tree-sitter highlighting, not painted tokens")
 
-    expected = {path.resolve() for path in CAPTURES}
-    unexpected = [
-        path.name
-        for path in ROOT.glob("screenshot-*.png")
-        if path.name != "screenshot-showcase.png" and path.resolve() not in expected
-    ]
-    if (ROOT / "screenshot.png").exists():
-        unexpected.append("screenshot.png")
+    unexpected = [path.name for path in ROOT.glob("screenshot*.png")]
     if unexpected:
         raise SystemExit("Unexpected canonical capture names: " + ", ".join(sorted(unexpected)))
 
@@ -93,29 +92,31 @@ def main() -> None:
     missing = [path.name for path in CAPTURES if not path.exists()]
     if missing:
         raise SystemExit("Missing canonical captures: " + ", ".join(missing))
-    sizes = {path.name: dimensions(path) for path in CAPTURES}
+    sizes = {str(path.relative_to(ROOT)): dimensions(path) for path in CAPTURES}
     if len(set(sizes.values())) != 1:
         raise SystemExit("Canonical capture dimensions differ: " + repr(sizes))
 
-    runtime_fingerprints = set()
+    runtime_fingerprints = {language: set() for language in LANGUAGES}
     for path in CAPTURES:
         sidecar = path.with_suffix(".json")
         if not sidecar.exists():
             raise SystemExit(f"{path.name} has no parser-backed capture metadata; recapture it")
         metadata = json.loads(sidecar.read_text())
-        if metadata["schema"] != path.stem.removeprefix("screenshot-") or metadata["highlighting"] != "treesitter":
+        language = path.stem
+        if (metadata["schema"] != path.parent.name or metadata.get("language") != language
+                or metadata["highlighting"] != "treesitter"):
             raise SystemExit(f"{sidecar.name} does not describe this Tree-sitter capture")
         for key, source in (
             ("image_sha256", path),
-            ("fixture_sha256", ROOT / "examples/flume.zig"),
+            ("fixture_sha256", ROOT / f"examples/flume.{LANGUAGES[language]}"),
             ("renderer_sha256", ROOT / "examples/showcase.lua"),
         ):
             if metadata[key] != digest(source):
                 raise SystemExit(f"{path.name} has stale {key}; recapture it")
         if metadata.get("theme_inputs") != theme_inputs(metadata["schema"]):
             raise SystemExit(f"{path.name} has stale theme inputs; recapture it")
-        runtime_fingerprints.add(json.dumps({key: metadata[key] for key in ("nvim", "parser", "queries")}, sort_keys=True))
-    if len(runtime_fingerprints) != 1:
+        runtime_fingerprints[language].add(json.dumps({key: metadata[key] for key in ("nvim", "parser", "queries")}, sort_keys=True))
+    if any(len(fingerprints) != 1 for fingerprints in runtime_fingerprints.values()):
         raise SystemExit("Canonical captures used different parser/query runtimes")
 
     tesseract = shutil.which("tesseract")

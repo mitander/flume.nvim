@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import struct
 import tempfile
 from types import SimpleNamespace
 import unittest
@@ -29,13 +30,15 @@ class CaptureProvenance(unittest.TestCase):
         ]
         files += [str(path.relative_to(ROOT)) for path in (ROOT / "lua/flume/languages").glob("*.lua")]
         files += [f"extras/ghostty/flume-{schema}" for schema in ("dusk", "opal", "mira", "mesa")]
-        files += [f"screenshot-{schema}.{extension}" for schema in ("dusk", "opal", "mira", "mesa") for extension in ("png", "json")]
+        files += [f"examples/flume.{extension}" for extension in ("rs", "tsx", "py", "go")]
+        files += [str(path.relative_to(ROOT)) for path in preflight.CAPTURES]
+        files += [str(path.with_suffix(".json").relative_to(ROOT)) for path in preflight.CAPTURES]
         for name in files:
             (self.root / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, self.root / name)
         stack = ExitStack()
         self.addCleanup(stack.close)
-        stack.enter_context(patch.multiple(preflight, ROOT=self.root, CAPTURES=tuple(self.root.glob("screenshot-*.png"))))
+        stack.enter_context(patch.multiple(preflight, ROOT=self.root, CAPTURES=tuple(self.root / path.relative_to(ROOT) for path in preflight.CAPTURES)))
         stack.enter_context(patch.object(preflight.sys, "argv", ["preflight"]))
         stack.enter_context(patch.object(preflight.shutil, "which", return_value="tesseract"))
         stack.enter_context(patch.object(preflight.subprocess, "run", return_value=SimpleNamespace(stdout="")))
@@ -44,7 +47,7 @@ class CaptureProvenance(unittest.TestCase):
         preflight.main()
 
     def test_changed_image_is_rejected(self):
-        image = self.root / "screenshot-dusk.png"
+        image = self.root / "assets/screenshots/dusk/zig.png"
         image.write_bytes(image.read_bytes() + b"changed")
         with self.assertRaisesRegex(SystemExit, "stale image_sha256"):
             preflight.main()
@@ -90,7 +93,7 @@ class CaptureProvenance(unittest.TestCase):
             command = fake_bin / name
             command.write_text("#!/bin/sh\n" + body)
             command.chmod(0o700)
-        image = self.root / "screenshot-dusk.png"
+        image = self.root / "assets/screenshots/dusk/zig.png"
         original = image.read_bytes()
         # Popen bypasses the OCR run() mock and executes the actual capture
         # script with a successful headless probe but no GUI completion.
@@ -105,11 +108,43 @@ class CaptureProvenance(unittest.TestCase):
         self.assertEqual(image.read_bytes(), original)
 
     def test_mixed_runtimes_are_rejected(self):
-        sidecar = self.root / "screenshot-opal.json"
+        sidecar = self.root / "assets/screenshots/opal/zig.json"
         metadata = json.loads(sidecar.read_text())
         metadata["parser"]["sha256"] = "different"
         sidecar.write_text(json.dumps(metadata))
         with self.assertRaisesRegex(SystemExit, "different parser/query runtimes"):
+            preflight.main()
+
+    def test_changed_language_fixture_is_rejected(self):
+        source = self.root / "examples/flume.rs"
+        source.write_text(source.read_text() + "\n// changed\n")
+        with self.assertRaisesRegex(SystemExit, "stale fixture_sha256"):
+            preflight.main()
+
+    def test_wrong_language_metadata_is_rejected(self):
+        sidecar = self.root / "assets/screenshots/dusk/rust.json"
+        metadata = json.loads(sidecar.read_text())
+        metadata["language"] = "go"
+        sidecar.write_text(json.dumps(metadata))
+        with self.assertRaisesRegex(SystemExit, "does not describe this Tree-sitter capture"):
+            preflight.main()
+
+    def test_missing_gallery_capture_is_rejected(self):
+        (self.root / "assets/screenshots/mesa/tsx.png").unlink()
+        with self.assertRaisesRegex(SystemExit, "Missing canonical captures"):
+            preflight.main()
+
+    def test_dimensions_are_checked_across_palettes(self):
+        image = self.root / "assets/screenshots/dusk/rust.png"
+        data = bytearray(image.read_bytes())
+        data[16:20] = struct.pack(">I", 1)
+        image.write_bytes(data)
+        with self.assertRaisesRegex(SystemExit, "capture dimensions differ"):
+            preflight.main()
+
+    def test_root_screenshots_are_rejected(self):
+        (self.root / "screenshot-dusk.png").write_bytes(b"obsolete")
+        with self.assertRaisesRegex(SystemExit, "Unexpected canonical capture names"):
             preflight.main()
 
     def test_painted_tokens_are_rejected(self):

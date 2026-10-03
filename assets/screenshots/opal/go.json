@@ -1,20 +1,21 @@
 {
-  "schema": "dusk",
+  "schema": "opal",
+  "language": "go",
   "highlighting": "treesitter",
   "nvim": "0.12.5",
   "parser": {
-    "revision": "6479aa13f32f701c383083d8b28360ebd682fb7d",
-    "sha256": "69e0c61f5fc912cd6fdbc1717c518b7ddbae7c4eb6ea86c01c9b8508e97cdd9f"
+    "revision": "2346a3ab1bb3857b48b29d779a1ef9799a248cd7",
+    "sha256": "4c425a88276f2ee56b90eca4804cd3e7269b31599a6086b77982bf5c324de5e1"
   },
   "queries": [
     {
-      "path": "zig/highlights.scm",
-      "sha256": "cbff0fe14e8aeffd64b146ac68fd797c1e38cd66f43a1e3273db8f4b4d753876"
+      "path": "go/highlights.scm",
+      "sha256": "81698c638abbf4c3a3ec8ccc3c6110be2cc725ad740bf87e6fa9ac685ecad267"
     }
   ],
-  "fixture_sha256": "e675c1011329d4c1065eedd76815ee173bd683fa14121f264c68bd571bc37e7b",
-  "renderer_sha256": "efbebb6ec5694ed849de0bdf047005c41a7ce2a73bac423ee49d16638558be46",
-  "image_sha256": "4eaee111a4fa92fa4631984131020c5fbbca8ab5b883a371b57e3c76abb2fea9",
+  "fixture_sha256": "ecd6717e4f5dc588061f31a070806011cfaac2b8bf96c338521f250071b6dc2d",
+  "renderer_sha256": "cef94cd5d74f35bda24a4cff008a499cca07a3f7985b6c5bc1580cc3548d14e1",
+  "image_sha256": "50897d65f05d02a9c776980e180ed6e3db01257bf2acfb1694718968245c7ea0",
   "theme_inputs": {
     "lua/flume/init.lua": "3ac95408acb60b0299ccc658d24dca48ebe83abeb7823b2f8661506656bba65b",
     "lua/flume/palette.lua": "f689bb7d2b6e1abdb332ab809bf6f0f5fa8574c8c140ff500a146affb35c3b3d",
@@ -24,6 +25,6 @@
     "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
     "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
     "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-    "extras/ghostty/flume-dusk": "eb4485cb0ea063ff0d531fb142d0675db5584770c7234b8ac1240ab94f945f74"
+    "extras/ghostty/flume-opal": "6e8e03d76e2e8995a8eba0cf7512dfe1d3c486627e08c21695e3ccad9de57898"
   }
 }

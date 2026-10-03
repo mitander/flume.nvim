@@ -6,13 +6,16 @@ or recolor application captures.
 
 ## Canonical editor captures
 
-Every palette uses the same Zig source, Tree-sitter runtime, opaque background,
-Ghostty geometry, font size, and padding. Tree-sitter assigns the highlights;
-the fixture does not paint tokens manually. Captures exclude language servers,
+The palette comparison uses Zig. Each palette also has a language grid with
+Rust, TypeScript/TSX, Python, and Go. For each language, all palettes use the
+same source, Tree-sitter runtime, opaque background, Ghostty geometry, font
+size, and padding. Tree-sitter assigns the highlights; the fixture does not
+paint tokens manually. Captures exclude language servers,
 Git state, diagnostics, diffs, menus, and notifications.
 
-Install a Zig parser and its highlight queries before capture. Set
-`FLUME_TS_RUNTIME` to a runtime directory containing `parser/` and `queries/`
+Install Zig, Rust, TSX, Python, and Go parsers and their highlight queries
+before capture. Include inherited queries (such as JSX and ECMAScript for TSX).
+Set `FLUME_TS_RUNTIME` to a runtime directory containing `parser/` and `queries/`
 if they are not on Neovim's default runtime path. Use a locked nvim-treesitter
 revision and its matching parser versions for all four palettes. See the
 [nvim-treesitter installation guide](https://github.com/nvim-treesitter/nvim-treesitter#setup).
@@ -20,10 +23,10 @@ These are capture dependencies, not requirements for using Flume.
 
 | Palette | Appearance | Full-resolution capture |
 | --- | --- | --- |
-| Dusk | Dark | [`screenshot-dusk.png`](../screenshot-dusk.png) |
-| Opal | Light | [`screenshot-opal.png`](../screenshot-opal.png) |
-| Mira | Dark | [`screenshot-mira.png`](../screenshot-mira.png) |
-| Mesa | Light | [`screenshot-mesa.png`](../screenshot-mesa.png) |
+| Dusk | Dark | [`dusk/zig.png`](../assets/screenshots/dusk/zig.png) |
+| Opal | Light | [`opal/zig.png`](../assets/screenshots/opal/zig.png) |
+| Mira | Dark | [`mira/zig.png`](../assets/screenshots/mira/zig.png) |
+| Mesa | Light | [`mesa/zig.png`](../assets/screenshots/mesa/zig.png) |
 
 On macOS, install Ghostty and grant Screen Recording permission before capture.
 The script identifies the Ghostty window through CoreGraphics; no interactive
@@ -39,17 +42,24 @@ export FLUME_TS_RUNTIME=/path/to/treesitter-runtime
 The capture uses the selected Ghostty theme directly; it does not switch your
 active integrations or other editors.
 
-Capture all four palettes:
+Capture all palettes and languages:
 
 ```sh
-./scripts/screenshot-window.sh dusk
-./scripts/screenshot-window.sh opal
-./scripts/screenshot-window.sh mira
-./scripts/screenshot-window.sh mesa
+for schema in dusk opal mira mesa; do
+    for language in zig rust tsx python go; do
+        ./scripts/screenshot-window.sh "$schema" "$language"
+    done
+done
 python3 scripts/preflight-screenshots.py
 ```
 
-Each capture writes a matching `screenshot-<schema>.json` sidecar. It records
+The language argument defaults to `zig`. Captures live under
+`assets/screenshots/<schema>/<language>.png`, with matching JSON sidecars.
+Raw window captures are temporary and are removed when the script exits.
+Source fixtures live in `examples/`; capture and composition tools live in
+`scripts/`.
+
+Each sidecar identifies the palette and language. It records
 Neovim's version, parser revision and checksum, query checksums, and source and
 image checksums. It also fingerprints Flume's palette, highlight definitions,
 language corrections, and selected Ghostty theme. The GUI must report its own
@@ -69,11 +79,24 @@ each activated palette and save it with that terminal's native contact sheet.
 
 ```sh
 python3 scripts/compose_showcase.py
+python3 scripts/compose-languages.py
 ```
 
-This writes `screenshot-showcase.png`, a 2800 × 1720 composite of Opal, Mesa,
-Mira, and Dusk. Dusk is the foreground sample. Application captures retain their
-original colors.
+Both commands validate capture provenance before composing. The first writes
+`assets/screenshots/showcase.png`, a 2800 × 1720 composite of Opal, Mesa,
+Mira, and Dusk. Dusk is the foreground sample. The second writes
+`assets/screenshots/<schema>/languages.png` for each palette, with Rust and
+TypeScript/TSX above Python and Go. Application captures retain their original
+colors and the language grids preserve their aspect ratios.
+
+Individual language captures:
+
+| Palette | Rust | TypeScript/TSX | Python | Go |
+| --- | --- | --- | --- | --- |
+| Dusk | [Rust](../assets/screenshots/dusk/rust.png) | [TSX](../assets/screenshots/dusk/tsx.png) | [Python](../assets/screenshots/dusk/python.png) | [Go](../assets/screenshots/dusk/go.png) |
+| Opal | [Rust](../assets/screenshots/opal/rust.png) | [TSX](../assets/screenshots/opal/tsx.png) | [Python](../assets/screenshots/opal/python.png) | [Go](../assets/screenshots/opal/go.png) |
+| Mira | [Rust](../assets/screenshots/mira/rust.png) | [TSX](../assets/screenshots/mira/tsx.png) | [Python](../assets/screenshots/mira/python.png) | [Go](../assets/screenshots/mira/go.png) |
+| Mesa | [Rust](../assets/screenshots/mesa/rust.png) | [TSX](../assets/screenshots/mesa/tsx.png) | [Python](../assets/screenshots/mesa/python.png) | [Go](../assets/screenshots/mesa/go.png) |
 
 ## Native integration contact sheets
 
@@ -97,11 +120,11 @@ For each integration, capture the same deterministic app fixture with all four
 palettes:
 
 ```text
-captures/<app>/dusk.png
-captures/<app>/opal.png
-captures/<app>/mira.png
-captures/<app>/mesa.png
-captures/<app>/metadata.json
+assets/screenshots/integrations/<app>/dusk.png
+assets/screenshots/integrations/<app>/opal.png
+assets/screenshots/integrations/<app>/mira.png
+assets/screenshots/integrations/<app>/mesa.png
+assets/screenshots/integrations/<app>/metadata.json
 ```
 
 Copy [`capture-metadata-template.json`](capture-metadata-template.json), fill in
@@ -111,9 +134,9 @@ real values, then compose:
 python3 scripts/compose-contact-sheet.py <app>
 ```
 
-The output is `captures/<app>/contact-sheet.png`. Metadata records app version,
-OS, terminal, font, dimensions, scale, fixture revision, capture date, and any
-unsupported or unthemeable regions.
+The output is `assets/screenshots/integrations/<app>/contact-sheet.png`.
+Metadata records app version, OS, terminal, font, dimensions, scale, fixture
+revision, capture date, and any unsupported or unthemeable regions.
 
 Prioritize:
 

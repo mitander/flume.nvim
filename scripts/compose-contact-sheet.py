@@ -36,7 +36,7 @@ def main() -> None:
     if len(sys.argv) != 2 or not sys.argv[1].replace("-", "").isalnum():
         raise SystemExit("Usage: compose-contact-sheet.py <app>")
     app = sys.argv[1]
-    directory = ROOT / "captures" / app
+    directory = ROOT / "assets/screenshots/integrations" / app
     images = tuple(directory / f"{schema}.png" for schema in SCHEMAS)
     missing = [path.name for path in images if not path.exists()]
     if missing:

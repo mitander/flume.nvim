@@ -1,5 +1,3 @@
-screenshot_raw.png
-screenshot_raw-*.png
 Session.vim
 __pycache__/
 *.py[cod]

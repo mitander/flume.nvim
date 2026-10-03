@@ -3,7 +3,7 @@
   <p><strong>Organic synthesis. Soft contrast. Resonant code.</strong></p>
 </div>
 
-[![Opal, Mesa, Mira, and Dusk in a cascading palette showcase](screenshot-showcase.png)](docs/showcase.md)
+[![Opal, Mesa, Mira, and Dusk in a cascading palette showcase](assets/screenshots/showcase.png)](docs/showcase.md)
 
 Flume is a Neovim colorscheme with four palettes and matching terminal and
 developer-tool themes. Neutral identifiers, semantic color, and soft surfaces
@@ -12,10 +12,31 @@ and popular plugin highlights.
 
 | Palette                         | Appearance | Character                           |
 | ------------------------------- | ---------- | ----------------------------------- |
-| [**Dusk**](screenshot-dusk.png) | Dark       | Quiet violet                        |
-| [**Opal**](screenshot-opal.png) | Light      | Vivid inks on cool opalescent paper |
-| [**Mira**](screenshot-mira.png) | Dark       | Plum with cyan, teal, and magenta   |
-| [**Mesa**](screenshot-mesa.png) | Light      | Warm rose-mineral paper             |
+| [**Dusk**](assets/screenshots/dusk/zig.png) | Dark       | Quiet violet                        |
+| [**Opal**](assets/screenshots/opal/zig.png) | Light      | Vivid inks on cool opalescent paper |
+| [**Mira**](assets/screenshots/mira/zig.png) | Dark       | Plum with cyan, teal, and magenta   |
+| [**Mesa**](assets/screenshots/mesa/zig.png) | Light      | Warm rose-mineral paper             |
+
+## Language gallery
+
+Rust, TypeScript/TSX, Python, and Go, shown with real Tree-sitter highlighting.
+Each palette uses the same source and layout. Click a grid for full resolution.
+
+### Dusk
+
+[![Dusk: Rust, TypeScript/TSX, Python, and Go](assets/screenshots/dusk/languages.png)](assets/screenshots/dusk/languages.png)
+
+### Opal
+
+[![Opal: Rust, TypeScript/TSX, Python, and Go](assets/screenshots/opal/languages.png)](assets/screenshots/opal/languages.png)
+
+### Mira
+
+[![Mira: Rust, TypeScript/TSX, Python, and Go](assets/screenshots/mira/languages.png)](assets/screenshots/mira/languages.png)
+
+### Mesa
+
+[![Mesa: Rust, TypeScript/TSX, Python, and Go](assets/screenshots/mesa/languages.png)](assets/screenshots/mesa/languages.png)
 
 ## Install
 
@@ -116,7 +137,7 @@ Run `./scripts/check` for tests, local links, and source checks.
 - [Changelog](CHANGELOG.md): release history.
 
 Flume's visual direction draws on [Jonathan Zawada's artwork for
-Flume](https://zawada.art/work/flume-skin/). A [wallpaper](background.png) is
+Flume](https://zawada.art/work/flume-skin/). A [wallpaper](assets/background.png) is
 available at 1376×768.
 
 ## License
