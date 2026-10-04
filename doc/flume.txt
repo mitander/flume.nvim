@@ -77,7 +77,7 @@ watch_sync ~
     Selecting another colorscheme stops watching. Call setup() to resume.
 
 follow_sync ~
-    At setup, prefers the validated schema in extras/current/schema over the
+    At setup, prefers the validated schema in <data-dir>/current/schema over the
     configured schema. Missing or invalid state uses the configured fallback.
     Defaults to false. Setup never rewrites the Lua configuration or marker.
     Set both follow_sync and watch_sync to false for an independent editor.
@@ -86,7 +86,9 @@ follow_sync ~
     require("flume").setup({ schema = "mesa", follow_sync = true })
 <
     :FlumeSync mira remembers Mira for the next setup. Mesa remains the fallback.
-    The remembered choice belongs to this plugin checkout, not a global user file.
+    The remembered choice belongs to stdpath("data")/flume, not the checkout.
+    Set FLUME_DATA_DIR before startup to use another shared data directory.
+    get_sync_dir() returns its absolute path.
     get_active_schema() returns its canonical schema, or nil when unavailable.
 
 dev ~
@@ -155,10 +157,23 @@ COMMANDS                                                        *flume-commands*
 ==============================================================================
 EXTRAS                                                            *flume-extras*
 
-Every canonical artifact includes its palette suffix. The active set is
-atomically linked under extras/current/ and records its canonical schema in
-extras/current/schema. Completed sets are retained so concurrent activations
+Every canonical artifact includes its palette suffix. Active sets live outside
+this checkout, under stdpath("data")/flume. Print the exact directory with:
+>
+    :lua print(require("flume").get_sync_dir())
+<
+The active set is atomically linked under <data-dir>/current/ and records its
+schema in current/schema. Completed sets are retained so concurrent activations
 cannot delete each other's files. Unchanged palette content reuses its set.
+
+After upgrading, run :FlumeSync and :FlumeInstallExtras to relink the five safe
+installer entries. Update manual includes to <data-dir>/current/. A writable
+checkout forwards recognized legacy extras/current symlinks for compatibility.
+Regular files, directories, and unrecognized links are left intact with a warning.
+Direct data-directory links survive plugin replacement; checkout links do not.
+
+Custom consumers can read current/palette.json: format_version 1, schema,
+appearance, and canonical colors. See docs/semantic-export.md for its contract.
 
     APP       DUSK ARTIFACT
     Ghostty   extras/ghostty/flume-dusk
@@ -170,6 +185,7 @@ cannot delete each other's files. Unchanged palette content reuses its set.
     fzf       extras/fzf/flume-dusk.opts
     Delta     extras/delta/flume-dusk.gitconfig
     Pi        extras/pi/flume-dusk.json
+    Palette   extras/palette/flume-dusk.json
 
 Only Ghostty, Kitty, OpenCode, Tmux, and LSD have safe automatic installer
 entries. The other tools support multiple include locations, so Flume does not

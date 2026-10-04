@@ -45,8 +45,24 @@ local function contrast(a, b)
     return (lighter + 0.05) / (darker + 0.05)
 end
 
+-- Never mutate the user's active themes or checkout while testing activation.
+local repository = vim.fn.getcwd()
+local fixture = vim.fn.tempname()
+vim.fn.mkdir(fixture, "p")
+fixture = assert((vim.uv or vim.loop).fs_realpath(fixture))
+local copy = { "cp", "-R" }
+for _, name in ipairs({ "lua", "colors", "extras", "tests", "scripts", "docs", "doc", "README.md" }) do
+    copy[#copy + 1] = repository .. "/" .. name
+end
+copy[#copy + 1] = fixture
+vim.fn.system(copy)
+assert(vim.v.shell_error == 0, "could not copy test fixture")
+local fixture_uv = vim.uv or vim.loop
+fixture_uv.fs_unlink(fixture .. "/extras/current")
+vim.cmd("cd " .. vim.fn.fnameescape(fixture))
+vim.env.FLUME_DATA_DIR = fixture .. "/extras"
 vim.opt.termguicolors = true
-vim.opt.runtimepath:prepend(vim.fn.getcwd())
+vim.opt.runtimepath:prepend(fixture)
 
 local palettes = require("flume.palette")
 local palette = palettes.dusk
@@ -792,7 +808,7 @@ test("activation reuses intact sets and recovers the final integration", functio
     local ok, err = xpcall(function()
         local changes = compiler.activate(schema)
         equal(uv.fs_readlink("extras/current"), original_set, "intact set identity")
-        equal(vim.tbl_count(changes), 9, "activation result inventory")
+        equal(vim.tbl_count(changes), 10, "activation result inventory")
         for name, changed in pairs(changes) do
             equal(changed, false, name .. " unchanged artifact")
         end
@@ -824,7 +840,7 @@ test("activation rejects sets with obsolete artifacts", function()
         vim.fn.writefile({ "obsolete" }, obsolete)
         compiler.activate(schema)
         truthy(uv.fs_readlink("extras/current") ~= original_set, "obsolete set was reused")
-        equal(#vim.fn.glob("extras/current/*", false, true), 10, "nine formats plus schema")
+        equal(#vim.fn.glob("extras/current/*", false, true), 11, "nine apps plus semantic palette and schema")
         equal(vim.fn.filereadable("extras/current/obsolete.json"), 0, "obsolete artifact survived")
         local recovered_set = uv.fs_readlink("extras/current")
         compiler.activate(schema == "opal" and "dusk" or "opal")
@@ -839,6 +855,7 @@ end)
 
 require("tests.extras").register(test, equal, truthy)
 require("tests.workflows").register(test, equal, truthy)
+require("tests.state").register(test, equal, truthy)
 
 test("Vim help tags build", function()
     local root = vim.fn.tempname()
@@ -872,6 +889,10 @@ test("health check covers canonical schemas", function()
     vim.health = original_health
     equal(#errors, 0, "health errors")
 end)
+
+require("flume.watch").stop()
+vim.cmd("cd " .. vim.fn.fnameescape(repository))
+vim.fn.delete(fixture, "rf")
 
 if #failures > 0 then
     io.stderr:write(string.format("\n%d test(s) failed; %d passed\n", #failures, passed))

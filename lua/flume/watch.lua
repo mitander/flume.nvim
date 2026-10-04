@@ -6,7 +6,7 @@ local debounce = nil
 local generation = 0
 local active_set = nil
 
-local plugin_dir = require("flume.extras").get_plugin_dir
+local state = require("flume.state")
 
 local function flume_is_active()
     local flume = require("flume")
@@ -23,7 +23,7 @@ local function apply_active_schema()
         M.stop()
         return
     end
-    local current_set = uv.fs_readlink(plugin_dir() .. "/extras/current")
+    local current_set = uv.fs_readlink(state.get_current())
     if not current_set or current_set == active_set then
         return
     end
@@ -65,8 +65,9 @@ end
 function M.start()
     M.stop()
 
-    local extras = plugin_dir() .. "/extras"
-    if not uv.fs_stat(extras) then
+    local extras = state.get_dir()
+    local created = pcall(vim.fn.mkdir, extras, "p")
+    if not created or not uv.fs_stat(extras) then
         return false
     end
 

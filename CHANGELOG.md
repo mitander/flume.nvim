@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Store synchronized integration sets in `stdpath("data")/flume`, independent of
+  plugin checkout replacement. Support `FLUME_DATA_DIR` and `get_sync_dir()`.
+- Forward recognized legacy checkout links when writable; installers now link
+  directly to shared state. Preserve unrelated paths and report migration failures.
+- Publish a versioned generic semantic palette export for custom consumers.
+- Add a four-palette integration contrast report with actual exported pairs,
+  palette hierarchy, before/after Git comparisons, and optional JSON measurements.
+  Native visual review remains separate from deterministic contrast checks.
+- Report shared state, stale integration links, and reload requirements in health checks.
+- Isolate activation tests from user state and the working checkout.
+
 - Add opt-in startup selection from the synchronized integration schema with
   `follow_sync`, while keeping the configured schema as a fallback.
 - Add opt-in development reload-on-save that preserves the editor palette.

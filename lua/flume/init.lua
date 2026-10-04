@@ -125,16 +125,13 @@ function M.setup(opts)
     end
 end
 
+function M.get_sync_dir()
+    return require("flume.state").get_dir()
+end
+
 -- Read the same runtime marker used by the integration watcher.
 function M.get_active_schema()
-    local file = io.open(require("flume.extras").get_plugin_dir() .. "/extras/current/schema", "rb")
-    if not file then
-        return nil
-    end
-    local schema = file:read("*l")
-    file:close()
-    local ok, resolved = pcall(require("flume.palette").resolve, schema or "")
-    return ok and resolved or nil
+    return require("flume.state").get_schema()
 end
 
 function M.get_colors(schema)

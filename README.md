@@ -121,8 +121,12 @@ require("flume").setup({ schema = "mesa", follow_sync = true })
 
 `:FlumeSync mira` records Mira in runtime state, not your Lua configuration.
 Set both `follow_sync = false` and `watch_sync = false` for an independent editor.
-External tools need their own reload support. See [shared workflows](docs/workflows.md)
-for lualine, fzf, Lazygit, and Delta.
+Active sets live in `stdpath("data")/flume`, outside the plugin checkout. Print
+`require("flume").get_sync_dir()` for your exact path. After upgrading, rerun
+`:FlumeInstallExtras` and update manual includes; legacy checkout links are forwarded
+when possible. External tools need their own reload support. See
+[shared workflows](docs/workflows.md) for setup and reload behavior, and the
+[semantic export](docs/semantic-export.md) for custom consumers.
 
 ## Commands
 
@@ -144,6 +148,7 @@ Reloads preserve the editor's current palette and do not synchronize external to
 Run `./scripts/check` for tests, local links, and source checks.
 
 - [Color system](docs/color-system.md): roles, contrast targets, and mapping rules.
+- [Integration review](docs/integration-review.md): visual previews, contrast measurements, and before/after reports.
 - [Showcase production](docs/showcase.md): captures and native integration evidence.
 - [Changelog](CHANGELOG.md): release history.
 

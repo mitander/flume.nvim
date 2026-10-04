@@ -23,7 +23,9 @@ local function is_light(schema)
 end
 
 local extras_config = require("flume.extras")
-local get_plugin_dir = extras_config.get_plugin_dir
+local function get_plugin_dir()
+    return extras_config.get_plugin_dir()
+end
 local integrations = extras_config.integrations
 
 local function write_file_if_changed(path, content)
@@ -800,12 +802,33 @@ function M.compile_opencode(schema)
     return write_file_if_changed(path, content)
 end
 
+function M.compile_palette(schema)
+    schema = normalize_schema(schema)
+    local meta = get_schema(schema)
+    local roles = vim.tbl_keys(meta.colors)
+    table.sort(roles)
+    local lines = {
+        "{",
+        '  "format_version": 1,',
+        '  "schema": "' .. schema .. '",',
+        '  "appearance": "' .. meta.appearance .. '",',
+        '  "colors": {',
+    }
+    for index, role in ipairs(roles) do
+        lines[#lines + 1] = string.format('    "%s": "%s"%s', role, meta.colors[role], index < #roles and "," or "")
+    end
+    lines[#lines + 1] = "  }"
+    lines[#lines + 1] = "}"
+    return write_file_if_changed(get_plugin_dir() .. "/extras/palette/flume" .. meta.suffix .. ".json",
+        table.concat(lines, "\n") .. "\n")
+end
+
 function M.activate(schema)
     schema = normalize_schema(schema)
     require("flume.palette").get(schema)
     local root = get_plugin_dir()
     local suffix = schema_suffix(schema)
-    local extras = root .. "/extras"
+    local extras = require("flume.state").get_dir()
     local current = extras .. "/current"
     local token = tostring(vim.fn.getpid()) .. "-" .. string.format("%.0f", uv.hrtime())
     local staged_name = ".current-stage-" .. token
@@ -962,6 +985,11 @@ function M.activate(schema)
 
     if not ok then
         error(result)
+    end
+    local forwarded, forward_error = require("flume.state").forward_legacy()
+    if not forwarded then
+        vim.notify("Flume synchronized, but legacy links could not be updated: " .. forward_error
+            .. ". Relink integrations to " .. current, vim.log.levels.WARN)
     end
     return result
 end

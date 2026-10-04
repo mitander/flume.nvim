@@ -38,6 +38,31 @@ function M.check()
     local colors = flume.get_colors(selected)
     ok("Palette loaded: " .. palette.display_name .. " (bg " .. colors.bg .. ", fg " .. colors.syntax_primary .. ")")
 
+    local state = require("flume.state")
+    ok("Shared theme state: " .. state.get_dir())
+    local active = flume.get_active_schema()
+    if active then
+        ok("Synchronized schema: " .. active)
+    else
+        warn("No valid synchronized schema; run :FlumeSync")
+    end
+    for app, configuration in pairs(extras.get_apps()) do
+        local destination = vim.fn.expand(configuration.dest)
+        local target = extras.get_source_path(configuration.src)
+        if vim.fn.getftype(destination) == "link" then
+            local linked = (vim.uv or vim.loop).fs_readlink(destination)
+            if linked == target and vim.fn.filereadable(destination) == 1 then
+                ok(app .. " linked to shared state")
+            else
+                warn(app .. " has a legacy, broken, or different theme link; run :FlumeInstallExtras " .. app)
+            end
+        else
+            warn(app .. " is not linked by Flume; manual setup may be in use")
+        end
+    end
+    ok("Reload: Ghostty on macOS, Tmux inside a session, and linked Pi themes are notified by :FlumeSync")
+    ok("Other apps require manual reload or a new invocation; installing a file does not select the theme")
+
     local suffix = palette.suffix
     local root = extras.get_plugin_dir()
     for _, integration in ipairs(extras.integrations) do

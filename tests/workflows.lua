@@ -4,7 +4,9 @@ function M.register(test, equal, truthy)
     test("startup sync preference reads runtime state without replacing fixed schemas", function()
         local extras = require("flume.extras")
         local original_dir = extras.get_plugin_dir
+        local original_data = vim.env.FLUME_DATA_DIR
         local root = vim.fn.tempname()
+        vim.env.FLUME_DATA_DIR = root .. "/extras"
         vim.fn.mkdir(root .. "/extras/current", "p")
         extras.get_plugin_dir = function()
             return root
@@ -29,6 +31,7 @@ function M.register(test, equal, truthy)
             end
         end, debug.traceback)
         extras.get_plugin_dir = original_dir
+        vim.env.FLUME_DATA_DIR = original_data
         vim.fn.delete(root, "rf")
         require("flume").setup({ watch_sync = false })
         if not ok then
@@ -39,7 +42,9 @@ function M.register(test, equal, truthy)
     test("development reload clears source caches and preserves the editor choice", function()
         local extras = require("flume.extras")
         local original_dir = extras.get_plugin_dir
+        local original_data = vim.env.FLUME_DATA_DIR
         local root = vim.fn.tempname()
+        vim.env.FLUME_DATA_DIR = root .. "/extras"
         vim.fn.mkdir(root .. "/extras/current", "p")
         vim.fn.writefile({ "opal" }, root .. "/extras/current/schema")
         extras.get_plugin_dir = function()
@@ -77,6 +82,7 @@ function M.register(test, equal, truthy)
         end, debug.traceback)
         -- Reload created a fresh extras module; the captured module may be stale.
         extras.get_plugin_dir = original_dir
+        vim.env.FLUME_DATA_DIR = original_data
         package.loaded["flume.extras"] = nil
         vim.fn.delete(root, "rf")
         require("flume").setup({ watch_sync = false })

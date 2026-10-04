@@ -21,6 +21,7 @@ M.integrations = {
     { name = "fzf", label = "fzf", source = "extras/fzf/flume%s.opts", current = "fzf.opts" },
     { name = "delta", label = "Delta", source = "extras/delta/flume%s.gitconfig", current = "delta.gitconfig" },
     { name = "pi", label = "Pi", source = "extras/pi/flume%s.json", current = "pi.json" },
+    { name = "palette", label = "Semantic palette", source = "extras/palette/flume%s.json", current = "palette.json" },
 }
 
 local apps = {
@@ -50,6 +51,12 @@ function M.get_apps()
     return apps
 end
 
+function M.get_source_path(source)
+    local active = source:match("^extras/current/(.+)$")
+    return active and require("flume.state").get_current() .. "/" .. active
+        or M.get_plugin_dir() .. "/" .. source
+end
+
 function M.install(name)
     local app = apps[name]
     if not app then
@@ -57,8 +64,7 @@ function M.install(name)
         return
     end
 
-    local plugin_dir = M.get_plugin_dir()
-    local src_path = plugin_dir .. "/" .. app.src
+    local src_path = M.get_source_path(app.src)
     local dest_path = vim.fn.expand(app.dest)
 
     -- `extras/current` is runtime state and is intentionally not checked in.
@@ -132,11 +138,13 @@ local function shell_quote(value)
 end
 
 function M.get_instruction_lines()
-    local plugin_dir = M.get_plugin_dir()
     local lines = {
         "# Flume Theme Extras Configuration",
         "",
-        "You can link or copy the compiled theme files to their respective application folders.",
+        "Active themes: " .. require("flume.state").get_current(),
+        "Run :FlumeSync once, then link and enable the theme in each application.",
+        "Semantic export: " .. require("flume.state").get_current() .. "/palette.json",
+        "External apps need their own reload support; see docs/workflows.md.",
         "",
         "## Option 1: Link directly from Neovim",
         "Run the following command to link all configurations:",
@@ -165,7 +173,7 @@ function M.get_instruction_lines()
 
     for _, name in ipairs(keys) do
         local app = apps[name]
-        local src_path = plugin_dir .. "/" .. app.src
+        local src_path = M.get_source_path(app.src)
         table.insert(lines, "### " .. name:sub(1, 1):upper() .. name:sub(2))
         table.insert(lines, "```bash")
         local destination = vim.fn.expand(app.dest)

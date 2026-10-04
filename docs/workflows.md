@@ -13,7 +13,7 @@ require("flume").setup({
 })
 ```
 
-On startup, `follow_sync` reads the validated schema from `extras/current/schema`.
+On startup, `follow_sync` reads the validated schema from `<data-dir>/current/schema`.
 Missing or invalid state uses the configured fallback. Setup does not write either file.
 
 `:FlumeSync mira` activates the Mira integration set and applies Mira in the editor.
@@ -24,8 +24,10 @@ The next startup follows Mira. Your Lua configuration still says `schema = "mesa
 Both options must be false for an editor that remains independent of shared palette choices.
 The defaults are `follow_sync = false` and `watch_sync = true`.
 
-The active state belongs to the plugin checkout. Editors sharing that checkout share the choice.
-Deleting or replacing the checkout can remove that state; the configured fallback then applies.
+The active state lives in `stdpath("data")/flume`. Editors sharing that directory share the choice,
+even across different plugin checkouts. Plugin replacement does not delete the choice.
+Set `FLUME_DATA_DIR` before startup to select another shared owner. See the
+[semantic export](semantic-export.md) for migration and consumer contracts.
 `:colorscheme flume-mesa` changes only the editor, not the remembered integration choice.
 `require("flume").get_active_schema()` returns the canonical active schema, or `nil`.
 
@@ -67,8 +69,9 @@ Use component color functions when colors must follow palette changes.
 
 ## External tools
 
-Run `:FlumeSync` once to create `extras/current` before using these examples.
-Replace `/absolute/path/to/flume.nvim` with your checkout or plugin-manager installation path.
+Run `:FlumeSync` once to create the active set before using these examples.
+Print `require("flume").get_sync_dir()` in Neovim and replace `/absolute/path/to/flume-data`
+with that directory. Link the files, then select or include them in each application.
 Flume does not modify shell startup files, Git configuration, or application state.
 
 ### fzf
@@ -80,13 +83,13 @@ Keep unrelated options in `FZF_DEFAULT_OPTS`.
 Fish:
 
 ```fish
-set -gx FZF_DEFAULT_OPTS_FILE /absolute/path/to/flume.nvim/extras/current/fzf.opts
+set -gx FZF_DEFAULT_OPTS_FILE /absolute/path/to/flume-data/current/fzf.opts
 ```
 
 Bash or Zsh:
 
 ```sh
-export FZF_DEFAULT_OPTS_FILE=/absolute/path/to/flume.nvim/extras/current/fzf.opts
+export FZF_DEFAULT_OPTS_FILE=/absolute/path/to/flume-data/current/fzf.opts
 ```
 
 This follows future synchronizations for new fzf invocations, including shell integrations.
@@ -97,7 +100,7 @@ An already running fzf instance does not reload. If your fzf lacks this option, 
 Layer the active Flume file after your personal configuration:
 
 ```sh
-lazygit --use-config-file "$HOME/.config/lazygit/config.yml,/absolute/path/to/flume.nvim/extras/current/lazygit.yml"
+lazygit --use-config-file "$HOME/.config/lazygit/config.yml,/absolute/path/to/flume-data/current/lazygit.yml"
 ```
 
 Use your actual config location; `lazygit --print-config-dir` reports the default directory.
@@ -110,7 +113,7 @@ Include the active generated configuration after your personal Delta options:
 
 ```gitconfig
 [include]
-    path = /absolute/path/to/flume.nvim/extras/current/delta.gitconfig
+    path = /absolute/path/to/flume-data/current/delta.gitconfig
 ```
 
 Remove duplicated fixed Flume colors and any later `light` or theme settings that override the include.

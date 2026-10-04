@@ -47,6 +47,7 @@ function M.register(test, equal, truthy)
         "fzf",
         "delta",
         "pi",
+        "palette",
     }
 
     local function suffix(schema)
@@ -65,11 +66,12 @@ function M.register(test, equal, truthy)
             fzf = "extras/fzf/flume%s.opts",
             delta = "extras/delta/flume%s.gitconfig",
             pi = "extras/pi/flume%s.json",
+            palette = "extras/palette/flume%s.json",
         }
         return patterns[app]:format(ending)
     end
 
-    test("generated inventory is exactly four schemas by nine integrations", function()
+    test("generated inventory is four schemas by nine apps and semantic export", function()
         local expected = {}
         for _, app in ipairs(apps) do
             for _, schema in ipairs(palettes.schema_order) do
@@ -85,7 +87,21 @@ function M.register(test, equal, truthy)
             end
         end
         equal(sorted_keys(actual), sorted_keys(expected), "generated integration inventory")
-        equal(vim.tbl_count(actual), 36, "generated artifact count")
+        equal(vim.tbl_count(actual), 40, "generated artifact count")
+    end)
+
+    test("versioned semantic exports contain exact canonical roles", function()
+        for _, schema in ipairs(palettes.schema_order) do
+            local data = vim.json.decode(read_all(path("palette", schema)))
+            equal(sorted_keys(data), "appearance,colors,format_version,schema", "export envelope")
+            equal(data.format_version, 1, "format version")
+            equal(data.schema, schema, "export schema")
+            equal(data.appearance, palettes.schemas[schema].appearance, "export appearance")
+            equal(sorted_keys(data.colors), sorted_keys(palettes[schema]), "export role inventory")
+            for role, color in pairs(palettes[schema]) do
+                equal(data.colors[role], color, schema .. " semantic " .. role)
+            end
+        end
     end)
 
     test("terminal integration contracts parse for every schema", function()
