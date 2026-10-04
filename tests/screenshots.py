@@ -1,20 +1,22 @@
 """Parser-free checks for canonical capture provenance."""
 
-from contextlib import ExitStack
 import importlib.util
 import json
 import os
-from pathlib import Path
 import shutil
-import subprocess
 import struct
+import subprocess
 import tempfile
-from types import SimpleNamespace
 import unittest
+from contextlib import ExitStack
+from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent.parent
-SPEC = importlib.util.spec_from_file_location("preflight", ROOT / "scripts/preflight-screenshots.py")
+SPEC = importlib.util.spec_from_file_location(
+    "preflight", ROOT / "scripts/preflight-screenshots.py"
+)
 preflight = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(preflight)
 
@@ -25,10 +27,16 @@ class CaptureProvenance(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
         files = [
-            "examples/showcase.lua", "examples/flume.zig", "scripts/screenshot-window.sh",
-            "scripts/preflight-screenshots.py", "lua/flume/init.lua", "lua/flume/palette.lua",
+            "examples/showcase.lua",
+            "examples/flume.zig",
+            "scripts/screenshot-window.sh",
+            "scripts/preflight-screenshots.py",
+            "lua/flume/init.lua",
+            "lua/flume/palette.lua",
         ]
-        files += [str(path.relative_to(ROOT)) for path in (ROOT / "lua/flume/languages").glob("*.lua")]
+        files += [
+            str(path.relative_to(ROOT)) for path in (ROOT / "lua/flume/languages").glob("*.lua")
+        ]
         files += [f"extras/ghostty/flume-{schema}" for schema in ("dusk", "opal", "mira", "mesa")]
         files += [f"examples/flume.{extension}" for extension in ("rs", "tsx", "py", "go")]
         files += [str(path.relative_to(ROOT)) for path in preflight.CAPTURES]
@@ -38,10 +46,18 @@ class CaptureProvenance(unittest.TestCase):
             shutil.copyfile(ROOT / name, self.root / name)
         stack = ExitStack()
         self.addCleanup(stack.close)
-        stack.enter_context(patch.multiple(preflight, ROOT=self.root, CAPTURES=tuple(self.root / path.relative_to(ROOT) for path in preflight.CAPTURES)))
+        stack.enter_context(
+            patch.multiple(
+                preflight,
+                ROOT=self.root,
+                CAPTURES=tuple(self.root / path.relative_to(ROOT) for path in preflight.CAPTURES),
+            )
+        )
         stack.enter_context(patch.object(preflight.sys, "argv", ["preflight"]))
         stack.enter_context(patch.object(preflight.shutil, "which", return_value="tesseract"))
-        stack.enter_context(patch.object(preflight.subprocess, "run", return_value=SimpleNamespace(stdout="")))
+        stack.enter_context(
+            patch.object(preflight.subprocess, "run", return_value=SimpleNamespace(stdout=""))
+        )
 
     def test_current_captures_pass(self):
         preflight.main()
@@ -59,7 +75,12 @@ class CaptureProvenance(unittest.TestCase):
             preflight.main()
 
     def test_changed_theme_is_rejected(self):
-        for name in ("lua/flume/init.lua", "lua/flume/palette.lua", "lua/flume/languages/zig.lua", "extras/ghostty/flume-dusk"):
+        for name in (
+            "lua/flume/init.lua",
+            "lua/flume/palette.lua",
+            "lua/flume/languages/zig.lua",
+            "extras/ghostty/flume-dusk",
+        ):
             with self.subTest(input=name):
                 path = self.root / name
                 original = path.read_bytes()
@@ -83,8 +104,10 @@ class CaptureProvenance(unittest.TestCase):
         query.write_text("(identifier) @variable\n")
         metadata = json.dumps({"nvim": "test", "parser": str(parser), "queries": [str(query)]})
         commands = {
-            "nvim": "printf '%s\\n' '" + metadata + "' > \"$FLUME_SHOWCASE_METADATA\"\n",
-            "osascript": "case \"$*\" in *'POSIX path'*) printf '%s/\\n' '" + str(app) + "';; esac\n",
+            "nvim": "printf '%s\\n' '" + metadata + '\' > "$FLUME_SHOWCASE_METADATA"\n',
+            "osascript": "case \"$*\" in *'POSIX path'*) printf '%s/\\n' '"
+            + str(app)
+            + "';; esac\n",
             "screencapture": "for last do :; done\nprintf 'capture' > \"$last\"\n",
             "swift": "printf '123\\n'\n",
             "magick": "printf 'failed GUI capture' > \"${3#PNG24:}\"\n",
@@ -99,8 +122,11 @@ class CaptureProvenance(unittest.TestCase):
         # script with a successful headless probe but no GUI completion.
         process = subprocess.Popen(
             ["bash", str(self.root / "scripts/screenshot-window.sh"), "dusk"],
-            cwd=self.root, env={**os.environ, "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"]},
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+            cwd=self.root,
+            env={**os.environ, "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"]},
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
         )
         stdout, stderr = process.communicate(timeout=15)
         self.assertNotEqual(process.returncode, 0, stdout)

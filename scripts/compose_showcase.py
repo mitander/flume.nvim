@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Compose the four-palette README showcase over Flume's original artwork."""
 
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "assets/screenshots/showcase.png"
@@ -41,10 +41,14 @@ def main() -> None:
         run(
             magick,
             ROOT / "assets/background.png",
-            "-resize", f"{CANVAS[0]}x{CANVAS[1]}^",
-            "-gravity", "center",
-            "-extent", f"{CANVAS[0]}x{CANVAS[1]}",
-            "-modulate", "100,100,100",
+            "-resize",
+            f"{CANVAS[0]}x{CANVAS[1]}^",
+            "-gravity",
+            "center",
+            "-extent",
+            f"{CANVAS[0]}x{CANVAS[1]}",
+            "-modulate",
+            "100,100,100",
             canvas,
         )
         run(magick, "-size", f"{CANVAS[0]}x{CANVAS[1]}", "gradient:#f2eff750-#23213668", blend)
@@ -55,20 +59,33 @@ def main() -> None:
             run(
                 magick,
                 source,
-                "-resize", f"{CARD[0]}x{CARD[1]}!",
-                "-bordercolor", "#ffffff22",
-                "-border", "2",
+                "-resize",
+                f"{CARD[0]}x{CARD[1]}!",
+                "-bordercolor",
+                "#ffffff22",
+                "-border",
+                "2",
                 card,
             )
             run(
                 magick,
                 canvas,
-                "(", card, "-background", "#00000078", "-shadow", "48x14+0+16", ")",
-                "-geometry", f"+{x}+{y}", "-composite",
-                card, "-geometry", f"+{x}+{y}", "-composite",
+                "(",
+                card,
+                "-background",
+                "#00000078",
+                "-shadow",
+                "48x14+0+16",
+                ")",
+                "-geometry",
+                f"+{x}+{y}",
+                "-composite",
+                card,
+                "-geometry",
+                f"+{x}+{y}",
+                "-composite",
                 canvas,
             )
-
 
         run(magick, canvas, "-strip", "PNG24:" + str(OUTPUT))
 

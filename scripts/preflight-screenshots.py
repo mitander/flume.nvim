@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Validate canonical screenshot inputs before release composition."""
 
-from pathlib import Path
 import hashlib
 import json
 import re
@@ -9,12 +8,16 @@ import shutil
 import struct
 import subprocess
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMAS = ("dusk", "opal", "mira", "mesa")
 LANGUAGES = {"zig": "zig", "rust": "rs", "tsx": "tsx", "python": "py", "go": "go"}
-CAPTURES = tuple(ROOT / "assets/screenshots" / schema / f"{language}.png"
-                 for schema in SCHEMAS for language in LANGUAGES)
+CAPTURES = tuple(
+    ROOT / "assets/screenshots" / schema / f"{language}.png"
+    for schema in SCHEMAS
+    for language in LANGUAGES
+)
 STALE_TEXT = re.compile(r"feat/|issue[- ]?2|light-schemas|\bzls\b", re.IGNORECASE)
 
 
@@ -69,17 +72,55 @@ def record(schema: str, language: str, runtime_file: Path) -> None:
     image.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n")
 
 
+def validate_capture(path: Path) -> tuple[str, str]:
+    sidecar = path.with_suffix(".json")
+    if not sidecar.exists():
+        raise SystemExit(f"{path.name} has no parser-backed capture metadata; recapture it")
+    metadata = json.loads(sidecar.read_text())
+    language = path.stem
+    wrong_capture = (
+        metadata["schema"] != path.parent.name
+        or metadata.get("language") != language
+        or metadata["highlighting"] != "treesitter"
+    )
+    if wrong_capture:
+        raise SystemExit(f"{sidecar.name} does not describe this Tree-sitter capture")
+
+    for key, source in (
+        ("image_sha256", path),
+        ("fixture_sha256", ROOT / f"examples/flume.{LANGUAGES[language]}"),
+        ("renderer_sha256", ROOT / "examples/showcase.lua"),
+    ):
+        if metadata[key] != digest(source):
+            raise SystemExit(f"{path.name} has stale {key}; recapture it")
+    if metadata.get("theme_inputs") != theme_inputs(metadata["schema"]):
+        raise SystemExit(f"{path.name} has stale theme inputs; recapture it")
+
+    runtime_identity = {key: metadata[key] for key in ("nvim", "parser", "queries")}
+    return language, json.dumps(runtime_identity, sort_keys=True)
+
+
 def main() -> None:
     if len(sys.argv) == 5 and sys.argv[1] == "--record":
         record(sys.argv[2], sys.argv[3], Path(sys.argv[4]))
         return
+
     fixture = (ROOT / "examples/showcase.lua").read_text()
     screenshot_script = (ROOT / "scripts/screenshot-window.sh").read_text()
-    if re.search(r"Gitsigns|git branch|\bzls\b|vim\.diagnostic|virtual_text|DiffAdd|Pmenu", fixture + screenshot_script, re.IGNORECASE):
-        raise SystemExit("Screenshot fixture still contains Git/LSP dependencies or presentation noise")
+    presentation_noise = re.search(
+        r"Gitsigns|git branch|\bzls\b|vim\.diagnostic|virtual_text|DiffAdd|Pmenu",
+        fixture + screenshot_script,
+        re.IGNORECASE,
+    )
+    if presentation_noise:
+        raise SystemExit(
+            "Screenshot fixture still contains Git/LSP dependencies or presentation noise"
+        )
 
     if "vim.treesitter.start(" not in fixture or "nvim_buf_set_extmark" in fixture:
-        raise SystemExit("Canonical screenshots must use real Tree-sitter highlighting, not painted tokens")
+        raise SystemExit(
+            "Canonical screenshots must use real Tree-sitter highlighting, not painted tokens"
+        )
 
     unexpected = [path.name for path in ROOT.glob("screenshot*.png")]
     if unexpected:
@@ -92,30 +133,15 @@ def main() -> None:
     missing = [path.name for path in CAPTURES if not path.exists()]
     if missing:
         raise SystemExit("Missing canonical captures: " + ", ".join(missing))
+
     sizes = {str(path.relative_to(ROOT)): dimensions(path) for path in CAPTURES}
     if len(set(sizes.values())) != 1:
         raise SystemExit("Canonical capture dimensions differ: " + repr(sizes))
 
     runtime_fingerprints = {language: set() for language in LANGUAGES}
     for path in CAPTURES:
-        sidecar = path.with_suffix(".json")
-        if not sidecar.exists():
-            raise SystemExit(f"{path.name} has no parser-backed capture metadata; recapture it")
-        metadata = json.loads(sidecar.read_text())
-        language = path.stem
-        if (metadata["schema"] != path.parent.name or metadata.get("language") != language
-                or metadata["highlighting"] != "treesitter"):
-            raise SystemExit(f"{sidecar.name} does not describe this Tree-sitter capture")
-        for key, source in (
-            ("image_sha256", path),
-            ("fixture_sha256", ROOT / f"examples/flume.{LANGUAGES[language]}"),
-            ("renderer_sha256", ROOT / "examples/showcase.lua"),
-        ):
-            if metadata[key] != digest(source):
-                raise SystemExit(f"{path.name} has stale {key}; recapture it")
-        if metadata.get("theme_inputs") != theme_inputs(metadata["schema"]):
-            raise SystemExit(f"{path.name} has stale theme inputs; recapture it")
-        runtime_fingerprints[language].add(json.dumps({key: metadata[key] for key in ("nvim", "parser", "queries")}, sort_keys=True))
+        language, runtime_identity = validate_capture(path)
+        runtime_fingerprints[language].add(runtime_identity)
     if any(len(fingerprints) != 1 for fingerprints in runtime_fingerprints.values()):
         raise SystemExit("Canonical captures used different parser/query runtimes")
 

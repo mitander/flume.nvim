@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
 """Compose one four-schema native-integration contact sheet."""
 
-from pathlib import Path
 import json
 import shutil
 import struct
 import subprocess
 import sys
 import tempfile
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMAS = ("dusk", "mira", "opal", "mesa")
 LABELS = ("Dusk", "Mira", "Opal", "Mesa")
 REQUIRED_METADATA = {
-    "app", "app_version", "os", "terminal", "font", "dimensions", "scale",
-    "fixture_revision", "capture_date", "unsupported_regions", "manual_action",
+    "app",
+    "app_version",
+    "os",
+    "terminal",
+    "font",
+    "dimensions",
+    "scale",
+    "fixture_revision",
+    "capture_date",
+    "unsupported_regions",
+    "manual_action",
 }
 
 
@@ -75,9 +84,20 @@ def main() -> None:
             run(magick, str(source), "-resize", "1200x830!", str(card))
             run(magick, str(canvas), str(card), "-geometry", f"+{x}+{y}", "-composite", str(canvas))
             run(
-                magick, str(canvas), "-fill", "#d9d4df", "-font", str(font),
-                "-pointsize", "30", "-gravity", "northwest", "-annotate",
-                f"+{x}+{y - 42}", label, str(canvas),
+                magick,
+                str(canvas),
+                "-fill",
+                "#d9d4df",
+                "-font",
+                str(font),
+                "-pointsize",
+                "30",
+                "-gravity",
+                "northwest",
+                "-annotate",
+                f"+{x}+{y - 42}",
+                label,
+                str(canvas),
             )
         run(magick, str(canvas), "-strip", "PNG24:" + str(directory / "contact-sheet.png"))
 
