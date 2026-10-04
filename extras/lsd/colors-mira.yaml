@@ -2,36 +2,36 @@
 # lsd color themes only style metadata; file names continue to use LS_COLORS.
 # Numeric values are xterm-256 approximations supported by crossterm.
 
-user: 246              # muted (#918a9a)
-group: 246             # muted (#918a9a)
+user: 248              # muted (#a6a0ad)
+group: 248             # muted (#a6a0ad)
 
 permission:
-  read: 246             # quiet metadata (#918a9a)
+  read: 248             # quiet metadata (#a6a0ad)
   write: 179            # quiet metadata (#d8a36b)
   exec: 109             # quiet metadata (#84b39f)
-  exec-sticky: 174      # error (#dd789b)
+  exec-sticky: 175      # error (#e187a6)
   no-access: 243        # placeholder (#746d7c)
-  octal: 246            # muted (#918a9a)
+  octal: 248            # muted (#a6a0ad)
   acl: 73              # accent (#72b5bf)
-  context: 245          # doc_comment (#8a8392)
+  context: 248          # doc_comment (#a5a0ab)
 
 date:
-  hour-old: 246         # muted (#918a9a)
-  day-old: 246          # muted (#918a9a)
+  hour-old: 248         # muted (#a6a0ad)
+  day-old: 248          # muted (#a6a0ad)
   older: 243            # placeholder (#746d7c)
 
 size:
   none: 243             # placeholder (#746d7c)
-  small: 246            # muted (#918a9a)
-  medium: 246           # muted (#918a9a)
+  small: 248            # muted (#a6a0ad)
+  medium: 248           # muted (#a6a0ad)
   large: 179            # warning (#d8a36b)
 
 inode:
-  valid: 246            # muted (#918a9a)
+  valid: 248            # muted (#a6a0ad)
   invalid: 243          # placeholder (#746d7c)
 
 links:
-  valid: 246            # muted (#918a9a)
+  valid: 248            # muted (#a6a0ad)
   invalid: 243          # placeholder (#746d7c)
 
 tree-edge: 237          # border_variant (#383547)
@@ -43,7 +43,7 @@ git-status:
   new-in-index: 109     # success (#84b39f)
   new-in-workdir: 109   # success (#84b39f)
   typechange: 179       # warning (#d8a36b)
-  deleted: 174          # error (#dd789b)
+  deleted: 175          # error (#e187a6)
   renamed: 73          # accent (#72b5bf)
   modified: 179         # warning (#d8a36b)
-  conflicted: 174       # error (#dd789b)
+  conflicted: 175       # error (#e187a6)

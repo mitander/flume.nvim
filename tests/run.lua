@@ -142,15 +142,83 @@ test("primary and filled text meet contrast contracts", function()
     end
 end)
 
-test("stable schema registry and light comment inks are frozen", function()
+test("syntax text stays readable on retained-foreground surfaces", function()
+    local surfaces = {
+        "bg", "active_line", "surface", "surface_alt", "element_active",
+        "diff_add_bg", "diff_change_bg", "diff_delete_bg", "diff_text_bg",
+    }
+    for _, schema in ipairs(schema_names) do
+        local colors = palettes[schema]
+        for role, foreground in pairs(colors) do
+            if role:match("^syntax_") then
+                for _, surface in ipairs(surfaces) do
+                    local ratio = contrast(foreground, colors[surface])
+                    truthy(ratio >= 4.5, string.format("%s %s on %s: %.2f:1", schema, role, surface, ratio))
+                end
+            end
+        end
+        truthy(colors.diff_text_bg ~= colors.diff_change_bg, schema .. " changed words need a distinct surface")
+        truthy(colors.diff_text_bg ~= colors.dim_blue, schema .. " changed words must not use an ANSI ink")
+    end
+end)
+
+test("configured state groups use readable semantic pairs", function()
+    local flume = require("flume")
+    local pairs = {
+        { "Normal", "Normal" }, { "Normal", "DiffText" }, { "Normal", "DiffDelete" },
+        { "Comment", "CursorLine" }, { "Comment", "Visual" },
+        { "Pmenu", "Pmenu" }, { "PmenuSel", "PmenuSel" },
+        { "Search", "Search" }, { "IncSearch", "IncSearch" }, { "CurSearch", "CurSearch" },
+        { "Search", "Visual" }, { "IncSearch", "Visual" }, { "CurSearch", "Visual" },
+        { "Search", "DiffText" }, { "CurSearch", "DiffText" },
+        { "DiagnosticVirtualTextError", "DiagnosticVirtualTextError" },
+        { "DiagnosticVirtualTextWarn", "DiagnosticVirtualTextWarn" },
+        { "DiagnosticVirtualTextInfo", "DiagnosticVirtualTextInfo" },
+        { "DiagnosticVirtualTextHint", "DiagnosticVirtualTextHint" },
+    }
+    for _, schema in ipairs(schema_names) do
+        flume.setup({ schema = schema, watch_sync = false })
+        equal(vim.api.nvim_get_hl(0, { name = "DiffText", link = false }).bg,
+            color_number(palettes[schema].diff_text_bg), schema .. " DiffText surface")
+        equal(vim.api.nvim_get_hl(0, { name = "DiffText", link = false }).fg, nil,
+            schema .. " DiffText retains syntax foregrounds")
+        for _, pair in ipairs(pairs) do
+            local foreground = vim.api.nvim_get_hl(0, { name = pair[1], link = false }).fg
+            local background = vim.api.nvim_get_hl(0, { name = pair[2], link = false }).bg
+            local ratio = contrast(string.format("#%06x", foreground), string.format("#%06x", background))
+            truthy(ratio >= 4.5, string.format("%s %s on %s: %.2f:1", schema, pair[1], pair[2], ratio))
+        end
+    end
+end)
+
+test("macro, import, directive and escape providers agree", function()
+    for _, schema in ipairs(schema_names) do
+        require("flume").setup({ schema = schema, watch_sync = false,
+            styles = { functions = { italic = true } } })
+        for _, groups in ipairs({
+            { "Macro", "@function.macro", "@lsp.type.macro" },
+            { "Include", "@keyword.import" },
+            { "PreProc", "Define", "PreCondit", "@keyword.directive", "@keyword.directive.define" },
+            { "SpecialChar", "@string.escape" },
+        }) do
+            local expected = vim.api.nvim_get_hl(0, { name = groups[1], link = false })
+            for _, group in ipairs(groups) do
+                local actual = vim.api.nvim_get_hl(0, { name = group, link = false })
+                equal(actual.fg, expected.fg, schema .. " " .. group)
+                equal(actual.italic, expected.italic, schema .. " " .. group .. " style")
+            end
+        end
+    end
+end)
+
+test("stable schema registry and light foundations are preserved", function()
     equal(table.concat(schema_names, ","), "dusk,opal,mira,mesa")
     equal(palettes.opal.bg, "#f2eff7")
     equal(palettes.opal.surface, "#ebe6f0")
     equal(palettes.opal.surface_alt, "#ddd6e3")
-    equal(palettes.opal.syntax_comment, "#706b70")
-    equal(palettes.opal.syntax_doc_comment, "#6c686d")
-    equal(palettes.mesa.syntax_comment, "#6f6a6f")
-    equal(palettes.mesa.syntax_doc_comment, "#6c686d")
+    equal(palettes.mesa.bg, "#f3ede8")
+    equal(palettes.mesa.surface, "#ebe3de")
+    equal(palettes.mesa.surface_alt, "#ded4d1")
 end)
 
 test("Mira and Mesa preserve their editor-first design anchors", function()
@@ -183,8 +251,9 @@ test("default schema resolves canonical Normal and Search colors", function()
     local search = vim.api.nvim_get_hl(0, { name = "Search", link = false })
     equal(normal.fg, color_number(palette.syntax_primary), "Normal foreground")
     equal(normal.bg, color_number(palette.bg), "Normal background")
-    equal(search.fg, color_number(palette.on_accent), "Search foreground")
-    equal(search.bg, color_number(palette.accent), "Search background")
+    equal(search.fg, color_number(palette.match), "Search foreground")
+    equal(search.bg, color_number(palette.warn_bg), "Search background")
+    equal(search.underline, true, "Search remains visible without hue")
     equal(vim.o.background, "dark", "background option")
     equal(vim.g.colors_name, "flume-dusk", "colorscheme name")
 end)

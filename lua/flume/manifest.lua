@@ -43,8 +43,20 @@ function M.render()
     lines[#lines + 1] = "| --- | --- | ---: | ---: |"
     local pairs = {
         { "syntax_primary", "bg", 4.5 },
+        { "syntax_primary", "diff_text_bg", 4.5 },
+        { "syntax_comment", "active_line", 4.5 },
+        { "syntax_comment", "element_active", 4.5 },
+        { "syntax_function", "element_active", 4.5 },
+        { "syntax_namespace", "element_active", 4.5 },
+        { "syntax_punctuation_special", "diff_text_bg", 4.5 },
+        { "error", "diff_delete_bg", 4.5 },
+        { "warning", "warn_bg", 4.5 },
+        { "info", "hint_bg", 4.5 },
         { "on_accent", "accent", 4.5 },
         { "on_accent", "match", 4.5 },
+        { "match", "warn_bg", 4.5 },
+        { "match", "element_active", 4.5 },
+        { "text", "diff_text_bg", 4.5 },
         { "border_focused", "bg", 3.0 },
     }
     for _, schema in ipairs(palettes.schema_order) do

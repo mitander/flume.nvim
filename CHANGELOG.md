@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Give changed words a semantic `diff_text_bg` surface that retains syntax colors.
+- Strengthen syntax contrast on cursor-line, selection, and diff surfaces in all
+  four palettes. Improve diagnostic and menu text without changing the canvases
+  or ANSI slots. Keep search matches readable when Visual replaces their
+  background; distinguish current matches with bold and underlined text.
+- Align legacy, Tree-sitter, and LSP macro roles; align imports, directives,
+  and string escapes across providers.
+- Add native selection, diagnostic, diff, search, completion, and Go/Zig LSP
+  captures with runtime provenance. Refresh the clean palette specimens.
+
 - Store synchronized integration sets in `stdpath("data")/flume`, independent of
   plugin checkout replacement. Support `FLUME_DATA_DIR` and `get_sync_dir()`.
 - Forward recognized legacy checkout links when writable; installers now link

@@ -10,12 +10,12 @@
     plus-style = syntax "#273629"
     plus-emph-style = syntax "#71885f"
     line-numbers = true
-    line-numbers-minus-style = "#ee7583"
+    line-numbers-minus-style = "#f08692"
     line-numbers-plus-style = "#a4b78a"
     line-numbers-left-style = "#464c5e"
     line-numbers-right-style = "#464c5e"
-    commit-decoration-style = "#73a6b6" box
+    commit-decoration-style = "#7dacbb" box
     file-style = "#d6d2e8"
-    file-decoration-style = "#73a6b6" ul
+    file-decoration-style = "#7dacbb" ul
     hunk-header-style = "#d6d2e8"
     hunk-header-decoration-style = "#464c5e" box

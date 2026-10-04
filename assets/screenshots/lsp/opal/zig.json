@@ -1,0 +1,55 @@
+{
+  "schema": "opal",
+  "language": "zig",
+  "highlighting": "treesitter+lsp",
+  "nvim": "0.12.5",
+  "parser": {
+    "revision": "6479aa13f32f701c383083d8b28360ebd682fb7d",
+    "sha256": "b813955f31fc2eb61bbde417ac01a5c20fc09214556a229b53b6a2e215b7bf41"
+  },
+  "queries": [
+    {
+      "path": "zig/highlights.scm",
+      "sha256": "cbff0fe14e8aeffd64b146ac68fd797c1e38cd66f43a1e3273db8f4b4d753876"
+    }
+  ],
+  "fixture_sha256": "dbabb19193753a47066f85c2450e3d30f6c9765c4074a933e5593c4b60c684f9",
+  "renderer_sha256": "21ff913bcbf4983751fea1586e208d2c63a5e5b4fe38f3d247cfc959c4a1e28e",
+  "image_sha256": "c3cc98a2ea285828269a2979555ccbe7e0e11c1ee65a626989881bb80d568f2f",
+  "theme_inputs": {
+    "lua/flume/init.lua": "13cf1470e7fefec640ddc7dc0d13da9cb13a06d6964af40985d08cdd02f0d844",
+    "lua/flume/palette.lua": "b06bc35486ae812ba1135dbb6cd3c9f6bb15335133133422e18db6cf6ae9d4b7",
+    "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
+    "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
+    "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",
+    "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
+    "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
+    "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
+    "extras/ghostty/flume-opal": "02b4982d0652d3a1dd02cccca1f06816e795103ab845d24ace7b2dfe4f44310e"
+  },
+  "kind": "lsp",
+  "capture_script_sha256": "e22a3e56cc0501f436fa0e6d70e2093b58fae0d6b05d36b50f2ecdc55aed2ee5",
+  "base_renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
+  "server": {
+    "name": "zls",
+    "version": "0.16.0",
+    "settings": [],
+    "token_counts": {
+      "string": 9,
+      "operator": 8,
+      "property": 1,
+      "keyword": 33,
+      "number": 5,
+      "escapeSequence": 1,
+      "errorTag": 4,
+      "function": 8,
+      "keywordLiteral": 8,
+      "type": 8,
+      "comment": 3,
+      "parameter": 6,
+      "builtin": 3,
+      "variable": 26
+    }
+  },
+  "server_executable_sha256": "e477de52cb5765648ef88107837a738e7dd4166782a4eae9e1e25af677350aec"
+}

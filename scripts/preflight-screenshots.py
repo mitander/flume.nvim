@@ -45,8 +45,13 @@ def theme_inputs(schema: str) -> dict[str, str]:
     return {str(path.relative_to(ROOT)): digest(path) for path in paths}
 
 
-def record(schema: str, language: str, runtime_file: Path) -> None:
-    image = ROOT / "assets/screenshots" / schema / f"{language}.png"
+def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax") -> None:
+    directory = ROOT / "assets/screenshots"
+    if kind != "syntax":
+        if kind not in ("selection", "completion", "lsp"):
+            raise SystemExit("Unknown capture kind")
+        directory /= kind
+    image = directory / schema / f"{language}.png"
     if schema not in SCHEMAS or language not in LANGUAGES:
         raise SystemExit("Unknown capture schema or language")
     runtime = json.loads(runtime_file.read_text())
@@ -54,10 +59,23 @@ def record(schema: str, language: str, runtime_file: Path) -> None:
     if runtime["language"] != language:
         raise SystemExit("Runtime metadata does not describe the requested language")
     revision_file = parser.parent.parent / f"parser-info/{language}.revision"
+    renderer = "showcase.lua"
+    fixture = f"flume.{LANGUAGES[language]}"
+    if kind in ("selection", "completion"):
+        renderer, fixture = "states.lua", "states.go"
+        if runtime.get("kind") != kind or runtime.get("diagnostics") != 4 or not runtime.get("diff_text"):
+            raise SystemExit("State fixture did not report its diff and diagnostics")
+        required_state = "visual" if kind == "selection" else "completion"
+        if not runtime.get(required_state):
+            raise SystemExit(f"State fixture did not render {required_state}")
+    elif kind == "lsp":
+        renderer = "lsp-showcase.lua"
+        if runtime.get("kind") != kind or not runtime.get("server", {}).get("token_counts"):
+            raise SystemExit("LSP fixture did not report semantic tokens")
     metadata = {
         "schema": schema,
         "language": language,
-        "highlighting": "treesitter",
+        "highlighting": "treesitter+lsp" if kind == "lsp" else "treesitter",
         "nvim": runtime["nvim"],
         "parser": {
             "revision": revision_file.read_text().strip() if revision_file.exists() else None,
@@ -67,11 +85,23 @@ def record(schema: str, language: str, runtime_file: Path) -> None:
             {"path": path.split("/queries/", 1)[-1], "sha256": digest(Path(path))}
             for path in runtime["queries"]
         ],
-        "fixture_sha256": digest(ROOT / f"examples/flume.{LANGUAGES[language]}"),
-        "renderer_sha256": digest(ROOT / "examples/showcase.lua"),
+        "fixture_sha256": digest(ROOT / "examples" / fixture),
+        "renderer_sha256": digest(ROOT / "examples" / renderer),
         "image_sha256": digest(image),
         "theme_inputs": theme_inputs(schema),
     }
+    if kind != "syntax":
+        metadata["kind"] = kind
+        metadata["capture_script_sha256"] = digest(ROOT / "scripts/screenshot-window.sh")
+        if kind == "lsp":
+            metadata["base_renderer_sha256"] = digest(ROOT / "examples/showcase.lua")
+            server = runtime["server"]
+            metadata["server"] = {key: server[key] for key in ("name", "version", "settings", "token_counts")}
+            metadata["server_executable_sha256"] = digest(Path(server["executable"]))
+        else:
+            metadata["runtime_states"] = {
+                key: runtime[key] for key in ("diff_text", "diagnostics", "visual", "completion")
+            }
     image.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n")
 
 
@@ -81,18 +111,44 @@ def validate_capture(path: Path) -> tuple[str, str]:
         raise SystemExit(f"{path.name} has no parser-backed capture metadata; recapture it")
     metadata = json.loads(sidecar.read_text())
     language = path.stem
+    kind = metadata.get("kind", "syntax")
+    renderer = "showcase.lua"
+    fixture = f"flume.{LANGUAGES[language]}"
+    expected_highlighting = "treesitter"
+    if kind in ("selection", "completion"):
+        renderer, fixture = "states.lua", "states.go"
+    elif kind == "lsp":
+        renderer = "lsp-showcase.lua"
+        expected_highlighting = "treesitter+lsp"
+    elif kind != "syntax":
+        raise SystemExit(f"{sidecar.name} has an unknown capture kind")
+    if kind != "syntax":
+        if path.parent.parent.name != kind:
+            raise SystemExit(f"{sidecar.name} has the wrong capture kind")
+        if metadata.get("capture_script_sha256") != digest(ROOT / "scripts/screenshot-window.sh"):
+            raise SystemExit(f"{path.name} has a stale capture script; recapture it")
+        if kind == "lsp":
+            if metadata.get("base_renderer_sha256") != digest(ROOT / "examples/showcase.lua"):
+                raise SystemExit(f"{path.name} has a stale base renderer; recapture it")
+            if not metadata.get("server", {}).get("token_counts") or not metadata.get("server_executable_sha256"):
+                raise SystemExit(f"{path.name} has no server token evidence")
+        else:
+            states = metadata.get("runtime_states", {})
+            required_state = "visual" if kind == "selection" else "completion"
+            if not states.get(required_state) or states.get("diagnostics") != 4 or not states.get("diff_text"):
+                raise SystemExit(f"{path.name} has incomplete state evidence")
     wrong_capture = (
         metadata["schema"] != path.parent.name
         or metadata.get("language") != language
-        or metadata["highlighting"] != "treesitter"
+        or metadata["highlighting"] != expected_highlighting
     )
     if wrong_capture:
         raise SystemExit(f"{sidecar.name} does not describe this Tree-sitter capture")
 
     for key, source in (
         ("image_sha256", path),
-        ("fixture_sha256", ROOT / f"examples/flume.{LANGUAGES[language]}"),
-        ("renderer_sha256", ROOT / "examples/showcase.lua"),
+        ("fixture_sha256", ROOT / "examples" / fixture),
+        ("renderer_sha256", ROOT / "examples" / renderer),
     ):
         if metadata[key] != digest(source):
             raise SystemExit(f"{path.name} has stale {key}; recapture it")
@@ -104,6 +160,33 @@ def validate_capture(path: Path) -> tuple[str, str]:
 
 
 def main() -> None:
+    if len(sys.argv) == 6 and sys.argv[1] == "--record-state":
+        record(sys.argv[3], sys.argv[4], Path(sys.argv[5]), sys.argv[2])
+        return
+    if "--states" in sys.argv:
+        paths = [
+            ROOT / "assets/screenshots" / kind / schema / f"{language}.png"
+            for kind, languages in (("selection", ("go",)), ("completion", ("go",)), ("lsp", ("go", "zig")))
+            for schema in SCHEMAS for language in languages
+        ]
+        fingerprints: dict[tuple[str, str], set[str]] = {}
+        for path in paths:
+            if not path.exists():
+                raise SystemExit(f"Missing state capture: {path.relative_to(ROOT)}")
+            language, identity = validate_capture(path)
+            metadata = json.loads(path.with_suffix(".json").read_text())
+            if metadata["kind"] == "lsp":
+                identity += json.dumps({
+                    "server": {key: metadata["server"][key] for key in ("name", "version", "settings")},
+                    "executable_sha256": metadata["server_executable_sha256"],
+                }, sort_keys=True)
+            fingerprints.setdefault((metadata["kind"], language), set()).add(identity)
+        if any(len(identities) != 1 for identities in fingerprints.values()):
+            raise SystemExit("State captures used different parser/query/server runtimes")
+        if len({dimensions(path) for path in paths}) != 1:
+            raise SystemExit("State capture dimensions differ")
+        print(f"State capture preflight passed: {len(paths)} captures")
+        return
     if len(sys.argv) == 5 and sys.argv[1] == "--record":
         record(sys.argv[2], sys.argv[3], Path(sys.argv[4]))
         return

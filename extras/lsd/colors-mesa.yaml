@@ -2,36 +2,36 @@
 # lsd color themes only style metadata; file names continue to use LS_COLORS.
 # Numeric values are xterm-256 approximations supported by crossterm.
 
-user: 242              # muted (#706976)
-group: 242             # muted (#706976)
+user: 59              # muted (#5f5964)
+group: 59             # muted (#5f5964)
 
 permission:
-  read: 242             # quiet metadata (#706976)
-  write: 242            # quiet metadata (#706976)
-  exec: 242             # quiet metadata (#706976)
-  exec-sticky: 95      # error (#974c68)
+  read: 59             # quiet metadata (#5f5964)
+  write: 59            # quiet metadata (#5f5964)
+  exec: 59             # quiet metadata (#5f5964)
+  exec-sticky: 95      # error (#89455f)
   no-access: 8        # placeholder (#817988)
-  octal: 242            # muted (#706976)
-  acl: 60              # accent (#356f80)
-  context: 242          # doc_comment (#6c686d)
+  octal: 59            # muted (#5f5964)
+  acl: 240              # accent (#2f6271)
+  context: 59          # doc_comment (#5e5a5f)
 
 date:
-  hour-old: 242         # muted (#706976)
-  day-old: 242          # muted (#706976)
+  hour-old: 59         # muted (#5f5964)
+  day-old: 59          # muted (#5f5964)
   older: 8            # placeholder (#817988)
 
 size:
   none: 8             # placeholder (#817988)
-  small: 242            # muted (#706976)
-  medium: 242           # muted (#706976)
-  large: 94            # warning (#80541f)
+  small: 59            # muted (#5f5964)
+  medium: 59           # muted (#5f5964)
+  large: 94            # warning (#7d521e)
 
 inode:
-  valid: 242            # muted (#706976)
+  valid: 59            # muted (#5f5964)
   invalid: 8          # placeholder (#817988)
 
 links:
-  valid: 242            # muted (#706976)
+  valid: 59            # muted (#5f5964)
   invalid: 8          # placeholder (#817988)
 
 tree-edge: 7          # border_variant (#c9bfbb)
@@ -40,10 +40,10 @@ git-status:
   default: 8          # placeholder (#817988)
   unmodified: 8       # placeholder (#817988)
   ignored: 8          # placeholder (#817988)
-  new-in-index: 59     # success (#4b6d65)
-  new-in-workdir: 59   # success (#4b6d65)
-  typechange: 94       # warning (#80541f)
-  deleted: 95          # error (#974c68)
-  renamed: 60          # accent (#356f80)
-  modified: 94         # warning (#80541f)
-  conflicted: 95       # error (#974c68)
+  new-in-index: 240     # success (#43615a)
+  new-in-workdir: 240   # success (#43615a)
+  typechange: 94       # warning (#7d521e)
+  deleted: 95          # error (#89455f)
+  renamed: 240          # accent (#2f6271)
+  modified: 94         # warning (#7d521e)
+  conflicted: 95       # error (#89455f)

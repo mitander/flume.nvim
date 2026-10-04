@@ -1,0 +1,55 @@
+{
+  "schema": "mesa",
+  "language": "go",
+  "highlighting": "treesitter+lsp",
+  "nvim": "0.12.5",
+  "parser": {
+    "revision": "2346a3ab1bb3857b48b29d779a1ef9799a248cd7",
+    "sha256": "9a0c9d0578dfe3466ed6adafcb0cbeaa75df3fa0cae07ad4a6fd42d1bd43043b"
+  },
+  "queries": [
+    {
+      "path": "go/highlights.scm",
+      "sha256": "81698c638abbf4c3a3ec8ccc3c6110be2cc725ad740bf87e6fa9ac685ecad267"
+    }
+  ],
+  "fixture_sha256": "9c31be87f1a3644a4a70ca5ae1823577828259bcb73f05a4caccb795a6f94bb1",
+  "renderer_sha256": "21ff913bcbf4983751fea1586e208d2c63a5e5b4fe38f3d247cfc959c4a1e28e",
+  "image_sha256": "e0a88915005af0542c4a6bcacb1b52778ab67088434244f854281f80a200b944",
+  "theme_inputs": {
+    "lua/flume/init.lua": "13cf1470e7fefec640ddc7dc0d13da9cb13a06d6964af40985d08cdd02f0d844",
+    "lua/flume/palette.lua": "b06bc35486ae812ba1135dbb6cd3c9f6bb15335133133422e18db6cf6ae9d4b7",
+    "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
+    "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
+    "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",
+    "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
+    "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
+    "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
+    "extras/ghostty/flume-mesa": "01882a08b6385d8e20f6c96aa3802c69c016851591fc2a655155a30be96a4f57"
+  },
+  "kind": "lsp",
+  "capture_script_sha256": "e22a3e56cc0501f436fa0e6d70e2093b58fae0d6b05d36b50f2ecdc55aed2ee5",
+  "base_renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
+  "server": {
+    "name": "gopls",
+    "version": "golang.org/x/tools/gopls v0.16.2",
+    "settings": {
+      "gopls": {
+        "semanticTokens": true
+      }
+    },
+    "token_counts": {
+      "comment": 3,
+      "operator": 14,
+      "function": 12,
+      "type": 4,
+      "number": 2,
+      "parameter": 4,
+      "keyword": 23,
+      "variable": 22,
+      "namespace": 8,
+      "string": 2
+    }
+  },
+  "server_executable_sha256": "f11a1147d42ed6cbc2f574ade9e2956ac630b1c11a5b197bde093cb1129c494e"
+}

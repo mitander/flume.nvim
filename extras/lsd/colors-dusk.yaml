@@ -2,36 +2,36 @@
 # lsd color themes only style metadata; file names continue to use LS_COLORS.
 # Numeric values are xterm-256 approximations supported by crossterm.
 
-user: 103              # muted (#8a85a6)
-group: 103             # muted (#8a85a6)
+user: 145              # muted (#a6a2bb)
+group: 145             # muted (#a6a2bb)
 
 permission:
-  read: 103             # quiet metadata (#8a85a6)
+  read: 145             # quiet metadata (#a6a2bb)
   write: 179            # quiet metadata (#dfb86b)
   exec: 144             # quiet metadata (#a4b78a)
-  exec-sticky: 210      # error (#ee7583)
+  exec-sticky: 210      # error (#f08692)
   no-access: 60        # placeholder (#67627d)
-  octal: 103            # muted (#8a85a6)
-  acl: 73              # accent (#73a6b6)
-  context: 245          # doc_comment (#81889a)
+  octal: 145            # muted (#a6a2bb)
+  acl: 109              # accent (#7dacbb)
+  context: 248          # doc_comment (#9fa5b2)
 
 date:
-  hour-old: 103         # muted (#8a85a6)
-  day-old: 103          # muted (#8a85a6)
+  hour-old: 145         # muted (#a6a2bb)
+  day-old: 145          # muted (#a6a2bb)
   older: 60            # placeholder (#67627d)
 
 size:
   none: 60             # placeholder (#67627d)
-  small: 103            # muted (#8a85a6)
-  medium: 103           # muted (#8a85a6)
+  small: 145            # muted (#a6a2bb)
+  medium: 145           # muted (#a6a2bb)
   large: 179            # warning (#dfb86b)
 
 inode:
-  valid: 103            # muted (#8a85a6)
+  valid: 145            # muted (#a6a2bb)
   invalid: 60          # placeholder (#67627d)
 
 links:
-  valid: 103            # muted (#8a85a6)
+  valid: 145            # muted (#a6a2bb)
   invalid: 60          # placeholder (#67627d)
 
 tree-edge: 237          # border_variant (#343949)
@@ -43,7 +43,7 @@ git-status:
   new-in-index: 144     # success (#a4b78a)
   new-in-workdir: 144   # success (#a4b78a)
   typechange: 179       # warning (#dfb86b)
-  deleted: 210          # error (#ee7583)
-  renamed: 73          # accent (#73a6b6)
+  deleted: 210          # error (#f08692)
+  renamed: 109          # accent (#7dacbb)
   modified: 179         # warning (#dfb86b)
-  conflicted: 210       # error (#ee7583)
+  conflicted: 210       # error (#f08692)

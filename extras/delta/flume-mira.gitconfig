@@ -10,7 +10,7 @@
     plus-style = syntax "#2a3735"
     plus-emph-style = syntax "#47665d"
     line-numbers = true
-    line-numbers-minus-style = "#dd789b"
+    line-numbers-minus-style = "#e187a6"
     line-numbers-plus-style = "#84b39f"
     line-numbers-left-style = "#4b485a"
     line-numbers-right-style = "#4b485a"

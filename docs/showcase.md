@@ -28,7 +28,7 @@ These are capture dependencies, not requirements for using Flume.
 | Mira | Dark | [`mira/zig.png`](../assets/screenshots/mira/zig.png) |
 | Mesa | Light | [`mesa/zig.png`](../assets/screenshots/mesa/zig.png) |
 
-On macOS, install Ghostty and grant Screen Recording permission before capture.
+On macOS, install Ghostty and Maple Mono NF, then grant Screen Recording permission before capture.
 The script identifies the Ghostty window through CoreGraphics; no interactive
 window selection is needed.
 
@@ -74,6 +74,57 @@ to inspect language-specific roles.
 
 For ANSI evidence, run `./examples/ansi.sh` in the fixed terminal window under
 each activated palette and save it with that terminal's native contact sheet.
+
+## Working-state and LSP captures
+
+Working-state captures use [`states.go`](../examples/states.go) and
+[`states.lua`](../examples/states.lua). The upper panes use Neovim's real diff
+engine, including changed identifiers and strings. The lower pane shows four
+fixture diagnostics, underlines, letter signs, and search matches.
+
+Selection and completion need different editor modes. Capture them separately
+so both use native UI states rather than painted imitations:
+
+```sh
+for schema in dusk opal mira mesa; do
+    ./scripts/screenshot-window.sh "$schema" go selection
+    ./scripts/screenshot-window.sh "$schema" go completion
+    ./scripts/screenshot-window.sh "$schema" go lsp
+    ./scripts/screenshot-window.sh "$schema" zig lsp
+done
+python3 scripts/preflight-screenshots.py --states
+```
+
+Use the same `FLUME_TS_RUNTIME` as the canonical captures. The LSP fixture
+requires `gopls` and `zls` on `PATH`, plus their Go and Zig toolchains.
+[`lsp-showcase.lua`](../examples/lsp-showcase.lua) copies source into a temporary
+workspace. It requires attached semantic tokens before reporting readiness.
+It suppresses diagnostics to isolate provider coloring and removes the workspace
+on exit. It does not change the user's editor or synchronized palette.
+
+Sidecars record parser/query fingerprints, fixture and renderer checksums,
+image checksums, and theme inputs. State sidecars also record native readiness
+and the capture-script checksum. LSP sidecars identify server versions, settings,
+executable checksums, and observed token counts. Preflight rejects mixed server
+or parser/query runtimes across palettes.
+
+The captures below use Neovim 0.12.5 and Ghostty 1.3.1 on macOS 27.0.1,
+with Maple Mono NF at 19 points and an opaque 100-column × 48-row viewport.
+The parser/query installation comes from nvim-treesitter commit
+`4916d6592ede8c07973490d9322f187e07dfefac`; sidecars record parser revisions
+and checksums. LSP captures use gopls v0.16.2 and ZLS 0.16.0.
+They do not qualify other server versions or languages.
+
+| Palette | Selection and diagnostics | Completion | Tree-sitter + LSP |
+| --- | --- | --- | --- |
+| Dusk | [Go](../assets/screenshots/selection/dusk/go.png) | [Go](../assets/screenshots/completion/dusk/go.png) | [Go](../assets/screenshots/lsp/dusk/go.png) · [Zig](../assets/screenshots/lsp/dusk/zig.png) |
+| Opal | [Go](../assets/screenshots/selection/opal/go.png) | [Go](../assets/screenshots/completion/opal/go.png) | [Go](../assets/screenshots/lsp/opal/go.png) · [Zig](../assets/screenshots/lsp/opal/zig.png) |
+| Mira | [Go](../assets/screenshots/selection/mira/go.png) | [Go](../assets/screenshots/completion/mira/go.png) | [Go](../assets/screenshots/lsp/mira/go.png) · [Zig](../assets/screenshots/lsp/mira/zig.png) |
+| Mesa | [Go](../assets/screenshots/selection/mesa/go.png) | [Go](../assets/screenshots/completion/mesa/go.png) | [Go](../assets/screenshots/lsp/mesa/go.png) · [Zig](../assets/screenshots/lsp/mesa/zig.png) |
+
+These editor captures do not approve the native integration contact sheets below.
+Review hierarchy at working font size; checksum and contrast checks do not
+establish reading comfort.
 
 ## Code examples
 

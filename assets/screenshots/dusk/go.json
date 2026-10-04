@@ -5,7 +5,7 @@
   "nvim": "0.12.5",
   "parser": {
     "revision": "2346a3ab1bb3857b48b29d779a1ef9799a248cd7",
-    "sha256": "1a310fa12ae2cb88377d4cf1a908deef0cfa6ef2524cb1a446650c4a25a3699f"
+    "sha256": "9a0c9d0578dfe3466ed6adafcb0cbeaa75df3fa0cae07ad4a6fd42d1bd43043b"
   },
   "queries": [
     {
@@ -15,16 +15,16 @@
   ],
   "fixture_sha256": "9c31be87f1a3644a4a70ca5ae1823577828259bcb73f05a4caccb795a6f94bb1",
   "renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
-  "image_sha256": "648f851bdecd9ac6f716e110c21f47904e48aa00de270ed51af746ba5b443ec4",
+  "image_sha256": "4d80d56a8e3212b187f9eb2da0346c8bf259c242f62a2180bfddaf134031cee6",
   "theme_inputs": {
-    "lua/flume/init.lua": "a6abb056ab7a6a910a20456f0c656a5cb432d76289305a27dfad09503729bd3c",
-    "lua/flume/palette.lua": "f689bb7d2b6e1abdb332ab809bf6f0f5fa8574c8c140ff500a146affb35c3b3d",
+    "lua/flume/init.lua": "13cf1470e7fefec640ddc7dc0d13da9cb13a06d6964af40985d08cdd02f0d844",
+    "lua/flume/palette.lua": "b06bc35486ae812ba1135dbb6cd3c9f6bb15335133133422e18db6cf6ae9d4b7",
     "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
     "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
     "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",
     "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
     "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
     "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-    "extras/ghostty/flume-dusk": "eb4485cb0ea063ff0d531fb142d0675db5584770c7234b8ac1240ab94f945f74"
+    "extras/ghostty/flume-dusk": "945206d60c41674919ccbff8667839b011df1556d4b16fc2fc9e0fd21b0eb8cc"
   }
 }

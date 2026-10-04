@@ -28,6 +28,9 @@ class CaptureProvenance(unittest.TestCase):
         self.root = Path(temporary.name)
         files = [
             "examples/showcase.lua",
+            "examples/states.lua",
+            "examples/states.go",
+            "examples/lsp-showcase.lua",
             "examples/flume.zig",
             "scripts/screenshot-window.sh",
             "scripts/preflight-screenshots.py",
@@ -61,6 +64,66 @@ class CaptureProvenance(unittest.TestCase):
 
     def test_current_captures_pass(self):
         preflight.main()
+
+    def state_runtime(self, kind):
+        parser = self.root / "runtime/parser/go.so"
+        query = self.root / "runtime/queries/go/highlights.scm"
+        parser.parent.mkdir(parents=True, exist_ok=True)
+        query.parent.mkdir(parents=True, exist_ok=True)
+        parser.write_bytes(b"fixture parser")
+        query.write_text("(identifier) @variable\n")
+        image = self.root / f"assets/screenshots/{kind}/dusk/go.png"
+        image.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(self.root / "assets/screenshots/dusk/go.png", image)
+        runtime = {
+            "nvim": "test", "language": "go", "kind": kind,
+            "parser": str(parser), "queries": [str(query)],
+            "diff_text": True, "diagnostics": 4,
+            "visual": kind == "selection", "completion": kind == "completion",
+        }
+        runtime_file = self.root / "runtime.json"
+        return runtime, runtime_file, image
+
+    def test_real_state_readiness_is_required(self):
+        for kind, required in (("selection", "visual"), ("completion", "completion")):
+            with self.subTest(kind=kind):
+                runtime, runtime_file, _ = self.state_runtime(kind)
+                runtime[required] = False
+                runtime_file.write_text(json.dumps(runtime))
+                with self.assertRaisesRegex(SystemExit, f"did not render {required}"):
+                    preflight.record("dusk", "go", runtime_file, kind)
+
+    def test_state_capture_provenance_is_checked(self):
+        runtime, runtime_file, image = self.state_runtime("completion")
+        runtime_file.write_text(json.dumps(runtime))
+        preflight.record("dusk", "go", runtime_file, "completion")
+        preflight.validate_capture(image)
+        renderer = self.root / "examples/states.lua"
+        renderer.write_text(renderer.read_text() + "\n-- changed\n")
+        with self.assertRaisesRegex(SystemExit, "stale renderer_sha256"):
+            preflight.validate_capture(image)
+
+    def test_lsp_requires_server_tokens(self):
+        runtime, runtime_file, _ = self.state_runtime("lsp")
+        runtime["server"] = {"token_counts": {}}
+        runtime_file.write_text(json.dumps(runtime))
+        with self.assertRaisesRegex(SystemExit, "did not report semantic tokens"):
+            preflight.record("dusk", "go", runtime_file, "lsp")
+
+    def test_lsp_records_server_identity_without_machine_paths(self):
+        runtime, runtime_file, image = self.state_runtime("lsp")
+        executable = self.root / "server"
+        executable.write_bytes(b"fixture server")
+        runtime["server"] = {
+            "name": "gopls", "version": "test", "settings": {},
+            "token_counts": {"function": 2}, "executable": str(executable),
+        }
+        runtime_file.write_text(json.dumps(runtime))
+        preflight.record("dusk", "go", runtime_file, "lsp")
+        preflight.validate_capture(image)
+        metadata = json.loads(image.with_suffix(".json").read_text())
+        self.assertEqual(metadata["server_executable_sha256"], preflight.digest(executable))
+        self.assertNotIn(str(self.root), json.dumps(metadata))
 
     def test_changed_image_is_rejected(self):
         image = self.root / "assets/screenshots/dusk/zig.png"

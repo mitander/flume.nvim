@@ -1,0 +1,38 @@
+{
+  "schema": "dusk",
+  "language": "go",
+  "highlighting": "treesitter",
+  "nvim": "0.12.5",
+  "parser": {
+    "revision": "2346a3ab1bb3857b48b29d779a1ef9799a248cd7",
+    "sha256": "9a0c9d0578dfe3466ed6adafcb0cbeaa75df3fa0cae07ad4a6fd42d1bd43043b"
+  },
+  "queries": [
+    {
+      "path": "go/highlights.scm",
+      "sha256": "81698c638abbf4c3a3ec8ccc3c6110be2cc725ad740bf87e6fa9ac685ecad267"
+    }
+  ],
+  "fixture_sha256": "a680a14711708fe88aa759eb539cd166be23865fde63fc0564077dfd9580b126",
+  "renderer_sha256": "3b02f9dbe04c928b7bcf5a3ae0bd169dbeb53e83ea4d588c73514d19d1b206fb",
+  "image_sha256": "e5d315620f4b11cebb118f818c463edeea28bf68dc994e991072f380e2ece6cb",
+  "theme_inputs": {
+    "lua/flume/init.lua": "13cf1470e7fefec640ddc7dc0d13da9cb13a06d6964af40985d08cdd02f0d844",
+    "lua/flume/palette.lua": "b06bc35486ae812ba1135dbb6cd3c9f6bb15335133133422e18db6cf6ae9d4b7",
+    "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
+    "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
+    "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",
+    "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
+    "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
+    "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
+    "extras/ghostty/flume-dusk": "945206d60c41674919ccbff8667839b011df1556d4b16fc2fc9e0fd21b0eb8cc"
+  },
+  "kind": "selection",
+  "capture_script_sha256": "e22a3e56cc0501f436fa0e6d70e2093b58fae0d6b05d36b50f2ecdc55aed2ee5",
+  "runtime_states": {
+    "diff_text": true,
+    "diagnostics": 4,
+    "visual": true,
+    "completion": false
+  }
+}

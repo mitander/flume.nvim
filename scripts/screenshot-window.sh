@@ -6,11 +6,24 @@ cd "$(dirname "$0")/.."
 GHOSTTY_COLUMNS=100
 GHOSTTY_ROWS=48
 GHOSTTY_FONT_SIZE=19
+GHOSTTY_FONT_FAMILY="Maple Mono NF"
 GHOSTTY_PID=""
 INPUT_FILE=""
 METADATA_FILE=""
 SCHEMA="${1:-dusk}"
 LANGUAGE="${2:-zig}"
+KIND="${3:-syntax}"
+RENDERER="showcase.lua"
+case "$KIND" in
+    syntax) ;;
+    selection|completion)
+        [ "$LANGUAGE" = go ] || { echo "State captures use Go" >&2; exit 1; }
+        RENDERER="states.lua" ;;
+    lsp)
+        case "$LANGUAGE" in go|zig) ;; *) echo "LSP captures support Go and Zig" >&2; exit 1 ;; esac
+        RENDERER="lsp-showcase.lua" ;;
+    *) echo "Capture kind must be syntax, selection, completion, or lsp" >&2; exit 1 ;;
+esac
 
 fail() {
     echo "Error: $*" >&2
@@ -29,6 +42,9 @@ esac
 
 RAW_SCREENSHOT=$(mktemp "${TMPDIR:-/tmp}/flume-capture.XXXXXX")
 FINAL_SCREENSHOT="assets/screenshots/${SCHEMA}/${LANGUAGE}.png"
+if [ "$KIND" != syntax ]; then
+    FINAL_SCREENSHOT="assets/screenshots/${KIND}/${SCHEMA}/${LANGUAGE}.png"
+fi
 mkdir -p "$(dirname "$FINAL_SCREENSHOT")"
 
 cleanup() {
@@ -121,12 +137,13 @@ launch_ghostty() {
     example_dir="$(pwd)/examples"
     INPUT_FILE=$(mktemp "${TMPDIR:-/tmp}/flume-screenshot-input.XXXXXX")
     runtime_cmd="+set runtimepath^=$(pwd)"
-    input_cmd="+lua require('flume').setup({ schema = '$SCHEMA', watch_sync = false }); dofile('showcase.lua')"
+    input_cmd="+lua require('flume').setup({ schema = '$SCHEMA', watch_sync = false }); dofile('$RENDERER')"
 
-    printf '%q %q %q %q %q %q %q %q %q\n' \
+    printf '%q %q %q %q %q %q %q %q %q %q\n' \
         "env" \
         "FLUME_SHOWCASE_SCHEMA=$SCHEMA" \
         "FLUME_SHOWCASE_LANGUAGE=$LANGUAGE" \
+        "FLUME_CAPTURE_KIND=$KIND" \
         "FLUME_TS_RUNTIME=${FLUME_TS_RUNTIME:-}" \
         "FLUME_SHOWCASE_METADATA=$METADATA_FILE" \
         "$nvim_bin" \
@@ -143,6 +160,8 @@ launch_ghostty() {
         --quit-after-last-window-closed=true \
         --theme="$(pwd)/extras/ghostty/flume-$SCHEMA" \
         --font-size="$GHOSTTY_FONT_SIZE" \
+        --font-family="$GHOSTTY_FONT_FAMILY" \
+        --background-opacity=1 \
         --window-width="$GHOSTTY_COLUMNS" \
         --window-height="$GHOSTTY_ROWS" \
         --window-padding-x=16 \
@@ -180,7 +199,9 @@ rm -f "$RAW_SCREENSHOT"
 
 echo "Waiting for window to render..."
 # Shell initialization can take longer than a fixed one-second delay.
-for _attempt in {1..50}; do
+attempts=50
+[ "$KIND" != lsp ] || attempts=500
+for ((_attempt = 0; _attempt < attempts; _attempt++)); do
     [ -s "$METADATA_FILE" ] && break
     sleep 0.1
 done
@@ -190,7 +211,11 @@ osascript -e 'tell application "Ghostty" to activate'
 sleep 0.2
 capture_ghostty_window || fail "Capture cancelled or failed."
 magick "$RAW_SCREENSHOT" -strip "PNG24:$FINAL_SCREENSHOT"
-python3 scripts/preflight-screenshots.py --record "$SCHEMA" "$LANGUAGE" "$METADATA_FILE"
+if [ "$KIND" = syntax ]; then
+    python3 scripts/preflight-screenshots.py --record "$SCHEMA" "$LANGUAGE" "$METADATA_FILE"
+else
+    python3 scripts/preflight-screenshots.py --record-state "$KIND" "$SCHEMA" "$LANGUAGE" "$METADATA_FILE"
+fi
 cleanup
 trap - EXIT
 echo "Updated $FINAL_SCREENSHOT"

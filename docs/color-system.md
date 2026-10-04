@@ -9,7 +9,7 @@ Flume resolves each named palette through one schema contract. Its roles belong 
 3. **Controlled saturation.** Stronger color marks state or structure; ordinary identifiers remain neutral.
 4. **Stable hierarchy.** Color families keep the same meaning across Tree-sitter, LSP, plugins, and generated extras.
 5. **Palette intensity.** A palette may change chroma, as Opal does, without changing semantic assignments or surface hierarchy.
-6. **Explicit contrast.** Primary text and filled labels target 4.5:1 contrast. Focused, state-bearing boundaries target 3:1. Decorative separators remain intentionally quieter and do not carry state by color alone.
+6. **Explicit contrast.** Syntax text targets 4.5:1 on the canvas, cursor line, selection, and diff surfaces. Menu text, diagnostic virtual text, and filled labels also target 4.5:1. Focused, state-bearing boundaries target 3:1. Decorative separators remain intentionally quieter and do not carry state by color alone.
 
 ## Layers
 
@@ -19,7 +19,12 @@ Flume resolves each named palette through one schema contract. Its roles belong 
 
 ### Semantic states
 
-`error`, `warning`, `success`, `info`, and `match` describe application state. `diff_add`, `diff_change`, and `diff_delete` describe version-control state. Their default values may share hues with ANSI colors, but users can override them independently.
+`error`, `warning`, `success`, `info`, and `match` describe application state. `diff_add`, `diff_change`, and `diff_delete` describe version-control state. Their default values may share hues with ANSI colors, but users can override them independently. `diff_text_bg` marks changed words while retaining syntax foregrounds. It is distinct from `diff_change_bg` and does not consume an ANSI ink.
+
+Search uses `match` text on `warn_bg`, with an underline. Current matches use
+bold, underlined `text` on `diff_text_bg`. These foregrounds remain readable when
+Visual selection replaces the search background. Filled `on_accent` text does
+not have that property.
 
 ### Syntax
 
@@ -36,7 +41,10 @@ Specific Tree-sitter captures and LSP token types resolve through these families
 - Enumeration members remain `syntax_constant` by default because most language servers model them as values. A language-qualified override may use `syntax_type` when a server also uses that token for constructors, as rust-analyzer does for enum variants.
 - Modules and namespaces use `syntax_namespace`. Any workaround for an inaccurate language-server token must be language-qualified rather than weakening the generic group.
 - Broad LSP variable tokens defer to Tree-sitter, which can distinguish calls, members, and other syntactic roles more precisely. Readonly and static modifiers do not turn ordinary bindings or fields into constants. Python namespace tokens also defer because some servers apply them to imported modules, classes, and callables alike.
-- Import keywords follow namespaces, word-like operators follow punctuation, and preprocessor directives follow attributes. This keeps keyword-heavy languages from collapsing into one dominant hue.
+- Import keywords follow namespaces, word-like operators follow punctuation, and preprocessor directives follow attributes. Legacy `Include`, `PreProc`, `Define`, and `PreCondit` follow the same roles.
+- Macro names use the function family across legacy syntax, Tree-sitter, and LSP. String escapes use the special family, matching `SpecialChar`.
+
+These mappings keep keyword-heavy languages from collapsing into one dominant hue.
 
 Exact group overrides remain available for further language-specific exceptions. Such exceptions should correct a parser or language-server mismatch, not establish a new language-specific color system.
 
@@ -59,6 +67,7 @@ Plugin integrations must resolve visible colors through semantic roles instead o
 - User `highlights` are applied last and therefore win.
 - Generated extras compile from the canonical palette, not editor-local overrides.
 - Global saturation/chroma transforms are not a v0.2.0 API; exact role-level overrides remain the supported customization boundary.
+- Contrast tests cover default opaque palettes. Transparency, user overrides, and terminal opacity require review against the actual rendered background.
 
 ## Verify language highlighting
 

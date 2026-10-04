@@ -42,7 +42,7 @@ class IntegrationReviewTests(unittest.TestCase):
         pairs = {
             pair.label: pair for pair in review.integration_pairs(ROOT, "fzf", "opal")
         }
-        self.assertEqual(pairs["Match inside selected row"].foreground, "#895c00")
+        self.assertEqual(pairs["Match inside selected row"].foreground, "#7e5500")
         self.assertEqual(pairs["Match inside selected row"].background, "#ddd6e3")
         lsd = {
             pair.label: pair for pair in review.integration_pairs(ROOT, "lsd", "opal")
@@ -50,7 +50,7 @@ class IntegrationReviewTests(unittest.TestCase):
         self.assertEqual(
             lsd["permission.no-access (Ghostty host)"].foreground, "#706878"
         )
-        self.assertEqual(lsd["user (Ghostty host)"].foreground, "#6c6c6c")
+        self.assertEqual(lsd["user (Ghostty host)"].foreground, "#626262")
 
     def test_report_highlights_real_changes_without_blessing_contrast(self):
         old = {"demo": {"opal": [review.Pair("Selection", "#ffffff", "#000000")]}}
