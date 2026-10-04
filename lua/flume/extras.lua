@@ -21,7 +21,6 @@ M.integrations = {
     { name = "fzf", label = "fzf", source = "extras/fzf/flume%s.opts", current = "fzf.opts" },
     { name = "delta", label = "Delta", source = "extras/delta/flume%s.gitconfig", current = "delta.gitconfig" },
     { name = "pi", label = "Pi", source = "extras/pi/flume%s.json", current = "pi.json" },
-    { name = "tracker_tui", label = "ltui / jtui", source = "extras/tracker-tui/flume%s.json", current = "tracker-tui.json" },
 }
 
 local apps = {

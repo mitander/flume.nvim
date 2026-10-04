@@ -49,6 +49,8 @@ Defaults:
         transparent = false,
         terminal_colors = true,
         watch_sync = true,
+        follow_sync = false,
+        dev = false,
         overrides = {},
         highlights = {},
         styles = {
@@ -71,8 +73,27 @@ terminal_colors ~
 watch_sync ~
     Watches the active integration set and applies schemas synchronized by
     other running Neovim instances. The watcher is event-driven and enabled by
-    default. Set to false to keep this editor's palette independent.
+    default. Set to false to ignore switches while this editor runs.
     Selecting another colorscheme stops watching. Call setup() to resume.
+
+follow_sync ~
+    At setup, prefers the validated schema in extras/current/schema over the
+    configured schema. Missing or invalid state uses the configured fallback.
+    Defaults to false. Setup never rewrites the Lua configuration or marker.
+    Set both follow_sync and watch_sync to false for an independent editor.
+    Reload preserves the current editor palette instead of rereading this state.
+>
+    require("flume").setup({ schema = "mesa", follow_sync = true })
+<
+    :FlumeSync mira remembers Mira for the next setup. Mesa remains the fallback.
+    The remembered choice belongs to this plugin checkout, not a global user file.
+    get_active_schema() returns its canonical schema, or nil when unavailable.
+
+dev ~
+    Reloads Flume when Lua files under this checkout's lua/ directory are saved.
+    Includes nested language modules and the lualine theme. Defaults to false.
+    Clears source caches and preserves the editor's schema, overrides, and options.
+    Does not activate external integrations or replace another colorscheme.
 
 overrides ~
     Changes colors by semantic role. Generated extras continue to use canonical
@@ -149,18 +170,12 @@ cannot delete each other's files. Unchanged palette content reuses its set.
     fzf       extras/fzf/flume-dusk.opts
     Delta     extras/delta/flume-dusk.gitconfig
     Pi        extras/pi/flume-dusk.json
-    ltui/jtui extras/tracker-tui/flume-dusk.json
 
 Only Ghostty, Kitty, OpenCode, Tmux, and LSD have safe automatic installer
 entries. The other tools support multiple include locations, so Flume does not
 guess. Use each tool's theme or include mechanism.
 
-LTUI / JTUI LIVE SYNC ~
-    Patched Pantheon ltui and jtui builds load all four themes from
-    extras/tracker-tui/.
-    They map workflow states and tracker-owned team, project, and label colors
-    onto canonical Flume roles. They follow the atomic extras/current switch
-    without polling or editing application state.
+See docs/workflows.md for external-tool setup examples.
 
 ==============================================================================
 HIGHLIGHTS                                                    *flume-highlights*
@@ -168,6 +183,9 @@ HIGHLIGHTS                                                    *flume-highlights*
 Built-in surfaces include Neovim UI, diagnostics, Tree-sitter, LSP semantic
 tokens, GitSigns, Oil, Telescope, nvim-cmp, lazy.nvim, WhichKey, Mason, Trouble,
 Neo-tree, nvim-tree, Snacks, and fzf-lua.
+
+Lualine users can select options = { theme = "flume" }. Lualine reloads this
+named theme on ColorScheme; Flume does not configure statusline sections.
 
 Use :Inspect or :highlight GroupName and the `highlights` option for exact
 changes. See docs/color-system.md for the semantic schema contract.

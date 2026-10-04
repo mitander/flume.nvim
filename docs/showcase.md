@@ -114,7 +114,6 @@ The checklist records missing native captures until evidence is committed:
 | fzf | Pending | Selection, match, prompt, border |
 | Delta | Pending | Add/change/delete and line numbers |
 | Pi | Pending | Text hierarchy, tools, Markdown |
-| ltui / jtui | Pending | Workflow states, identity colors, selection |
 
 For each integration, capture the same deterministic app fixture with all four
 palettes:
@@ -142,9 +141,8 @@ Prioritize:
 
 1. Delta and Lazygit diffs and line numbers;
 2. Pi and OpenCode text hierarchy, tool state, and Markdown;
-3. ltui / jtui workflow states, identity colors, and selection;
-4. Ghostty and Kitty ANSI 0–15, selection, cursor, and tabs;
-5. Tmux status variables, LSD metadata, and fzf selection/search state.
+3. Ghostty and Kitty ANSI 0–15, selection, cursor, and tabs;
+4. Tmux status variables, LSD metadata, and fzf selection/search state.
 
 When automation is unavailable, record the exact manual action and application
 version instead of fabricating evidence.

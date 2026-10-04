@@ -5,6 +5,8 @@ local default_config = {
     transparent = false,
     terminal_colors = true,
     watch_sync = true,
+    follow_sync = false,
+    dev = false,
     overrides = {},
     highlights = {},
     styles = {
@@ -30,9 +32,15 @@ end
 
 local function clear_flume_modules()
     local watch = package.loaded["flume.watch"]
-    if watch then
-        watch.stop()
+    if type(watch) == "table" then
+        pcall(watch.stop)
     end
+    local dev = package.loaded["flume.dev"]
+    if type(dev) == "table" then
+        pcall(dev.stop)
+    end
+    -- A broken edited stop() must not prevent cache rollback.
+    pcall(vim.api.nvim_del_augroup_by_name, "FlumeDevReload")
     for name in pairs(package.loaded) do
         if name == "flume" or name:match("^flume%.") then
             package.loaded[name] = nil
@@ -54,20 +62,48 @@ function M.reload()
         end,
     })
 
-    clear_flume_modules()
-    require("flume").setup(config)
+    local previous = {}
+    for name, module in pairs(package.loaded) do
+        if name == "flume" or name:match("^flume%.") then
+            previous[name] = module
+        end
+    end
+    -- Reload the editor's choice, not the startup fallback or global choice.
+    local follow_sync = config.follow_sync
+    config.follow_sync = false
+    local ok, err = xpcall(function()
+        clear_flume_modules()
+        local flume = require("flume")
+        flume.setup(config)
+        flume.config.follow_sync = follow_sync
+    end, debug.traceback)
+    if not ok then
+        -- A syntax error must not strand the save hook or keep a half-loaded theme.
+        clear_flume_modules()
+        for name, module in pairs(previous) do
+            package.loaded[name] = module
+        end
+        M.setup(config)
+        M.config.follow_sync = follow_sync
+    end
     pcall(vim.api.nvim_del_augroup_by_id, probe)
+    if not ok then
+        vim.notify("Flume reload failed; previous theme restored:\n" .. err, vim.log.levels.ERROR)
+        return false
+    end
 
     -- Older Neovim versions may emit ColorScheme while resetting syntax.
     if not colorscheme_emitted then
         vim.api.nvim_exec_autocmds("ColorScheme", { pattern = colors_name, modeline = false })
     end
     vim.notify("Flume theme reloaded", vim.log.levels.INFO)
+    return true
 end
 
 function M.setup(opts)
     opts = vim.deepcopy(opts or {})
-    opts.schema = require("flume.palette").resolve(opts.schema or default_config.schema)
+    local fallback = require("flume.palette").resolve(opts.schema or default_config.schema)
+    opts.schema = (opts.follow_sync and M.get_active_schema()) or fallback
     M.config = vim.tbl_deep_extend("force", vim.deepcopy(default_config), opts)
     M.load()
     vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name, modeline = false })
@@ -79,6 +115,26 @@ function M.setup(opts)
             watch.stop()
         end
     end
+    if M.config.dev then
+        require("flume.dev").start()
+    else
+        local dev = package.loaded["flume.dev"]
+        if dev then
+            dev.stop()
+        end
+    end
+end
+
+-- Read the same runtime marker used by the integration watcher.
+function M.get_active_schema()
+    local file = io.open(require("flume.extras").get_plugin_dir() .. "/extras/current/schema", "rb")
+    if not file then
+        return nil
+    end
+    local schema = file:read("*l")
+    file:close()
+    local ok, resolved = pcall(require("flume.palette").resolve, schema or "")
+    return ok and resolved or nil
 end
 
 function M.get_colors(schema)
@@ -407,6 +463,7 @@ function M.load(schema, colorscheme)
     hi("NeoTreeGitIgnored", { fg = c.placeholder })
 
     hi("NvimTreeNormal", { fg = c.fg, bg = c.bg })
+    hi("NvimTreeStatusLine", { fg = c.text, bg = c.surface_alt, bold = true })
     hi("NvimTreeFolderIcon", { fg = c.accent })
     hi("NvimTreeFolderName", { fg = c.accent })
     hi("NvimTreeOpenedFolderName", { fg = c.accent, bold = true })

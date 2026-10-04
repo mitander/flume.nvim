@@ -673,10 +673,6 @@ test("generated extras are current and machine-readable", function()
         fzf = { source = "extras/fzf/flume%s.opts", current = "extras/current/fzf.opts" },
         delta = { source = "extras/delta/flume%s.gitconfig", current = "extras/current/delta.gitconfig" },
         pi = { source = "extras/pi/flume%s.json", current = "extras/current/pi.json" },
-        tracker_tui = {
-            source = "extras/tracker-tui/flume%s.json",
-            current = "extras/current/tracker-tui.json",
-        },
     }
     for _, schema in ipairs(require("flume.palette").schema_order) do
         local suffix = require("flume.palette").schemas[schema].suffix
@@ -790,13 +786,13 @@ test("activation reuses intact sets and recovers the final integration", functio
     local compiler = require("flume.compiler")
     local uv = vim.uv or vim.loop
     local schema = vim.fn.readfile("extras/current/schema")[1]
-    local current = "extras/current/tracker-tui.json"
-    local expected = vim.fn.readfile("extras/tracker-tui/flume-" .. schema .. ".json", "b")
+    local current = "extras/current/pi.json"
+    local expected = vim.fn.readfile("extras/pi/flume-" .. schema .. ".json", "b")
     local original_set = uv.fs_readlink("extras/current")
     local ok, err = xpcall(function()
         local changes = compiler.activate(schema)
         equal(uv.fs_readlink("extras/current"), original_set, "intact set identity")
-        equal(vim.tbl_count(changes), 10, "activation result inventory")
+        equal(vim.tbl_count(changes), 9, "activation result inventory")
         for name, changed in pairs(changes) do
             equal(changed, false, name .. " unchanged artifact")
         end
@@ -812,12 +808,37 @@ test("activation reuses intact sets and recovers the final integration", functio
         equal(uv.fs_readlink("extras/current"), recovered_set, "inactive recovery set was not reused")
     end, debug.traceback)
     -- Restore the deliberately corrupted immutable set, not the current link.
-    vim.fn.writefile(expected, "extras/" .. original_set .. "/tracker-tui.json", "b")
+    vim.fn.writefile(expected, "extras/" .. original_set .. "/pi.json", "b")
+    compiler.activate(schema)
+    if not ok then error(err) end
+end)
+
+test("activation rejects sets with obsolete artifacts", function()
+    local compiler = require("flume.compiler")
+    local uv = vim.uv or vim.loop
+    local schema = vim.fn.readfile("extras/current/schema")[1]
+    compiler.activate(schema)
+    local original_set = uv.fs_readlink("extras/current")
+    local obsolete = "extras/" .. original_set .. "/obsolete.json"
+    local ok, err = xpcall(function()
+        vim.fn.writefile({ "obsolete" }, obsolete)
+        compiler.activate(schema)
+        truthy(uv.fs_readlink("extras/current") ~= original_set, "obsolete set was reused")
+        equal(#vim.fn.glob("extras/current/*", false, true), 10, "nine formats plus schema")
+        equal(vim.fn.filereadable("extras/current/obsolete.json"), 0, "obsolete artifact survived")
+        local recovered_set = uv.fs_readlink("extras/current")
+        compiler.activate(schema == "opal" and "dusk" or "opal")
+        compiler.activate(schema)
+        equal(uv.fs_readlink("extras/current"), recovered_set, "clean recovery set was not reused")
+        equal(vim.fn.filereadable(obsolete), 1, "previous immutable set was deleted")
+    end, debug.traceback)
+    uv.fs_unlink(obsolete)
     compiler.activate(schema)
     if not ok then error(err) end
 end)
 
 require("tests.extras").register(test, equal, truthy)
+require("tests.workflows").register(test, equal, truthy)
 
 test("Vim help tags build", function()
     local root = vim.fn.tempname()

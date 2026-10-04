@@ -2,11 +2,11 @@
 
 ## Unreleased
 
-- Add generated Textual themes for the Pantheon Linear and Jira TUIs.
-- Normalize tracker-owned workflow and identity colors onto canonical Flume
-  roles instead of mixing Linear or Jira colors into the active palette.
-- Include the active Tracker TUI theme in the atomic integration set so patched
-  clients can follow `:FlumeSync` while running.
+- Add opt-in startup selection from the synchronized integration schema with
+  `follow_sync`, while keeping the configured schema as a fallback.
+- Add opt-in development reload-on-save that preserves the editor palette.
+- Supply a palette-aware named lualine theme and the tree statusline highlight.
+- Publish portable fzf, Lazygit, and Delta activation recipes.
 - Let running Neovim instances follow synchronized palettes by default;
   disable this with `watch_sync = false`.
 - Stop synchronization watching when another colorscheme takes over,

@@ -5,7 +5,7 @@
   "nvim": "0.12.5",
   "parser": {
     "revision": "2346a3ab1bb3857b48b29d779a1ef9799a248cd7",
-    "sha256": "4c425a88276f2ee56b90eca4804cd3e7269b31599a6086b77982bf5c324de5e1"
+    "sha256": "1a310fa12ae2cb88377d4cf1a908deef0cfa6ef2524cb1a446650c4a25a3699f"
   },
   "queries": [
     {
@@ -17,7 +17,7 @@
   "renderer_sha256": "cef94cd5d74f35bda24a4cff008a499cca07a3f7985b6c5bc1580cc3548d14e1",
   "image_sha256": "314b82f1374a318124e0775410476427eeab2db18723fac39cb0e400ae2d4b24",
   "theme_inputs": {
-    "lua/flume/init.lua": "3ac95408acb60b0299ccc658d24dca48ebe83abeb7823b2f8661506656bba65b",
+    "lua/flume/init.lua": "7a2d43f2ae03c4d7e141480cf52b0ace12d8545cb31abff757987c3bc6f52b53",
     "lua/flume/palette.lua": "f689bb7d2b6e1abdb332ab809bf6f0f5fa8574c8c140ff500a146affb35c3b3d",
     "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
     "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",

@@ -47,7 +47,6 @@ function M.register(test, equal, truthy)
         "fzf",
         "delta",
         "pi",
-        "tracker-tui",
     }
 
     local function suffix(schema)
@@ -66,12 +65,11 @@ function M.register(test, equal, truthy)
             fzf = "extras/fzf/flume%s.opts",
             delta = "extras/delta/flume%s.gitconfig",
             pi = "extras/pi/flume%s.json",
-            ["tracker-tui"] = "extras/tracker-tui/flume%s.json",
         }
         return patterns[app]:format(ending)
     end
 
-    test("generated inventory is exactly four schemas by ten integrations", function()
+    test("generated inventory is exactly four schemas by nine integrations", function()
         local expected = {}
         for _, app in ipairs(apps) do
             for _, schema in ipairs(palettes.schema_order) do
@@ -87,116 +85,7 @@ function M.register(test, equal, truthy)
             end
         end
         equal(sorted_keys(actual), sorted_keys(expected), "generated integration inventory")
-        equal(vim.tbl_count(actual), 40, "generated artifact count")
-    end)
-
-    test("tracker TUI themes parse for every schema", function()
-        local theme_keys = keyset({
-            "name",
-            "dark",
-            "primary",
-            "secondary",
-            "accent",
-            "background",
-            "surface",
-            "panel",
-            "foreground",
-            "success",
-            "warning",
-            "error",
-            "variables",
-            "roles",
-        })
-        local variable_keys = keyset({
-            "border",
-            "border_focus",
-            "border_detail",
-            "modal_bg",
-            "cursor",
-            "overlay",
-            "scrollbar",
-            "scrollbar_hover",
-            "scrollbar_active",
-            "scrollbar_background",
-            "selection_background",
-            "selection_foreground",
-        })
-        local role_keys = keyset({
-            "text",
-            "text_subtle",
-            "text_muted",
-            "border",
-            "border_subtle",
-            "accent",
-            "accent_secondary",
-            "accent_tertiary",
-            "success",
-            "warning",
-            "error",
-            "status_triage",
-            "status_started",
-            "status_unstarted",
-            "status_backlog",
-            "status_completed",
-            "status_canceled",
-            "team",
-            "project",
-            "initiative",
-            "label",
-            "blocked",
-            "blocking",
-            "priority_urgent",
-        })
-
-        for _, schema in ipairs(palettes.schema_order) do
-            local colors = palettes[schema]
-            local theme = vim.json.decode(read_all(path("tracker-tui", schema)))
-            equal(sorted_keys(theme), sorted_keys(theme_keys), schema .. " tracker TUI keys")
-            equal(sorted_keys(theme.variables), sorted_keys(variable_keys), schema .. " tracker TUI variable keys")
-            equal(sorted_keys(theme.roles), sorted_keys(role_keys), schema .. " tracker TUI role keys")
-            equal(theme.name, palettes.schemas[schema].integration_name, schema .. " tracker TUI name")
-            equal(theme.dark, palettes.schemas[schema].appearance == "dark", schema .. " tracker TUI appearance")
-            equal(theme.background, colors.bg, schema .. " tracker TUI background")
-            equal(theme.foreground, colors.text, schema .. " tracker TUI foreground")
-            equal(theme.primary, colors.accent, schema .. " tracker TUI primary")
-            equal(theme.roles.text, colors.text, schema .. " tracker TUI text")
-            equal(theme.roles.text_muted, colors.syntax_comment, schema .. " tracker TUI muted text")
-            equal(theme.roles.status_started, colors.warning, schema .. " tracker TUI started status")
-            equal(theme.roles.status_completed, colors.success, schema .. " tracker TUI completed status")
-            equal(theme.roles.blocked, colors.error, schema .. " tracker TUI blocked status")
-            equal(theme.roles.priority_urgent, colors.error, schema .. " tracker TUI urgent priority")
-            equal(theme.roles.team, colors.accent, schema .. " tracker TUI team role")
-            equal(theme.roles.project, colors.syntax_type, schema .. " tracker TUI project role")
-            equal(theme.roles.initiative, colors.syntax_keyword, schema .. " tracker TUI initiative role")
-            equal(theme.roles.label, colors.cyan, schema .. " tracker TUI label role")
-            equal(theme.variables.border_focus, colors.border_focused, schema .. " tracker TUI focused border")
-            equal(theme.variables.selection_background, colors.accent, schema .. " tracker TUI selection background")
-            equal(theme.variables.selection_foreground, colors.on_accent, schema .. " tracker TUI selection foreground")
-            truthy(
-                contrast(theme.variables.selection_foreground, theme.variables.selection_background) >= 4.5,
-                schema .. " tracker TUI selection contrast"
-            )
-
-            for _, key in ipairs({
-                "foreground",
-                "primary",
-                "secondary",
-                "accent",
-                "success",
-                "warning",
-                "error",
-            }) do
-                truthy(contrast(theme[key], theme.background) >= 4.5, schema .. " tracker TUI " .. key .. " contrast")
-            end
-            for role, color in pairs(theme.roles) do
-                if role ~= "border" and role ~= "border_subtle" then
-                    truthy(
-                        contrast(color, theme.background) >= 4.5,
-                        schema .. " tracker TUI " .. role .. " contrast"
-                    )
-                end
-            end
-        end
+        equal(vim.tbl_count(actual), 36, "generated artifact count")
     end)
 
     test("terminal integration contracts parse for every schema", function()

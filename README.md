@@ -95,7 +95,6 @@ Matching themes live in [`extras/`](extras):
 - [fzf](extras/fzf/)
 - [Delta](extras/delta/)
 - [Pi](extras/pi/)
-- [ltui / jtui](extras/tracker-tui/) (patched Pantheon builds)
 
 **Automatic installation:** Ghostty, Kitty, OpenCode, Tmux, and LSD.
 
@@ -105,7 +104,7 @@ Matching themes live in [`extras/`](extras):
 
 **Manual setup:** use the other tools' theme or include mechanisms. Flume does
 not guess user-specific destinations. See [`:help flume-extras`](doc/flume.txt)
-for artifact paths and live-sync requirements for ltui / jtui.
+for artifact paths.
 
 Switch Neovim and the active integration set together:
 
@@ -113,8 +112,17 @@ Switch Neovim and the active integration set together:
 :FlumeSync mira
 ```
 
-Other Neovim instances follow by default. Set `watch_sync = false` to keep an
-editor's palette independent. External tools need their own reload support.
+Other running Neovim instances follow by default. To remember the synchronized
+palette at startup, keep a fallback in your dotfiles:
+
+```lua
+require("flume").setup({ schema = "mesa", follow_sync = true })
+```
+
+`:FlumeSync mira` records Mira in runtime state, not your Lua configuration.
+Set both `follow_sync = false` and `watch_sync = false` for an independent editor.
+External tools need their own reload support. See [shared workflows](docs/workflows.md)
+for lualine, fzf, Lazygit, and Delta.
 
 ## Commands
 
@@ -129,6 +137,9 @@ editor's palette independent. External tools need their own reload support.
 | `:help flume`               | Open the reference manual                                  |
 
 ## Development
+
+Set `dev = true` in your local Flume setup to reload on Lua source saves.
+Reloads preserve the editor's current palette and do not synchronize external tools.
 
 Run `./scripts/check` for tests, local links, and source checks.
 

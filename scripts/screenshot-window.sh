@@ -179,10 +179,15 @@ launch_ghostty
 rm -f "$RAW_SCREENSHOT"
 
 echo "Waiting for window to render..."
-sleep 1.0
+# Shell initialization can take longer than a fixed one-second delay.
+for _attempt in {1..50}; do
+    [ -s "$METADATA_FILE" ] && break
+    sleep 0.1
+done
 osascript -e 'tell application "Ghostty" to activate'
 
 [ -s "$METADATA_FILE" ] || fail "The parser-backed fixture did not finish loading."
+sleep 0.2
 capture_ghostty_window || fail "Capture cancelled or failed."
 magick "$RAW_SCREENSHOT" -strip "PNG24:$FINAL_SCREENSHOT"
 python3 scripts/preflight-screenshots.py --record "$SCHEMA" "$LANGUAGE" "$METADATA_FILE"

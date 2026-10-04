@@ -14,16 +14,6 @@ local function flume_is_active()
     return vim.g.colors_name == name
 end
 
-local function read_active_schema()
-    local file = io.open(plugin_dir() .. "/extras/current/schema", "rb")
-    if not file then
-        return nil
-    end
-    local schema = file:read("*l")
-    file:close()
-    return schema
-end
-
 local function apply_active_schema()
     -- A callback can already be scheduled when setup() disables the watcher.
     if not watcher then
@@ -37,13 +27,8 @@ local function apply_active_schema()
     if not current_set or current_set == active_set then
         return
     end
-    local schema = read_active_schema()
-    if not schema or schema == "" then
-        return
-    end
-
-    local palette_ok, resolved = pcall(require("flume.palette").resolve, schema)
-    if not palette_ok then
+    local resolved = require("flume").get_active_schema()
+    if not resolved then
         return
     end
 
