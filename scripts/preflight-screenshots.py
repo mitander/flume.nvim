@@ -8,6 +8,7 @@ import shutil
 import struct
 import subprocess
 import sys
+from collections.abc import Iterable
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -22,6 +23,7 @@ CAPTURES = tuple(
     for language in LANGUAGES
 )
 STALE_TEXT = re.compile(r"feat/|issue[- ]?2|light-schemas|\bzls\b", re.IGNORECASE)
+CAPTURE_ERROR = re.compile(r"\bE\d+:\s")
 
 
 def dimensions(path: Path) -> tuple[int, int]:
@@ -96,7 +98,8 @@ def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax")
         if kind == "lsp":
             metadata["base_renderer_sha256"] = digest(ROOT / "examples/showcase.lua")
             server = runtime["server"]
-            metadata["server"] = {key: server[key] for key in ("name", "version", "settings", "token_counts")}
+            metadata["server"] = {key: server[key] for key in ("name", "version", "settings")}
+            metadata["server"]["token_counts"] = dict(sorted(server["token_counts"].items()))
             metadata["server_executable_sha256"] = digest(Path(server["executable"]))
         else:
             metadata["runtime_states"] = {
@@ -159,6 +162,23 @@ def validate_capture(path: Path) -> tuple[str, str]:
     return language, json.dumps(runtime_identity, sort_keys=True)
 
 
+def check_capture_text(paths: Iterable[Path], *, check_stale_text: bool = True) -> None:
+    tesseract = shutil.which("tesseract")
+    if not tesseract:
+        raise SystemExit("tesseract is required to check capture text")
+    for path in paths:
+        result = subprocess.run(
+            [tesseract, str(path), "stdout"], text=True, capture_output=True, check=True
+        )
+        error = CAPTURE_ERROR.search(result.stdout)
+        if error:
+            raise SystemExit(f"{path.name} contains a Neovim error: {error.group(0).strip()}")
+        if check_stale_text:
+            match = STALE_TEXT.search(result.stdout)
+            if match:
+                raise SystemExit(f"{path.name} contains stale capture text: {match.group(0)!r}")
+
+
 def main() -> None:
     if len(sys.argv) == 6 and sys.argv[1] == "--record-state":
         record(sys.argv[3], sys.argv[4], Path(sys.argv[5]), sys.argv[2])
@@ -185,6 +205,9 @@ def main() -> None:
             raise SystemExit("State captures used different parser/query/server runtimes")
         if len({dimensions(path) for path in paths}) != 1:
             raise SystemExit("State capture dimensions differ")
+        if "--ocr" in sys.argv:
+            # Server names are intentional in these captures, unlike specimens.
+            check_capture_text(paths, check_stale_text=False)
         print(f"State capture preflight passed: {len(paths)} captures")
         return
     if len(sys.argv) == 5 and sys.argv[1] == "--record":
@@ -221,8 +244,10 @@ def main() -> None:
         raise SystemExit("Missing canonical captures: " + ", ".join(missing))
 
     sizes = {str(path.relative_to(ROOT)): dimensions(path) for path in CAPTURES}
-    if len(set(sizes.values())) != 1:
-        raise SystemExit("Canonical capture dimensions differ: " + repr(sizes))
+    for language in LANGUAGES:
+        language_sizes = {dimensions(path) for path in CAPTURES if path.stem == language}
+        if len(language_sizes) != 1:
+            raise SystemExit(f"Canonical {language} capture dimensions differ: " + repr(sizes))
 
     runtime_fingerprints = {language: set() for language in LANGUAGES}
     for path in CAPTURES:
@@ -231,18 +256,9 @@ def main() -> None:
     if any(len(fingerprints) != 1 for fingerprints in runtime_fingerprints.values()):
         raise SystemExit("Canonical captures used different parser/query runtimes")
 
-    tesseract = shutil.which("tesseract")
-    if not tesseract:
-        raise SystemExit("tesseract is required to check captures for stale branch text")
-    for path in CAPTURES:
-        result = subprocess.run(
-            [tesseract, str(path), "stdout"], text=True, capture_output=True, check=True
-        )
-        match = STALE_TEXT.search(result.stdout)
-        if match:
-            raise SystemExit(f"{path.name} contains stale capture text: {match.group(0)!r}")
+    check_capture_text(CAPTURES)
 
-    print(f"Screenshot preflight passed: {len(CAPTURES)} captures at {next(iter(sizes.values()))}")
+    print(f"Screenshot preflight passed: {len(CAPTURES)} captures across {len(LANGUAGES)} language viewports")
 
 
 if __name__ == "__main__":

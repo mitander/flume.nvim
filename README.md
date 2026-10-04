@@ -10,17 +10,38 @@ developer-tool themes. Neutral identifiers, semantic color, and soft surfaces
 keep the focus on code. Includes Tree-sitter, LSP semantic tokens, diagnostics,
 and popular plugin highlights.
 
-| Palette                         | Appearance | Character                           |
-| ------------------------------- | ---------- | ----------------------------------- |
-| [**Dusk**](assets/screenshots/dusk/zig.png) | Dark       | Quiet violet                        |
-| [**Opal**](assets/screenshots/opal/zig.png) | Light      | Vivid inks on cool opalescent paper |
-| [**Mira**](assets/screenshots/mira/zig.png) | Dark       | Plum with cyan, teal, and magenta   |
-| [**Mesa**](assets/screenshots/mesa/zig.png) | Light      | Warm rose-mineral paper             |
+## Palettes
 
-## Language gallery
+Each preview shows the same Zig expression tree with real Tree-sitter highlighting.
+Click a palette to inspect its full-size capture.
 
-One file per image, with real Tree-sitter highlighting and room to read the code.
-Each palette uses the same source and layout. Open a language for its full-size capture.
+<table>
+  <tr>
+    <th>Dusk · Dark · Quiet violet</th>
+    <th>Opal · Light · Vivid inks on cool paper</th>
+  </tr>
+  <tr>
+    <td width="50%"><a href="assets/screenshots/dusk/zig.png"><img src="assets/screenshots/dusk/zig.png" alt="Dusk palette in Neovim" /></a></td>
+    <td width="50%"><a href="assets/screenshots/opal/zig.png"><img src="assets/screenshots/opal/zig.png" alt="Opal palette in Neovim" /></a></td>
+  </tr>
+  <tr>
+    <th>Mira · Dark · Plum with cyan and teal</th>
+    <th>Mesa · Light · Warm rose-mineral paper</th>
+  </tr>
+  <tr>
+    <td width="50%"><a href="assets/screenshots/mira/zig.png"><img src="assets/screenshots/mira/zig.png" alt="Mira palette in Neovim" /></a></td>
+    <td width="50%"><a href="assets/screenshots/mesa/zig.png"><img src="assets/screenshots/mesa/zig.png" alt="Mesa palette in Neovim" /></a></td>
+  </tr>
+</table>
+
+Explore [Go, Rust, Python, TSX, Zig, Elixir, and TOML](docs/showcase.md#individual-language-captures),
+or inspect [selection, diffs, diagnostics, completion, and LSP coloring](docs/showcase.md#working-state-and-lsp-captures).
+
+<details>
+<summary>Language gallery — all four palettes</summary>
+
+One file per image, with real Tree-sitter highlighting. Each language uses the
+same source and layout across palettes. Open a language for its full-size capture.
 
 | Palette | Code examples | Config |
 | --- | --- | --- |
@@ -29,8 +50,10 @@ Each palette uses the same source and layout. Open a language for its full-size 
 | **Mira** | [Go](assets/screenshots/mira/go.png) · [Rust](assets/screenshots/mira/rust.png) · [Python](assets/screenshots/mira/python.png) · [TSX](assets/screenshots/mira/tsx.png) · [Zig](assets/screenshots/mira/zig.png) · [Elixir](assets/screenshots/mira/elixir.png) | [TOML](assets/screenshots/mira/toml.png) |
 | **Mesa** | [Go](assets/screenshots/mesa/go.png) · [Rust](assets/screenshots/mesa/rust.png) · [Python](assets/screenshots/mesa/python.png) · [TSX](assets/screenshots/mesa/tsx.png) · [Zig](assets/screenshots/mesa/zig.png) · [Elixir](assets/screenshots/mesa/elixir.png) | [TOML](assets/screenshots/mesa/toml.png) |
 
-The examples explore cancellation, typestate, event summaries, undo, compile-time
-return types, and pattern-matched pipelines. See the [source guide](docs/showcase.md#code-examples) for details.
+The examples explore cancellation, typestate, event summaries, undo, constant
+folding, and pattern-matched pipelines. See the [source guide](docs/showcase.md#code-examples) for details.
+
+</details>
 
 ## Install
 
@@ -78,7 +101,12 @@ hooks. Exact roles are listed in the [palette manifest](docs/palette-manifest.md
 
 ## Integrations
 
-Matching themes live in [`extras/`](extras):
+- [Lualine](docs/workflows.md#lualine): use `options = { theme = "flume" }`
+  in your lualine setup. The named theme follows palette changes.
+
+Matching external-tool themes live in [`extras/`](extras). Setup recipes live in the
+[workflow guide](docs/workflows.md#external-tools); native preview status lives
+in the [showcase](docs/showcase.md#native-integration-contact-sheets):
 
 - [Ghostty](extras/ghostty/)
 - [Kitty](extras/kitty/)

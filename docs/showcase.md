@@ -65,7 +65,8 @@ image checksums. It also fingerprints Flume's palette, highlight definitions,
 language corrections, and selected Ghostty theme. The GUI must report its own
 successful fixture initialization; the headless probe cannot certify a capture.
 The preflight rejects stale inputs or images and mixed parser/query runtimes,
-checks equal dimensions, and OCRs captures for stale branch/LSP text.
+checks equal dimensions across palettes for each language, and OCRs captures
+for stale branch/LSP text and Neovim error messages.
 Source-only checks also reject manually assigned token highlights.
 
 These captures demonstrate Tree-sitter output, not LSP semantic highlighting.
@@ -92,7 +93,7 @@ for schema in dusk opal mira mesa; do
     ./scripts/screenshot-window.sh "$schema" go lsp
     ./scripts/screenshot-window.sh "$schema" zig lsp
 done
-python3 scripts/preflight-screenshots.py --states
+python3 scripts/preflight-screenshots.py --states --ocr
 ```
 
 Use the same `FLUME_TS_RUNTIME` as the canonical captures. The LSP fixture
@@ -106,7 +107,10 @@ Sidecars record parser/query fingerprints, fixture and renderer checksums,
 image checksums, and theme inputs. State sidecars also record native readiness
 and the capture-script checksum. LSP sidecars identify server versions, settings,
 executable checksums, and observed token counts. Preflight rejects mixed server
-or parser/query runtimes across palettes.
+or parser/query runtimes across palettes. Add `--ocr` to check state and LSP
+captures for Neovim error messages; this native lane requires Tesseract.
+Without `--ocr`, state preflight checks provenance and dimensions only, so
+ordinary checks do not require OCR.
 
 The captures below use Neovim 0.12.5 and Ghostty 1.3.1 on macOS 27.0.1,
 with Maple Mono NF at 19 points and an opaque 100-column × 48-row viewport.
@@ -130,10 +134,11 @@ establish reading comfort.
 
 The examples use each language's conventions rather than translating the same
 exercise. Some demonstrate a language mechanism; others show a practical script
-or configuration. The 100-column × 48-row viewport fits each complete file without
-scrolling. Captures keep the 19-point font and show syntax, not diagnostics or LSP
-semantic tokens. Syntax-role coverage is spread across the examples; no single
-file demonstrates every highlight group.
+or configuration. Zig uses a compact 112-column × 32-row viewport for the
+README hero. Other languages use 100 columns × 48 rows. Each complete file fits
+without scrolling. Captures keep the 19-point font and show syntax, not
+diagnostics or LSP semantic tokens. Syntax-role coverage is spread across the
+examples; no single file demonstrates every highlight group.
 
 | Source | Mechanism |
 | --- | --- |
@@ -141,12 +146,11 @@ file demonstrates every highlight group.
 | [Rust](../examples/flume.rs) | Typestate makes `open` available only after unlocking; a wrong key returns the door for another attempt. |
 | [Python](../examples/flume.py) | A command-line script reads JSON-lines events, counts names, and prints the most common events with percentages. |
 | [TSX](../examples/flume.tsx) | A React counter stores history so undo is one state transition; functional updates compose queued clicks. |
-| [Zig](../examples/flume.zig) | A compile-time parameter selects whether a missing port returns an error or an optional value. |
+| [Zig](../examples/flume.zig) | A tagged union represents an expression tree. Recursive folding returns a number for constant expressions and `null` for dynamic identifiers. |
 | [Elixir](../examples/flume.ex) | A regex parser returns tagged tuples; a pipeline counts valid log entries using pattern-matched anonymous function clauses. |
 | [TOML](../examples/flume.toml) | An illustrative preview-server config uses tables, arrays of tables, quoted keys, literal strings, and multiline strings. |
 
-The Zig example is inspired by Matklad's
-[A Fun Zig Program](https://matklad.github.io/2025/04/21/fun-zig-program.html).
+Run `zig run examples/flume.zig` to print `add folded = 42` (verified with Zig 0.16.0).
 Go requires 1.22+ for integer ranges. The TSX component requires React and its
 TypeScript types; render `<UndoCounter />` in a React application. Python requires
 3.10+; run `python3 examples/flume.py events.jsonl --limit 3` with one object such
@@ -166,7 +170,7 @@ Mira, and Dusk. Dusk is the foreground sample. Application captures retain their
 original colors and aspect ratios. The README language links open individual
 captures rather than reduced four-file grids.
 
-Individual language captures:
+### Individual language captures
 
 | Palette | Code | Config |
 | --- | --- | --- |

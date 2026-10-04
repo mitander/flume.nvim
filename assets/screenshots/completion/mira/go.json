@@ -28,7 +28,7 @@
     "extras/ghostty/flume-mira": "30f9fe02c9691fe0a6070dc30aadf20bc4163ea8167a20a361eef439d9753c45"
   },
   "kind": "completion",
-  "capture_script_sha256": "e22a3e56cc0501f436fa0e6d70e2093b58fae0d6b05d36b50f2ecdc55aed2ee5",
+  "capture_script_sha256": "737523fb67aba63b96d86dd01a5d7d0d04808050e5a859fc8fb3c348a792c125",
   "runtime_states": {
     "diff_text": true,
     "diagnostics": 4,

@@ -5,6 +5,8 @@ cd "$(dirname "$0")/.."
 
 GHOSTTY_COLUMNS=100
 GHOSTTY_ROWS=48
+ZIG_COLUMNS=112
+ZIG_ROWS=32
 GHOSTTY_FONT_SIZE=19
 GHOSTTY_FONT_FAMILY="Maple Mono NF"
 GHOSTTY_PID=""
@@ -39,6 +41,12 @@ case "$LANGUAGE" in
     zig|rust|tsx|python|go|elixir|toml) ;;
     *) fail "Unsupported language: $LANGUAGE" ;;
 esac
+
+# The compact Zig specimen drives the hero; other languages need more rows.
+if [ "$KIND" = syntax ] && [ "$LANGUAGE" = zig ]; then
+    GHOSTTY_COLUMNS=$ZIG_COLUMNS
+    GHOSTTY_ROWS=$ZIG_ROWS
+fi
 
 RAW_SCREENSHOT=$(mktemp "${TMPDIR:-/tmp}/flume-capture.XXXXXX")
 FINAL_SCREENSHOT="assets/screenshots/${SCHEMA}/${LANGUAGE}.png"

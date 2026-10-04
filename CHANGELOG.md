@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Restore the constant-folding Zig specimen and wider, shorter windows in the
+  cascading README hero. Add labelled palette previews and an expandable language
+  gallery; keep native state and LSP evidence on the showcase page.
+
 - Give changed words a semantic `diff_text_bg` surface that retains syntax colors.
 - Strengthen syntax contrast on cursor-line, selection, and diff surfaces in all
   four palettes. Improve diagnostic and menu text without changing the canvases

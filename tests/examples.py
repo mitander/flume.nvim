@@ -88,8 +88,13 @@ class ExampleViewport(unittest.TestCase):
             with self.subTest(source=source.name):
                 lines = source.read_text().splitlines()
                 # Leave room for status/command lines and the number column.
-                self.assertLessEqual(len(lines), rows - 2)
-                self.assertLessEqual(max(len(line.expandtabs(8)) for line in lines), columns - 8)
+                capture_rows = rows
+                capture_columns = columns
+                if extension == "zig":
+                    capture_rows = int(re.search(r"ZIG_ROWS=(\d+)", script)[1])
+                    capture_columns = int(re.search(r"ZIG_COLUMNS=(\d+)", script)[1])
+                self.assertLessEqual(len(lines), capture_rows - 2)
+                self.assertLessEqual(max(len(line.expandtabs(8)) for line in lines), capture_columns - 8)
 
 
 if __name__ == "__main__":

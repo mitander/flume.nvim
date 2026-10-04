@@ -28,7 +28,7 @@
     "extras/ghostty/flume-mesa": "01882a08b6385d8e20f6c96aa3802c69c016851591fc2a655155a30be96a4f57"
   },
   "kind": "lsp",
-  "capture_script_sha256": "e22a3e56cc0501f436fa0e6d70e2093b58fae0d6b05d36b50f2ecdc55aed2ee5",
+  "capture_script_sha256": "737523fb67aba63b96d86dd01a5d7d0d04808050e5a859fc8fb3c348a792c125",
   "base_renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
   "server": {
     "name": "gopls",
@@ -40,15 +40,15 @@
     },
     "token_counts": {
       "comment": 3,
-      "operator": 14,
       "function": 12,
-      "type": 4,
-      "number": 2,
-      "parameter": 4,
       "keyword": 23,
-      "variable": 22,
       "namespace": 8,
-      "string": 2
+      "number": 2,
+      "operator": 14,
+      "parameter": 4,
+      "string": 2,
+      "type": 4,
+      "variable": 22
     }
   },
   "server_executable_sha256": "f11a1147d42ed6cbc2f574ade9e2956ac630b1c11a5b197bde093cb1129c494e"

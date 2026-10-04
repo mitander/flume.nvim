@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Check local Markdown links in release documentation."""
+"""Check local Markdown and HTML links in release documentation."""
 
 import re
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -11,11 +12,29 @@ FILES = (ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md")))
 LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 
 
+class HTMLLinks(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.targets: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        for name, value in attrs:
+            if name in ("href", "src") and value:
+                self.targets.append(value)
+
+
+def link_targets(text: str) -> list[str]:
+    html = HTMLLinks()
+    html.feed(text)
+    markdown = [target.split()[0].strip("<>") for target in LINK.findall(text)]
+    return markdown + html.targets
+
+
 def main() -> None:
     failures: list[str] = []
     for document in FILES:
-        for target in LINK.findall(document.read_text()):
-            target = target.split()[0].strip("<>")
+        for target in link_targets(document.read_text()):
+            target = target.strip()
             if target.startswith(("http://", "https://", "mailto:", "#")):
                 continue
 
@@ -26,7 +45,7 @@ def main() -> None:
     if failures:
         print("\n".join(failures), file=sys.stderr)
         raise SystemExit(1)
-    print(f"Markdown links passed: {len(FILES)} files")
+    print(f"Documentation links passed: {len(FILES)} files")
 
 
 if __name__ == "__main__":

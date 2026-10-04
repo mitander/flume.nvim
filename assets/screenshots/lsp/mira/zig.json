@@ -13,9 +13,9 @@
       "sha256": "cbff0fe14e8aeffd64b146ac68fd797c1e38cd66f43a1e3273db8f4b4d753876"
     }
   ],
-  "fixture_sha256": "dbabb19193753a47066f85c2450e3d30f6c9765c4074a933e5593c4b60c684f9",
+  "fixture_sha256": "e675c1011329d4c1065eedd76815ee173bd683fa14121f264c68bd571bc37e7b",
   "renderer_sha256": "21ff913bcbf4983751fea1586e208d2c63a5e5b4fe38f3d247cfc959c4a1e28e",
-  "image_sha256": "d70ee5aef983dc78e6b83d29cd31a00283ee3914eb35dc45a28d1d867b57fd51",
+  "image_sha256": "75b923d3832131b57be6ed500d328e4cd2cce7be36d7c602c58787a52e81b765",
   "theme_inputs": {
     "lua/flume/init.lua": "13cf1470e7fefec640ddc7dc0d13da9cb13a06d6964af40985d08cdd02f0d844",
     "lua/flume/palette.lua": "b06bc35486ae812ba1135dbb6cd3c9f6bb15335133133422e18db6cf6ae9d4b7",
@@ -28,27 +28,29 @@
     "extras/ghostty/flume-mira": "30f9fe02c9691fe0a6070dc30aadf20bc4163ea8167a20a361eef439d9753c45"
   },
   "kind": "lsp",
-  "capture_script_sha256": "e22a3e56cc0501f436fa0e6d70e2093b58fae0d6b05d36b50f2ecdc55aed2ee5",
+  "capture_script_sha256": "737523fb67aba63b96d86dd01a5d7d0d04808050e5a859fc8fb3c348a792c125",
   "base_renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
   "server": {
     "name": "zls",
     "version": "0.16.0",
     "settings": [],
     "token_counts": {
-      "number": 5,
-      "type": 8,
-      "parameter": 6,
-      "property": 1,
-      "operator": 8,
-      "escapeSequence": 1,
-      "errorTag": 4,
-      "string": 9,
-      "keyword": 33,
+      "builtin": 2,
       "comment": 3,
-      "builtin": 3,
-      "keywordLiteral": 8,
-      "function": 8,
-      "variable": 26
+      "enumMember": 3,
+      "escapeSequence": 1,
+      "function": 4,
+      "keyword": 24,
+      "keywordLiteral": 3,
+      "label": 4,
+      "method": 1,
+      "number": 2,
+      "operator": 18,
+      "parameter": 2,
+      "property": 12,
+      "string": 2,
+      "type": 11,
+      "variable": 20
     }
   },
   "server_executable_sha256": "e477de52cb5765648ef88107837a738e7dd4166782a4eae9e1e25af677350aec"

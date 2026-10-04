@@ -62,6 +62,42 @@ class CaptureProvenance(unittest.TestCase):
             patch.object(preflight.subprocess, "run", return_value=SimpleNamespace(stdout=""))
         )
 
+    def copy_state_captures(self):
+        for kind in ("selection", "completion", "lsp"):
+            for source in (ROOT / "assets/screenshots" / kind).rglob("*"):
+                if source.suffix in (".png", ".json"):
+                    destination = self.root / source.relative_to(ROOT)
+                    destination.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(source, destination)
+
+    def test_state_ocr_is_opt_in(self):
+        self.copy_state_captures()
+        with (
+            patch.object(preflight.sys, "argv", ["preflight", "--states"]),
+            patch.object(preflight.shutil, "which", return_value=None),
+            patch.object(preflight.subprocess, "run") as run,
+        ):
+            preflight.main()
+            run.assert_not_called()
+
+    def test_state_ocr_rejects_neovim_errors(self):
+        self.copy_state_captures()
+        with (
+            patch.object(preflight.sys, "argv", ["preflight", "--states", "--ocr"]),
+            patch.object(preflight.subprocess, "run", return_value=SimpleNamespace(stdout="E21: Not modifiable")),
+        ):
+            with self.assertRaisesRegex(SystemExit, "contains a Neovim error: E21:"):
+                preflight.main()
+
+    def test_state_ocr_allows_server_names(self):
+        self.copy_state_captures()
+        with (
+            patch.object(preflight.sys, "argv", ["preflight", "--states", "--ocr"]),
+            patch.object(preflight.subprocess, "run", return_value=SimpleNamespace(stdout="Tree-sitter + zls")) as run,
+        ):
+            preflight.main()
+            self.assertEqual(run.call_count, 16)
+
     def test_current_captures_pass(self):
         preflight.main()
 
@@ -116,7 +152,7 @@ class CaptureProvenance(unittest.TestCase):
         executable.write_bytes(b"fixture server")
         runtime["server"] = {
             "name": "gopls", "version": "test", "settings": {},
-            "token_counts": {"function": 2}, "executable": str(executable),
+            "token_counts": {"variable": 3, "function": 2}, "executable": str(executable),
         }
         runtime_file.write_text(json.dumps(runtime))
         preflight.record("dusk", "go", runtime_file, "lsp")
@@ -124,6 +160,7 @@ class CaptureProvenance(unittest.TestCase):
         metadata = json.loads(image.with_suffix(".json").read_text())
         self.assertEqual(metadata["server_executable_sha256"], preflight.digest(executable))
         self.assertNotIn(str(self.root), json.dumps(metadata))
+        self.assertEqual(list(metadata["server"]["token_counts"]), ["function", "variable"])
 
     def test_changed_image_is_rejected(self):
         image = self.root / "assets/screenshots/dusk/zig.png"
@@ -223,6 +260,13 @@ class CaptureProvenance(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "Missing canonical captures"):
             preflight.main()
 
+    def test_language_viewports_may_differ(self):
+        def language_dimensions(path):
+            return (112, 32) if path.stem == "zig" else (100, 48)
+
+        with patch.object(preflight, "dimensions", side_effect=language_dimensions):
+            preflight.main()
+
     def test_dimensions_are_checked_across_palettes(self):
         image = self.root / "assets/screenshots/dusk/rust.png"
         data = bytearray(image.read_bytes())
@@ -230,6 +274,13 @@ class CaptureProvenance(unittest.TestCase):
         image.write_bytes(data)
         with self.assertRaisesRegex(SystemExit, "capture dimensions differ"):
             preflight.main()
+
+    def test_neovim_error_text_is_rejected(self):
+        with patch.object(preflight.subprocess, "run", return_value=SimpleNamespace(
+            stdout="E21: Cannot make changes, 'modifiable' is off\n"
+        )):
+            with self.assertRaisesRegex(SystemExit, "contains a Neovim error: E21:"):
+                preflight.main()
 
     def test_root_screenshots_are_rejected(self):
         (self.root / "screenshot-dusk.png").write_bytes(b"obsolete")
