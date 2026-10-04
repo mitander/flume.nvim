@@ -3,8 +3,8 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-GHOSTTY_COLUMNS=112
-GHOSTTY_ROWS=32
+GHOSTTY_COLUMNS=100
+GHOSTTY_ROWS=48
 GHOSTTY_FONT_SIZE=19
 GHOSTTY_PID=""
 INPUT_FILE=""
@@ -19,11 +19,11 @@ fail() {
 
 case "$SCHEMA" in
     dusk|opal|mira|mesa) ;;
-    *) fail "Usage: $0 [dusk|opal|mira|mesa] [zig|rust|tsx|python|go]" ;;
+    *) fail "Usage: $0 [dusk|opal|mira|mesa] [zig|rust|tsx|python|go|elixir|toml]" ;;
 esac
 
 case "$LANGUAGE" in
-    zig|rust|tsx|python|go) ;;
+    zig|rust|tsx|python|go|elixir|toml) ;;
     *) fail "Unsupported language: $LANGUAGE" ;;
 esac
 

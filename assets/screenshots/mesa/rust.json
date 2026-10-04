@@ -13,9 +13,9 @@
       "sha256": "4e0f5994f30ee545fc63435054a0b029c7d0222632c5c787c4e9c249dc0ef20f"
     }
   ],
-  "fixture_sha256": "9628ac3e3072d0d2f862e47cf55edb5406cf103773b8d69c7329a3db0b87d887",
-  "renderer_sha256": "cef94cd5d74f35bda24a4cff008a499cca07a3f7985b6c5bc1580cc3548d14e1",
-  "image_sha256": "804cccc2dac52bf83daed376504724b80d8252a220d6aeadb189008930c630ed",
+  "fixture_sha256": "778c39f248a47bac71e08c1b876841c976ecbd2bbe2b8c1ab1aab6013993bdd9",
+  "renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
+  "image_sha256": "08200284b6185e44f04bb57833153170a7cf7919fc4aa0dc5f5e46d3b7e5830f",
   "theme_inputs": {
     "lua/flume/init.lua": "a6abb056ab7a6a910a20456f0c656a5cb432d76289305a27dfad09503729bd3c",
     "lua/flume/palette.lua": "f689bb7d2b6e1abdb332ab809bf6f0f5fa8574c8c140ff500a146affb35c3b3d",

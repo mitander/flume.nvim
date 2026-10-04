@@ -19,24 +19,18 @@ and popular plugin highlights.
 
 ## Language gallery
 
-Rust, TypeScript/TSX, Python, and Go, shown with real Tree-sitter highlighting.
-Each palette uses the same source and layout. Click a grid for full resolution.
+One file per image, with real Tree-sitter highlighting and room to read the code.
+Each palette uses the same source and layout. Open a language for its full-size capture.
 
-### Dusk
+| Palette | Code examples | Config |
+| --- | --- | --- |
+| **Dusk** | [Go](assets/screenshots/dusk/go.png) · [Rust](assets/screenshots/dusk/rust.png) · [Python](assets/screenshots/dusk/python.png) · [TSX](assets/screenshots/dusk/tsx.png) · [Zig](assets/screenshots/dusk/zig.png) · [Elixir](assets/screenshots/dusk/elixir.png) | [TOML](assets/screenshots/dusk/toml.png) |
+| **Opal** | [Go](assets/screenshots/opal/go.png) · [Rust](assets/screenshots/opal/rust.png) · [Python](assets/screenshots/opal/python.png) · [TSX](assets/screenshots/opal/tsx.png) · [Zig](assets/screenshots/opal/zig.png) · [Elixir](assets/screenshots/opal/elixir.png) | [TOML](assets/screenshots/opal/toml.png) |
+| **Mira** | [Go](assets/screenshots/mira/go.png) · [Rust](assets/screenshots/mira/rust.png) · [Python](assets/screenshots/mira/python.png) · [TSX](assets/screenshots/mira/tsx.png) · [Zig](assets/screenshots/mira/zig.png) · [Elixir](assets/screenshots/mira/elixir.png) | [TOML](assets/screenshots/mira/toml.png) |
+| **Mesa** | [Go](assets/screenshots/mesa/go.png) · [Rust](assets/screenshots/mesa/rust.png) · [Python](assets/screenshots/mesa/python.png) · [TSX](assets/screenshots/mesa/tsx.png) · [Zig](assets/screenshots/mesa/zig.png) · [Elixir](assets/screenshots/mesa/elixir.png) | [TOML](assets/screenshots/mesa/toml.png) |
 
-[![Dusk: Rust, TypeScript/TSX, Python, and Go](assets/screenshots/dusk/languages.png)](assets/screenshots/dusk/languages.png)
-
-### Opal
-
-[![Opal: Rust, TypeScript/TSX, Python, and Go](assets/screenshots/opal/languages.png)](assets/screenshots/opal/languages.png)
-
-### Mira
-
-[![Mira: Rust, TypeScript/TSX, Python, and Go](assets/screenshots/mira/languages.png)](assets/screenshots/mira/languages.png)
-
-### Mesa
-
-[![Mesa: Rust, TypeScript/TSX, Python, and Go](assets/screenshots/mesa/languages.png)](assets/screenshots/mesa/languages.png)
+The examples explore cancellation, typestate, event summaries, undo, compile-time
+return types, and pattern-matched pipelines. See the [source guide](docs/showcase.md#code-examples) for details.
 
 ## Install
 
@@ -145,7 +139,8 @@ when possible. External tools need their own reload support. See
 Set `dev = true` in your local Flume setup to reload on Lua source saves.
 Reloads preserve the editor's current palette and do not synchronize external tools.
 
-Run `./scripts/check` for tests, local links, and source checks.
+Run `./scripts/check` for tests, local links, and source checks. The check script
+requires Neovim and Python 3.11+.
 
 - [Color system](docs/color-system.md): roles, contrast targets, and mapping rules.
 - [Integration review](docs/integration-review.md): visual previews, contrast measurements, and before/after reports.

@@ -12,7 +12,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMAS = ("dusk", "opal", "mira", "mesa")
-LANGUAGES = {"zig": "zig", "rust": "rs", "tsx": "tsx", "python": "py", "go": "go"}
+LANGUAGES = {
+    "zig": "zig", "rust": "rs", "tsx": "tsx", "python": "py", "go": "go",
+    "elixir": "ex", "toml": "toml",
+}
 CAPTURES = tuple(
     ROOT / "assets/screenshots" / schema / f"{language}.png"
     for schema in SCHEMAS

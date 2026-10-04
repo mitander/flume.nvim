@@ -4,8 +4,8 @@
   "highlighting": "treesitter",
   "nvim": "0.12.5",
   "parser": {
-    "revision": "75b3874edb2dc714fb1fd77a32013d0f8699989f",
-    "sha256": "dace09bd8d5f401638d54f8a74c63f3427fdcee0a42b59095cf4169e7dd0e453"
+    "revision": null,
+    "sha256": "c8cbc8d3696a366be92ea656c21bf4bd581f3759b557dcf1631a83aabd9ece23"
   },
   "queries": [
     {
@@ -25,9 +25,9 @@
       "sha256": "0631577ba119c6b1f9fbabe70d70ad17ae81e4e7d8afb0e2309bd8acee0f5f76"
     }
   ],
-  "fixture_sha256": "6d16654f209ddd0c4f44fc971c2427b65a926e519dd065edd00df264d5589084",
-  "renderer_sha256": "cef94cd5d74f35bda24a4cff008a499cca07a3f7985b6c5bc1580cc3548d14e1",
-  "image_sha256": "c29698b0f3cea0568d2c290155cae357db824d48f5bbc9927ae38305846dd886",
+  "fixture_sha256": "d612012da7be9be1eab739ef79ec8f42a6649d6ecb1ce1769aa47625e16ce7cf",
+  "renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
+  "image_sha256": "b48a4207f279824d44a461960ded225b4e2dabdc0c8da1de388e49dbb093d50c",
   "theme_inputs": {
     "lua/flume/init.lua": "a6abb056ab7a6a910a20456f0c656a5cb432d76289305a27dfad09503729bd3c",
     "lua/flume/palette.lua": "f689bb7d2b6e1abdb332ab809bf6f0f5fa8574c8c140ff500a146affb35c3b3d",

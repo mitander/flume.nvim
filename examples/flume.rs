@@ -1,27 +1,44 @@
-use std::fmt;
+#[derive(Debug)]
+struct Locked;
+#[derive(Debug)]
+struct Unlocked;
 
-/// A tiny expression tree with constant folding.
-enum Ast {
-    Num(i64),
-    Add(Box<Ast>, Box<Ast>),
+/// State is part of the type: a locked door has no `open` method.
+#[derive(Debug)]
+struct Door<State> {
+    key: u32,
+    _state: State,
 }
 
-impl Ast {
-    fn fold(&self) -> Option<i64> {
-        match self {
-            Self::Num(value) => Some(*value),
-            Self::Add(lhs, rhs) => Some(lhs.fold()? + rhs.fold()?),
+impl Door<Locked> {
+    fn unlock(self, key: u32) -> Result<Door<Unlocked>, Self> {
+        if key != self.key {
+            return Err(self); // Keep the door so the caller can retry.
         }
+        Ok(Door {
+            key,
+            _state: Unlocked,
+        })
     }
 }
 
-impl fmt::Display for Ast {
-    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(formatter, "{:?}", self.fold())
+impl Door<Unlocked> {
+    fn open(&self) -> &'static str {
+        "Welcome in!"
     }
 }
+
+const KEY: u32 = 42;
 
 fn main() {
-    let expr = Ast::Add(Box::new(Ast::Num(40)), Box::new(Ast::Num(2)));
-    println!("{expr} folded = {:?}", expr.fold());
+    let door = Door {
+        key: KEY,
+        _state: Locked,
+    };
+    // door.open(); // This would fail to compile.
+    let door = door.unlock(7).expect_err("wrong key");
+    match door.unlock(KEY) {
+        Ok(unlocked) => println!("{}", unlocked.open()),
+        Err(locked) => eprintln!("Still locked: {locked:?}"),
+    }
 }

@@ -1,23 +1,42 @@
-from dataclasses import dataclass
+import argparse
+import json
+from collections import Counter
 from pathlib import Path
 
 
-@dataclass
-class Ast:
-    """A tiny expression tree with constant folding."""
-
-    value: int | None = None
-    lhs: "Ast | None" = None
-    rhs: "Ast | None" = None
-
-    def fold(self) -> int | None:
-        if self.value is not None:
-            return self.value
-        if self.lhs is None or self.rhs is None:
-            return None
-        left, right = self.lhs.fold(), self.rhs.fold()
-        return None if left is None or right is None else left + right
+# Input: one JSON object per line, e.g. {"event": "page_view"}.
+def count_events(path: Path) -> Counter[str]:
+    counts: Counter[str] = Counter()
+    with path.open(encoding="utf-8") as log:
+        for number, line in enumerate(log, start=1):
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            event = record.get("event") if isinstance(record, dict) else None
+            if not isinstance(event, str) or not event.strip():
+                raise ValueError(f"line {number}: expected a non-empty event name")
+            counts[event] += 1
+    return counts
 
 
-expr = Ast(lhs=Ast(40), rhs=Ast(2))
-print(f"{Path(__file__).stem} folded = {expr.fold()}")
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Summarize a JSON-lines event log.")
+    parser.add_argument("log", type=Path)
+    parser.add_argument("--limit", type=int, default=5, help="number of events to show")
+    args = parser.parse_args()
+    if args.limit < 1:
+        parser.error("--limit must be positive")
+
+    try:
+        counts = count_events(args.log)
+    except (OSError, ValueError) as error:
+        parser.exit(1, f"{args.log}: {error}\n")
+
+    total = counts.total()
+    print(f"{total:,} events across {len(counts)} names")
+    for event, count in counts.most_common(args.limit):
+        print(f"{event:<24} {count:>6,}  {count / total:>6.1%}")
+
+
+if __name__ == "__main__":
+    main()

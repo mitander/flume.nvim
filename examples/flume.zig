@@ -1,29 +1,27 @@
-/// A tiny expression tree with constant folding.
 const std = @import("std");
 
-const Ast = union(enum) {
-    num: i64,
-    ident: []const u8,
-    add: struct { lhs: *const Ast, rhs: *const Ast },
-
-    // Fold constants; identifiers remain dynamic.
-    fn fold(self: *const Ast) ?i64 {
-        return switch (self.*) {
-            .num => |n| n,
-            .ident => null,
-            .add => |a| blk: {
-                const l = a.lhs.fold() orelse break :blk null;
-                const r = a.rhs.fold() orelse break :blk null;
-                break :blk l + r;
-            },
-        };
+// The caller chooses whether a missing port is an error or null.
+// Inspired by matklad's "A Fun Zig Program":
+// https://matklad.github.io/2025/04/21/fun-zig-program.html
+fn parsePort(comptime required: bool, text: []const u8) !(if (required) u16 else ?u16) {
+    if (text.len == 0) {
+        if (required) return error.MissingPort;
+        return null;
     }
-};
+    const port = try std.fmt.parseInt(u16, text, 10);
+    if (port == 0) return error.ReservedPort;
+    return port;
+}
 
-pub fn main() void {
-    // Build and evaluate 40 + 2.
-    const lhs = Ast{ .num = 40 };
-    const rhs = Ast{ .num = 2 };
-    const expr = Ast{ .add = .{ .lhs = &lhs, .rhs = &rhs } };
-    std.debug.print("{s} folded = {}\n", .{ @tagName(expr), expr.fold().? });
+pub fn main() !void {
+    const explicit = try parsePort(true, "8080");
+    const fallback = try parsePort(false, "") orelse 3000;
+    std.debug.print("explicit: {d}, fallback: {d}\n", .{ explicit, fallback });
+}
+
+test "required changes the return type, not just the value" {
+    try std.testing.expectEqual(@as(u16, 8080), try parsePort(true, "8080"));
+    try std.testing.expectEqual(@as(?u16, null), try parsePort(false, ""));
+    try std.testing.expectError(error.MissingPort, parsePort(true, ""));
+    try std.testing.expectError(error.ReservedPort, parsePort(false, "0"));
 }

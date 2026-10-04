@@ -1,0 +1,40 @@
+# Illustrative configuration for a local preview server.
+# This is a format example, not a Flume configuration file.
+[project]
+name = "night-radio"
+version = "0.1.0"
+description = "A small listening room for late-night discoveries."
+
+[server]
+host = "127.0.0.1"
+port = 8080
+open_browser = true
+allowed_origins = ["http://localhost:8080", "http://127.0.0.1:8080"]
+
+[assets]
+root = "./public"
+ignore = ["**/*.map", ".DS_Store"]
+# Literal strings preserve backslashes without escaping them.
+fingerprint_pattern = '\.[a-f0-9]{8}\.'
+
+[cache]
+enabled = false
+max_entries = 1_024
+refresh_seconds = 0.5
+
+[headers]
+"Cache-Control" = "no-store"
+"X-Content-Type-Options" = "nosniff"
+
+[[routes]]
+path = "/health"
+status = 200
+body = "ok\n"
+
+[[routes]]
+path = "/about"
+status = 200
+body = """
+Night radio is on air.
+Pull up a chair.
+"""

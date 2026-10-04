@@ -15,8 +15,9 @@ fi
 
 sh -n scripts/check
 bash -n scripts/screenshot-window.sh
-python3 -m py_compile scripts/check-links.py scripts/compose_showcase.py scripts/compose-contact-sheet.py scripts/compose-languages.py scripts/preflight-screenshots.py scripts/review-integrations.py
+python3 -m py_compile scripts/check-links.py scripts/compose_showcase.py scripts/compose-contact-sheet.py scripts/preflight-screenshots.py scripts/review-integrations.py
 python3 scripts/check-links.py
 python3 scripts/preflight-screenshots.py --source-only
+python3 -m unittest discover -s tests -p 'examples.py'
 python3 -m unittest discover -s tests -p 'screenshots.py'
 python3 -m unittest discover -s tests -p 'integration_review.py'

@@ -1,18 +1,38 @@
-defmodule Ast do
-  @moduledoc "A tiny expression tree with constant folding."
-  defstruct [:value, :lhs, :rhs]
+defmodule Log do
+  @moduledoc "A small log parser that keeps malformed lines explicit."
+  @line ~r/^(?<level>info|warn|error) (?<message>.+)$/
 
-  def fold(%__MODULE__{value: value}) when is_integer(value), do: value
+  def parse(""), do: {:error, :empty_line}
 
-  def fold(%__MODULE__{lhs: lhs, rhs: rhs}) do
-    fold(lhs) + fold(rhs)
-  end
+  def parse(line) when is_binary(line) do
+    case Regex.named_captures(@line, line) do
+      %{"level" => level, "message" => message} ->
+        {:ok, %{level: level, message: message}}
 
-  def sample do
-    %__MODULE__{lhs: %__MODULE__{value: 40}, rhs: %__MODULE__{value: 2}}
+      nil ->
+        {:error, :invalid_format}
+    end
   end
 end
 
-expr = Ast.sample()
-result = expr |> Ast.fold() |> Integer.to_string()
-IO.puts("folded = #{result}")
+lines = [
+  "info Listener ready on port 8080",
+  "warn Cache is nearly full",
+  "info Connection accepted",
+  "this is not a log entry",
+  ""
+]
+
+# Count valid entries; errors remain available to other callers.
+lines
+|> Enum.map(&Log.parse/1)
+|> Enum.flat_map(fn
+  {:ok, %{level: level}} -> [level]
+  {:error, _reason} -> []
+end)
+|> Enum.frequencies()
+|> Enum.sort()
+|> Enum.each(fn {level, count} -> IO.puts("#{level}: #{count}") end)
+
+# info: 2
+# warn: 1

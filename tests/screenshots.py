@@ -38,7 +38,7 @@ class CaptureProvenance(unittest.TestCase):
             str(path.relative_to(ROOT)) for path in (ROOT / "lua/flume/languages").glob("*.lua")
         ]
         files += [f"extras/ghostty/flume-{schema}" for schema in ("dusk", "opal", "mira", "mesa")]
-        files += [f"examples/flume.{extension}" for extension in ("rs", "tsx", "py", "go")]
+        files += [f"examples/flume.{extension}" for extension in ("rs", "tsx", "py", "go", "ex", "toml")]
         files += [str(path.relative_to(ROOT)) for path in preflight.CAPTURES]
         files += [str(path.with_suffix(".json").relative_to(ROOT)) for path in preflight.CAPTURES]
         for name in files:

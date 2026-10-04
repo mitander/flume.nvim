@@ -1,7 +1,10 @@
 -- Real Tree-sitter highlighting, without a language server.
 local schema = vim.env.FLUME_SHOWCASE_SCHEMA or "dusk"
 local language = vim.env.FLUME_SHOWCASE_LANGUAGE or "zig"
-local extensions = { zig = "zig", rust = "rs", tsx = "tsx", python = "py", go = "go" }
+local extensions = {
+    zig = "zig", rust = "rs", tsx = "tsx", python = "py", go = "go",
+    elixir = "ex", toml = "toml",
+}
 local extension = assert(extensions[language], "Unsupported capture language: " .. language)
 vim.opt.termguicolors = true
 if vim.env.FLUME_TS_RUNTIME and vim.env.FLUME_TS_RUNTIME ~= "" then

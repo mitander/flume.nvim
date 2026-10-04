@@ -9,12 +9,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "assets/screenshots/showcase.png"
 CANVAS = (2800, 1720)
-CARD = (1450, 1018)
+CARD = (1050, 1220)
 SOURCES = (
     (ROOT / "assets/screenshots/opal/zig.png", 100, 35),
-    (ROOT / "assets/screenshots/mesa/zig.png", 500, 250),
-    (ROOT / "assets/screenshots/mira/zig.png", 900, 465),
-    (ROOT / "assets/screenshots/dusk/zig.png", 1300, 680),
+    (ROOT / "assets/screenshots/mesa/zig.png", 650, 185),
+    (ROOT / "assets/screenshots/mira/zig.png", 1200, 335),
+    (ROOT / "assets/screenshots/dusk/zig.png", 1750, 485),
 )
 
 
@@ -60,7 +60,7 @@ def main() -> None:
                 magick,
                 source,
                 "-resize",
-                f"{CARD[0]}x{CARD[1]}!",
+                f"{CARD[0]}x{CARD[1]}",
                 "-bordercolor",
                 "#ffffff22",
                 "-border",
