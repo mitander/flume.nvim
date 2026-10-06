@@ -30,6 +30,20 @@ local function styled(opts, style)
     return vim.tbl_deep_extend("force", opts, style or {})
 end
 
+local function editor_name(config)
+    return config.colorscheme or require("flume.palette").get(config.schema).colorscheme
+end
+
+function M.is_active()
+    return vim.g.colors_name == editor_name(M.config)
+end
+
+-- Lua-driven transitions emit the event here; :colorscheme emits its own after load().
+function M.apply(schema, colorscheme)
+    M.load(schema, colorscheme)
+    vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name, modeline = false })
+end
+
 local function clear_flume_modules()
     local watch = package.loaded["flume.watch"]
     if type(watch) == "table" then
@@ -50,7 +64,7 @@ end
 
 function M.reload()
     local config = vim.deepcopy(M.config)
-    local colors_name = config.colorscheme or require("flume.palette").get(config.schema).colorscheme
+    local colors_name = editor_name(config)
     local colorscheme_emitted = false
     local probe = vim.api.nvim_create_augroup("FlumeReloadProbe", { clear = true })
     vim.api.nvim_create_autocmd("ColorScheme", {
@@ -105,8 +119,7 @@ function M.setup(opts)
     local fallback = require("flume.palette").resolve(opts.schema or default_config.schema)
     opts.schema = (opts.follow_sync and M.get_active_schema()) or fallback
     M.config = vim.tbl_deep_extend("force", vim.deepcopy(default_config), opts)
-    M.load()
-    vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name, modeline = false })
+    M.apply()
     if M.config.watch_sync then
         require("flume.watch").start()
     else
@@ -146,7 +159,7 @@ function M.load(schema, colorscheme)
         M.config.colorscheme = colorscheme
     end
     local palette = require("flume.palette").get(M.config.schema)
-    local colors_name = M.config.colorscheme or palette.colorscheme
+    local colors_name = editor_name(M.config)
     M.colors = M.get_colors(M.config.schema)
     local c = M.colors
     local styles = M.config.styles or {}
@@ -568,8 +581,7 @@ function M.load(schema, colorscheme)
         end
         require("flume.palette").get(schema)
         require("flume.sync").run({ schema = schema })
-        M.load(schema, colorscheme)
-        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name, modeline = false })
+        M.apply(schema, colorscheme)
     end, {
         nargs = "?",
         complete = function()

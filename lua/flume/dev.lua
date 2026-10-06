@@ -17,8 +17,7 @@ function M.start()
                 return
             end
             local flume = require("flume")
-            local name = flume.config.colorscheme or require("flume.palette").get(flume.config.schema).colorscheme
-            if flume.config.dev and vim.g.colors_name == name then
+            if flume.config.dev and flume.is_active() then
                 flume.reload()
             end
         end,

@@ -8,18 +8,12 @@ local active_set = nil
 
 local state = require("flume.state")
 
-local function flume_is_active()
-    local flume = require("flume")
-    local name = flume.config.colorscheme or require("flume.palette").get(flume.config.schema).colorscheme
-    return vim.g.colors_name == name
-end
-
 local function apply_active_schema()
     -- A callback can already be scheduled when setup() disables the watcher.
     if not watcher then
         return
     end
-    if not flume_is_active() then
+    if not require("flume").is_active() then
         M.stop()
         return
     end
@@ -38,8 +32,7 @@ local function apply_active_schema()
         return
     end
 
-    flume.load(resolved, nil)
-    vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name, modeline = false })
+    flume.apply(resolved, nil)
 end
 
 function M.stop()
@@ -102,7 +95,7 @@ function M.start()
     vim.api.nvim_create_autocmd("ColorScheme", {
         group = group,
         callback = function()
-            if not flume_is_active() then
+            if not require("flume").is_active() then
                 M.stop()
             end
         end,

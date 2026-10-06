@@ -65,7 +65,7 @@ function M.run(opts)
     opts = opts or {}
     local requested = opts.schema or require("flume").config.schema or "dusk"
     local schema = require("flume.palette").resolve(requested)
-    local result = require("flume.compiler").activate(schema)
+    local result = require("flume.state").activate(schema)
     local count = 0
     for _, changed in pairs(result) do
         if changed then

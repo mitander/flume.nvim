@@ -71,7 +71,7 @@ function M.install(name)
     -- Materialize it on first install from the editor's selected schema.
     if app.src:match("^extras/current/") and vim.fn.filereadable(src_path) == 0 then
         local flume = require("flume")
-        local activated, activate_error = pcall(require("flume.compiler").activate, flume.config.schema)
+        local activated, activate_error = pcall(require("flume.state").activate, flume.config.schema)
         if not activated then
             vim.notify("Could not activate Flume extras: " .. tostring(activate_error), vim.log.levels.ERROR)
             return

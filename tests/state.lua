@@ -52,6 +52,42 @@ function M.register(test, equal, truthy)
         if not ok then error(err) end
     end)
 
+    test("state publishes recovery sets and forwards their legacy links without the compiler", function()
+        local state = require("flume.state")
+        local uv = vim.uv or vim.loop
+        local original_legacy = state.get_legacy_current
+        local original_data = vim.env.FLUME_DATA_DIR
+        local compiler = package.loaded["flume.compiler"]
+        local preload = package.preload["flume.compiler"]
+        local root = vim.fn.tempname()
+        state.get_legacy_current = function() return root .. "/legacy" end
+        vim.env.FLUME_DATA_DIR = root
+        package.loaded["flume.compiler"] = nil
+        package.preload["flume.compiler"] = function() error("publication must not load the compiler") end
+        local ok, err = xpcall(function()
+            state.activate("mira")
+            local original_set = uv.fs_readlink(state.get_current())
+            vim.fn.writefile({ "corrupt" }, state.get_current() .. "/pi.json")
+            state.activate("mira")
+            local recovered_set = uv.fs_readlink(state.get_current())
+            truthy(recovered_set ~= original_set, "corrupt set was reused")
+            assert(uv.fs_unlink(root .. "/legacy"))
+            assert(uv.fs_symlink(recovered_set, root .. "/legacy"))
+            vim.env.FLUME_DATA_DIR = root .. "/new-owner"
+            state.activate("opal")
+            equal(uv.fs_readlink(root .. "/legacy"), state.get_current(), "recovery name was not recognized")
+            equal(vim.fn.readfile(root .. "/legacy/schema")[1], "opal", "legacy reader did not follow")
+            equal(vim.fn.readfile(root .. "/" .. recovered_set .. "/schema")[1], "mira", "recovery set was deleted")
+            equal(vim.fn.readfile(root .. "/" .. original_set .. "/pi.json")[1], "corrupt", "old set was replaced")
+        end, debug.traceback)
+        package.loaded["flume.compiler"] = compiler
+        package.preload["flume.compiler"] = preload
+        state.get_legacy_current = original_legacy
+        vim.env.FLUME_DATA_DIR = original_data
+        vim.fn.delete(root, "rf")
+        if not ok then error(err) end
+    end)
+
     test("compatibility failures preserve shared activation and user paths", function()
         local state = require("flume.state")
         local original_legacy = state.get_legacy_current
@@ -85,6 +121,40 @@ function M.register(test, equal, truthy)
         state.get_legacy_current = original_legacy
         vim.env.FLUME_DATA_DIR = original_data
         vim.notify = original_notify
+        vim.fn.delete(root, "rf")
+        if not ok then error(err) end
+    end)
+
+    test("failed staged writes preserve the active set and remove private staging", function()
+        local state = require("flume.state")
+        local original_data = vim.env.FLUME_DATA_DIR
+        local original_legacy = state.get_legacy_current
+        local open = io.open
+        local root = vim.fn.tempname()
+        vim.env.FLUME_DATA_DIR = root
+        state.get_legacy_current = function() return root .. "/legacy" end
+        local ok, err = xpcall(function()
+            state.activate("dusk")
+            local current = (vim.uv or vim.loop).fs_readlink(state.get_current())
+            io.open = function(path, mode)
+                if mode == "wb" and path:find("/.current-stage-", 1, true) then
+                    return {
+                        write = function() return nil, "injected staged write failure" end,
+                        close = function() return true end,
+                    }
+                end
+                return open(path, mode)
+            end
+            local activated = pcall(state.activate, "opal")
+            io.open = open
+            equal(activated, false, "failed staged write reported success")
+            equal(state.get_schema(), "dusk", "failed staged write changed shared choice")
+            equal((vim.uv or vim.loop).fs_readlink(state.get_current()), current, "active link changed")
+            equal(#vim.fn.glob(root .. "/.current-stage-*", false, true), 0, "private staging survived")
+        end, debug.traceback)
+        io.open = open
+        state.get_legacy_current = original_legacy
+        vim.env.FLUME_DATA_DIR = original_data
         vim.fn.delete(root, "rf")
         if not ok then error(err) end
     end)
