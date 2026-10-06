@@ -61,5 +61,33 @@ class DocumentationLinks(unittest.TestCase):
             self.assertIn("README.md: missing missing.png", errors.getvalue())
 
 
+class GalleryNavigation(unittest.TestCase):
+    def test_theme_and_language_sections_are_cross_linked(self):
+        languages = {
+            "go": "Go", "rust": "Rust", "python": "Python",
+            "tsx": "TypeScript", "zig": "Zig", "elixir": "Elixir", "toml": "TOML",
+        }
+        for schema in ("dusk", "opal", "mira", "mesa"):
+            theme_path = ROOT / "docs/themes" / f"{schema}.md"
+            self.assertIn(theme_path, links.FILES)
+            theme = theme_path.read_text()
+            for section in ("Diagnostics and working states", "Completion", "LSP", "Integrations"):
+                self.assertIn(f"\n## {section}\n", theme)
+            for kind, language in (("selection", "go"), ("completion", "go"), ("lsp", "go"), ("lsp", "zig")):
+                self.assertIn(f"../../assets/screenshots/{kind}/{schema}/{language}.png", theme)
+            for language, heading in languages.items():
+                with self.subTest(schema=schema, language=language):
+                    language_path = ROOT / "docs/languages" / f"{language}.md"
+                    self.assertIn(language_path, links.FILES)
+                    gallery = language_path.read_text()
+                    image = f"../../assets/screenshots/{schema}/{language}.png"
+                    self.assertIn(f"\n## {heading}\n", theme)
+                    self.assertIn(f"\n## {schema.title()}\n", gallery)
+                    self.assertIn(image, theme)
+                    self.assertIn(image, gallery)
+                    self.assertIn(f"(../languages/{language}.md#{schema})", theme)
+                    self.assertIn(f"(../themes/{schema}.md#{heading.lower()})", gallery)
+
+
 if __name__ == "__main__":
     unittest.main()

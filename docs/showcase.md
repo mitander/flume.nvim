@@ -104,15 +104,13 @@ geometry, source, and parser/query runtime. Sidecars and
 and display limitations; no token painting or pixel recoloring was used.
 
 Generation used `activate=false`. Validation passed 53 Lua tests, 104 native
-parser checks, resolved UI/state pairs, and the 16 refreshed state/LSP captures
-with OCR. All four canonical Zig captures were refreshed too. Go LSP captures
-show only lines 1–29 because the display constrains full-height windows; all
-Zig source lines and the working-state fixture remain visible.
+parser checks, resolved UI/state pairs, and the complete `./scripts/check` gate.
+All 28 canonical captures and 16 state/LSP captures pass provenance and OCR
+preflight. The README composite was regenerated from the current captures.
 
-The other 24 canonical captures still need a full-height display: Go, Rust,
-Python, TSX, Elixir, and TOML in all four palettes. Canonical preflight and the
-full gate's canonical screenshot tests fail on stale inputs. README composition
-is blocked by that preflight; its composite remains unchanged. Native integration
+The before/final comparison above retains its 19-point font. Canonical Zig
+captures also use 19 points. Other canonical languages and all state/LSP
+captures use 12 points so complete fixtures fit this display. Native integration
 contact sheets below remain Pending and are not qualified by editor captures.
 
 ## Canonical editor captures
@@ -132,12 +130,12 @@ revision and its matching parser versions for all four palettes. See the
 [nvim-treesitter installation guide](https://github.com/nvim-treesitter/nvim-treesitter#setup).
 These are capture dependencies, not requirements for using Flume.
 
-| Palette | Appearance | Full-resolution capture                              |
-| ------- | ---------- | ---------------------------------------------------- |
-| Dusk    | Dark       | [`dusk/zig.png`](../assets/screenshots/dusk/zig.png) |
-| Opal    | Light      | [`opal/zig.png`](../assets/screenshots/opal/zig.png) |
-| Mira    | Dark       | [`mira/zig.png`](../assets/screenshots/mira/zig.png) |
-| Mesa    | Light      | [`mesa/zig.png`](../assets/screenshots/mesa/zig.png) |
+| Palette | Appearance | Theme gallery |
+| --- | --- | --- |
+| Dusk | Dark | [Languages, working states, and integrations](themes/dusk.md) |
+| Opal | Light | [Languages, working states, and integrations](themes/opal.md) |
+| Mira | Dark | [Languages, working states, and integrations](themes/mira.md) |
+| Mesa | Light | [Languages, working states, and integrations](themes/mesa.md) |
 
 On macOS, install Ghostty and Maple Mono NF, then grant Screen Recording permission before capture.
 The script identifies the Ghostty window through CoreGraphics; no interactive
@@ -157,12 +155,18 @@ Capture all palettes and languages:
 
 ```sh
 for schema in dusk opal mira mesa; do
-    for language in zig rust tsx python go elixir toml; do
-        ./scripts/screenshot-window.sh "$schema" "$language"
+    ./scripts/screenshot-window.sh "$schema" zig
+    for language in rust tsx python go elixir toml; do
+        FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" "$language"
     done
 done
 python3 scripts/preflight-screenshots.py
 ```
+
+The default font size is 19 points. Set `FLUME_CAPTURE_FONT_SIZE` for a
+capture-only override when complete fixtures do not fit the display. Keep the
+same size across all palettes for a language, and across all state captures.
+This does not change installed terminal preferences or editor settings.
 
 The language argument defaults to `zig`. Captures live under
 `assets/screenshots/<schema>/<language>.png`, with matching JSON sidecars.
@@ -199,10 +203,10 @@ so both use native UI states rather than painted imitations:
 
 ```sh
 for schema in dusk opal mira mesa; do
-    ./scripts/screenshot-window.sh "$schema" go selection
-    ./scripts/screenshot-window.sh "$schema" go completion
-    ./scripts/screenshot-window.sh "$schema" go lsp
-    ./scripts/screenshot-window.sh "$schema" zig lsp
+    FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" go selection
+    FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" go completion
+    FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" go lsp
+    FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" zig lsp
 done
 python3 scripts/preflight-screenshots.py --states --ocr
 ```
@@ -224,21 +228,19 @@ Without `--ocr`, state preflight checks provenance and dimensions only, so
 ordinary checks do not require OCR.
 
 The captures below use Neovim 0.12.5 and Ghostty 1.3.1 on macOS 27.0.1,
-with Maple Mono NF at 19 points and an opaque 100-column viewport.
-Capture requests 48 rows, but the current display limits single-pane output to
-29 visible source lines. Selection/completion fixtures and all Zig lines remain
-visible; Go LSP's final ten lines are outside the capture.
+with Maple Mono NF at 12 points and an opaque 100-column viewport.
+Complete selection/completion fixtures and Go/Zig LSP sources fit without scrolling.
 The parser/query installation comes from nvim-treesitter commit
 `4916d6592ede8c07973490d9322f187e07dfefac`; sidecars record parser revisions
 and checksums. LSP captures use gopls v0.16.2 and ZLS 0.16.0.
 They do not qualify other server versions or languages.
 
-| Palette | Selection and diagnostics                         | Completion                                         | Tree-sitter + LSP                                                                           |
-| ------- | ------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Dusk    | [Go](../assets/screenshots/selection/dusk/go.png) | [Go](../assets/screenshots/completion/dusk/go.png) | [Go](../assets/screenshots/lsp/dusk/go.png) · [Zig](../assets/screenshots/lsp/dusk/zig.png) |
-| Opal    | [Go](../assets/screenshots/selection/opal/go.png) | [Go](../assets/screenshots/completion/opal/go.png) | [Go](../assets/screenshots/lsp/opal/go.png) · [Zig](../assets/screenshots/lsp/opal/zig.png) |
-| Mira    | [Go](../assets/screenshots/selection/mira/go.png) | [Go](../assets/screenshots/completion/mira/go.png) | [Go](../assets/screenshots/lsp/mira/go.png) · [Zig](../assets/screenshots/lsp/mira/zig.png) |
-| Mesa    | [Go](../assets/screenshots/selection/mesa/go.png) | [Go](../assets/screenshots/completion/mesa/go.png) | [Go](../assets/screenshots/lsp/mesa/go.png) · [Zig](../assets/screenshots/lsp/mesa/zig.png) |
+| Palette | Selection and diagnostics | Completion | Tree-sitter + LSP |
+| --- | --- | --- | --- |
+| Dusk | [Working states](themes/dusk.md#diagnostics-and-working-states) | [Menu](themes/dusk.md#completion) | [Go](themes/dusk.md#go-with-gopls) · [Zig](themes/dusk.md#zig-with-zls) |
+| Opal | [Working states](themes/opal.md#diagnostics-and-working-states) | [Menu](themes/opal.md#completion) | [Go](themes/opal.md#go-with-gopls) · [Zig](themes/opal.md#zig-with-zls) |
+| Mira | [Working states](themes/mira.md#diagnostics-and-working-states) | [Menu](themes/mira.md#completion) | [Go](themes/mira.md#go-with-gopls) · [Zig](themes/mira.md#zig-with-zls) |
+| Mesa | [Working states](themes/mesa.md#diagnostics-and-working-states) | [Menu](themes/mesa.md#completion) | [Go](themes/mesa.md#go-with-gopls) · [Zig](themes/mesa.md#zig-with-zls) |
 
 These editor captures do not approve the native integration contact sheets below.
 Review hierarchy at working font size; checksum and contrast checks do not
@@ -250,8 +252,8 @@ The examples use each language's conventions rather than translating the same
 exercise. Some demonstrate a language mechanism; others show a practical script
 or configuration. Zig uses a compact 112-column × 32-row viewport for the
 README hero. Other languages use 100 columns × 48 rows. Each complete file fits
-without scrolling. Captures keep the 19-point font and show syntax, not
-diagnostics or LSP semantic tokens. Syntax-role coverage is spread across the
+without scrolling. Zig captures use a 19-point font; other languages use
+12 points. They show syntax, not diagnostics or LSP semantic tokens. Syntax-role coverage is spread across the
 examples; no single file demonstrates every highlight group.
 
 | Source                         | Mechanism                                                                                                                                     |
@@ -281,17 +283,24 @@ python3 scripts/compose_showcase.py
 The command validates capture provenance before composing. It writes
 `assets/screenshots/showcase.png`, a 2800 × 1720 composite of Opal, Mesa,
 Mira, and Dusk. Dusk is the foreground sample. Application captures retain their
-original colors and aspect ratios. The README language links open individual
-captures rather than reduced four-file grids.
+original colors and aspect ratios. README links open Markdown galleries with
+embedded captures, headings, and links to corresponding theme/language sections.
 
 ### Individual language captures
 
-| Palette | Code                                                                                                                                                                                                                                                                              | Config                                      |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| Dusk    | [Go](../assets/screenshots/dusk/go.png) · [Rust](../assets/screenshots/dusk/rust.png) · [Python](../assets/screenshots/dusk/python.png) · [TSX](../assets/screenshots/dusk/tsx.png) · [Zig](../assets/screenshots/dusk/zig.png) · [Elixir](../assets/screenshots/dusk/elixir.png) | [TOML](../assets/screenshots/dusk/toml.png) |
-| Opal    | [Go](../assets/screenshots/opal/go.png) · [Rust](../assets/screenshots/opal/rust.png) · [Python](../assets/screenshots/opal/python.png) · [TSX](../assets/screenshots/opal/tsx.png) · [Zig](../assets/screenshots/opal/zig.png) · [Elixir](../assets/screenshots/opal/elixir.png) | [TOML](../assets/screenshots/opal/toml.png) |
-| Mira    | [Go](../assets/screenshots/mira/go.png) · [Rust](../assets/screenshots/mira/rust.png) · [Python](../assets/screenshots/mira/python.png) · [TSX](../assets/screenshots/mira/tsx.png) · [Zig](../assets/screenshots/mira/zig.png) · [Elixir](../assets/screenshots/mira/elixir.png) | [TOML](../assets/screenshots/mira/toml.png) |
-| Mesa    | [Go](../assets/screenshots/mesa/go.png) · [Rust](../assets/screenshots/mesa/rust.png) · [Python](../assets/screenshots/mesa/python.png) · [TSX](../assets/screenshots/mesa/tsx.png) · [Zig](../assets/screenshots/mesa/zig.png) · [Elixir](../assets/screenshots/mesa/elixir.png) | [TOML](../assets/screenshots/mesa/toml.png) |
+Browse by theme, including working states and integration exports:
+
+[Dusk](themes/dusk.md) · [Opal](themes/opal.md) ·
+[Mira](themes/mira.md) · [Mesa](themes/mesa.md)
+
+Browse by language, comparing all four themes on one page:
+
+[Go](languages/go.md) · [Rust](languages/rust.md) · [Python](languages/python.md) ·
+[TypeScript/TSX](languages/tsx.md) · [Zig](languages/zig.md) ·
+[Elixir](languages/elixir.md) · [TOML](languages/toml.md)
+
+Each gallery has section links and cross-links to the other view. Both views
+embed the same full-resolution image files; they do not duplicate or recolor captures.
 
 ## Native integration contact sheets
 

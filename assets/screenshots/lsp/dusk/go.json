@@ -15,7 +15,7 @@
   ],
   "fixture_sha256": "9c31be87f1a3644a4a70ca5ae1823577828259bcb73f05a4caccb795a6f94bb1",
   "renderer_sha256": "21ff913bcbf4983751fea1586e208d2c63a5e5b4fe38f3d247cfc959c4a1e28e",
-  "image_sha256": "8eed0f25b6479bb335a8379fe122b8cfd7c4d1b047846f746a83683f68ec9a4a",
+  "image_sha256": "cee8889f9ae8ee9331203e9a6653ebbad87b1553c23058be60c2a472c04a2986",
   "theme_inputs": {
     "lua/flume/init.lua": "09e36fb21f2de55e340576d002e4ace44c644bc647772178624319cc9117e66f",
     "lua/flume/palette.lua": "b50950afa72aebfcb41e4ec6f1b4acbfb2ede88f20b5a8164d2077c085f86bcf",
@@ -28,7 +28,7 @@
     "extras/ghostty/flume-dusk": "945206d60c41674919ccbff8667839b011df1556d4b16fc2fc9e0fd21b0eb8cc"
   },
   "kind": "lsp",
-  "capture_script_sha256": "737523fb67aba63b96d86dd01a5d7d0d04808050e5a859fc8fb3c348a792c125",
+  "capture_script_sha256": "25b465ca87c6c337d84a1ce7f0cee66055d5ab9bdc850daa89e11f179ad3ffe7",
   "base_renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
   "server": {
     "name": "gopls",

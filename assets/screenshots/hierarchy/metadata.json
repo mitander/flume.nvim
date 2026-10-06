@@ -18,7 +18,7 @@
   "unsupported_regions": [
     "The display constrains the requested full-height viewport. All 29 canonical Zig lines and all 22 supplementary Rust comment-fixture lines are visible.",
     "These matched comparisons use Tree-sitter only. Separate refreshed Go/Zig LSP sidecars report server versions and semantic-token readiness.",
-    "Go LSP single-pane captures show lines 1-29 rather than all 39 lines. Canonical full-height Go, Rust, Python, TSX, Elixir, and TOML captures remain stale and are not replaced with clipped images.",
+    "These 19-point before/after comparisons are distinct from the canonical gallery. The canonical non-Zig and state/LSP captures were subsequently refreshed at 12 points to show complete fixtures on this display.",
     "Editor evidence does not qualify native integration contact sheets or establish reading comfort on other displays."
   ],
   "manual_action": "Automated scripts/screenshot-window.sh SCHEMA zig and SCHEMA rust with FLUME_TS_RUNTIME=/tmp/flume-audit-runtime.WqXqCE in isolated before/after source copies. For the supplementary comments capture only, comments.rs was copied to examples/flume.rs in both isolated copies; canonical examples/flume.rs in the repository was never modified. The resulting rust.png/rust.json were stored as comments.png/comments.json with original hashes and the actual fixture checksum. Canonical Zig and state/LSP captures were copied back only after real capture; no stale image hashes were rewritten."

@@ -15,7 +15,7 @@
   ],
   "fixture_sha256": "a680a14711708fe88aa759eb539cd166be23865fde63fc0564077dfd9580b126",
   "renderer_sha256": "3b02f9dbe04c928b7bcf5a3ae0bd169dbeb53e83ea4d588c73514d19d1b206fb",
-  "image_sha256": "62a16ac9fe1992aaa8b5fe08756cc30da178e6ff77f648c23382bf682865a0f9",
+  "image_sha256": "1f68502cda75ce5f2cb8c76c4486ef613ebf6b3d7cb4aee0321924a0602d4b52",
   "theme_inputs": {
     "lua/flume/init.lua": "09e36fb21f2de55e340576d002e4ace44c644bc647772178624319cc9117e66f",
     "lua/flume/palette.lua": "b50950afa72aebfcb41e4ec6f1b4acbfb2ede88f20b5a8164d2077c085f86bcf",
@@ -28,7 +28,7 @@
     "extras/ghostty/flume-mesa": "01882a08b6385d8e20f6c96aa3802c69c016851591fc2a655155a30be96a4f57"
   },
   "kind": "selection",
-  "capture_script_sha256": "737523fb67aba63b96d86dd01a5d7d0d04808050e5a859fc8fb3c348a792c125",
+  "capture_script_sha256": "25b465ca87c6c337d84a1ce7f0cee66055d5ab9bdc850daa89e11f179ad3ffe7",
   "runtime_states": {
     "diff_text": true,
     "diagnostics": 4,

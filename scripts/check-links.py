@@ -8,7 +8,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parent.parent
-FILES = (ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md")))
+FILES = (ROOT / "README.md", *sorted((ROOT / "docs").rglob("*.md")))
 LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 
 
