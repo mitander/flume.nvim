@@ -1,6 +1,19 @@
 # Flume color system
 
-Flume resolves each named palette through one schema contract. Its roles belong to four distinct layers, keeping overrides predictable across all four appearances. The [palette origins](palette-origins.md) explain how downstream design work informed Mira and Mesa without owning their public names. The [generated palette manifest](palette-manifest.md) lists every exact role and tested contrast pair directly from the canonical Lua table.
+Flume uses the same semantic roles across all four palettes. This guide explains
+those roles and the mapping rules for contributors and custom consumers. The
+[generated palette manifest](palette-manifest.md) lists exact values and tested
+contrast pairs from the canonical Lua table.
+
+## Palette direction
+
+Dusk and Mira use violet-charcoal foundations. Opal pairs cool paper with vivid
+inks; Mesa pairs warm rose-mineral paper with restrained inks. Light palettes
+use darker foregrounds, not inverted dark-palette RGB values.
+
+Mira and Mesa use cyan for functions, amber for types, violet for keywords,
+teal for strings, and magenta for namespaces and properties. The manifest lists
+the exact colors.
 
 ## Principles
 
@@ -56,7 +69,7 @@ Plugin integrations must resolve visible colors through semantic roles instead o
 
 ### Terminal colors
 
-`black` through `bright_white` are the sixteen ANSI slots. They are terminal primitives, not diagnostic or diff roles. The explicit `dim_*` values are retained as palette primitives for future terminal and integration work.
+`black` through `bright_white` are the sixteen ANSI slots. They are terminal primitives, not diagnostic or diff roles. The explicit `dim_*` values provide quieter ANSI-related inks, including staged GitSigns.
 
 ## Invariants
 
@@ -66,7 +79,7 @@ Plugin integrations must resolve visible colors through semantic roles instead o
 - `overrides` are applied after the base palette resolves.
 - User `highlights` are applied last and therefore win.
 - Generated extras compile from the canonical palette, not editor-local overrides.
-- Global saturation/chroma transforms are not a v0.2.0 API; exact role-level overrides remain the supported customization boundary.
+- Customization uses exact role overrides, not global saturation or chroma transforms.
 - Contrast tests cover default opaque palettes. Transparency, user overrides, and terminal opacity require review against the actual rendered background.
 
 ## Verify language highlighting

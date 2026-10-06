@@ -1,46 +1,79 @@
-*flume.nvim* *flume*            Organic synthesis. Soft contrast. Resonant code.
+*flume.txt*	Four palettes for Neovim and matching developer-tool themes
+*flume.nvim* *flume*
+
+Flume keeps ordinary identifiers neutral and uses color for syntax and state.
 
 ==============================================================================
-CONTENTS                                                        *flume-contents*
+CONTENTS                                                      *flume-contents*
 
 1. Setup ......................... |flume-setup|
 2. Palettes ...................... |flume-palettes|
-3. Options ....................... |flume-options|
-4. Commands ...................... |flume-commands|
-5. Extras ........................ |flume-extras|
-6. Highlights .................... |flume-highlights|
+3. Everyday use .................. |flume-usage|
+4. Options ....................... |flume-options|
+5. Commands ...................... |flume-commands|
+6. Extras ........................ |flume-extras|
+7. Highlights .................... |flume-highlights|
+8. Troubleshooting ............... |flume-troubleshooting|
 
 ==============================================================================
-SETUP                                                              *flume-setup*
+SETUP                                                            *flume-setup*
 
-Configure and apply one palette with a single setup call:
+Install mitander/flume.nvim with your plugin manager. Requires Neovim 0.9+
+with a true-color terminal. Once the plugin is on 'runtimepath':
 >
+    vim.opt.termguicolors = true
     require("flume").setup({ schema = "dusk" })
 <
+The editor now uses Dusk. :echo g:colors_name should print flume-dusk.
+setup() configures and applies the theme; no :colorscheme call is needed.
+Each setup() starts from defaults, so include all your options in one call.
 
-Do not follow setup() with :colorscheme. When no Lua options are needed, a
-colorscheme command is the alternative:
+If you do not need Lua options, use this alternative in init.vim:
 >
+    set termguicolors
     colorscheme flume-dusk
 <
-
-Flume targets Neovim 0.9+ and expects 'termguicolors'.
-
-==============================================================================
-PALETTES                                                        *flume-palettes*
-
-Canonical schema IDs:
-
-    dusk    dark   original quiet violet Flume
-    opal    light  vivid inks on cool opalescent paper
-    mira    dark   technical plum with cyan, teal, and magenta
-    mesa    light  warm rose-mineral paper
-
-Canonical colorscheme entry points are "flume-dusk", "flume-opal",
-"flume-mira", and "flume-mesa".
+Tree-sitter parsers and language servers are optional. Flume supplies colors
+but does not install or configure those providers.
 
 ==============================================================================
-OPTIONS                                                          *flume-options*
+PALETTES                                                      *flume-palettes*
+
+Schema  Appearance  Character ~
+    dusk    dark    quiet violet
+    opal    light   vivid inks on cool opalescent paper
+    mira    dark    technical plum with cyan, teal, and magenta
+    mesa    light   restrained inks on warm rose-mineral paper
+
+The colorscheme names are flume-dusk, flume-opal, flume-mira, and flume-mesa.
+Each palette sets 'background' to its appearance.
+
+==============================================================================
+EVERYDAY USE                                                     *flume-usage*
+
+Try another palette without changing shared external themes:
+>
+    :colorscheme flume-opal
+<
+This keeps the configured styles and overrides. Change `schema` in your setup
+for the next startup. To change the shared theme as well, use |:FlumeSync|.
+See |flume-watch_sync| for how other editors follow that choice.
+
+For italic comments and a custom current line number, replace your setup with:
+>
+    require("flume").setup({
+        schema = "opal",
+        styles = { comments = { italic = true } },
+        highlights = {
+            CursorLineNr = { bold = true, fg = "#413b49" },
+        },
+    })
+<
+Use :set cursorline number to see the line-number change. Use |:Inspect| on
+syntax or :highlight GroupName on UI groups to choose an exact override.
+
+==============================================================================
+OPTIONS                                                        *flume-options*
 
 Defaults:
 >
@@ -60,151 +93,234 @@ Defaults:
     })
 <
 
-schema ~
-    Selects "dusk", "opal", "mira", or "mesa".
+schema ~                                                        *flume-schema*
+    Selects one of the IDs in |flume-palettes|.
 
-transparent ~
+transparent ~                                              *flume-transparent*
     Removes primary editor and sign-column backgrounds. Raised surfaces,
-    selections, diffs, and diagnostic backgrounds remain visible.
+    selections, diffs, and diagnostic backgrounds remain visible. Contrast
+    depends on your terminal background when transparency is enabled.
 
-terminal_colors ~
-    Sets g:terminal_color_0 through g:terminal_color_15 from the palette.
+terminal_colors ~                                      *flume-terminal_colors*
+    Sets g:terminal_color_0 through g:terminal_color_15 for Neovim's terminal.
+    When false, clears those variables. This does not theme the host terminal;
+    use |flume-extras| for that.
 
-watch_sync ~
-    Watches the active integration set and applies schemas synchronized by
-    other running Neovim instances. The watcher is event-driven and enabled by
-    default. Set to false to ignore switches while this editor runs.
-    Selecting another colorscheme stops watching. Call setup() to resume.
+watch_sync ~                                                *flume-watch_sync*
+    Applies palettes synchronized by other editors sharing the data directory.
+    Enabled by default. Set to false to ignore switches while the editor runs.
+    Selecting a non-Flume colorscheme stops watching. Call setup() to resume.
 
-follow_sync ~
-    At setup, prefers the validated schema in <data-dir>/current/schema over the
-    configured schema. Missing or invalid state uses the configured fallback.
-    Defaults to false. Setup never rewrites the Lua configuration or marker.
-    Set both follow_sync and watch_sync to false for an independent editor.
-    Reload preserves the current editor palette instead of rereading this state.
+follow_sync ~                                              *flume-follow_sync*
+    At setup, prefers the validated shared schema over the configured schema.
+    Missing or invalid state uses the configured fallback. Defaults to false.
 >
     require("flume").setup({ schema = "mesa", follow_sync = true })
 <
-    :FlumeSync mira remembers Mira for the next setup. Mesa remains the fallback.
-    The remembered choice belongs to stdpath("data")/flume, not the checkout.
-    Set FLUME_DATA_DIR before startup to use another shared data directory.
-    get_sync_dir() returns its absolute path.
-    get_active_schema() returns its canonical schema, or nil when unavailable.
+    After :FlumeSync mira, startup selects Mira; Mesa remains the fallback.
+    Setup does not rewrite your Lua configuration or the shared marker.
+    Reload preserves the editor's current palette instead of rereading state.
+    Set both follow_sync and watch_sync to false for an independent editor.
+    See |flume-data| for the directory and accessors.
 
-dev ~
-    Reloads Flume when Lua files under this checkout's lua/ directory are saved.
-    Includes nested language modules and the lualine theme. Defaults to false.
-    Clears source caches and preserves the editor's schema, overrides, and options.
-    Does not activate external integrations or replace another colorscheme.
+dev ~                                                              *flume-dev*
+    Reloads Flume when Lua files in the checkout's lua/ directory are saved.
+    Includes language modules and the lualine theme. Preserves the current
+    schema and options; does not synchronize extras or replace another theme.
+    A failed reload restores the previous modules and theme. Fix and save the
+    source to retry. See docs/contributing.md for development checks.
 
-overrides ~
-    Changes colors by semantic role. Generated extras continue to use canonical
-    palettes; runtime saturation transforms are intentionally absent.
+overrides ~                                                  *flume-overrides*
+    Changes palette colors by role before highlights are built. Exact roles
+    and default values are listed in docs/palette-manifest.md.
 >
     require("flume").setup({
         schema = "opal",
-        overrides = {
-            syntax_comment = "#7a747a",
-            syntax_namespace = "#f48a94",
+        overrides = { syntax_comment = "#7a747a" },
+    })
+<
+    External themes use the palette's default colors, not these overrides.
+    Check contrast against your rendered background after customization.
+
+styles ~                                                        *flume-styles*
+    Adds text attributes to the syntax families shown in the defaults above.
+    Values use |nvim_set_hl()| attributes, for example { italic = true }.
+
+highlights ~                                         *flume-highlights-option*
+    Replaces an exact, case-sensitive group or Tree-sitter capture after other
+    highlights are built. Values are |nvim_set_hl()| tables or functions that
+    receive resolved palette colors. Functions can follow palette changes:
+>
+    require("flume").setup({
+        highlights = {
+            CursorLineNr = function(c)
+                return { fg = c.accent, bold = true }
+            end,
         },
     })
 <
 
-styles ~
-    Adds broad text attributes to syntax roles.
->
-    require("flume").setup({ styles = { comments = { italic = true } } })
-<
-
-highlights ~
-    Changes an exact, case-sensitive group or Tree-sitter capture. Values may
-    be tables or functions receiving the resolved palette colors.
-
-SYSTEM APPEARANCE ~
-    Flume does not install an OS watcher. Call setup() from an existing
-    appearance hook after that hook updates 'background':
+SYSTEM APPEARANCE ~                                         *flume-appearance*
+    Flume does not watch OS appearance. Call setup() from your appearance hook
+    after that hook updates 'background':
 >
     require("flume").setup({
         schema = vim.o.background == "light" and "opal" or "dusk",
     })
 <
+    Include your other options in that call too.
 
 ==============================================================================
-COMMANDS                                                        *flume-commands*
+COMMANDS                                                      *flume-commands*
 
-:FlumeReload                                                      *:FlumeReload*
-    Reload the editor-local palette and notify ColorScheme integrations.
+Commands become available when Flume is loaded.
 
-:FlumeCompile                                                    *:FlumeCompile*
-    Regenerate all canonical integration files without changing the active
-    palette.
+:FlumeReload                                                    *:FlumeReload*
+    Reload source modules and the editor-local palette. Preserves options and
+    notifies ColorScheme integrations without synchronizing external themes.
 
-:FlumeSync [schema]                                                 *:FlumeSync*
-    Apply a canonical palette and activate supported live integrations.
-    Running Neovim instances with watch_sync enabled follow the new schema.
-    See |flume-extras| for external live-sync requirements.
+:FlumeCompile                                                  *:FlumeCompile*
+    Regenerate integration files from the palettes in the checkout. Does not
+    change the active palette. Use after changing palette or exporter code.
 
-:FlumeInstallExtras [app]                                  *:FlumeInstallExtras*
-    Symlink generated extras into safe standard locations. Supported app
-    arguments: ghostty, kitty, opencode, tmux, lsd.
+:FlumeSync [schema]                                               *:FlumeSync*
+    Apply a palette and activate its shared integration set. With no argument,
+    use the editor's current palette. |flume-watch_sync| editors follow it.
+    External reload behavior is described in |flume-extras|.
 
-:FlumeExtras                                                      *:FlumeExtras*
-    Open refusal-safe copy/link instructions for extras.
+:FlumeInstallExtras [app]                                *:FlumeInstallExtras*
+    Link an external theme at a standard destination. With no argument, link
+    all five installable apps. See |flume-install-extras| before running it.
 
-:checkhealth flume                                           *flume-checkhealth*
-    Check the selected palette and its generated integration files.
+:FlumeExtras                                                    *:FlumeExtras*
+    Open a scratch buffer with the current paths and shell link instructions
+    for the five installable apps. Shell instructions refuse existing paths.
+
+:checkhealth flume                                         *flume-checkhealth*
+    Check Neovim, 'termguicolors', palette, shared state, installer links, and
+    generated files. Unlinked apps may be unused or configured manually.
 
 ==============================================================================
-EXTRAS                                                            *flume-extras*
+EXTRAS                                                          *flume-extras*
 
-Every canonical artifact includes its palette suffix. Active sets live outside
-this checkout, under stdpath("data")/flume. Print the exact directory with:
+For a fixed theme, use a palette-suffixed file under extras/. For themes that
+follow |:FlumeSync|, use the active filenames under <data-dir>/current/:
+
+Tool      Fixed Dusk artifact                      Active filename ~
+Ghostty   extras/ghostty/flume-dusk                 ghostty
+Kitty     extras/kitty/flume-dusk.conf              kitty.conf
+Tmux      extras/tmux/colors-dusk.conf              tmux.conf
+LSD       extras/lsd/colors-dusk.yaml               lsd.yaml
+OpenCode  extras/opencode/flume-dusk.json           opencode.json
+Lazygit   extras/lazygit/flume-dusk.yml             lazygit.yml
+fzf       extras/fzf/flume-dusk.opts                fzf.opts
+Delta     extras/delta/flume-dusk.gitconfig         delta.gitconfig
+Pi        extras/pi/flume-dusk.json                 pi.json
+Palette   extras/palette/flume-dusk.json            palette.json
+
+INSTALL AND SELECT                                      *flume-install-extras*
+
+For example, install the Ghostty theme from Neovim:
+>
+    :FlumeInstallExtras ghostty
+<
+Then add `theme = flume` to your Ghostty config and reload it. Installing the
+file alone does not select the theme. Switch the shared palette with:
+>
+    :FlumeSync mira
+<
+The installer creates the active set if needed. Supported app arguments and
+symlink destinations:
+
+    ghostty   ~/.config/ghostty/themes/flume
+    kitty     ~/.config/kitty/themes/flume.conf
+    opencode  ~/.config/opencode/themes/flume.json
+    tmux      ~/.tmux/flume-theme.conf
+    lsd       ~/.config/lsd/colors.yaml
+
+It refuses existing regular files and directories, but replaces existing
+symlinks. Check the destination first if you already manage a theme there.
+Move an existing file aside only after preserving any personal settings.
+
+For application setup examples, see docs/workflows.md. Other
+tools have no automatic installer because their include locations vary.
+
+RELOAD BEHAVIOR ~
+
+:FlumeSync asks running Ghostty on macOS to reload, sources ~/.tmux.conf when
+inside Tmux, and notifies a linked ~/.pi/agent/themes/flume.json theme. Apps
+must already select or include Flume. Other apps need their own reload action
+or a new invocation; publishing an active set does not make them reload.
+
+SHARED DATA                                                       *flume-data*
+
+Active sets live in stdpath("data")/flume, outside the checkout. Editors using
+the same directory share the palette. Print the exact path:
 >
     :lua print(require("flume").get_sync_dir())
 <
-The active set is atomically linked under <data-dir>/current/ and records its
-schema in current/schema. Completed sets are retained so concurrent activations
-cannot delete each other's files. Unchanged palette content reuses its set.
+Set FLUME_DATA_DIR before startup to use another shared directory.
+get_active_schema() returns the validated shared schema, or nil when absent.
+For custom consumers, current/palette.json contains the default palette colors.
+Its format and atomic-switch contract are in docs/semantic-export.md.
 
-After upgrading, run :FlumeSync and :FlumeInstallExtras to relink the five safe
-installer entries. Update manual includes to <data-dir>/current/. A writable
-checkout forwards recognized legacy extras/current symlinks for compatibility.
-Regular files, directories, and unrecognized links are left intact with a warning.
-Direct data-directory links survive plugin replacement; checkout links do not.
-
-Custom consumers can read current/palette.json: format_version 1, schema,
-appearance, and canonical colors. See docs/semantic-export.md for its contract.
-
-    APP       DUSK ARTIFACT
-    Ghostty   extras/ghostty/flume-dusk
-    Kitty     extras/kitty/flume-dusk.conf
-    Tmux      extras/tmux/colors-dusk.conf
-    LSD       extras/lsd/colors-dusk.yaml
-    OpenCode  extras/opencode/flume-dusk.json
-    Lazygit   extras/lazygit/flume-dusk.yml
-    fzf       extras/fzf/flume-dusk.opts
-    Delta     extras/delta/flume-dusk.gitconfig
-    Pi        extras/pi/flume-dusk.json
-    Palette   extras/palette/flume-dusk.json
-
-Only Ghostty, Kitty, OpenCode, Tmux, and LSD have safe automatic installer
-entries. The other tools support multiple include locations, so Flume does not
-guess. Use each tool's theme or include mechanism.
-
-See docs/workflows.md for external-tool setup examples.
+After upgrading from checkout-owned state, run :FlumeSync and
+:FlumeInstallExtras, then update manual includes to <data-dir>/current/.
+Recognized legacy checkout links are forwarded when writable, but direct data
+links survive plugin replacement. Migration details: docs/semantic-export.md.
 
 ==============================================================================
-HIGHLIGHTS                                                    *flume-highlights*
+HIGHLIGHTS                                                  *flume-highlights*
 
-Built-in surfaces include Neovim UI, diagnostics, Tree-sitter, LSP semantic
-tokens, GitSigns, Oil, Telescope, nvim-cmp, lazy.nvim, WhichKey, Mason, Trouble,
-Neo-tree, nvim-tree, Snacks, and fzf-lua.
+Flume defines Neovim UI, diagnostics, Tree-sitter, and LSP semantic groups.
+Plugin highlights cover GitSigns, Oil, Telescope, nvim-cmp, lazy.nvim,
+WhichKey, Mason, Trouble, Neo-tree, nvim-tree, Snacks, and fzf-lua. These
+plugins are not dependencies. BlinkCmpGhostText is also defined.
 
-Lualine users can select options = { theme = "flume" }. Lualine reloads this
-named theme on ColorScheme; Flume does not configure statusline sections.
+LUALINE ~                                                      *flume-lualine*
 
-Use :Inspect or :highlight GroupName and the `highlights` option for exact
-changes. See docs/color-system.md for the semantic schema contract.
+Select Flume in your existing lualine setup:
+>
+    require("lualine").setup({
+        options = { theme = "flume" },
+        -- Keep your own sections and component options here.
+    })
+<
+Lualine reloads named themes on ColorScheme; no extra callback is needed.
+A precomputed theme or component color table can retain old colors. Use
+component color functions when colors must follow palette changes.
+
+==============================================================================
+TROUBLESHOOTING                                        *flume-troubleshooting*
+
+Theme did not load ~
+    Check :echo g:colors_name. If it is not a Flume name, confirm the plugin
+    loads before setup() and no later configuration selects another theme.
+    With lazy.nvim, use the eager loading specification in README.md.
+
+Colors differ from the previews ~
+    Check :set termguicolors? and your terminal's true-color support. Previews
+    use opaque backgrounds and Tree-sitter; transparency, terminal opacity,
+    parsers, and language servers can change what you see. Inspect syntax with
+    |:Inspect| and UI groups with :highlight GroupName.
+
+Palette changes unexpectedly or resets at startup ~
+    Running-editor and startup selection are separate. See |flume-watch_sync|
+    and |flume-follow_sync|. To isolate an editor, disable both options.
+
+External app stays on the old palette ~
+    Check the selected theme/include, then the link reported by
+    :checkhealth flume. Use the stable current/ path, not a resolved set path.
+    Reload the app or start a new invocation as described in |flume-extras|.
+    Local `overrides` do not alter external themes; see |flume-overrides|.
+
+Installer refuses a path ~
+    Preserve your existing file and inspect the destination before relinking.
+    See |flume-install-extras|. For legacy forwarding warnings or a stale
+    lock, follow the migration procedure in docs/semantic-export.md.
+
+Help is unavailable ~
+    Confirm the plugin is on 'runtimepath'. Run :helptags ALL to rebuild tags.
 
 ==============================================================================
 vim:tw=78:ts=8:noet:ft=help:norl:

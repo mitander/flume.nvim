@@ -1,6 +1,6 @@
 # Opal examples
 
-Light palette with a cool paper canvas. [All galleries](../showcase.md#individual-language-captures).
+Light palette with a cool paper canvas. [All galleries](../gallery.md).
 
 [Go](#go) · [Rust](#rust) · [Python](#python) · [TypeScript](#typescript) ·
 [Zig](#zig) · [Elixir](#elixir) · [TOML](#toml) ·
@@ -79,8 +79,8 @@ Diagnostics are suppressed here to isolate provider coloring.
 ## Integrations
 
 [Setup recipes](../workflows.md#external-tools) · [Lualine setup](../workflows.md#lualine).
-Native integration previews are **pending**. The editor images above do not
-qualify external applications; see the [native capture checklist](../showcase.md#native-integration-contact-sheets).
+External-app screenshots aren't available yet; the images above show Neovim only.
+Matching theme files are listed below.
 
 | Integration | Opal configuration |
 | --- | --- |

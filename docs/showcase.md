@@ -1,117 +1,12 @@
-# Showcase and visual release evidence
+# Showcase production
 
-Flume keeps canonical editor captures, README presentation, and native
-integration evidence separate. Composition scripts resize pixels but never tint
-or recolor application captures.
+This guide is for contributors who need to refresh screenshots or review native
+integrations. To compare palettes, browse the [gallery](gallery.md).
 
-## July-inspired syntax hierarchy
-
-The before captures use commit `b767a86b02d3a936a8609f2fa4ff50bb4b468cb4`
-plus the softened primary foregrounds, Dusk/Mira property trials, and Markdown
-style fixes. Sidecars record those exact inputs. The final hierarchy keeps
-the primary foregrounds and style fixes, but replaces the property trials.
-
-Dusk uses deeper rose fields/namespaces, quieter violet punctuation and comments,
-and the July teal syntax family. Amber types and peach literals are unchanged.
-Mira uses its own July pink namespace and a repaired deeper pink property ink;
-its teal, violet, amber, and peach families remain intact. Opal and Mesa retain
-their chromatic syntax and receive only modestly lighter comments and supporting
-state surfaces. No canvas, ANSI ink, diagnostic ink, or semantic mapping changed.
-
-July's exact inks do not all satisfy the current state contract. Properties,
-namespaces, brackets, and comments therefore retain targeted lightness repairs.
-Dusk's brown-rose special punctuation needs the largest repair because its
-historical ink fails even on the canvas. Dark selections and diff fills are
-closer to the canvas, not replaced by uniform foregrounds. Light selections
-are closer to paper; Mesa's changed-word fill is also slightly lighter.
-
-### Changed source roles
-
-Before values match the captured comparison inputs, including property trials.
-The retained primary inks are Dusk `#c9c5d9`, Mira `#cbc5d2`, Opal `#514e57`,
-and Mesa `#524f50`. The [generated manifest](palette-manifest.md) owns all final
-role values. Shared Dusk syntax accents below mean attribute, constant,
-function, and special; they do not change the separate UI accent.
-
-| Palette | Role | Before | Final |
-| --- | --- | --- | --- |
-| Dusk | Shared syntax accents | `#7dacbb` | `#73a6b6` |
-| Dusk | `syntax_keyword` | `#b898d8` | `#b391d6` |
-| Dusk | `syntax_property` | `#e18f9c` | `#ce818d` |
-| Dusk | `syntax_namespace` | `#cf979f` | `#ca838c` |
-| Dusk | `syntax_comment` | `#a5a3b2` | `#9995a8` |
-| Dusk | `syntax_doc_comment` | `#9fa5b2` | `#9297a9` |
-| Dusk | `syntax_punctuation` | `#a2a3bc` | `#9899b5` |
-| Dusk | `syntax_punctuation_bracket` | `#a3a5b8` | `#9396ae` |
-| Dusk | `syntax_punctuation_special` | `#c99a97` | `#bd8b85` |
-| Dusk | `surface_alt`, `diff_text_bg` | `#353252`, `#34374c` | `#302c43` |
-| Dusk | `element_active` | `#35394c` | `#2f2c40` |
-| Dusk | `diff_add_bg` | `#273629` | `#293028` |
-| Dusk | `diff_change_bg` | `#273343` | `#292e3d` |
-| Dusk | `diff_delete_bg` | `#412a34` | `#392831` |
-| Mira | `syntax_property` | `#e18aa4` | `#d18099` |
-| Mira | `syntax_namespace` | `#e187a6` | `#dd789b` |
-| Mira | `syntax_comment`, `syntax_punctuation_bracket` | `#a6a0ad` | `#9b94a4` |
-| Mira | `syntax_doc_comment` | `#a5a0ab` | `#9b94a3` |
-| Mira | `syntax_punctuation` | `#a69fb2` | `#9d96aa` |
-| Mira | `surface_alt` | `#353142` | `#302b3c` |
-| Mira | `element_active` | `#393548` | `#312d3e` |
-| Mira | `diff_add_bg` | `#2a3735` | `#2b302d` |
-| Mira | `diff_change_bg` | `#3a302b` | `#342c28` |
-| Mira | `diff_delete_bg` | `#402a35` | `#362830` |
-| Mira | `diff_text_bg` | `#393348` | `#312b3e` |
-| Opal | `syntax_comment` | `#605c60` | `#646064` |
-| Opal | `syntax_doc_comment` | `#5f5c60` | `#636064` |
-| Opal | `surface_alt`, `element_active` | `#ddd6e3` | `#e4dee9` |
-| Mesa | `syntax_comment` | `#5e5a5e` | `#636063` |
-| Mesa | `syntax_doc_comment` | `#5e5a5f` | `#626064` |
-| Mesa | `surface_alt`, `element_active` | `#ded4d1` | `#e5dcd9` |
-| Mesa | `diff_text_bg` | `#dcdad1` | `#dfddd4` |
-
-### Contrast and native evidence
-
-Each cell below is final canvas / worst applicable state contrast, rounded to
-two decimals. The matrix retains `bg`, `active_line`, `surface`, `surface_alt`,
-`element_active`, and all four diff backgrounds. Resolved highlights agree with
-the source roles. These opaque sRGB calculations constrain readability, not
-comfort or eye strain.
-
-| Palette | Properties | Namespaces | Ordinary comments | Documentation comments | Worst state |
-| --- | --- | --- | --- | --- | --- |
-| Dusk | 5.33 / 4.56 | 5.32 / 4.55 | 5.38 / 4.61 | 5.38 / 4.61 | `surface_alt` / `diff_text_bg` |
-| Mira | 5.44 / 4.61 | 5.42 / 4.59 | 5.37 / 4.55 | 5.37 / 4.54 | `element_active` |
-| Opal | 5.81 / 4.90 | 5.81 / 4.90 | 5.43 / 4.58 | 5.45 / 4.60 | `diff_delete_bg` |
-| Mesa | 5.87 / 5.01 | 5.87 / 5.01 | 5.35 / 4.56 | 5.36 / 4.57 | `diff_text_bg` |
-
-The final native samples show deeper dark-theme fields and subordinate comment
-blocks beside ordinary code. Mira retains pink rather than copying Dusk's rose.
-Light-theme comment changes are deliberately small; stronger softening would
-need broader surface changes. Selection and changed-word fills remain visible,
-and existing diagnostic signs, underlines, and virtual text retain emphasis.
-
-| Palette | Zig, before / final | Dense comments, before / final |
-| --- | --- | --- |
-| Dusk | [Before](../assets/screenshots/hierarchy/before/dusk/zig.png) · [Final](../assets/screenshots/hierarchy/after/dusk/zig.png) | [Before](../assets/screenshots/hierarchy/before/dusk/comments.png) · [Final](../assets/screenshots/hierarchy/after/dusk/comments.png) |
-| Mira | [Before](../assets/screenshots/hierarchy/before/mira/zig.png) · [Final](../assets/screenshots/hierarchy/after/mira/zig.png) | [Before](../assets/screenshots/hierarchy/before/mira/comments.png) · [Final](../assets/screenshots/hierarchy/after/mira/comments.png) |
-| Opal | [Before](../assets/screenshots/hierarchy/before/opal/zig.png) · [Final](../assets/screenshots/hierarchy/after/opal/zig.png) | [Before](../assets/screenshots/hierarchy/before/opal/comments.png) · [Final](../assets/screenshots/hierarchy/after/opal/comments.png) |
-| Mesa | [Before](../assets/screenshots/hierarchy/before/mesa/zig.png) · [Final](../assets/screenshots/hierarchy/after/mesa/zig.png) | [Before](../assets/screenshots/hierarchy/before/mesa/comments.png) · [Final](../assets/screenshots/hierarchy/after/mesa/comments.png) |
-
-The supplementary [Rust fixture](../assets/screenshots/hierarchy/comments.rs)
-keeps ordinary and documentation blocks beside identifiers and fields without
-changing canonical fixtures. Before/final captures use the same native font,
-geometry, source, and parser/query runtime. Sidecars and
-[metadata](../assets/screenshots/hierarchy/metadata.json) record actual inputs
-and display limitations; no token painting or pixel recoloring was used.
-
-Generation used `activate=false`. Validation passed 53 Lua tests, 104 native
-parser checks, resolved UI/state pairs, and the complete `./scripts/check` gate.
-All 28 canonical captures and 16 state/LSP captures pass provenance and OCR
-preflight. The README composite was regenerated from the current captures.
-
-The before/final comparison above retains its 19-point font. Canonical Zig
-captures also use 19 points. Other canonical languages and all state/LSP
-captures use 12 points so complete fixtures fit this display. Native integration
-contact sheets below remain Pending and are not qualified by editor captures.
+Composition scripts resize captures without tinting or recoloring them. Exact
+role values and contrast pairs belong to the [palette manifest](palette-manifest.md),
+not screenshot comparison tables. Archived hierarchy comparisons retain their
+inputs in [capture metadata](../assets/screenshots/hierarchy/metadata.json).
 
 ## Canonical editor captures
 
@@ -286,20 +181,7 @@ Mira, and Dusk. Dusk is the foreground sample. Application captures retain their
 original colors and aspect ratios. README links open Markdown galleries with
 embedded captures, headings, and links to corresponding theme/language sections.
 
-### Individual language captures
-
-Browse by theme, including working states and integration exports:
-
-[Dusk](themes/dusk.md) · [Opal](themes/opal.md) ·
-[Mira](themes/mira.md) · [Mesa](themes/mesa.md)
-
-Browse by language, comparing all four themes on one page:
-
-[Go](languages/go.md) · [Rust](languages/rust.md) · [Python](languages/python.md) ·
-[TypeScript/TSX](languages/tsx.md) · [Zig](languages/zig.md) ·
-[Elixir](languages/elixir.md) · [TOML](languages/toml.md)
-
-Each gallery has section links and cross-links to the other view. Both views
+The [gallery](gallery.md) links to both palette and language views. Both views
 embed the same full-resolution image files; they do not duplicate or recolor captures.
 
 ## Native integration contact sheets

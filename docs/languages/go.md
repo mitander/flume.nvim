@@ -4,7 +4,7 @@ The same Go source and Tree-sitter runtime in all four themes.
 [Source and capture details](../showcase.md#code-examples).
 
 [Dusk](#dusk) · [Opal](#opal) · [Mira](#mira) · [Mesa](#mesa) ·
-[All galleries](../showcase.md#individual-language-captures)
+[All galleries](../gallery.md)
 
 ## Dusk
 

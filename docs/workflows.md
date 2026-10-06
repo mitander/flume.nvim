@@ -1,78 +1,102 @@
-# Shared workflows
+# External-tool recipes
 
-Use these examples to follow Flume palettes without putting machine-specific paths or UI layouts into the plugin.
-
-## Remember the synchronized palette
-
-Treat the configured schema as a fallback, not mutable state:
-
-```lua
-require("flume").setup({
-    schema = "mesa",
-    follow_sync = true,
-})
-```
-
-On startup, `follow_sync` reads the validated schema from `<data-dir>/current/schema`.
-Missing or invalid state uses the configured fallback. Setup does not write either file.
-
-`:FlumeSync mira` activates the Mira integration set and applies Mira in the editor.
-The next startup follows Mira. Your Lua configuration still says `schema = "mesa"`.
-`:FlumeReload` preserves the current editor palette, even when another palette is active globally.
-
-`follow_sync` controls startup selection. `watch_sync` controls changes while the editor runs.
-Both options must be false for an editor that remains independent of shared palette choices.
-The defaults are `follow_sync = false` and `watch_sync = true`.
-
-The active state lives in `stdpath("data")/flume`. Editors sharing that directory share the choice,
-even across different plugin checkouts. Plugin replacement does not delete the choice.
-Set `FLUME_DATA_DIR` before startup to select another shared owner. See the
-[semantic export](semantic-export.md) for migration and consumer contracts.
-`:colorscheme flume-mesa` changes only the editor, not the remembered integration choice.
-`require("flume").get_active_schema()` returns the canonical active schema, or `nil`.
-
-## Develop the colorscheme
-
-Enable reload-on-save in your local development configuration:
-
-```lua
-require("flume").setup({ schema = "mesa", follow_sync = true, dev = true })
-```
-
-Saving Lua files under this checkout's `lua/` directory reloads Flume's source modules.
-Nested language modules and the lualine theme are included. Symlinked checkout paths work too.
-Reload preserves the current schema, overrides, and options. It emits `ColorScheme` without activating external integrations.
-A failed reload restores the previous modules and theme; fixing and saving the source retries the reload.
-The hook does not replace a different active colorscheme. Set `dev = false` to remove it.
-
-Run `./scripts/check` before submitting changes.
-To test the native lualine integration with an installed checkout:
-
-```sh
-FLUME_LUALINE_RUNTIME=/path/to/lualine.nvim nvim --headless --clean -c "lua dofile('tests/lualine.lua')"
-```
+Use these includes when you want external tools to follow `:FlumeSync`.
+The [help reference](../doc/flume.txt) lists installation destinations, active
+filenames, shared-data options, and reload behavior. For a fixed palette instead,
+use the palette-suffixed files in [`extras/`](../extras).
 
 ## Lualine
 
-Flume supplies a named theme, not a statusline layout:
-
-```lua
-require("lualine").setup({
-    options = { theme = "flume" },
-    -- Keep your own sections and component options here.
-})
-```
-
-Lualine reloads named themes on `ColorScheme`. No additional callback is needed.
-A precomputed theme table or component color table can retain old colors.
-Use component color functions when colors must follow palette changes.
+Lualine setup and palette changes are covered by `:help flume-lualine`
+([online](../doc/flume.txt)).
 
 ## External tools
 
 Run `:FlumeSync` once to create the active set before using these examples.
 Print `require("flume").get_sync_dir()` in Neovim and replace `/absolute/path/to/flume-data`
-with that directory. Link the files, then select or include them in each application.
-Flume does not modify shell startup files, Git configuration, or application state.
+with that directory. Select or include the active file in each application.
+Keep these includes in your own shell and application configuration. Merge the
+examples into existing settings rather than replacing your whole configuration.
+
+For the five installable tools below, run the named `:FlumeInstallExtras` command
+in Neovim first. It refuses regular files and directories but replaces symlinks;
+check the destination if you already manage a theme there.
+
+### Ghostty
+
+Run `:FlumeInstallExtras ghostty`, then add this to your Ghostty config:
+
+```ini
+theme = flume
+```
+
+Reload Ghostty's configuration to see the theme. On macOS, future `:FlumeSync`
+calls ask running Ghostty windows to reload. On other platforms, reload manually.
+See [Ghostty's theme configuration](https://ghostty.org/docs/config/reference#theme).
+
+### Kitty
+
+Run `:FlumeInstallExtras kitty`, then add this after other color settings in
+`~/.config/kitty/kitty.conf`:
+
+```conf
+include themes/flume.conf
+```
+
+Reload with Kitty's default `Ctrl+Shift+F5` shortcut after changing the shared
+palette, or open a new Kitty instance. Flume does not request a Kitty reload.
+See [Kitty's configuration guide](https://sw.kovidgoyal.net/kitty/conf/).
+
+### Tmux
+
+Run `:FlumeInstallExtras tmux`, then source the variables before your status and
+window styles in `~/.tmux.conf`:
+
+```tmux
+source-file ~/.tmux/flume-theme.conf
+```
+
+The file supplies colors, not a statusline layout. Use those variables in your
+existing styles. Tmux's `#{...}` formats read the colors when rendering; for example:
+
+```tmux
+set -g status-style "bg=#{thm_bg},fg=#{thm_fg}"
+```
+
+Run `tmux source-file ~/.tmux.conf` to apply your configuration. Future
+`:FlumeSync` calls source that file when Neovim is running inside Tmux.
+See the [Tmux manual](https://man.openbsd.org/tmux#source-file).
+
+### LSD
+
+Run `:FlumeInstallExtras lsd`, then select the file in `~/.config/lsd/config.yaml`:
+
+```yaml
+color:
+  when: auto
+  theme: ~/.config/lsd/colors.yaml
+```
+
+Run `lsd -l` to see metadata colors. New invocations read the shared palette;
+file-name colors still follow `LS_COLORS`. Classic mode disables color.
+See [LSD's configuration guide](https://github.com/lsd-rs/lsd#customizing-lsd-configuration-and-theming).
+
+### OpenCode
+
+Run `:FlumeInstallExtras opencode`, then use `/theme` in OpenCode to select
+`flume`. To set it in configuration, merge this into `~/.config/opencode/tui.json`:
+
+```json
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "theme": "flume"
+}
+```
+
+Restart OpenCode after changing the shared palette if it still shows the old
+colors. Flume does not request an OpenCode reload. These instructions follow the
+[current OpenCode theme guide](https://opencode.ai/docs/themes/); older versions
+may keep the theme setting in `opencode.json` instead.
 
 ### fzf
 

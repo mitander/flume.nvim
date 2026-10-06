@@ -1,19 +1,23 @@
-<div align="center">
-  <img src="assets/flume.svg" alt="Flume" width="360">
-  <p><strong>Organic synthesis. Soft contrast. Resonant code.</strong></p>
-</div>
+<p align="center">
+  <img src="assets/flume.svg" alt="Flume" width="260">
+  <br><br>
+</p>
 
-[![Opal, Mesa, Mira, and Dusk in a cascading palette showcase](assets/screenshots/showcase.png)](docs/showcase.md)
+Flume is a Neovim colorscheme inspired by
+[Jonathan Zawada's artwork for Flume](https://zawada.art/work/flume-skin/).
+It offers two dark and two light palettes, with matching themes for your
+terminal and developer tools.
 
-Flume is a Neovim colorscheme with four palettes and matching terminal and
-developer-tool themes. Neutral identifiers, semantic color, and soft surfaces
-keep the focus on code. Includes Tree-sitter, LSP semantic tokens, diagnostics,
-and popular plugin highlights.
+Ordinary identifiers stay neutral. Color distinguishes functions, types,
+selections, and diagnostics against soft backgrounds.
 
-## Palettes
+[![Opal, Mesa, Mira, and Dusk in a cascading palette showcase](assets/screenshots/showcase.png)](docs/gallery.md)
 
-Each preview shows the same Zig expression tree with real Tree-sitter highlighting.
-Click a palette to browse its languages, diagnostics, completion, LSP, and integrations.
+<details>
+<summary>Palette previews</summary>
+
+Each preview shows the same Zig source with Tree-sitter. Click a palette for
+more languages, selections, and diffs.
 
 <table>
   <tr>
@@ -34,24 +38,12 @@ Click a palette to browse its languages, diagnostics, completion, LSP, and integ
   </tr>
 </table>
 
-### Language examples
-
-Compare each language across all four palettes:
-
-- [Go](docs/languages/go.md)
-- [Rust](docs/languages/rust.md)
-- [Python](docs/languages/python.md)
-- [TypeScript/TSX](docs/languages/tsx.md)
-- [Zig](docs/languages/zig.md)
-- [Elixir](docs/languages/elixir.md)
-- [TOML](docs/languages/toml.md)
-
-See the [example sources](docs/showcase.md#code-examples), or browse
-[selection, diffs, diagnostics, completion, and LSP coloring](docs/showcase.md#working-state-and-lsp-captures).
+</details>
 
 ## Install
 
-Requires Neovim 0.9+ and true-color support. With lazy.nvim:
+Requires Neovim 0.9+ and a true-color terminal. Add this to your
+[lazy.nvim](https://github.com/folke/lazy.nvim) configuration:
 
 ```lua
 {
@@ -60,118 +52,94 @@ Requires Neovim 0.9+ and true-color support. With lazy.nvim:
     priority = 1000,
     config = function()
         vim.opt.termguicolors = true
-        require("flume").setup({ schema = "dusk" })
+        require("flume").setup({
+            schema = "dusk",
+        })
     end,
 }
 ```
 
-`setup()` configures and applies Flume. Do not follow it with `:colorscheme`.
-Without Lua options, use `colorscheme flume-dusk` instead. The other entry points
-are `flume-opal`, `flume-mira`, and `flume-mesa`.
+Install the plugin and restart Neovim to load Dusk. Run `:echo g:colors_name`
+to confirm `flume-dusk`. The `setup()` call applies the theme; you don't need
+an extra `:colorscheme` call.
 
-## Configure
+With another plugin manager, install `mitander/flume.nvim`, then add the contents
+of the `config` function above to your `init.lua` after the plugin loads.
 
-Override palette roles, syntax styles, or exact highlight groups:
+Flume includes Tree-sitter, LSP, and plugin highlights. You'll need to install
+parsers and language servers separately if you use them.
+
+## Usage
+
+Try another palette in the current editor:
+
+```vim
+:colorscheme flume-opal
+```
+
+The colorscheme names are `flume-dusk`, `flume-opal`, `flume-mira`, and
+`flume-mesa`. Change `schema` in your setup to use that palette at startup.
+
+## Configuration
+
+For italic comments and a custom current line number, replace your setup call
+with:
 
 ```lua
 require("flume").setup({
     schema = "opal",
-    transparent = false,
-    overrides = {
-        syntax_comment = "#7a747a",
-        accent = "#5f9cab",
+    styles = {
+        comments = { italic = true },
     },
-    styles = { comments = { italic = true } },
     highlights = {
-        CursorLineNr = { fg = "#ffffff", bold = true },
+        CursorLineNr = {
+            bold = true,
+            fg = "#413b49",
+        },
     },
 })
 ```
 
-Use `:Inspect` or `:highlight GroupName` to identify a highlight group.
-Overrides affect Neovim only; generated themes use canonical palette colors.
-See [`:help flume-options`](doc/flume.txt) for all defaults and system-appearance
-hooks. Exact roles are listed in the [palette manifest](docs/palette-manifest.md).
+Run `:set cursorline number` to see the line-number change. For all options,
+including palette-role overrides, see `:help flume-options`
+([online](doc/flume.txt)).
 
 ## Integrations
 
-- [Lualine](docs/workflows.md#lualine): use `options = { theme = "flume" }`
-  in your lualine setup. The named theme follows palette changes.
+Follow the [external-tool recipes](docs/workflows.md#external-tools) to install
+and select a matching theme.
 
-Matching external-tool themes live in [`extras/`](extras). Setup recipes live in the
-[workflow guide](docs/workflows.md#external-tools); native preview status lives
-in the [showcase](docs/showcase.md#native-integration-contact-sheets):
+For **lualine**, set `options = { theme = "flume" }` in your existing setup.
+The named theme follows palette changes; see `:help flume-lualine`.
 
-- [Ghostty](extras/ghostty/)
-- [Kitty](extras/kitty/)
-- [Tmux](extras/tmux/)
-- [LSD](extras/lsd/)
-- [OpenCode](extras/opencode/)
-- [Lazygit](extras/lazygit/)
-- [fzf](extras/fzf/)
-- [Delta](extras/delta/)
-- [Pi](extras/pi/)
+Matching themes are available for **Ghostty, Kitty, Tmux, LSD, OpenCode,
+Lazygit, fzf, Delta, and Pi**. See `:help flume-extras` for supported installation
+paths and reload behavior.
 
-**Automatic installation:** Ghostty, Kitty, OpenCode, Tmux, and LSD.
-
-```vim
-:FlumeInstallExtras
-```
-
-**Manual setup:** use the other tools' theme or include mechanisms. Flume does
-not guess user-specific destinations. See [`:help flume-extras`](doc/flume.txt)
-for artifact paths.
-
-Switch Neovim and the active integration set together:
+Once they're configured, switch the editor and shared themes together:
 
 ```vim
 :FlumeSync mira
 ```
 
-Other running Neovim instances follow by default. To remember the synchronized
-palette at startup, keep a fallback in your dotfiles:
+Other running Flume editors follow the switch by default. External apps may need
+a reload or a new invocation.
 
-```lua
-require("flume").setup({ schema = "mesa", follow_sync = true })
-```
+To remember the shared palette at startup, see `:help flume-follow_sync`.
+To keep an editor independent, set both `follow_sync = false` and
+`watch_sync = false`.
 
-`:FlumeSync mira` records Mira in runtime state, not your Lua configuration.
-Set both `follow_sync = false` and `watch_sync = false` for an independent editor.
-Active sets live in `stdpath("data")/flume`, outside the plugin checkout. Print
-`require("flume").get_sync_dir()` for your exact path. After upgrading, rerun
-`:FlumeInstallExtras` and update manual includes; legacy checkout links are forwarded
-when possible. External tools need their own reload support. See
-[shared workflows](docs/workflows.md) for setup and reload behavior, and the
-[semantic export](docs/semantic-export.md) for custom consumers.
+## Troubleshooting
 
-## Commands
+- `:help flume` for the full manual ([online](doc/flume.txt)).
+- `:help flume-troubleshooting` to identify unexpected colors or palette switches.
+- `:checkhealth flume` to verify your setup and integration files are correct.
+- [Palette manifest](docs/palette-manifest.md) for color roles and values for overrides.
 
-| Command                     | Action                                                     |
-| --------------------------- | ---------------------------------------------------------- |
-| `:FlumeReload`              | Reload the editor-local palette                            |
-| `:FlumeCompile`             | Regenerate all integration artifacts                       |
-| `:FlumeSync [schema]`       | Apply a palette and activate its integration set           |
-| `:FlumeInstallExtras [app]` | Link integrations with standard destinations               |
-| `:FlumeExtras`              | Show safe link instructions for the five installable tools |
-| `:checkhealth flume`        | Check the selected palette and generated files             |
-| `:help flume`               | Open the reference manual                                  |
+## Contributing
 
-## Development
-
-Set `dev = true` in your local Flume setup to reload on Lua source saves.
-Reloads preserve the editor's current palette and do not synchronize external tools.
-
-Run `./scripts/check` for tests, local links, and source checks. The check script
-requires Neovim and Python 3.11+.
-
-- [Color system](docs/color-system.md): roles, contrast targets, and mapping rules.
-- [Integration review](docs/integration-review.md): visual previews, contrast measurements, and before/after reports.
-- [Showcase production](docs/showcase.md): captures and native integration evidence.
-- [Changelog](CHANGELOG.md): release history.
-
-Flume's visual direction draws on [Jonathan Zawada's artwork for
-Flume](https://zawada.art/work/flume-skin/). A [wallpaper](assets/background.png) is
-available at 1376×768.
+See the [contributor guide](docs/contributing.md) for local development, checks,
+and visual review. The [changelog](CHANGELOG.md) records releases.
 
 ## License
 
