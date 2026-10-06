@@ -3,7 +3,7 @@
   "defs": {
     "bg":                    "#232136",
     "surface":               "#262938",
-    "element_active":        "#35394c",
+    "element_active":        "#2f2c40",
     "fg":                    "#c9c5d9",
     "muted":                 "#a6a2bb",
     "placeholder":           "#67627d",
@@ -20,16 +20,16 @@
     "bright_blue":           "#7eb6e8",
     "cyan":                  "#8fc9d2",
     "magenta":               "#b99add",
-    "syntax_comment":        "#a5a3b2",
-    "syntax_keyword":        "#b898d8",
-    "syntax_function":       "#7dacbb",
-    "syntax_primary":        "#d6d2e8",
+    "syntax_comment":        "#9995a8",
+    "syntax_keyword":        "#b391d6",
+    "syntax_function":       "#73a6b6",
+    "syntax_primary":        "#c9c5d9",
     "syntax_string":         "#a4b78a",
     "syntax_boolean":        "#ea9f8c",
     "syntax_type":           "#dfb86b",
-    "syntax_punctuation":    "#a2a3bc",
-    "diff_add_bg":           "#273629",
-    "diff_delete_bg":        "#412a34"
+    "syntax_punctuation":    "#9899b5",
+    "diff_add_bg":           "#293028",
+    "diff_delete_bg":        "#392831"
   },
   "theme": {
     "primary":                    "accent",

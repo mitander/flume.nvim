@@ -167,7 +167,14 @@ test("configured state groups use readable semantic pairs", function()
     local pairs = {
         { "Normal", "Normal" }, { "Normal", "DiffText" }, { "Normal", "DiffDelete" },
         { "Comment", "CursorLine" }, { "Comment", "Visual" },
+        { "@comment.documentation", "Visual" }, { "@comment.documentation", "DiffText" },
+        { "@property", "Visual" }, { "@property", "DiffText" },
+        { "@module", "Visual" }, { "@module", "DiffText" },
         { "Pmenu", "Pmenu" }, { "PmenuSel", "PmenuSel" },
+        { "StatusLine", "StatusLine" }, { "StatusLineNC", "StatusLineNC" },
+        { "Folded", "Folded" }, { "MatchParen", "MatchParen" }, { "WildMenu", "WildMenu" },
+        { "TabLine", "TabLine" }, { "TabLineSel", "TabLineSel" },
+        { "CursorLineNr", "CursorLineNr" },
         { "Search", "Search" }, { "IncSearch", "IncSearch" }, { "CurSearch", "CurSearch" },
         { "Search", "Visual" }, { "IncSearch", "Visual" }, { "CurSearch", "Visual" },
         { "Search", "DiffText" }, { "CurSearch", "DiffText" },
@@ -187,6 +194,22 @@ test("configured state groups use readable semantic pairs", function()
             local background = vim.api.nvim_get_hl(0, { name = pair[2], link = false }).bg
             local ratio = contrast(string.format("#%06x", foreground), string.format("#%06x", background))
             truthy(ratio >= 4.5, string.format("%s %s on %s: %.2f:1", schema, pair[1], pair[2], ratio))
+        end
+    end
+end)
+
+test("Markdown technical text stays upright while prose retains italics", function()
+    for _, schema in ipairs(schema_names) do
+        require("flume").setup({ schema = schema, watch_sync = false })
+        for _, group in ipairs({ "@markup.link", "@markup.link.url", "@markup.raw", "@string.special.path" }) do
+            local actual = vim.api.nvim_get_hl(0, { name = group, link = false })
+            truthy(not actual.italic, schema .. " " .. group .. " must stay upright")
+        end
+        truthy(vim.api.nvim_get_hl(0, { name = "@markup.link.url", link = false }).underline,
+            schema .. " URLs retain their underline")
+        for _, group in ipairs({ "@markup.italic", "@markup.quote" }) do
+            truthy(vim.api.nvim_get_hl(0, { name = group, link = false }).italic,
+                schema .. " " .. group .. " retains prose italics")
         end
     end
 end)
@@ -215,10 +238,27 @@ test("stable schema registry and light foundations are preserved", function()
     equal(table.concat(schema_names, ","), "dusk,opal,mira,mesa")
     equal(palettes.opal.bg, "#f2eff7")
     equal(palettes.opal.surface, "#ebe6f0")
-    equal(palettes.opal.surface_alt, "#ddd6e3")
     equal(palettes.mesa.bg, "#f3ede8")
     equal(palettes.mesa.surface, "#ebe3de")
-    equal(palettes.mesa.surface_alt, "#ded4d1")
+    for _, schema in ipairs({ "opal", "mesa" }) do
+        local colors = palettes[schema]
+        truthy(luminance(colors.bg) > luminance(colors.surface), schema .. " surface must recede from the canvas")
+        truthy(luminance(colors.surface) > luminance(colors.surface_alt), schema .. " alternate surface keeps depth")
+        equal(colors.element_active, colors.surface_alt, schema .. " light selections use the strong surface")
+    end
+end)
+
+test("comments remain subordinate and shared syntax accents stay related", function()
+    for _, schema in ipairs(schema_names) do
+        local colors = palettes[schema]
+        local primary = contrast(colors.syntax_primary, colors.bg)
+        for _, role in ipairs({ "syntax_comment", "syntax_doc_comment" }) do
+            truthy(contrast(colors[role], colors.bg) < primary, schema .. " " .. role .. " must recede from code")
+        end
+        for _, role in ipairs({ "syntax_attribute", "syntax_constant", "syntax_special" }) do
+            equal(colors[role], colors.syntax_function, schema .. " " .. role .. " shares the function accent")
+        end
+    end
 end)
 
 test("Mira and Mesa preserve their editor-first design anchors", function()

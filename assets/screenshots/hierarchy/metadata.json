@@ -1,0 +1,25 @@
+{
+  "app": "Neovim",
+  "app_version": "0.12.5",
+  "os": "macOS 27.0.1 (26A434)",
+  "terminal": "Ghostty 1.3.1",
+  "font": "Maple Mono NF, 19 points",
+  "dimensions": "Zig 2704 x 1896 pixels; supplementary Rust comments 2428 x 1896 pixels; matched geometry before/after",
+  "scale": "2x native pixels, unresized",
+  "fixture_revision": "Starting master HEAD b767a86b02d3a936a8609f2fa4ff50bb4b468cb4 with uncommitted foreground/property trials and Markdown style fixes. Before captures preserve that working source. After captures use the final July-inspired source and generated consumers. Existing semantic mappings, language overrides, and canonical fixtures are unchanged.",
+  "capture_date": "2026-10-06",
+  "design_evidence": {
+    "archive": "flume-reference-comparison.zip",
+    "archive_sha256": "95ca06c6bf105c8cb3c81b885348f8e2db1ad65cca0d068453b079770e021cc8",
+    "historical_dusk_commit": "61154ff0d3131bd3e5ba97defa0f6020f92ee002",
+    "historical_mira_commit": "cd3b0dbe63e5ebe55ebf5a5aefdd7e97ef607c57",
+    "interpretation": "Controlled browser palette comparison, not installed-state evidence or a historical editor reconstruction. Archive historical Lua files match git show; native before captures use the real starting working tree."
+  },
+  "unsupported_regions": [
+    "The display constrains the requested full-height viewport. All 29 canonical Zig lines and all 22 supplementary Rust comment-fixture lines are visible.",
+    "These matched comparisons use Tree-sitter only. Separate refreshed Go/Zig LSP sidecars report server versions and semantic-token readiness.",
+    "Go LSP single-pane captures show lines 1-29 rather than all 39 lines. Canonical full-height Go, Rust, Python, TSX, Elixir, and TOML captures remain stale and are not replaced with clipped images.",
+    "Editor evidence does not qualify native integration contact sheets or establish reading comfort on other displays."
+  ],
+  "manual_action": "Automated scripts/screenshot-window.sh SCHEMA zig and SCHEMA rust with FLUME_TS_RUNTIME=/tmp/flume-audit-runtime.WqXqCE in isolated before/after source copies. For the supplementary comments capture only, comments.rs was copied to examples/flume.rs in both isolated copies; canonical examples/flume.rs in the repository was never modified. The resulting rust.png/rust.json were stored as comments.png/comments.json with original hashes and the actual fixture checksum. Canonical Zig and state/LSP captures were copied back only after real capture; no stale image hashes were rewritten."
+}

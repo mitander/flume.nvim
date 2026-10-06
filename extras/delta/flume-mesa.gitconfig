@@ -15,7 +15,7 @@
     line-numbers-left-style = "#8c837f"
     line-numbers-right-style = "#8c837f"
     commit-decoration-style = "#2f6271" box
-    file-style = "#423d47"
+    file-style = "#524f50"
     file-decoration-style = "#2f6271" ul
-    hunk-header-style = "#423d47"
+    hunk-header-style = "#524f50"
     hunk-header-decoration-style = "#8c837f" box

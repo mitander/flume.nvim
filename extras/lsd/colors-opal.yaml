@@ -13,7 +13,7 @@ permission:
   no-access: 8        # placeholder (#817987)
   octal: 241            # muted (#615a68)
   acl: 24              # accent (#00667e)
-  context: 59          # doc_comment (#5f5c60)
+  context: 241          # doc_comment (#636064)
 
 date:
   hour-old: 241         # muted (#615a68)

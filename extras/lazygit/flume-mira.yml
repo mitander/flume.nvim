@@ -5,13 +5,13 @@ gui:
     inactiveBorderColor: ["#4b485a"]
     searchingActiveBorderColor: ["#d8a36b", bold]
     optionsTextColor: ["#a6a0ad"]
-    selectedLineBgColor: ["#393548"]
+    selectedLineBgColor: ["#312d3e"]
     inactiveViewSelectedLineBgColor: ["#2b2838"]
-    cherryPickedCommitBgColor: ["#393548"]
+    cherryPickedCommitBgColor: ["#312d3e"]
     cherryPickedCommitFgColor: ["#b69bd2"]
     unstagedChangesColor: ["#e187a6"]
-    defaultFgColor: ["#d9d4df"]
+    defaultFgColor: ["#cbc5d2"]
 git:
   pagers:
     - colorArg: always
-      pager: 'delta --dark --features="" --paging=never --syntax-theme=ansi --minus-style="syntax #402a35" --minus-emph-style="syntax #754355" --plus-style="syntax #2a3735" --plus-emph-style="syntax #47665d" --line-numbers --line-numbers-minus-style=#e187a6 --line-numbers-plus-style=#84b39f --line-numbers-left-style=#4b485a --line-numbers-right-style=#4b485a'
+      pager: 'delta --dark --features="" --paging=never --syntax-theme=ansi --minus-style="syntax #362830" --minus-emph-style="syntax #754355" --plus-style="syntax #2b302d" --plus-emph-style="syntax #47665d" --line-numbers --line-numbers-minus-style=#e187a6 --line-numbers-plus-style=#84b39f --line-numbers-left-style=#4b485a --line-numbers-right-style=#4b485a'

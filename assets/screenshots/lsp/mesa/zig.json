@@ -15,10 +15,10 @@
   ],
   "fixture_sha256": "e675c1011329d4c1065eedd76815ee173bd683fa14121f264c68bd571bc37e7b",
   "renderer_sha256": "21ff913bcbf4983751fea1586e208d2c63a5e5b4fe38f3d247cfc959c4a1e28e",
-  "image_sha256": "c745ad8339f7b60925ef671f96e3ce7cb43f0fc11c638e9ebdb6c5ba787c9734",
+  "image_sha256": "7653a7d3fcfbd3cbfec4bf04f4332a7f2e876c70cbcc7e0dff94275ec679d64f",
   "theme_inputs": {
-    "lua/flume/init.lua": "13cf1470e7fefec640ddc7dc0d13da9cb13a06d6964af40985d08cdd02f0d844",
-    "lua/flume/palette.lua": "b06bc35486ae812ba1135dbb6cd3c9f6bb15335133133422e18db6cf6ae9d4b7",
+    "lua/flume/init.lua": "09e36fb21f2de55e340576d002e4ace44c644bc647772178624319cc9117e66f",
+    "lua/flume/palette.lua": "b50950afa72aebfcb41e4ec6f1b4acbfb2ede88f20b5a8164d2077c085f86bcf",
     "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
     "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
     "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",

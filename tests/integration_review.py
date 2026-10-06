@@ -1,6 +1,7 @@
 """Deterministic measurements of exported artifacts, not a native rendering test."""
 
 import importlib.util
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -42,8 +43,11 @@ class IntegrationReviewTests(unittest.TestCase):
         pairs = {
             pair.label: pair for pair in review.integration_pairs(ROOT, "fzf", "opal")
         }
-        self.assertEqual(pairs["Match inside selected row"].foreground, "#7e5500")
-        self.assertEqual(pairs["Match inside selected row"].background, "#ddd6e3")
+        palette_path = ROOT / "extras/palette/flume-opal.json"
+        colors = json.loads(palette_path.read_text())["colors"]
+        selected_match = pairs["Match inside selected row"]
+        self.assertEqual(selected_match.foreground, colors["match"])
+        self.assertEqual(selected_match.background, colors["element_active"])
         lsd = {
             pair.label: pair for pair in review.integration_pairs(ROOT, "lsd", "opal")
         }
