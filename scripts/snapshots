@@ -83,7 +83,7 @@ def container(image, source, output, arguments, extra_mounts=None, entrypoint=No
     # Cleanup identity is private to the host and unique per concurrently running case.
     cidfile = output.parent / (output.name + '.cid')
     command = ['docker', 'run', '--rm', '--platform', PLATFORM, '--network', 'none', '--read-only',
-        '--tmpfs', '/tmp:exec,size=768m', '--shm-size', '256m', '--cap-drop', 'ALL',
+        '--tmpfs', '/tmp:exec,size=1536m', '--shm-size', '512m', '--cap-drop', 'ALL',
         '--security-opt', 'no-new-privileges', '--user', f'{os.getuid()}:{os.getgid()}', '--cidfile', str(cidfile),
         '--mount', f'type=bind,source={source},target=/repo,readonly',
         '--mount', f'type=bind,source={output},target=/output' + (',readonly' if readonly_output else '')]

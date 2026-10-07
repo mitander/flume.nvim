@@ -6,6 +6,4 @@ Type "2"
 Wait+Screen /exported palette/
 Show
 # Git status and diff loading finish separately; let the completed UI paint.
-Sleep 500ms
-Screenshot "/output/{{case}}.png"
-Sleep 200ms
+Sleep 700ms

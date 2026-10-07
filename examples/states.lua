@@ -6,7 +6,7 @@ if vim.env.FLUME_TS_RUNTIME and vim.env.FLUME_TS_RUNTIME ~= "" then
     vim.opt.runtimepath:prepend(vim.env.FLUME_TS_RUNTIME)
 end
 vim.opt.termguicolors = true
-vim.o.laststatus = 2
+if not vim.env.FLUME_CAPTURE_KIND then vim.o.laststatus = 2 end
 vim.o.splitright = true
 vim.o.showmode = false
 vim.o.ruler = false
@@ -31,7 +31,7 @@ local function open_buffer(name, lines)
     vim.wo.cursorline = true
     vim.wo.wrap = false
     vim.wo.signcolumn = "yes"
-    vim.wo.statusline = "  " .. name .. "  %=Flume " .. schema .. "  "
+    vim.wo.statusline = "  " .. name .. "  %=%l:%c  "
     vim.treesitter.start(buf, "go")
     return buf
 end

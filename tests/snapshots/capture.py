@@ -4,6 +4,7 @@ import argparse
 import importlib.util
 import json
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -11,7 +12,25 @@ from common import APPS, SCHEMAS, SCENES, destination, digest, environment_diges
 
 ROOT = Path('/repo')
 OUTPUT = Path('/output')
-GEOMETRY = {'columns': 100, 'rows': 40, 'font': 'DejaVu Sans Mono', 'font_size': 16}
+GEOMETRY = {
+    'columns': 100, 'rows': 40, 'font': 'Maple Mono NF', 'font_size': 38,
+    'logical_font_size': 19, 'backing_scale': 2,
+    'line_height': 1.12, 'letter_spacing': 2,
+    'padding': 24, 'titlebar_height': 48, 'corner_radius': 20,
+}
+
+
+def font_evidence():
+    from render import FONT_DIRECTORY, FONT_FACES
+
+    evidence = {}
+    for role, (filename, pattern) in FONT_FACES.items():
+        resolved = subprocess.check_output(['fc-match', '-f', '%{file}', 'Maple Mono NF:' + pattern], text=True)
+        expected = FONT_DIRECTORY / filename
+        if Path(resolved).resolve() != expected.resolve():
+            raise ValueError(f'Terminal font fallback for {role}: {resolved}')
+        evidence[role] = {'filename': filename, 'sha256': digest(expected)}
+    return evidence
 
 
 def terminal_theme(schema):
@@ -39,7 +58,9 @@ def tape(scene, schema):
     header = '\n'.join((
         'Set Shell bash', f'Set FontFamily "{geometry["font"]}"',
         f'Set FontSize {geometry["font_size"]}', f'Set Columns {geometry["columns"]}', f'Set Rows {geometry["rows"]}',
-        'Set Padding 12', 'Set Margin 0', 'Set BorderRadius 0', 'Set CursorBlink false',
+        f'Set LineHeight {geometry["line_height"]}', f'Set LetterSpacing {geometry["letter_spacing"]}',
+        'Set Padding 0', 'Set Margin 0', 'Set BorderRadius 0', 'Set CursorBlink false',
+        'Set Framerate 10', f'Output "/tmp/{case}-frames/"',
         'Set TypingSpeed 0', 'Set WaitTimeout 90s', 'Set Theme ' + json.dumps(terminal_theme(schema)),
         'Env PS1 ""', f'Env FLUME_SCHEMA "{schema}"', f'Env FLUME_SHOWCASE_SCHEMA "{schema}"',
         f'Env FLUME_SHOWCASE_LANGUAGE "{spec.get("language", "")}"',
@@ -53,19 +74,29 @@ def tape(scene, schema):
 
 def capture(case):
     from PIL import Image
+    from render import last_frame, window
+
     scene, schema = case.rsplit('-', 1)
     spec = SCENES[scene]
+    fonts = font_evidence()
+    frames = Path('/tmp') / f'{case}-frames'
+    if frames.exists():
+        shutil.rmtree(frames)
     path = Path('/tmp') / f'{case}.tape'
     path.write_text(tape(scene, schema))
     with (OUTPUT / f'{case}.log').open('w') as log:
         result = subprocess.run(['vhs', str(path)], stdout=log, stderr=subprocess.STDOUT, timeout=150)
-    image_path = OUTPUT / f'{case}.png'
-    if result.returncode or not image_path.is_file():
+    if result.returncode:
         raise RuntimeError(f'{case}: capture failed; see {case}.log')
-    with Image.open(image_path) as image:
-        image.load()
+    text, cursor = last_frame(frames)
+    geometry = GEOMETRY | {key: spec[key] for key in ('columns', 'rows')}
+    image_path = OUTPUT / f'{case}.png'
+    with Image.open(text) as text_image, Image.open(cursor) as cursor_image:
+        image = window(text_image, cursor_image, terminal_theme(schema), geometry)
+        image.save(image_path)
         dimensions = list(image.size)
-    inputs = [ROOT / 'tests/snapshots/capture.py', ROOT / 'tests/snapshots/common.py', ROOT / f'tests/snapshots/{spec["app"]}.tape', ROOT / f'extras/ghostty/flume-{schema}']
+    shutil.rmtree(frames)
+    inputs = [ROOT / 'tests/snapshots/capture.py', ROOT / 'tests/snapshots/render.py', ROOT / 'tests/snapshots/common.py', ROOT / f'tests/snapshots/{spec["app"]}.tape', ROOT / f'extras/ghostty/flume-{schema}']
     inputs += sorted((ROOT / 'tests/snapshots/fixtures').glob('*'))
     if spec['app'] == 'neovim':
         inputs += [ROOT / 'scripts/preflight-screenshots.py']
@@ -81,7 +112,8 @@ def capture(case):
         'destination': destination(case),
         'inputs': {str(file.relative_to(ROOT)): digest(file) for file in inputs if file.is_file()},
         'environment': {
-            'renderer': 'VHS v0.12.1 / ttyd / Chromium', 'platform': 'linux/amd64',
+            'renderer': 'VHS v0.12.1 raw PNG / ttyd / Chromium / Pillow RGBA', 'platform': 'linux/amd64',
+            'font_faces': fonts,
             'image_recipe_sha256': environment_digest(ROOT),
             'geometry': GEOMETRY | {key: spec[key] for key in ('columns', 'rows')},
         },

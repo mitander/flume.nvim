@@ -68,6 +68,13 @@
   real parser, diagnostic, completion, and language-server evidence, with exact
   pixel comparisons and visual reports. Keep Ghostty/Kitty configuration checks
   separate from native renderer qualification.
+- Pin Maple Mono NF Medium and its bold/italic faces for high-resolution captures.
+  Preserve exact RGB colors by composing VHS's raw PNG layers, and add rounded
+  corners with a restrained macOS-style title bar. Keep complete foreground
+  windows visible in the hero and use compact viewports for short app fixtures.
+  Use larger showcase typography, clean title bars, and mode-specific non-blinking
+  cursors. Signal capture readiness through real status information instead of
+  adding preview labels to the images.
 
 ## v0.2.0 — 2026-07-27
 

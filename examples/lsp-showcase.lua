@@ -21,7 +21,7 @@ if language == "go" then
 end
 vim.bo[buf].buftype = ""
 vim.api.nvim_buf_set_name(buf, file)
-vim.wo.statusline = "  Tree-sitter + " .. server.name .. "  %t%=line %l  col %c  "
+vim.wo.statusline = "  Tree-sitter + " .. server.name .. "  %t%=%l:%c  "
 vim.diagnostic.enable(false, { bufnr = buf })
 vim.api.nvim_create_autocmd("VimLeavePre", { once = true, callback = function()
     vim.fn.delete(workspace, "rf")

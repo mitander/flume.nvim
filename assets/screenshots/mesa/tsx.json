@@ -26,8 +26,8 @@
     }
   ],
   "fixture_sha256": "d612012da7be9be1eab739ef79ec8f42a6649d6ecb1ce1769aa47625e16ce7cf",
-  "renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
-  "image_sha256": "ea919f40e5f1f080d02456d155d32e40ade2698d28c21600510e8072b56025e2",
+  "renderer_sha256": "00d74b4c40a1b7db029de301a9819370e8d09ac8b93c67cad0814e219c9bfc44",
+  "image_sha256": "f2c77869c69c57b201b435f3acce26092fa2c6bd41f1db438addded40303e824",
   "theme_inputs": {
     "lua/flume/init.lua": "a1f69f1788b750c825d7ff175521ecabe813651ca5daa72035a1a7685d6acd9f",
     "lua/flume/palette.lua": "b50950afa72aebfcb41e4ec6f1b4acbfb2ede88f20b5a8164d2077c085f86bcf",
@@ -41,7 +41,7 @@
   },
   "capture_renderer": {
     "name": "VHS",
-    "script_sha256": "320ede5344f876f877fc2514c6bbaa64d61f445ab864cbb21ec1adf4982dae25",
-    "environment_sha256": "092ace19c41462299edb1862e764ffadc234875388fb883f28fb7a94b296430f"
+    "script_sha256": "7bdf2cdee5719db2a95f26025185615b310003497ca1fa6b20c8dc172783befc",
+    "environment_sha256": "c45d231af2b84172d1d2d50a7f518254dd44bb1a2800961d9ae3d0805cdeec4d"
   }
 }

@@ -14,7 +14,10 @@ capture environment. Subsequent runs reuse it. No desktop windows open, and no
 Screen Recording or Accessibility permissions are needed.
 
 Capture runs offline with an isolated home, read-only source, fixed fixtures,
-locale, fonts, dimensions, and Linux amd64 tools. ARM Macs use the same binaries
+locale, fonts, dimensions, and Linux amd64 tools. It retains VHS's raw terminal
+PNG layers and composes them in RGBA through pinned Pillow. It does not use
+VHS's FFmpeg screenshot compositor, whose default YUV conversion shifts colors.
+Regression tests require exact RGB preservation as well as exact pixel comparison. ARM Macs use the same binaries
 as CI. Two isolated capture containers run at a time. Pi and OpenCode restore
 synthetic sessions: they do not call models or use credentials, extensions,
 plugins, or personal configuration. OpenCode's code fence is plain code: this
@@ -89,7 +92,9 @@ The environment compiles grammars pinned by nvim-treesitter revision
 queries. These are capture dependencies, not requirements for using Flume.
 Each capture records parser revision/checksum, query fingerprints, fixture and
 theme inputs, image checksum, and renderer identity. Neovim itself reports
-readiness before VHS captures the painted terminal state.
+readiness before VHS captures the painted terminal state. The capture fixture
+reveals the real statusline location field only after readiness; no preview label
+is added to the image.
 
 | Palette | Appearance | Gallery |
 | --- | --- | --- |
@@ -99,9 +104,24 @@ readiness before VHS captures the painted terminal state.
 | Mesa | Light | [Languages, states, and integrations](themes/mesa.md) |
 
 Raw images live at `assets/screenshots/<schema>/<language>.png`. Geometry is
-112 columns × 32 rows for Zig, 100 × 48 for other editor scenes, with DejaVu Sans
-Mono at 16 pixels, fixed padding, and an opaque background. Complete fixtures fit
-without scrolling. Gallery links embed these same full-resolution images.
+112 columns × 32 rows for Zig and 100 × 48 for other editor scenes. Typography
+uses checksum-locked Maple Mono NF Medium, with real Bold, Medium Italic, and
+Bold Italic faces. The 19-point showcase size renders at 38 pixels for
+high-resolution images, with 1.12 line height and 2-pixel letter spacing.
+Capture checks the resolved font files and fails on fallback. Neovim keeps
+mode-specific, non-blinking cursor shapes: block in Normal mode, bar in Insert
+mode. Syntax specimens park the block cursor on whitespace to keep text readable.
+Capture does not mask pixels or allow comparison tolerance.
+
+Pinned Pillow adds padding, an understated title bar with three macOS-style
+buttons, no redundant window-title text, and antialiased rounded corners. It never resizes or filters terminal
+pixels. The terminal background is opaque; only the outer corners are transparent.
+Complete fixtures fit without scrolling. Gallery links embed the full-resolution
+images.
+
+These settings use the reference font faces with spacing chosen for a clear
+headless showcase, not identical Ghostty rasterization. Ghostty's macOS-only font thickening, ligature
+shaping, and `linear-corrected` text blending are not reproduced by Chromium.
 
 Syntax captures demonstrate Tree-sitter, not LSP semantic highlighting. Use the
 [native language checks](color-system.md#verify-language-highlighting) to inspect
@@ -160,14 +180,16 @@ such as `{"event":"play"}`, or `elixir tests/examples.exs` to check its parser.
 The normal snapshot commands generate and test `assets/screenshots/showcase.png`:
 a 2800 × 1720 cascade of Opal, Mesa, Mira, and Dusk Zig captures over the original
 artwork. Dusk is the foreground sample. Composition runs through pinned Pillow
-in the capture environment; it preserves capture colors and aspect ratios.
-There is no manual screenshot or separate ImageMagick step.
+in the capture environment; it preserves capture colors, rounded corners, and
+aspect ratios. Each window fits within both size bounds so its statusline stays
+inside the canvas. There is no manual screenshot or separate ImageMagick step.
 
 ## Integration contact sheets
 
 These contact sheets show real applications through VHS's ttyd/Chromium terminal,
 not native Ghostty or Kitty rendering. Each uses the same app fixture and geometry
-across all four palettes. Pi/OpenCode content is synthetic, but their UI is real.
+across all four palettes. The short fzf, LSD, and Tmux fixtures use 16-row viewports
+instead of mostly empty windows. Pi/OpenCode content is synthetic, but their UI is real.
 
 | Integration | Exercised surface |
 | --- | --- |

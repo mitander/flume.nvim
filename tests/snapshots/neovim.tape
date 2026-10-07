@@ -1,8 +1,6 @@
 Hide
 Type "exec sh /repo/tests/snapshots/fixtures/neovim.sh"
 Enter
-Wait+Screen /Flume preview/
+Wait+Screen /(?m) [0-9]+:[0-9]+[[:space:]]*$/
 Show
-Sleep 200ms
-Screenshot "/output/{{case}}.png"
-Sleep 200ms
+Sleep 400ms

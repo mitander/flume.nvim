@@ -10,6 +10,8 @@ INTEGRATIONS = ('delta', 'fzf', 'lazygit', 'lsd', 'opencode', 'pi', 'tmux')
 LANGUAGES = ('zig', 'rust', 'tsx', 'python', 'go', 'elixir', 'toml')
 APPS = (*INTEGRATIONS, 'neovim')
 SCENES = {app: {'app': app, 'columns': 100, 'rows': 40} for app in INTEGRATIONS}
+for app in ('fzf', 'lsd', 'tmux'):
+    SCENES[app]['rows'] = 16
 for language in LANGUAGES:
     SCENES['neovim-' + language] = {'app': 'neovim', 'language': language, 'kind': 'syntax', 'columns': 112 if language == 'zig' else 100, 'rows': 32 if language == 'zig' else 48}
 for kind, languages in (('selection', ('go',)), ('completion', ('go',)), ('lsp', ('go', 'zig'))):

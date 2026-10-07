@@ -4,6 +4,7 @@ import hashlib
 import json
 import shutil
 import subprocess
+import zipfile
 from pathlib import Path
 
 
@@ -20,8 +21,22 @@ def main():
             raise ValueError('Archive checksum mismatch: ' + name)
         directory = Path('/opt/tools') / name
         directory.mkdir(parents=True)
-        run('tar', 'xf', str(archive), '-C', str(directory), '--strip-components=' + str(tool['strip']))
+        if tool.get('format') == 'zip':
+            # Extract only the locked font faces and license, not arbitrary archive paths.
+            with zipfile.ZipFile(archive) as bundle:
+                for filename in tool['files']:
+                    if Path(filename).name != filename:
+                        raise ValueError('Archive entry must be a plain filename')
+                    with bundle.open(filename) as incoming, (directory / filename).open('wb') as output:
+                        shutil.copyfileobj(incoming, output)
+        else:
+            run('tar', 'xf', str(archive), '-C', str(directory), '--strip-components=' + str(tool['strip']))
         archive.unlink()
+    fonts = Path('/usr/share/fonts/truetype/maple')
+    fonts.mkdir(parents=True)
+    for font in (Path('/opt/tools') / 'maple-font').glob('*.ttf'):
+        shutil.copyfile(font, fonts / font.name)
+    run('fc-cache', '-f')
     runtime = Path('/opt/treesitter')
     (runtime / 'parser').mkdir(parents=True)
     (runtime / 'parser-info').mkdir()

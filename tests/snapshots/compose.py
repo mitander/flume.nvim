@@ -17,11 +17,12 @@ def contact_sheet(images):
         raise ValueError('Contact-sheet capture dimensions differ')
     sheet = Image.new('RGB', (width * 2 + 72, height * 2 + 144), '#1c1b20')
     draw = ImageDraw.Draw(sheet)
-    font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf', 24)
+    font = ImageFont.truetype('/usr/share/fonts/truetype/maple/MapleMono-NF-Medium.ttf', 32)
     for index, (schema, image) in enumerate(zip(SCHEMAS, images)):
         x, y = 24 + (index % 2) * (width + 24), 60 + (index // 2) * (height + 60)
         draw.text((x, y - 34), schema.title(), font=font, fill='#d9d4df')
-        sheet.paste(image.convert('RGB'), (x, y))
+        card = image.convert('RGBA')
+        sheet.paste(card.convert('RGB'), (x, y), card.getchannel('A'))
     return sheet
 
 
@@ -35,12 +36,13 @@ def showcase(images):
         overlay.putpixel((0, y), tuple(round(a + (b - a) * fraction) for a, b in zip((242, 239, 247, 80), (35, 33, 54, 104))))
     canvas = Image.alpha_composite(canvas, overlay.resize(size))
     for image, (x, y) in zip(images, ((100, 35), (500, 250), (900, 465), (1300, 680))):
-        card = image.convert('RGBA')
-        card.thumbnail((1450, 1018), Image.Resampling.LANCZOS)
-        # Resize up as well as down, preserving the terminal's aspect ratio.
-        card = image.convert('RGBA').resize((1450, round(image.height * 1450 / image.width)), Image.Resampling.LANCZOS)
+        # Fit both bounds so the foreground window's statusline remains visible.
+        scale = min(1450 / image.width, 1018 / image.height)
+        card = image.convert('RGBA').resize((round(image.width * scale), round(image.height * scale)), Image.Resampling.LANCZOS)
         shadow = Image.new('RGBA', size)
-        ImageDraw.Draw(shadow).rectangle((x, y + 16, x + card.width, y + card.height + 16), fill=(0, 0, 0, 90))
+        shadow_alpha = Image.new('L', size)
+        shadow_alpha.paste(card.getchannel('A').point(lambda value: round(value * 90 / 255)), (x, y + 16))
+        shadow.putalpha(shadow_alpha)
         canvas = Image.alpha_composite(canvas, shadow.filter(ImageFilter.GaussianBlur(14)))
         canvas.alpha_composite(card, (x, y))
     return canvas.convert('RGB')

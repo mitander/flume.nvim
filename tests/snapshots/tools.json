@@ -1,4 +1,10 @@
 {
+  "maple-font": {
+    "url": "https://github.com/subframe7536/maple-font/releases/download/v7.9/MapleMono-NF-unhinted.zip",
+    "sha256": "8248d6260660be1066b5ebe90d25131582df8383f38db1c284dd1f2dc9d2b46e",
+    "format": "zip",
+    "files": ["MapleMono-NF-Medium.ttf", "MapleMono-NF-Bold.ttf", "MapleMono-NF-MediumItalic.ttf", "MapleMono-NF-BoldItalic.ttf", "LICENSE.txt"]
+  },
   "nvim": {
     "url": "https://github.com/neovim/neovim/releases/download/v0.12.5/nvim-linux-x86_64.tar.gz",
     "sha256": "bce0f56eda1f1b1db6eee8f4133d7a38813ea07933837dd1777411ca384c6875",

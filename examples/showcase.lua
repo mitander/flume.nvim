@@ -25,17 +25,20 @@ vim.wo.number = true
 vim.wo.cursorline = true
 vim.wo.signcolumn = "no"
 vim.wo.wrap = false
-vim.o.laststatus = 2
+if not vim.env.FLUME_CAPTURE_KIND then vim.o.laststatus = 2 end
 vim.o.showmode = false
 vim.o.ruler = false
-vim.o.statusline = "  NORMAL  %t%=line %l  col %c  "
+vim.o.statusline = "  NORMAL  %t%=%l:%c  "
 
 local parser = vim.treesitter.get_parser(buf, language)
 assert(not parser:parse()[1]:root():has_error(), language .. " capture fixture contains a parse error")
 local query_files = vim.treesitter.query.get_files(language, "highlights")
 assert(#query_files > 0, "Install " .. language .. " highlight queries or set FLUME_TS_RUNTIME")
 vim.treesitter.start(buf, language)
-vim.api.nvim_win_set_cursor(0, { math.min(17, #lines), 0 })
+-- Park the block cursor on whitespace so the specimen text stays readable.
+local cursor_line = math.min(17, #lines)
+local cursor_column = (lines[cursor_line]:find("%s") or 1) - 1
+vim.api.nvim_win_set_cursor(0, { cursor_line, cursor_column })
 vim.cmd("redraw")
 
 if vim.env.FLUME_SHOWCASE_METADATA then

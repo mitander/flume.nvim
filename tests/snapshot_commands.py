@@ -398,6 +398,16 @@ class SnapshotCommands(unittest.TestCase):
         self.assertFalse(cidfile.exists())
         self.assertNotEqual(cidfile.parent, output)
 
+    def test_neovim_cursor_preserves_mode_shapes_and_disables_blinking(self):
+        fixture = (ROOT / 'tests/snapshots/fixtures/neovim.lua').read_text()
+        self.assertIn("vim.opt.guicursor = 'n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkon0'", fixture)
+        self.assertNotIn('Flume preview', fixture)
+        self.assertLess(fixture.index('vim.o.laststatus = 0'), fixture.index('dofile('))
+        self.assertLess(fixture.index('filereadable'), fixture.index('vim.o.laststatus = 2'))
+        for renderer in ('showcase.lua', 'states.lua'):
+            self.assertIn('if not vim.env.FLUME_CAPTURE_KIND then vim.o.laststatus = 2 end',
+                          (ROOT / 'examples' / renderer).read_text())
+
     def test_palette_header_uses_the_shipped_terminal_export(self):
         with patch.object(capture, 'ROOT', ROOT):
             theme = capture.terminal_theme('opal')
@@ -407,7 +417,12 @@ class SnapshotCommands(unittest.TestCase):
         self.assertEqual(theme['selection'], '#413b49')
         self.assertEqual(theme['brightBlue'], '#0071a3')
         self.assertIn('Set CursorBlink false', tape)
-        self.assertIn('/output/fzf-opal.png', tape)
+        self.assertIn('Output "/tmp/fzf-opal-frames/"', tape)
+        self.assertIn('Set FontFamily "Maple Mono NF"', tape)
+        self.assertIn('Set FontSize 38', tape)
+        self.assertIn('Set LineHeight 1.12', tape)
+        self.assertIn('Set LetterSpacing 2', tape)
+        self.assertNotIn('Screenshot ', tape)
         self.assertNotIn('{{schema}}', tape)
 
     def test_test_reports_environment_changes_without_updating_baselines(self):
