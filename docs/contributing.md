@@ -29,6 +29,22 @@ links, whitespace and shell syntax checks, and Python tests. Screenshot prefligh
 checks committed provenance and dimensions; it does not open an editor or external
 application. CI runs the same gate on Neovim 0.9.5 and stable.
 
+The separate [integration snapshot lane](showcase.md#reproducible-integration-snapshots)
+runs Neovim and all seven terminal-app integrations in a pinned container,
+including the README composite and integration contact sheets:
+
+```sh
+./scripts/snapshots test
+./scripts/snapshots update
+```
+
+`test` compares exact pixels without changing baselines. `update` replaces
+baselines after every requested capture succeeds. Review its visual report and
+commit changed `assets/screenshots/` images, sidecars, and the snapshot manifest
+with your code; updating does not approve a result.
+Both commands require Python 3.11+ and a running local Docker-compatible runtime.
+CI runs snapshot tests in a separate job, not once per Neovim version.
+
 Follow the existing four-space Lua indentation. The gate rejects trailing
 whitespace; there is no separate required formatter.
 
@@ -64,5 +80,6 @@ application before claiming they work.
 - [Semantic export](semantic-export.md) — the contract for custom consumers.
 
 When a source change makes committed screenshots stale, refresh them with the
-showcase procedures. Keep captures native: do not recolor pixels or hand-assign
-syntax highlights to approximate parser output.
+showcase procedures. Capture real application output: do not recolor pixels or
+hand-assign syntax highlights to approximate parser output. The maintained VHS
+snapshots do not qualify native Ghostty or Kitty rendering.

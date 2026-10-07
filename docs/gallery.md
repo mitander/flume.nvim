@@ -10,7 +10,8 @@ Compare Flume's two dark and two light palettes on the same code and editor stat
 - [Mesa](themes/mesa.md): light, with restrained inks on warm paper.
 
 Each palette page includes languages, selections, diffs, diagnostics, completion,
-and Go/Zig LSP examples. External-app screenshots aren't available yet.
+Go/Zig LSP examples, lualine, and real terminal-app snapshots. All maintained
+images use the same [reproducible capture pipeline](showcase.md).
 
 ## Browse by language
 
@@ -20,7 +21,7 @@ Compare all four palettes on one page:
 [TypeScript/TSX](languages/tsx.md) · [Zig](languages/zig.md) ·
 [Elixir](languages/elixir.md) · [TOML](languages/toml.md)
 
-These screenshots use Tree-sitter and opaque backgrounds. Your terminal, font,
+Editor snapshots use real Tree-sitter and opaque backgrounds in VHS. Your terminal, font,
 transparency, and language tools can change the appearance.
 
 [Install Flume](../README.md#install) · [Configure external tools](workflows.md) ·

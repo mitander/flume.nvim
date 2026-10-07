@@ -48,4 +48,4 @@ For each changed mapping:
 4. Adjust the integration's role mapping deliberately; do not globally transform the palette to repair one consumer.
 5. Regenerate artifacts and the report, then run `./scripts/check`.
 
-Use the [showcase procedures](showcase.md) for native capture evidence. A screenshot baseline preserves an approved result, but cannot prove readability by itself. Native review remains required before claiming that an integration is visually qualified.
+Use the [showcase pipeline](showcase.md) for real application snapshots. A screenshot baseline preserves a reviewed result, but cannot prove readability by itself. Visually review the application snapshots before claiming an integration is qualified. Native Ghostty/Kitty selection, cursor, tabs, and live reload remain separate checks; VHS does not exercise their renderers.

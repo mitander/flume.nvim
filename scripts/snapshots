@@ -1,0 +1,223 @@
+#!/usr/bin/env python3
+"""Test or update every maintained image without opening desktop windows."""
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+SNAPSHOTS = ROOT / 'tests/snapshots'
+sys.path.insert(0, str(SNAPSHOTS))
+from common import APPS, CASES, SCENES, SCHEMAS, derived_cases, destination, environment_digest, read_manifest, selected_cases, verify_images
+
+BASELINES = SNAPSHOTS / 'baselines'
+PLATFORM = 'linux/amd64'
+
+
+def replace_file(source, destination):
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(dir=destination.parent, delete=False) as staged:
+        path = Path(staged.name)
+        try:
+            with source.open('rb') as incoming:
+                shutil.copyfileobj(incoming, staged)
+            staged.flush()
+            os.chmod(path, 0o644)
+            os.replace(path, destination)
+        finally:
+            path.unlink(missing_ok=True)
+
+
+def update_baselines(actual, baseline, cases, *, published_root):
+    captured = read_manifest(actual)
+    if set(captured['cases']) != set(cases):
+        raise ValueError('Capture inventory does not match the requested snapshots')
+    verify_images(actual, captured, cases)
+    recorded = read_manifest(baseline)
+    baseline.mkdir(parents=True, exist_ok=True)
+    for case in cases:
+        target = published_root / destination(case)
+        replace_file(actual / f'{case}.png', target)
+        sidecar = actual / f'{case}.json'
+        if 'sidecar_sha256' in captured['cases'][case]:
+            replace_file(sidecar, target.with_suffix('.json'))
+        record = captured['cases'][case]
+        recorded['cases'][case] = record | {'destination': destination(case)}
+    # Manifest-last exposes interrupted image changes. Identical previous captures stay valid.
+    manifest = actual / 'updated-manifest.json'
+    manifest.write_text(json.dumps(recorded, indent=2, sort_keys=True) + '\n')
+    replace_file(manifest, baseline / 'manifest.json')
+
+
+def stage_source(destination_root, apps):
+    shutil.copytree(SNAPSHOTS, destination_root / 'tests/snapshots', ignore=shutil.ignore_patterns('baselines', '__pycache__'))
+    for app in dict.fromkeys([*(app for app in apps if app != 'neovim'), 'ghostty']):
+        shutil.copytree(ROOT / f'extras/{app}', destination_root / f'extras/{app}')
+    for directory in ('lua', 'colors', 'examples'):
+        shutil.copytree(ROOT / directory, destination_root / directory, ignore=shutil.ignore_patterns('__pycache__'))
+    for file in ('scripts/preflight-screenshots.py', 'assets/background.png'):
+        target = destination_root / file
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / file, target)
+
+
+def stage_baselines(directory):
+    directory.mkdir()
+    manifest = read_manifest(BASELINES)
+    (directory / 'manifest.json').write_text(json.dumps(manifest))
+    for case in CASES:
+        source = ROOT / destination(case)
+        if source.exists():
+            shutil.copyfile(source, directory / f'{case}.png')
+            if source.with_suffix('.json').exists():
+                shutil.copyfile(source.with_suffix('.json'), directory / f'{case}.json')
+
+
+def container(image, source, output, arguments, extra_mounts=None, entrypoint=None, readonly_output=False):
+    # Cleanup identity is private to the host and unique per concurrently running case.
+    cidfile = output.parent / (output.name + '.cid')
+    command = ['docker', 'run', '--rm', '--platform', PLATFORM, '--network', 'none', '--read-only',
+        '--tmpfs', '/tmp:exec,size=768m', '--shm-size', '256m', '--cap-drop', 'ALL',
+        '--security-opt', 'no-new-privileges', '--user', f'{os.getuid()}:{os.getgid()}', '--cidfile', str(cidfile),
+        '--mount', f'type=bind,source={source},target=/repo,readonly',
+        '--mount', f'type=bind,source={output},target=/output' + (',readonly' if readonly_output else '')]
+    for mount in extra_mounts or []:
+        command.extend(['--mount', mount])
+    if entrypoint:
+        command.extend(['--entrypoint', entrypoint])
+    try:
+        return subprocess.run([*command, image, *arguments], timeout=200).returncode
+    finally:
+        if cidfile.exists():
+            identifier = cidfile.read_text().strip()
+            if identifier:
+                subprocess.run(['docker', 'rm', '-f', identifier], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=20)
+            cidfile.unlink(missing_ok=True)
+
+
+def capture_case(image, source, directory, case):
+    directory.mkdir()
+    scene, schema = case.rsplit('-', 1)
+    return container(image, source, directory, ['--app', SCENES[scene]['app'], '--schema', schema, '--scene', scene])
+
+
+def execute(mode, apps, schemas, scenes=None):
+    if shutil.which('docker') is None:
+        raise ValueError('Docker is required; start a local Docker-compatible runtime first')
+    cases = selected_cases(apps, schemas, scenes)
+    if not cases:
+        raise ValueError('No scenes match the requested applications')
+    report = Path(tempfile.mkdtemp(prefix='flume-snapshot-report-'))
+    print(f'Report: {report / "index.html"}', flush=True)
+    with tempfile.TemporaryDirectory(prefix='flume-snapshot-run-') as temporary:
+        work = Path(temporary)
+        source, actual, baseline = work / 'source', work / 'actual', work / 'baseline'
+        actual.mkdir()
+        stage_source(source, apps)
+        stage_baselines(baseline)
+        image = 'flume-nvim-snapshots:' + environment_digest(source)[:16]
+        cached = subprocess.run(['docker', 'image', 'inspect', image], capture_output=True, timeout=20)
+        if cached.returncode:
+            subprocess.run(['docker', 'build', '--platform', PLATFORM, '-t', image, str(source / 'tests/snapshots')], check=True, timeout=1200)
+        captured = {'format_version': 1, 'cases': {}}
+        failed = False
+        capture_errors = {}
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            jobs = {}
+            try:
+                for case in cases:
+                    jobs[pool.submit(capture_case, image, source, work / case, case)] = case
+                for job in as_completed(jobs):
+                    if job.cancelled():
+                        continue
+                    case = jobs[job]
+                    try:
+                        returncode = job.result()
+                    except Exception as error:
+                        # Future failures still own useful logs in their case directory.
+                        capture_errors[case] = f'{type(error).__name__}: {error}'
+                        returncode = 1
+                    if returncode:
+                        failed = True
+                        for pending in jobs:
+                            pending.cancel()
+                    directory = work / case
+                    allowed = {'manifest.json', *(case + suffix for suffix in ('.png', '.json', '-runtime.json', '.log'))}
+                    for file in directory.glob('*'):
+                        if file.name not in allowed:
+                            continue
+                        if file.is_symlink() or not file.is_file():
+                            raise ValueError(f'Unsafe capture output: {file.name}')
+                        if file.name != 'manifest.json':
+                            shutil.copyfile(file, actual / file.name)
+                    if not failed:
+                        part = read_manifest(directory)
+                        if set(part['cases']) != {case}:
+                            raise ValueError(f'Capture inventory does not match {case}')
+                        captured['cases'].update(part['cases'])
+            finally:
+                for pending in jobs:
+                    pending.cancel()
+                pool.shutdown(wait=True, cancel_futures=True)
+        if failed:
+            shutil.copytree(actual, report / 'capture')
+            (report / 'capture-errors.json').write_text(json.dumps(capture_errors, indent=2) + '\n')
+            print(f'Capture failed; logs: {report / "capture"}', file=sys.stderr)
+            return 1
+        if set(captured['cases']) != set(cases):
+            raise ValueError('Capture inventory does not match the requested snapshots')
+        verify_images(actual, captured, cases)
+        (actual / 'manifest.json').write_text(json.dumps(captured, indent=2, sort_keys=True) + '\n')
+        mounts = [f'type=bind,source={baseline},target=/baseline,readonly', f'type=bind,source={report},target=/report']
+        compose = ['/repo/tests/snapshots/compose.py', '--actual', '/output', '--baseline', '/baseline']
+        compose += [item for case in cases for item in ('--case', case)]
+        if container(image, source, actual, compose, mounts, entrypoint='python3'):
+            return 2
+        expected = [*cases, *derived_cases(cases)]
+        composed = read_manifest(actual)
+        if set(composed['cases']) != set(expected):
+            raise ValueError('Composed inventory does not match the requested snapshots')
+        verify_images(actual, composed, expected)
+        cases = expected
+        comparison = ['/repo/tests/snapshots/compare.py', '--actual', '/output', '--baseline', '/baseline', '--report', '/report']
+        comparison += [item for case in cases for item in ('--case', case)]
+        result = container(image, source, actual, comparison, mounts, entrypoint='python3', readonly_output=True)
+        if result not in (0, 1):
+            return result
+        final = read_manifest(actual)
+        if set(final['cases']) != set(expected):
+            raise ValueError('Final inventory does not match the requested snapshots')
+        verify_images(actual, final, expected)
+        if mode == 'update':
+            update_baselines(actual, BASELINES, cases, published_root=ROOT)
+            print(f'Updated {len(cases)} images. Review the report and Git diff; update is not approval.')
+            return 0
+        print(f'{len(cases)} images {"match" if result == 0 else "need review"}. Report: {report / "index.html"}')
+        return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('mode', choices=('test', 'update'))
+    parser.add_argument('--app', choices=APPS, action='append', help='limit to an application (repeatable)')
+    parser.add_argument('--schema', choices=SCHEMAS, action='append', help='limit to a palette (repeatable)')
+    parser.add_argument('--scene', choices=SCENES, action='append', help='limit to a scene (repeatable)')
+    args = parser.parse_args()
+    try:
+        return execute(args.mode, list(dict.fromkeys(args.app or APPS)), list(dict.fromkeys(args.schema or SCHEMAS)), args.scene)
+    except (ValueError, OSError, subprocess.SubprocessError) as error:
+        print(f'Snapshot error: {error}', file=sys.stderr)
+        return 2
+    except KeyboardInterrupt:
+        print('Snapshot run interrupted; no desktop windows were opened.', file=sys.stderr)
+        return 130
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

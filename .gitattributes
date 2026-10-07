@@ -1,0 +1,2 @@
+# Unified diff context lines use a literal space, including blank source lines.
+tests/snapshots/fixtures/delta.diff whitespace=-blank-at-eol

@@ -1,10 +1,20 @@
 # Changelog
 
-## Unreleased
+## v0.3.0
 
-- Restore the constant-folding Zig specimen and wider, shorter windows in the
-  cascading README hero. Add labelled palette previews and an expandable language
-  gallery; keep native state and LSP evidence on the showcase page.
+### Upgrade notes
+
+- Active integration sets now live in `stdpath("data")/flume`, outside the plugin
+  checkout. Run `:FlumeInstallExtras` to relink installable integrations and update
+  manual includes to the shared data directory. Recognized checkout links are
+  forwarded when writable, but do not survive checkout replacement. See the
+  [migration procedure](docs/semantic-export.md#migration-from-checkout-owned-state).
+- Running Flume editors follow `:FlumeSync` switches by default. To keep an editor
+  independent at startup and while running, set both `follow_sync = false` and
+  `watch_sync = false`. Startup following remains opt-in.
+- Remove Tuxedo themes and integration support.
+
+### Palettes and highlighting
 
 - Give changed words a semantic `diff_text_bg` surface that retains syntax colors.
 - Strengthen syntax contrast on cursor-line, selection, and diff surfaces in all
@@ -13,8 +23,10 @@
   background; distinguish current matches with bold and underlined text.
 - Align legacy, Tree-sitter, and LSP macro roles; align imports, directives,
   and string escapes across providers.
-- Add native selection, diagnostic, diff, search, completion, and Go/Zig LSP
-  captures with runtime provenance. Refresh the clean palette specimens.
+- Add real Neovim selection, diagnostic, diff, search, completion, and Go/Zig LSP
+  captures through VHS with runtime provenance. Refresh the clean palette specimens.
+
+### Shared themes and integrations
 
 - Store synchronized integration sets in `stdpath("data")/flume`, independent of
   plugin checkout replacement. Support `FLUME_DATA_DIR` and `get_sync_dir()`.
@@ -38,13 +50,24 @@
   including already queued palette changes.
 - Retain immutable integration sets so concurrent activations cannot delete
   each other's files.
+- Keep readonly/static bindings and fields in their normal syntax roles,
+  and let ZLS namespace tokens use the namespace color.
+
+### Documentation and visual evidence
+
+- Restore the constant-folding Zig specimen and wider, shorter windows in the
+  cascading README hero. Add labelled palette previews and an expandable language
+  gallery; keep application state and LSP evidence on the showcase page.
 - Use actual Tree-sitter highlighting for canonical screenshots and record
   parser/query provenance instead of manually assigning token colors.
 - Add native parser fixtures and role checks for Zig, Rust, Python,
   TypeScript/TSX, Go, and Elixir.
-- Keep readonly/static bindings and fields in their normal syntax roles,
-  and let ZLS namespace tokens use the namespace color.
-- Remove Tuxedo themes and integration support.
+- Unify editor, lualine, and seven terminal-app snapshots behind headless
+  `scripts/snapshots test` and `update` commands. Generate and test the README
+  hero and integration contact sheets through the same pinned pipeline. Preserve
+  real parser, diagnostic, completion, and language-server evidence, with exact
+  pixel comparisons and visual reports. Keep Ghostty/Kitty configuration checks
+  separate from native renderer qualification.
 
 ## v0.2.0 — 2026-07-27
 

@@ -79,8 +79,24 @@ Diagnostics are suppressed here to isolate provider coloring.
 ## Integrations
 
 [Setup recipes](../workflows.md#external-tools) · [Lualine setup](../workflows.md#lualine).
-External-app screenshots aren't available yet; the images above show Neovim only.
-Matching theme files are listed below.
+These snapshots use real apps through VHS; Pi/OpenCode restore synthetic offline
+sessions. They do not prove native Ghostty/Kitty rendering.
+
+### Lualine
+
+![Mira with the Flume lualine theme](../../assets/screenshots/lualine/mira/go.png)
+
+### Terminal apps
+
+![Mira Tmux](../../assets/screenshots/integrations/tmux/mira.png)
+![Mira LSD](../../assets/screenshots/integrations/lsd/mira.png)
+![Mira OpenCode](../../assets/screenshots/integrations/opencode/mira.png)
+![Mira Lazygit](../../assets/screenshots/integrations/lazygit/mira.png)
+![Mira fzf](../../assets/screenshots/integrations/fzf/mira.png)
+![Mira Delta](../../assets/screenshots/integrations/delta/mira.png)
+![Mira Pi](../../assets/screenshots/integrations/pi/mira.png)
+
+Matching configuration files:
 
 | Integration | Mira configuration |
 | --- | --- |

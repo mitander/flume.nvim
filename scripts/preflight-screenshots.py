@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate canonical screenshot inputs before release composition."""
 
+import argparse
 import hashlib
 import json
 import re
@@ -12,6 +13,9 @@ from collections.abc import Iterable
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / 'tests/snapshots'))
+from common import environment_digest
+
 SCHEMAS = ("dusk", "opal", "mira", "mesa")
 LANGUAGES = {
     "zig": "zig", "rust": "rs", "tsx": "tsx", "python": "py", "go": "go",
@@ -47,13 +51,10 @@ def theme_inputs(schema: str) -> dict[str, str]:
     return {str(path.relative_to(ROOT)): digest(path) for path in paths}
 
 
-def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax") -> None:
-    directory = ROOT / "assets/screenshots"
-    if kind != "syntax":
-        if kind not in ("selection", "completion", "lsp"):
-            raise SystemExit("Unknown capture kind")
-        directory /= kind
-    image = directory / schema / f"{language}.png"
+def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax", *, image: Path) -> None:
+    """Record parser evidence beside a staged VHS image; publication belongs to snapshots."""
+    if kind not in ("syntax", "selection", "completion", "lsp"):
+        raise SystemExit("Unknown capture kind")
     if schema not in SCHEMAS or language not in LANGUAGES:
         raise SystemExit("Unknown capture schema or language")
     runtime = json.loads(runtime_file.read_text())
@@ -92,9 +93,13 @@ def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax")
         "image_sha256": digest(image),
         "theme_inputs": theme_inputs(schema),
     }
+    metadata['capture_renderer'] = {
+        'name': 'VHS', 'script_sha256': digest(ROOT / 'tests/snapshots/capture.py'),
+        'environment_sha256': environment_digest(ROOT),
+    }
     if kind != "syntax":
         metadata["kind"] = kind
-        metadata["capture_script_sha256"] = digest(ROOT / "scripts/screenshot-window.sh")
+        metadata["capture_script_sha256"] = digest(ROOT / 'tests/snapshots/capture.py')
         if kind == "lsp":
             metadata["base_renderer_sha256"] = digest(ROOT / "examples/showcase.lua")
             server = runtime["server"]
@@ -114,6 +119,9 @@ def validate_capture(path: Path) -> tuple[str, str]:
         raise SystemExit(f"{path.name} has no parser-backed capture metadata; recapture it")
     metadata = json.loads(sidecar.read_text())
     language = path.stem
+    expected = {'name': 'VHS', 'script_sha256': digest(ROOT / 'tests/snapshots/capture.py'), 'environment_sha256': environment_digest(ROOT)}
+    if metadata.get('capture_renderer') != expected:
+        raise SystemExit(f'{path.name} has stale VHS capture inputs; recapture it')
     kind = metadata.get("kind", "syntax")
     renderer = "showcase.lua"
     fixture = f"flume.{LANGUAGES[language]}"
@@ -128,7 +136,7 @@ def validate_capture(path: Path) -> tuple[str, str]:
     if kind != "syntax":
         if path.parent.parent.name != kind:
             raise SystemExit(f"{sidecar.name} has the wrong capture kind")
-        if metadata.get("capture_script_sha256") != digest(ROOT / "scripts/screenshot-window.sh"):
+        if metadata.get("capture_script_sha256") != digest(ROOT / 'tests/snapshots/capture.py'):
             raise SystemExit(f"{path.name} has a stale capture script; recapture it")
         if kind == "lsp":
             if metadata.get("base_renderer_sha256") != digest(ROOT / "examples/showcase.lua"):
@@ -180,10 +188,12 @@ def check_capture_text(paths: Iterable[Path], *, check_stale_text: bool = True) 
 
 
 def main() -> None:
-    if len(sys.argv) == 6 and sys.argv[1] == "--record-state":
-        record(sys.argv[3], sys.argv[4], Path(sys.argv[5]), sys.argv[2])
-        return
-    if "--states" in sys.argv:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--source-only', action='store_true', help='check current syntax-scene producers without reading images')
+    parser.add_argument('--states', action='store_true', help='check selection, completion, and LSP captures')
+    parser.add_argument('--ocr', action='store_true', help='also inspect image text with Tesseract')
+    args = parser.parse_args()
+    if args.states:
         paths = [
             ROOT / "assets/screenshots" / kind / schema / f"{language}.png"
             for kind, languages in (("selection", ("go",)), ("completion", ("go",)), ("lsp", ("go", "zig")))
@@ -205,20 +215,20 @@ def main() -> None:
             raise SystemExit("State captures used different parser/query/server runtimes")
         if len({dimensions(path) for path in paths}) != 1:
             raise SystemExit("State capture dimensions differ")
-        if "--ocr" in sys.argv:
+        if args.ocr:
             # Server names are intentional in these captures, unlike specimens.
             check_capture_text(paths, check_stale_text=False)
         print(f"State capture preflight passed: {len(paths)} captures")
         return
-    if len(sys.argv) == 5 and sys.argv[1] == "--record":
-        record(sys.argv[2], sys.argv[3], Path(sys.argv[4]))
-        return
-
     fixture = (ROOT / "examples/showcase.lua").read_text()
-    screenshot_script = (ROOT / "scripts/screenshot-window.sh").read_text()
+    capture_sources = '\n'.join((ROOT / name).read_text() for name in (
+        'tests/snapshots/fixtures/neovim.lua',
+        'tests/snapshots/fixtures/neovim.sh',
+        'tests/snapshots/neovim.tape',
+    ))
     presentation_noise = re.search(
         r"Gitsigns|git branch|\bzls\b|vim\.diagnostic|virtual_text|DiffAdd|Pmenu",
-        fixture + screenshot_script,
+        fixture + capture_sources,
         re.IGNORECASE,
     )
     if presentation_noise:
@@ -235,7 +245,7 @@ def main() -> None:
     if unexpected:
         raise SystemExit("Unexpected canonical capture names: " + ", ".join(sorted(unexpected)))
 
-    if "--source-only" in sys.argv:
+    if args.source_only:
         print("Screenshot source preflight passed")
         return
 
@@ -256,7 +266,8 @@ def main() -> None:
     if any(len(fingerprints) != 1 for fingerprints in runtime_fingerprints.values()):
         raise SystemExit("Canonical captures used different parser/query runtimes")
 
-    check_capture_text(CAPTURES)
+    if args.ocr:
+        check_capture_text(CAPTURES)
 
     print(f"Screenshot preflight passed: {len(CAPTURES)} captures across {len(LANGUAGES)} language viewports")
 

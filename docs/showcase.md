@@ -1,234 +1,194 @@
 # Showcase production
 
-This guide is for contributors who need to refresh screenshots or review native
-integrations. To compare palettes, browse the [gallery](gallery.md).
+To compare palettes, browse the [gallery](gallery.md). Maintained gallery,
+integration, and README images use one reproducible snapshot pipeline:
 
-Composition scripts resize captures without tinting or recoloring them. Exact
-role values and contrast pairs belong to the [palette manifest](palette-manifest.md),
-not screenshot comparison tables. Archived hierarchy comparisons retain their
-inputs in [capture metadata](../assets/screenshots/hierarchy/metadata.json).
+```sh
+./scripts/snapshots test
+./scripts/snapshots update
+```
+
+Run from the repository root on macOS or Linux with Python 3.11+ and a running
+local Docker-compatible runtime. The first run downloads and builds the pinned
+capture environment. Subsequent runs reuse it. No desktop windows open, and no
+Screen Recording or Accessibility permissions are needed.
+
+Capture runs offline with an isolated home, read-only source, fixed fixtures,
+locale, fonts, dimensions, and Linux amd64 tools. ARM Macs use the same binaries
+as CI. Two isolated capture containers run at a time. Pi and OpenCode restore
+synthetic sessions: they do not call models or use credentials, extensions,
+plugins, or personal configuration. OpenCode's code fence is plain code: this
+fixture covers basic Markdown layout, emphasis, inline code, and core UI colors,
+not its asynchronous syntax parser, heading/link styles, or colored-diff roles.
+Real language-parser coverage belongs to the Neovim scenes.
+
+## Reproducible integration snapshots
+
+`test` freezes its inputs, captures the selected scenes, generates their derived
+images, and compares exact pixels against the published images. It never changes
+those images or the baseline manifest. Missing evidence, changed environment,
+changed pixels, or failed capture produces a nonzero exit status. There is no
+pixel tolerance or automatic approval.
+
+The command prints a temporary HTML report with expected, actual, and visible
+difference images. Capture failures retain partial captures and logs instead.
+CI runs the same command in a separate job and retains its report.
+
+`update` uses the same capture and composition path. It publishes images only
+after all requested captures and compositions succeed. Review its before/after
+report and Git diff before committing; updating is not visual approval.
+
+Published images under `assets/screenshots/` are the baselines, not copies of a
+second image set. `tests/snapshots/baselines/manifest.json` records their hashes,
+input fingerprints, dimensions, renderer, and environment identity. Neovim
+images also have parser/state/server sidecars. Commit changed images and metadata
+with the source change.
+
+Publication is atomic per file, not across the whole matrix. The manifest is
+written last, so interrupted image changes fail evidence checks. Rerun `update`
+to finish or restore the affected files with Git. If only input provenance changes
+while pixels and environment stay identical, interruption leaves valid evidence
+from the previous capture. Snapshot tests compare pixels and environment, not
+input hashes; editor preflight additionally checks source provenance.
+
+### Focused runs
+
+Filters are repeatable:
+
+```sh
+./scripts/snapshots test --app fzf
+./scripts/snapshots update --app delta --schema opal
+./scripts/snapshots update --app neovim --scene neovim-zig
+./scripts/snapshots test --app neovim --scene neovim-completion-go
+```
+
+Integration runs also generate that app's contact sheet. Zig syntax runs generate
+the README hero. For partial palette updates, composition combines the new
+captures with committed, verified unselected captures. Refresh all palettes when
+changing the environment; do not combine captures from different tool versions.
+
+Palette/exporter changes still need the generated-extra refresh described in the
+[contributor checks](contributing.md#checks). App fixtures consume the shipped
+exports, not editor-local overrides.
+
+Tapes, fixtures, inventory, and composition live in `tests/snapshots/`. Its
+`Dockerfile` pins the base image and Debian archive; `tools.json` locks release
+and grammar archives by checksum. Change versions deliberately and refresh
+all affected baselines. `scripts/snapshots` is the only maintained capture and
+composition entry point.
 
 ## Canonical editor captures
 
-The palette comparison uses Zig. Each palette also has individual captures of
-Go, Rust, Python, TypeScript/TSX, Zig, Elixir, and TOML. For each language, all palettes use the
-same source, Tree-sitter runtime, opaque background, Ghostty geometry, font
-size, and padding. Tree-sitter assigns the highlights; the fixture does not
-paint tokens manually. Captures exclude language servers,
-Git state, diagnostics, diffs, menus, and notifications.
+The palette comparison and README hero use the same Zig fixture. Every palette
+also has Go, Rust, Python, TypeScript/TSX, Elixir, and TOML captures. They use real
+Neovim 0.12.5 Tree-sitter highlighting, not manually colored tokens. Syntax scenes
+exclude diagnostics, Git state, menus, notifications, and language servers.
 
-Install Zig, Rust, TSX, Python, Go, Elixir, and TOML parsers and their highlight queries
-before capture. Include inherited queries (such as JSX and ECMAScript for TSX).
-Set `FLUME_TS_RUNTIME` to a runtime directory containing `parser/` and `queries/`
-if they are not on Neovim's default runtime path. Use a locked nvim-treesitter
-revision and its matching parser versions for all four palettes. See the
-[nvim-treesitter installation guide](https://github.com/nvim-treesitter/nvim-treesitter#setup).
-These are capture dependencies, not requirements for using Flume.
+The environment compiles grammars pinned by nvim-treesitter revision
+`4916d6592ede8c07973490d9322f187e07dfefac`, with its matching queries and inherited
+queries. These are capture dependencies, not requirements for using Flume.
+Each capture records parser revision/checksum, query fingerprints, fixture and
+theme inputs, image checksum, and renderer identity. Neovim itself reports
+readiness before VHS captures the painted terminal state.
 
-| Palette | Appearance | Theme gallery |
+| Palette | Appearance | Gallery |
 | --- | --- | --- |
-| Dusk | Dark | [Languages, working states, and integrations](themes/dusk.md) |
-| Opal | Light | [Languages, working states, and integrations](themes/opal.md) |
-| Mira | Dark | [Languages, working states, and integrations](themes/mira.md) |
-| Mesa | Light | [Languages, working states, and integrations](themes/mesa.md) |
+| Dusk | Dark | [Languages, states, and integrations](themes/dusk.md) |
+| Opal | Light | [Languages, states, and integrations](themes/opal.md) |
+| Mira | Dark | [Languages, states, and integrations](themes/mira.md) |
+| Mesa | Light | [Languages, states, and integrations](themes/mesa.md) |
 
-On macOS, install Ghostty and Maple Mono NF, then grant Screen Recording permission before capture.
-The script identifies the Ghostty window through CoreGraphics; no interactive
-window selection is needed.
+Raw images live at `assets/screenshots/<schema>/<language>.png`. Geometry is
+112 columns × 32 rows for Zig, 100 × 48 for other editor scenes, with DejaVu Sans
+Mono at 16 pixels, fixed padding, and an opaque background. Complete fixtures fit
+without scrolling. Gallery links embed these same full-resolution images.
 
-Capture and validate from the repository root. If needed, replace the example
-runtime path with your parser/query installation:
-
-```sh
-export FLUME_TS_RUNTIME=/path/to/treesitter-runtime
-```
-
-The capture uses the selected Ghostty theme directly; it does not switch your
-active integrations or other editors.
-
-Capture all palettes and languages:
-
-```sh
-for schema in dusk opal mira mesa; do
-    ./scripts/screenshot-window.sh "$schema" zig
-    for language in rust tsx python go elixir toml; do
-        FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" "$language"
-    done
-done
-python3 scripts/preflight-screenshots.py
-```
-
-The default font size is 19 points. Set `FLUME_CAPTURE_FONT_SIZE` for a
-capture-only override when complete fixtures do not fit the display. Keep the
-same size across all palettes for a language, and across all state captures.
-This does not change installed terminal preferences or editor settings.
-
-The language argument defaults to `zig`. Captures live under
-`assets/screenshots/<schema>/<language>.png`, with matching JSON sidecars.
-Raw window captures are temporary and are removed when the script exits.
-Source fixtures live in `examples/`; capture and composition tools live in
-`scripts/`.
-
-Each sidecar identifies the palette and language. It records
-Neovim's version, parser revision and checksum, query checksums, and source and
-image checksums. It also fingerprints Flume's palette, highlight definitions,
-language corrections, and selected Ghostty theme. The GUI must report its own
-successful fixture initialization; the headless probe cannot certify a capture.
-The preflight rejects stale inputs or images and mixed parser/query runtimes,
-checks equal dimensions across palettes for each language, and OCRs captures
-for stale branch/LSP text and Neovim error messages.
-Source-only checks also reject manually assigned token highlights.
-
-These captures demonstrate Tree-sitter output, not LSP semantic highlighting.
-Use the [native language checks](color-system.md#verify-language-highlighting)
-to inspect language-specific roles.
-
-For ANSI evidence, run `./examples/ansi.sh` in the fixed terminal window under
-each activated palette and save it with that terminal's native contact sheet.
+Syntax captures demonstrate Tree-sitter, not LSP semantic highlighting. Use the
+[native language checks](color-system.md#verify-language-highlighting) to inspect
+provider roles independently of screenshots. `scripts/preflight-screenshots.py`
+checks input and image provenance, matching runtimes, and geometry. Its optional
+OCR checks require Tesseract; the snapshot commands do not require host OCR tools.
 
 ## Working-state and LSP captures
 
-Working-state captures use [`states.go`](../examples/states.go) and
-[`states.lua`](../examples/states.lua). The upper panes use Neovim's real diff
-engine, including changed identifiers and strings. The lower pane shows four
-fixture diagnostics, underlines, letter signs, and search matches.
+[`states.go`](../examples/states.go) and [`states.lua`](../examples/states.lua)
+exercise Neovim's real diff engine, changed-word surfaces, search, four fixture
+diagnostics with signs/underlines/virtual text, and either Visual selection or
+Insert-mode completion. Selection and completion are separate scenes because
+one editor cannot show both modes at once. They do not paint imitation UI states.
 
-Selection and completion need different editor modes. Capture them separately
-so both use native UI states rather than painted imitations:
+[`lsp-showcase.lua`](../examples/lsp-showcase.lua) attaches real gopls v0.16.2 or
+ZLS 0.16.0 to an isolated workspace. Go 1.23.2 and Zig 0.16.0 are pinned with those
+servers. Readiness requires observed semantic tokens; diagnostics are suppressed
+to isolate provider coloring. Sidecars identify server version, settings,
+executable checksum, and observed token counts. These images do not qualify
+other server versions or languages.
 
-```sh
-for schema in dusk opal mira mesa; do
-    FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" go selection
-    FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" go completion
-    FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" go lsp
-    FLUME_CAPTURE_FONT_SIZE=12 ./scripts/screenshot-window.sh "$schema" zig lsp
-done
-python3 scripts/preflight-screenshots.py --states --ocr
-```
-
-Use the same `FLUME_TS_RUNTIME` as the canonical captures. The LSP fixture
-requires `gopls` and `zls` on `PATH`, plus their Go and Zig toolchains.
-[`lsp-showcase.lua`](../examples/lsp-showcase.lua) copies source into a temporary
-workspace. It requires attached semantic tokens before reporting readiness.
-It suppresses diagnostics to isolate provider coloring and removes the workspace
-on exit. It does not change the user's editor or synchronized palette.
-
-Sidecars record parser/query fingerprints, fixture and renderer checksums,
-image checksums, and theme inputs. State sidecars also record native readiness
-and the capture-script checksum. LSP sidecars identify server versions, settings,
-executable checksums, and observed token counts. Preflight rejects mixed server
-or parser/query runtimes across palettes. Add `--ocr` to check state and LSP
-captures for Neovim error messages; this native lane requires Tesseract.
-Without `--ocr`, state preflight checks provenance and dimensions only, so
-ordinary checks do not require OCR.
-
-The captures below use Neovim 0.12.5 and Ghostty 1.3.1 on macOS 27.0.1,
-with Maple Mono NF at 12 points and an opaque 100-column viewport.
-Complete selection/completion fixtures and Go/Zig LSP sources fit without scrolling.
-The parser/query installation comes from nvim-treesitter commit
-`4916d6592ede8c07973490d9322f187e07dfefac`; sidecars record parser revisions
-and checksums. LSP captures use gopls v0.16.2 and ZLS 0.16.0.
-They do not qualify other server versions or languages.
+The lualine scene loads the real checksum-locked plugin with the named `flume`
+theme. Its statusline uses the same palette as the editor.
 
 | Palette | Selection and diagnostics | Completion | Tree-sitter + LSP |
 | --- | --- | --- | --- |
-| Dusk | [Working states](themes/dusk.md#diagnostics-and-working-states) | [Menu](themes/dusk.md#completion) | [Go](themes/dusk.md#go-with-gopls) · [Zig](themes/dusk.md#zig-with-zls) |
-| Opal | [Working states](themes/opal.md#diagnostics-and-working-states) | [Menu](themes/opal.md#completion) | [Go](themes/opal.md#go-with-gopls) · [Zig](themes/opal.md#zig-with-zls) |
-| Mira | [Working states](themes/mira.md#diagnostics-and-working-states) | [Menu](themes/mira.md#completion) | [Go](themes/mira.md#go-with-gopls) · [Zig](themes/mira.md#zig-with-zls) |
-| Mesa | [Working states](themes/mesa.md#diagnostics-and-working-states) | [Menu](themes/mesa.md#completion) | [Go](themes/mesa.md#go-with-gopls) · [Zig](themes/mesa.md#zig-with-zls) |
-
-These editor captures do not approve the native integration contact sheets below.
-Review hierarchy at working font size; checksum and contrast checks do not
-establish reading comfort.
+| Dusk | [States](themes/dusk.md#diagnostics-and-working-states) | [Menu](themes/dusk.md#completion) | [Go](themes/dusk.md#go-with-gopls) · [Zig](themes/dusk.md#zig-with-zls) |
+| Opal | [States](themes/opal.md#diagnostics-and-working-states) | [Menu](themes/opal.md#completion) | [Go](themes/opal.md#go-with-gopls) · [Zig](themes/opal.md#zig-with-zls) |
+| Mira | [States](themes/mira.md#diagnostics-and-working-states) | [Menu](themes/mira.md#completion) | [Go](themes/mira.md#go-with-gopls) · [Zig](themes/mira.md#zig-with-zls) |
+| Mesa | [States](themes/mesa.md#diagnostics-and-working-states) | [Menu](themes/mesa.md#completion) | [Go](themes/mesa.md#go-with-gopls) · [Zig](themes/mesa.md#zig-with-zls) |
 
 ## Code examples
 
-The examples use each language's conventions rather than translating the same
-exercise. Some demonstrate a language mechanism; others show a practical script
-or configuration. Zig uses a compact 112-column × 32-row viewport for the
-README hero. Other languages use 100 columns × 48 rows. Each complete file fits
-without scrolling. Zig captures use a 19-point font; other languages use
-12 points. They show syntax, not diagnostics or LSP semantic tokens. Syntax-role coverage is spread across the
-examples; no single file demonstrates every highlight group.
+Sources live in `examples/`. They use each language's conventions rather than
+translating the same exercise. Role coverage spans the examples; no single file
+demonstrates every highlight group.
 
-| Source                         | Mechanism                                                                                                                                     |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Go](../examples/flume.go)     | A channel producer stops on cancellation, even without a receiver; the caller waits for cleanup.                                              |
-| [Rust](../examples/flume.rs)   | Typestate makes `open` available only after unlocking; a wrong key returns the door for another attempt.                                      |
-| [Python](../examples/flume.py) | A command-line script reads JSON-lines events, counts names, and prints the most common events with percentages.                              |
-| [TSX](../examples/flume.tsx)   | A React counter stores history so undo is one state transition; functional updates compose queued clicks.                                     |
-| [Zig](../examples/flume.zig)   | A tagged union represents an expression tree. Recursive folding returns a number for constant expressions and `null` for dynamic identifiers. |
-| [Elixir](../examples/flume.ex) | A regex parser returns tagged tuples; a pipeline counts valid log entries using pattern-matched anonymous function clauses.                   |
-| [TOML](../examples/flume.toml) | An illustrative preview-server config uses tables, arrays of tables, quoted keys, literal strings, and multiline strings.                     |
+| Source | Mechanism |
+| --- | --- |
+| [Go](../examples/flume.go) | A channel producer stops on cancellation; its caller waits for cleanup. |
+| [Rust](../examples/flume.rs) | Typestate permits opening only after unlocking. |
+| [Python](../examples/flume.py) | A JSON-lines event counter reports frequencies and percentages. |
+| [TSX](../examples/flume.tsx) | A React counter records undo history through functional updates. |
+| [Zig](../examples/flume.zig) | Recursive constant folding over a tagged expression union. |
+| [Elixir](../examples/flume.ex) | A regex parser feeds a frequency-counting pipeline. |
+| [TOML](../examples/flume.toml) | Illustrative preview-server configuration, not Flume configuration. |
 
-Run `zig run examples/flume.zig` to print `add folded = 42` (verified with Zig 0.16.0).
-Go requires 1.22+ for integer ranges. The TSX component requires React and its
-TypeScript types; render `<UndoCounter />` in a React application. Python requires
-3.10+; run `python3 examples/flume.py events.jsonl --limit 3` with one object such
-as `{"event": "play"}` per line. Elixir requires 1.10+ for `Enum.frequencies/1`;
-run `elixir examples/flume.ex` or `elixir tests/examples.exs` to check the parser.
-The TOML example is not a Flume configuration file.
+Go requires 1.22+, Python 3.10+, and Elixir 1.10+. TSX requires React and its
+TypeScript types. `zig run examples/flume.zig` prints `add folded = 42` with
+Zig 0.16.0. Run `python3 examples/flume.py events.jsonl --limit 3` with records
+such as `{"event":"play"}`, or `elixir tests/examples.exs` to check its parser.
 
 ## README composite
 
-```sh
-python3 scripts/compose_showcase.py
-```
+The normal snapshot commands generate and test `assets/screenshots/showcase.png`:
+a 2800 × 1720 cascade of Opal, Mesa, Mira, and Dusk Zig captures over the original
+artwork. Dusk is the foreground sample. Composition runs through pinned Pillow
+in the capture environment; it preserves capture colors and aspect ratios.
+There is no manual screenshot or separate ImageMagick step.
 
-The command validates capture provenance before composing. It writes
-`assets/screenshots/showcase.png`, a 2800 × 1720 composite of Opal, Mesa,
-Mira, and Dusk. Dusk is the foreground sample. Application captures retain their
-original colors and aspect ratios. README links open Markdown galleries with
-embedded captures, headings, and links to corresponding theme/language sections.
+## Integration contact sheets
 
-The [gallery](gallery.md) links to both palette and language views. Both views
-embed the same full-resolution image files; they do not duplicate or recolor captures.
+These contact sheets show real applications through VHS's ttyd/Chromium terminal,
+not native Ghostty or Kitty rendering. Each uses the same app fixture and geometry
+across all four palettes. Pi/OpenCode content is synthetic, but their UI is real.
 
-## Native integration contact sheets
+| Integration | Exercised surface |
+| --- | --- |
+| Tmux | Exported status variables and active window |
+| LSD | File types, permissions, sizes, dates, symlinks, and Git state |
+| OpenCode | Core UI colors, Markdown emphasis, inline code, and plain code/diff text from an offline session |
+| Lazygit | Repository files and add/change/delete diff state |
+| fzf | Search, current item, and multi-selection |
+| Delta | Added/changed/deleted diff lines and line numbers |
+| Pi | Markdown, code, thinking, and successful/failed tool results |
 
-Visual integration review is manual release evidence, not a pixel-diff CI gate.
-The checklist records missing native captures until evidence is committed:
+The palette galleries embed each app's snapshot. Each integration directory also
+contains `contact-sheet.png`, generated and tested from its four raw captures.
 
-| Integration | Contact sheet | Required surface                   |
-| ----------- | ------------- | ---------------------------------- |
-| Ghostty     | Pending       | ANSI 0–15, selection, cursor       |
-| Kitty       | Pending       | ANSI 0–15, selection, tabs         |
-| Tmux        | Pending       | Status variables and active window |
-| LSD         | Pending       | File types, permissions, Git state |
-| OpenCode    | Pending       | Text hierarchy, diffs, Markdown    |
-| Lazygit     | Pending       | Add/change/delete and line numbers |
-| fzf         | Pending       | Selection, match, prompt, border   |
-| Delta       | Pending       | Add/change/delete and line numbers |
-| Pi          | Pending       | Text hierarchy, tools, Markdown    |
+Ghostty and Kitty exports remain configuration-contract checks: syntax,
+settings, ANSI slots, and exact canonical colors. Rendering those files in VHS
+would not test either terminal. Native selection/cursor/tab behavior and live
+reload remain optional, separate qualification rather than routine pixel tests.
 
-For each integration, capture the same deterministic app fixture with all four
-palettes:
-
-```text
-assets/screenshots/integrations/<app>/dusk.png
-assets/screenshots/integrations/<app>/opal.png
-assets/screenshots/integrations/<app>/mira.png
-assets/screenshots/integrations/<app>/mesa.png
-assets/screenshots/integrations/<app>/metadata.json
-```
-
-Copy [`capture-metadata-template.json`](capture-metadata-template.json), fill in
-real values, then compose:
-
-```sh
-python3 scripts/compose-contact-sheet.py <app>
-```
-
-The output is `assets/screenshots/integrations/<app>/contact-sheet.png`.
-Metadata records app version, OS, terminal, font, dimensions, scale, fixture
-revision, capture date, and any unsupported or unthemeable regions.
-
-Prioritize:
-
-1. Delta and Lazygit diffs and line numbers;
-2. Pi and OpenCode text hierarchy, tool state, and Markdown;
-3. Ghostty and Kitty ANSI 0–15, selection, cursor, and tabs;
-4. Tmux status variables, LSD metadata, and fzf selection/search state.
-
-When automation is unavailable, record the exact manual action and application
-version instead of fabricating evidence.
+Historical hierarchy comparisons retain their inputs in
+[capture metadata](../assets/screenshots/hierarchy/metadata.json). They are
+archived evidence, not maintained showcase assets regenerated by this pipeline.
+Exact role values and contrast pairs belong to the
+[palette manifest](palette-manifest.md), not screenshot comparison tables.

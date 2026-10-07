@@ -2,10 +2,8 @@
 
 import importlib.util
 import json
-import os
 import shutil
 import struct
-import subprocess
 import tempfile
 import unittest
 from contextlib import ExitStack
@@ -32,10 +30,14 @@ class CaptureProvenance(unittest.TestCase):
             "examples/states.go",
             "examples/lsp-showcase.lua",
             "examples/flume.zig",
-            "scripts/screenshot-window.sh",
             "scripts/preflight-screenshots.py",
+            "tests/snapshots/fixtures/neovim.lua",
+            "tests/snapshots/fixtures/neovim.sh",
+            "tests/snapshots/neovim.tape",
             "lua/flume/init.lua",
             "lua/flume/palette.lua",
+            "tests/snapshots/capture.py", "tests/snapshots/Dockerfile",
+            "tests/snapshots/tools.json", "tests/snapshots/install.py",
         ]
         files += [
             str(path.relative_to(ROOT)) for path in (ROOT / "lua/flume/languages").glob("*.lua")
@@ -127,12 +129,12 @@ class CaptureProvenance(unittest.TestCase):
                 runtime[required] = False
                 runtime_file.write_text(json.dumps(runtime))
                 with self.assertRaisesRegex(SystemExit, f"did not render {required}"):
-                    preflight.record("dusk", "go", runtime_file, kind)
+                    preflight.record("dusk", "go", runtime_file, kind, image=self.root / f"assets/screenshots/{kind}/dusk/go.png")
 
     def test_state_capture_provenance_is_checked(self):
         runtime, runtime_file, image = self.state_runtime("completion")
         runtime_file.write_text(json.dumps(runtime))
-        preflight.record("dusk", "go", runtime_file, "completion")
+        preflight.record("dusk", "go", runtime_file, "completion", image=image)
         preflight.validate_capture(image)
         renderer = self.root / "examples/states.lua"
         renderer.write_text(renderer.read_text() + "\n-- changed\n")
@@ -140,11 +142,11 @@ class CaptureProvenance(unittest.TestCase):
             preflight.validate_capture(image)
 
     def test_lsp_requires_server_tokens(self):
-        runtime, runtime_file, _ = self.state_runtime("lsp")
+        runtime, runtime_file, image = self.state_runtime("lsp")
         runtime["server"] = {"token_counts": {}}
         runtime_file.write_text(json.dumps(runtime))
         with self.assertRaisesRegex(SystemExit, "did not report semantic tokens"):
-            preflight.record("dusk", "go", runtime_file, "lsp")
+            preflight.record("dusk", "go", runtime_file, "lsp", image=image)
 
     def test_lsp_records_server_identity_without_machine_paths(self):
         runtime, runtime_file, image = self.state_runtime("lsp")
@@ -155,12 +157,34 @@ class CaptureProvenance(unittest.TestCase):
             "token_counts": {"variable": 3, "function": 2}, "executable": str(executable),
         }
         runtime_file.write_text(json.dumps(runtime))
-        preflight.record("dusk", "go", runtime_file, "lsp")
+        preflight.record("dusk", "go", runtime_file, "lsp", image=image)
         preflight.validate_capture(image)
         metadata = json.loads(image.with_suffix(".json").read_text())
         self.assertEqual(metadata["server_executable_sha256"], preflight.digest(executable))
         self.assertNotIn(str(self.root), json.dumps(metadata))
         self.assertEqual(list(metadata["server"]["token_counts"]), ["function", "variable"])
+
+    def test_missing_capture_renderer_is_rejected(self):
+        sidecar = self.root / "assets/screenshots/dusk/zig.json"
+        metadata = json.loads(sidecar.read_text())
+        del metadata["capture_renderer"]
+        sidecar.write_text(json.dumps(metadata))
+        with self.assertRaisesRegex(SystemExit, "stale VHS capture inputs"):
+            preflight.main()
+
+    def test_legacy_record_commands_are_rejected(self):
+        for option in ("--record", "--record-state"):
+            with self.subTest(option=option), patch.object(preflight.sys, "argv", ["preflight", option]):
+                with self.assertRaises(SystemExit) as error:
+                    preflight.main()
+                self.assertEqual(error.exception.code, 2)
+
+    def test_source_check_inspects_current_editor_fixture(self):
+        fixture = self.root / "tests/snapshots/fixtures/neovim.lua"
+        fixture.write_text(fixture.read_text() + "\nvim.diagnostic.config({ virtual_text = true })\n")
+        with patch.object(preflight.sys, "argv", ["preflight", "--source-only"]):
+            with self.assertRaisesRegex(SystemExit, "presentation noise"):
+                preflight.main()
 
     def test_changed_image_is_rejected(self):
         image = self.root / "assets/screenshots/dusk/zig.png"
@@ -188,50 +212,6 @@ class CaptureProvenance(unittest.TestCase):
                 with self.assertRaisesRegex(SystemExit, "stale theme inputs"):
                     preflight.main()
                 path.write_bytes(original)
-
-    def test_failed_gui_cannot_reuse_headless_metadata(self):
-        fake_bin = self.root / "bin"
-        fake_bin.mkdir()
-        app = self.root / "Ghostty.app"
-        executable = app / "Contents/MacOS/ghostty"
-        executable.parent.mkdir(parents=True)
-        executable.write_text("#!/bin/sh\nexec tail -f /dev/null\n")
-        executable.chmod(0o700)
-        runtime = self.root / "runtime"
-        runtime.mkdir()
-        parser, query = runtime / "zig.so", runtime / "highlights.scm"
-        parser.write_bytes(b"test parser")
-        query.write_text("(identifier) @variable\n")
-        metadata = json.dumps({"nvim": "test", "parser": str(parser), "queries": [str(query)]})
-        commands = {
-            "nvim": "printf '%s\\n' '" + metadata + '\' > "$FLUME_SHOWCASE_METADATA"\n',
-            "osascript": "case \"$*\" in *'POSIX path'*) printf '%s/\\n' '"
-            + str(app)
-            + "';; esac\n",
-            "screencapture": "for last do :; done\nprintf 'capture' > \"$last\"\n",
-            "swift": "printf '123\\n'\n",
-            "magick": "printf 'failed GUI capture' > \"${3#PNG24:}\"\n",
-        }
-        for name, body in commands.items():
-            command = fake_bin / name
-            command.write_text("#!/bin/sh\n" + body)
-            command.chmod(0o700)
-        image = self.root / "assets/screenshots/dusk/zig.png"
-        original = image.read_bytes()
-        # Popen bypasses the OCR run() mock and executes the actual capture
-        # script with a successful headless probe but no GUI completion.
-        process = subprocess.Popen(
-            ["bash", str(self.root / "scripts/screenshot-window.sh"), "dusk"],
-            cwd=self.root,
-            env={**os.environ, "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"]},
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-        )
-        stdout, stderr = process.communicate(timeout=15)
-        self.assertNotEqual(process.returncode, 0, stdout)
-        self.assertIn("parser-backed fixture did not finish loading", stderr)
-        self.assertEqual(image.read_bytes(), original)
 
     def test_mixed_runtimes_are_rejected(self):
         sidecar = self.root / "assets/screenshots/opal/zig.json"
@@ -276,7 +256,7 @@ class CaptureProvenance(unittest.TestCase):
             preflight.main()
 
     def test_neovim_error_text_is_rejected(self):
-        with patch.object(preflight.subprocess, "run", return_value=SimpleNamespace(
+        with patch.object(preflight.sys, 'argv', ['preflight', '--ocr']), patch.object(preflight.subprocess, "run", return_value=SimpleNamespace(
             stdout="E21: Cannot make changes, 'modifiable' is off\n"
         )):
             with self.assertRaisesRegex(SystemExit, "contains a Neovim error: E21:"):

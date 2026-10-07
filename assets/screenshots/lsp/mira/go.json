@@ -2,10 +2,10 @@
   "schema": "mira",
   "language": "go",
   "highlighting": "treesitter+lsp",
-  "nvim": "0.12.5",
+  "nvim": "0.12.5+v0.12.5",
   "parser": {
     "revision": "2346a3ab1bb3857b48b29d779a1ef9799a248cd7",
-    "sha256": "9a0c9d0578dfe3466ed6adafcb0cbeaa75df3fa0cae07ad4a6fd42d1bd43043b"
+    "sha256": "6dce7366464077d46811766e6eec6ba0c4198dd029b6eefe560f2cd9b8d1ced8"
   },
   "queries": [
     {
@@ -15,7 +15,7 @@
   ],
   "fixture_sha256": "9c31be87f1a3644a4a70ca5ae1823577828259bcb73f05a4caccb795a6f94bb1",
   "renderer_sha256": "21ff913bcbf4983751fea1586e208d2c63a5e5b4fe38f3d247cfc959c4a1e28e",
-  "image_sha256": "647cb910707071ec0e208323169258fb8516dc6e7af3a1ff7954cd8b94a8e229",
+  "image_sha256": "0877055f95b7319bbd24ffa614366f30804618b8d1ff36bd1f7251ab3c59b74b",
   "theme_inputs": {
     "lua/flume/init.lua": "a1f69f1788b750c825d7ff175521ecabe813651ca5daa72035a1a7685d6acd9f",
     "lua/flume/palette.lua": "b50950afa72aebfcb41e4ec6f1b4acbfb2ede88f20b5a8164d2077c085f86bcf",
@@ -27,8 +27,13 @@
     "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
     "extras/ghostty/flume-mira": "30f9fe02c9691fe0a6070dc30aadf20bc4163ea8167a20a361eef439d9753c45"
   },
+  "capture_renderer": {
+    "name": "VHS",
+    "script_sha256": "320ede5344f876f877fc2514c6bbaa64d61f445ab864cbb21ec1adf4982dae25",
+    "environment_sha256": "092ace19c41462299edb1862e764ffadc234875388fb883f28fb7a94b296430f"
+  },
   "kind": "lsp",
-  "capture_script_sha256": "25b465ca87c6c337d84a1ce7f0cee66055d5ab9bdc850daa89e11f179ad3ffe7",
+  "capture_script_sha256": "320ede5344f876f877fc2514c6bbaa64d61f445ab864cbb21ec1adf4982dae25",
   "base_renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
   "server": {
     "name": "gopls",
@@ -51,5 +56,5 @@
       "variable": 22
     }
   },
-  "server_executable_sha256": "f11a1147d42ed6cbc2f574ade9e2956ac630b1c11a5b197bde093cb1129c494e"
+  "server_executable_sha256": "f1c4ff615da01bbb205dfa406e5498503fff7ed775f0ad968e7dd7b99a1a25f9"
 }

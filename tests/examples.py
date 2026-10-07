@@ -80,9 +80,11 @@ class ConfigExample(unittest.TestCase):
 
 class ExampleViewport(unittest.TestCase):
     def test_complete_files_fit_capture(self):
-        script = (ROOT / "scripts/screenshot-window.sh").read_text()
-        rows = int(re.search(r"GHOSTTY_ROWS=(\d+)", script)[1])
-        columns = int(re.search(r"GHOSTTY_COLUMNS=(\d+)", script)[1])
+        import sys
+        sys.path.insert(0, str(ROOT / 'tests/snapshots'))
+        from common import SCENES
+        rows = SCENES['neovim-go']['rows']
+        columns = SCENES['neovim-go']['columns']
         for extension in ("go", "rs", "py", "tsx", "zig", "ex", "toml"):
             source = ROOT / f"examples/flume.{extension}"
             with self.subTest(source=source.name):
@@ -91,8 +93,8 @@ class ExampleViewport(unittest.TestCase):
                 capture_rows = rows
                 capture_columns = columns
                 if extension == "zig":
-                    capture_rows = int(re.search(r"ZIG_ROWS=(\d+)", script)[1])
-                    capture_columns = int(re.search(r"ZIG_COLUMNS=(\d+)", script)[1])
+                    capture_rows = SCENES['neovim-zig']['rows']
+                    capture_columns = SCENES['neovim-zig']['columns']
                 self.assertLessEqual(len(lines), capture_rows - 2)
                 self.assertLessEqual(max(len(line.expandtabs(8)) for line in lines), capture_columns - 8)
 

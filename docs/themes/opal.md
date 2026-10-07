@@ -79,8 +79,24 @@ Diagnostics are suppressed here to isolate provider coloring.
 ## Integrations
 
 [Setup recipes](../workflows.md#external-tools) · [Lualine setup](../workflows.md#lualine).
-External-app screenshots aren't available yet; the images above show Neovim only.
-Matching theme files are listed below.
+These snapshots use real apps through VHS; Pi/OpenCode restore synthetic offline
+sessions. They do not prove native Ghostty/Kitty rendering.
+
+### Lualine
+
+![Opal with the Flume lualine theme](../../assets/screenshots/lualine/opal/go.png)
+
+### Terminal apps
+
+![Opal Tmux](../../assets/screenshots/integrations/tmux/opal.png)
+![Opal LSD](../../assets/screenshots/integrations/lsd/opal.png)
+![Opal OpenCode](../../assets/screenshots/integrations/opencode/opal.png)
+![Opal Lazygit](../../assets/screenshots/integrations/lazygit/opal.png)
+![Opal fzf](../../assets/screenshots/integrations/fzf/opal.png)
+![Opal Delta](../../assets/screenshots/integrations/delta/opal.png)
+![Opal Pi](../../assets/screenshots/integrations/pi/opal.png)
+
+Matching configuration files:
 
 | Integration | Opal configuration |
 | --- | --- |

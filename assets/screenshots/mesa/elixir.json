@@ -2,10 +2,10 @@
   "schema": "mesa",
   "language": "elixir",
   "highlighting": "treesitter",
-  "nvim": "0.12.5",
+  "nvim": "0.12.5+v0.12.5",
   "parser": {
     "revision": "7937d3b4d65fa574163cfa59394515d3c1cf16f4",
-    "sha256": "2d4a000555f45178644c67452b53eb5519f506d21c26765aef7148b82284f5cf"
+    "sha256": "a465c6beb7079288f3d3d8e4180ceb6e9825a3fde1ef37ad5cd93d7ad804dcff"
   },
   "queries": [
     {
@@ -15,7 +15,7 @@
   ],
   "fixture_sha256": "bd1fec4a566f639bac81b0924928e9d3b4146d4b6fdd0c8fae8db3c5f5157365",
   "renderer_sha256": "08a686241e8be974a18f9b2e6cf8356d47f7cc3621283177ace8f2a85f47ff8d",
-  "image_sha256": "86e8e549fb450c5bc21f56e6bba72fea27df0495022904aae78ae446cb38e0ac",
+  "image_sha256": "ae8b67f8374536abea74f8722cea39647deecdfe53b6f871896fe8cebabb1ad2",
   "theme_inputs": {
     "lua/flume/init.lua": "a1f69f1788b750c825d7ff175521ecabe813651ca5daa72035a1a7685d6acd9f",
     "lua/flume/palette.lua": "b50950afa72aebfcb41e4ec6f1b4acbfb2ede88f20b5a8164d2077c085f86bcf",
@@ -26,5 +26,10 @@
     "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
     "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
     "extras/ghostty/flume-mesa": "01882a08b6385d8e20f6c96aa3802c69c016851591fc2a655155a30be96a4f57"
+  },
+  "capture_renderer": {
+    "name": "VHS",
+    "script_sha256": "320ede5344f876f877fc2514c6bbaa64d61f445ab864cbb21ec1adf4982dae25",
+    "environment_sha256": "092ace19c41462299edb1862e764ffadc234875388fb883f28fb7a94b296430f"
   }
 }

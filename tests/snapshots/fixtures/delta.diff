@@ -1,0 +1,29 @@
+diff --git a/palette.py b/palette.py
+index 3364091..514c204 100644
+--- a/palette.py
++++ b/palette.py
+@@ -1,8 +1,8 @@
+ # Select a palette without changing ordinary identifiers.
+ PALETTES = ["dusk", "opal", "mira", "mesa"]
+ 
+ def select_palette(name: str) -> str:
+     if name not in PALETTES:
+         raise ValueError("Unknown palette")
+-    return name
+-print(select_palette("dusk"))
++    return name.upper()
++print(select_palette("opal"))
+diff --git a/removed.txt b/removed.txt
+deleted file mode 100644
+index 920ce2a..0000000
+--- a/removed.txt
++++ /dev/null
+@@ -1 +0,0 @@
+-Old palette configuration
+diff --git a/shared.json b/shared.json
+new file mode 100644
+index 0000000..1543c42
+--- /dev/null
++++ b/shared.json
+@@ -0,0 +1 @@
++{"schema": "opal", "appearance": "light"}

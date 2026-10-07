@@ -1,0 +1,80 @@
+{
+  "info": {
+    "id": "ses_flumequalifiedfixture",
+    "slug": "flume-native-fixture",
+    "projectID": "fixture",
+    "directory": "/tmp/fixture",
+    "title": "Offline Flume palette fixture",
+    "version": "1.18.35",
+    "time": {
+      "created": 1785153600000,
+      "updated": 1785153600000
+    }
+  },
+  "messages": [
+    {
+      "info": {
+        "id": "msg_flume0001",
+        "sessionID": "ses_flumequalifiedfixture",
+        "role": "user",
+        "time": {
+          "created": 1785153600000
+        },
+        "agent": "build",
+        "model": {
+          "providerID": "opencode",
+          "modelID": "big-pickle"
+        }
+      },
+      "parts": [
+        {
+          "id": "prt_flume0001",
+          "sessionID": "ses_flumequalifiedfixture",
+          "messageID": "msg_flume0001",
+          "type": "text",
+          "text": "Review the palette configuration. Offline visual fixture; no model request."
+        }
+      ]
+    },
+    {
+      "info": {
+        "id": "msg_flume0002",
+        "sessionID": "ses_flumequalifiedfixture",
+        "role": "assistant",
+        "time": {
+          "created": 1785153600000,
+          "completed": 1785153600001
+        },
+        "parentID": "msg_flume0001",
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/tmp/fixture",
+          "root": "/tmp/fixture"
+        },
+        "cost": 0,
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "finish": "stop"
+      },
+      "parts": [
+        {
+          "id": "prt_flume0002",
+          "sessionID": "ses_flumequalifiedfixture",
+          "messageID": "msg_flume0002",
+          "type": "text",
+          "text": "Palette review\n\nThe **shared export** selects `opal`.\n\n- Text hierarchy uses semantic roles.\n- Missing optional config is reported.\n\n```\nfunction select_palette(name: string): string {\n  return name.toUpperCase()\n}\n```\n\nFlume workflows: github.com/mitander/flume.nvim\n\n```diff\n- return name\n+ return name.upper()\n```"
+        }
+      ]
+    }
+  ]
+}

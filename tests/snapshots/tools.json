@@ -1,0 +1,97 @@
+{
+  "nvim": {
+    "url": "https://github.com/neovim/neovim/releases/download/v0.12.5/nvim-linux-x86_64.tar.gz",
+    "sha256": "bce0f56eda1f1b1db6eee8f4133d7a38813ea07933837dd1777411ca384c6875",
+    "strip": 1
+  },
+  "pi": {
+    "url": "https://github.com/earendil-works/pi/releases/download/v1.0.4/pi-linux-x64.tar.gz",
+    "sha256": "284c45dd28cf975a13cff6af34741dd0a0cdca6634e8bdfc0083ae7d452e86d6",
+    "strip": 1
+  },
+  "opencode": {
+    "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.35/opencode-linux-x64-baseline.tar.gz",
+    "sha256": "90c97d4a24d36437bce36f27195c9cd2e0b70ed037a04d1c6a6740eb246c2a73",
+    "strip": 0
+  },
+  "lazygit": {
+    "url": "https://github.com/jesseduffield/lazygit/releases/download/v0.55.1/lazygit_0.55.1_linux_x86_64.tar.gz",
+    "sha256": "6385a699dde302b7fdcd1cc8910ae225ed0c19a230285569c586051576f0d6a3",
+    "strip": 0
+  },
+  "lsd": {
+    "url": "https://github.com/lsd-rs/lsd/releases/download/v1.2.0/lsd-v1.2.0-x86_64-unknown-linux-musl.tar.gz",
+    "sha256": "77849da1210336534258551a581401ba19ae6b8d7b66a2a1feff148ad41e3814",
+    "strip": 1
+  },
+  "go": {
+    "url": "https://go.dev/dl/go1.23.2.linux-amd64.tar.gz",
+    "sha256": "542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e",
+    "strip": 1
+  },
+  "zig": {
+    "url": "https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz",
+    "sha256": "70e49664a74374b48b51e6f3fdfbf437f6395d42509050588bd49abe52ba3d00",
+    "strip": 1
+  },
+  "zls": {
+    "url": "https://github.com/zigtools/zls/releases/download/0.16.0/zls-x86_64-linux.tar.xz",
+    "sha256": "ded6d562a0b86ee878b1ddf70ffab2797ce3cdca3b02d6077548f9d56dff96b6",
+    "strip": 0
+  },
+  "treesitter": {
+    "url": "https://codeload.github.com/nvim-treesitter/nvim-treesitter/tar.gz/4916d6592ede8c07973490d9322f187e07dfefac",
+    "sha256": "4e720e38f1a74c07fc8bc9d6264e25ab620df93c6576200f43f2ca0ce5fbdec1",
+    "strip": 1,
+    "revision": "4916d6592ede8c07973490d9322f187e07dfefac"
+  },
+  "parser-zig": {
+    "url": "https://codeload.github.com/tree-sitter-grammars/tree-sitter-zig/tar.gz/6479aa13f32f701c383083d8b28360ebd682fb7d",
+    "sha256": "34b338658c7548ea7e723b9a74a18bba76d16bf453bc4a9deb13f2f507f4e725",
+    "strip": 1,
+    "revision": "6479aa13f32f701c383083d8b28360ebd682fb7d"
+  },
+  "parser-rust": {
+    "url": "https://codeload.github.com/tree-sitter/tree-sitter-rust/tar.gz/77a3747266f4d621d0757825e6b11edcbf991ca5",
+    "sha256": "dee82ddfd01bfc3a8ed201cc03b56448107d3217a4b3a7a8fc7fa6bc32b2405b",
+    "strip": 1,
+    "revision": "77a3747266f4d621d0757825e6b11edcbf991ca5"
+  },
+  "parser-tsx": {
+    "url": "https://codeload.github.com/tree-sitter/tree-sitter-typescript/tar.gz/75b3874edb2dc714fb1fd77a32013d0f8699989f",
+    "sha256": "96ce4d1b513767d414bcca408efd9b49879162cceecdbed79a88e8ad2184f385",
+    "strip": 1,
+    "revision": "75b3874edb2dc714fb1fd77a32013d0f8699989f",
+    "location": "tsx"
+  },
+  "parser-python": {
+    "url": "https://codeload.github.com/tree-sitter/tree-sitter-python/tar.gz/v0.25.0",
+    "sha256": "4609a3665a620e117acf795ff01b9e965880f81745f287a16336f4ca86cf270c",
+    "strip": 1,
+    "revision": "v0.25.0"
+  },
+  "parser-go": {
+    "url": "https://codeload.github.com/tree-sitter/tree-sitter-go/tar.gz/2346a3ab1bb3857b48b29d779a1ef9799a248cd7",
+    "sha256": "94d08fc0f727a8dbe03203e2aaf1c5dc33a57e496b583049324eddc79769797b",
+    "strip": 1,
+    "revision": "2346a3ab1bb3857b48b29d779a1ef9799a248cd7"
+  },
+  "parser-elixir": {
+    "url": "https://codeload.github.com/elixir-lang/tree-sitter-elixir/tar.gz/7937d3b4d65fa574163cfa59394515d3c1cf16f4",
+    "sha256": "c8302c728ec013417a36bb10177117690ba2effbd3b4933c9ce553c73308606b",
+    "strip": 1,
+    "revision": "7937d3b4d65fa574163cfa59394515d3c1cf16f4"
+  },
+  "parser-toml": {
+    "url": "https://codeload.github.com/tree-sitter-grammars/tree-sitter-toml/tar.gz/64b56832c2cffe41758f28e05c756a3a98d16f41",
+    "sha256": "feeb2e1cf531588cdcfb9c57292620151a08597f18a98dad26cc17fd4b544dcb",
+    "strip": 1,
+    "revision": "64b56832c2cffe41758f28e05c756a3a98d16f41"
+  },
+  "lualine": {
+    "url": "https://codeload.github.com/nvim-lualine/lualine.nvim/tar.gz/221ce6b2d999187044529f49da6554a92f740a96",
+    "sha256": "0bb7ae9af7c16ce56292f0fb38f57dfbdd48a071a5f08e0bff8bed6b9b02006b",
+    "strip": 1,
+    "revision": "221ce6b2d999187044529f49da6554a92f740a96"
+  }
+}

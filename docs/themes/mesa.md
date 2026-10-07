@@ -79,8 +79,24 @@ Diagnostics are suppressed here to isolate provider coloring.
 ## Integrations
 
 [Setup recipes](../workflows.md#external-tools) · [Lualine setup](../workflows.md#lualine).
-External-app screenshots aren't available yet; the images above show Neovim only.
-Matching theme files are listed below.
+These snapshots use real apps through VHS; Pi/OpenCode restore synthetic offline
+sessions. They do not prove native Ghostty/Kitty rendering.
+
+### Lualine
+
+![Mesa with the Flume lualine theme](../../assets/screenshots/lualine/mesa/go.png)
+
+### Terminal apps
+
+![Mesa Tmux](../../assets/screenshots/integrations/tmux/mesa.png)
+![Mesa LSD](../../assets/screenshots/integrations/lsd/mesa.png)
+![Mesa OpenCode](../../assets/screenshots/integrations/opencode/mesa.png)
+![Mesa Lazygit](../../assets/screenshots/integrations/lazygit/mesa.png)
+![Mesa fzf](../../assets/screenshots/integrations/fzf/mesa.png)
+![Mesa Delta](../../assets/screenshots/integrations/delta/mesa.png)
+![Mesa Pi](../../assets/screenshots/integrations/pi/mesa.png)
+
+Matching configuration files:
 
 | Integration | Mesa configuration |
 | --- | --- |

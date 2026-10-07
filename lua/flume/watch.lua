@@ -91,6 +91,14 @@ function M.start()
         return false
     end
 
+    -- Reconcile changes made while the native event backend starts observing.
+    -- The seeded active_set preserves follow_sync=false for an unchanged activation.
+    vim.schedule(function()
+        if generation == started_generation then
+            apply_active_schema()
+        end
+    end)
+
     local group = vim.api.nvim_create_augroup("FlumeSyncWatch", { clear = true })
     vim.api.nvim_create_autocmd("ColorScheme", {
         group = group,

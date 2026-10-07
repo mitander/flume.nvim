@@ -69,13 +69,21 @@ See the [Tmux manual](https://man.openbsd.org/tmux#source-file).
 
 ### LSD
 
-Run `:FlumeInstallExtras lsd`, then select the file in `~/.config/lsd/config.yaml`:
+With LSD 1.2+, run `:FlumeInstallExtras lsd`, then select custom colors in
+`~/.config/lsd/config.yaml`:
 
 ```yaml
 color:
   when: auto
-  theme: ~/.config/lsd/colors.yaml
+  theme: custom
 ```
+
+LSD reads `colors.yaml` from its configuration directory. If your LSD configuration lives under
+`XDG_CONFIG_HOME`, link `<data-dir>/current/lsd.yaml` into that directory's
+`lsd/colors.yaml`. LSD 1.2 searches `~/.config/lsd` first, so an existing
+`colors.yaml` there takes precedence over the XDG location.
+Older LSD versions can use `theme: ~/.config/lsd/colors.yaml`; LSD 1.2 warns
+that this path-based setting is deprecated.
 
 Run `lsd -l` to see metadata colors. New invocations read the shared palette;
 file-name colors still follow `LS_COLORS`. Classic mode disables color.

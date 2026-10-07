@@ -502,7 +502,7 @@ test("public commands are registered", function()
 end)
 
 test("screenshot initialization uses the single setup path", function()
-    local script = table.concat(vim.fn.readfile("scripts/screenshot-window.sh"), "\n")
+    local script = table.concat(vim.fn.readfile("tests/snapshots/fixtures/neovim.lua"), "\n")
     truthy(script:find("require('flume').setup", 1, true), "screenshot setup call missing")
     truthy(not script:find("vim.cmd.colorscheme", 1, true), "screenshot applies setup and colorscheme")
 end)
@@ -598,6 +598,49 @@ test("sync watcher ignores unrelated integration activity", function()
     end, 10), "watcher did not follow a successful activation")
     require("flume.compiler").activate("dusk")
     flume.setup({ schema = "dusk" })
+end)
+
+test("sync watcher reconciles activation before its first filesystem event", function()
+    local flume = require("flume")
+    local compiler = require("flume.compiler")
+    local uv = vim.uv or vim.loop
+    compiler.activate("dusk")
+    flume.setup({ schema = "mira", watch_sync = false })
+    local original_event, original_schedule = uv.new_fs_event, vim.schedule
+    local queued = {}
+    local closed = false
+    uv.new_fs_event = function()
+        return {
+            start = function() return true end,
+            stop = function() end,
+            close = function() closed = true end,
+            is_closing = function() return closed end,
+        }
+    end
+    vim.schedule = function(callback) queued[#queued + 1] = callback end
+    local ok, err = xpcall(function()
+        flume.setup({ schema = "mira" })
+        equal(flume.config.schema, "mira", "watcher followed the unchanged startup activation")
+        equal(#queued, 1, "watcher did not schedule initial reconciliation")
+        queued[1]()
+        equal(flume.config.schema, "mira", "initial reconciliation ignored follow_sync=false")
+
+        require("flume.watch").start()
+        compiler.activate("opal")
+        queued[2]()
+        equal(flume.config.schema, "opal", "activation before the first event was missed")
+
+        require("flume.watch").start()
+        compiler.activate("mesa")
+        flume.setup({ schema = "dusk", watch_sync = false })
+        queued[3]()
+        equal(flume.config.schema, "dusk", "stopped watcher retained initial reconciliation")
+    end, debug.traceback)
+    require("flume.watch").stop()
+    uv.new_fs_event, vim.schedule = original_event, original_schedule
+    compiler.activate("dusk")
+    flume.setup({ schema = "dusk" })
+    if not ok then error(err) end
 end)
 
 test("sync watcher stops when another colorscheme takes over", function()

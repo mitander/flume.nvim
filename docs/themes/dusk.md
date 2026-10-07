@@ -79,8 +79,24 @@ Diagnostics are suppressed here to isolate provider coloring.
 ## Integrations
 
 [Setup recipes](../workflows.md#external-tools) · [Lualine setup](../workflows.md#lualine).
-External-app screenshots aren't available yet; the images above show Neovim only.
-Matching theme files are listed below.
+These snapshots use real apps through VHS; Pi/OpenCode restore synthetic offline
+sessions. They do not prove native Ghostty/Kitty rendering.
+
+### Lualine
+
+![Dusk with the Flume lualine theme](../../assets/screenshots/lualine/dusk/go.png)
+
+### Terminal apps
+
+![Dusk Tmux](../../assets/screenshots/integrations/tmux/dusk.png)
+![Dusk LSD](../../assets/screenshots/integrations/lsd/dusk.png)
+![Dusk OpenCode](../../assets/screenshots/integrations/opencode/dusk.png)
+![Dusk Lazygit](../../assets/screenshots/integrations/lazygit/dusk.png)
+![Dusk fzf](../../assets/screenshots/integrations/fzf/dusk.png)
+![Dusk Delta](../../assets/screenshots/integrations/delta/dusk.png)
+![Dusk Pi](../../assets/screenshots/integrations/pi/dusk.png)
+
+Matching configuration files:
 
 | Integration | Dusk configuration |
 | --- | --- |
