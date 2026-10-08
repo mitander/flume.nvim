@@ -84,6 +84,8 @@ def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax",
             raise SystemExit("LSP fixture did not report semantic tokens")
         if not runtime.get("hover"):
             raise SystemExit("LSP fixture did not report hover documentation")
+        if runtime.get("workspace") != f"/tmp/flume-lsp-{language}":
+            raise SystemExit("LSP fixture must use a stable isolated workspace")
     metadata = {
         "schema": schema,
         "language": language,
@@ -119,6 +121,7 @@ def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax",
                 metadata["base_renderer_sha256"] = digest(ROOT / "examples/showcase.lua")
                 metadata["server"]["token_counts"] = dict(sorted(server["token_counts"].items()))
                 metadata["hover"] = runtime.get("hover", [])
+                metadata["workspace"] = runtime["workspace"]
             else:
                 metadata["runtime_states"] = {key: runtime[key] for key in ("completion", "candidates", "documentation", "frontend", "documentation_highlights")}
         else:
@@ -167,6 +170,8 @@ def validate_capture(path: Path) -> tuple[str, str]:
                 raise SystemExit(f"{path.name} has no server token evidence")
             if not metadata.get("hover"):
                 raise SystemExit(f"{path.name} has no hover evidence")
+            if metadata.get("workspace") != f"/tmp/flume-lsp-{language}":
+                raise SystemExit(f"{path.name} has no stable isolated workspace evidence")
         elif kind == "completion":
             states = metadata.get("runtime_states", {})
             if not states.get("completion") or not states.get("candidates") or not states.get("documentation"):

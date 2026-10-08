@@ -79,6 +79,27 @@ class ConfigExample(unittest.TestCase):
 
 
 class ExampleViewport(unittest.TestCase):
+    def test_lsp_workspace_creation_is_private_and_rejects_existing_data(self):
+        source = (ROOT / 'examples/lsp-showcase.lua').read_text()
+        creation = next(line for line in source.splitlines() if line.startswith('assert(vim.fn.mkdir(workspace'))
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            workspace = directory / 'workspace'
+            script = directory / 'workspace-test.lua'
+            script.write_text('\n'.join([
+                'local workspace = ' + json.dumps(str(workspace)),
+                creation,
+                'assert(vim.fn.getfperm(workspace) == "rwx------")',
+                'vim.fn.writefile({"preserved"}, workspace .. "/keep")',
+                'local ok = pcall(function() ' + creation + ' end)',
+                'assert(not ok, "Existing workspace must be rejected")',
+                'assert(vim.fn.readfile(workspace .. "/keep")[1] == "preserved")',
+            ]))
+            result = subprocess.run(['nvim', '--headless', '--clean', '-l', str(script)],
+                                    text=True, capture_output=True, timeout=15)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual((workspace / 'keep').read_text(), 'preserved\n')
+
     def test_completion_fixture_uses_the_shipped_palette_backgrounds(self):
         source = (ROOT / 'examples/completion.go').read_text()
         for schema in ('dusk', 'opal', 'mira', 'mesa'):

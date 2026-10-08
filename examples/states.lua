@@ -9,6 +9,7 @@ vim.opt.termguicolors = true
 if not vim.env.FLUME_CAPTURE_KIND then vim.o.laststatus = 2 end
 vim.o.splitright = true
 vim.o.showmode = false
+vim.o.showcmd = false
 vim.o.ruler = false
 vim.o.diffopt = "internal,filler,closeoff,linematch:60"
 vim.o.completeopt = "menuone,noinsert"
@@ -38,16 +39,24 @@ end
 
 open_buffer("before", source)
 vim.cmd("diffthis")
+vim.wo.signcolumn = "no"
+vim.wo.foldcolumn = "0"
+local before_win = vim.api.nvim_get_current_win()
 vim.cmd("vsplit")
 local changed = vim.deepcopy(source)
 changed[6] = "func greeting(user string) string {"
 changed[7] = '    return fmt.Sprintf("Welcome, %s", user)'
 open_buffer("after", changed)
 vim.cmd("diffthis")
+vim.wo.signcolumn = "no"
+vim.wo.foldcolumn = "0"
+local after_win = vim.api.nvim_get_current_win()
 vim.cmd("diffupdate")
 assert(vim.fn.diff_hlID(7, 26) == vim.fn.hlID("DiffText"), "Changed word must use DiffText")
 vim.cmd("botright split")
 local buf = open_buffer("working states", source)
+vim.cmd("diffoff")
+vim.wo.foldcolumn = "0"
 vim.cmd("resize 20")
 local ns = vim.api.nvim_create_namespace("FlumeStateFixture")
 vim.diagnostic.config({
@@ -76,6 +85,12 @@ end
 
 vim.api.nvim_create_autocmd("VimEnter", { once = true, callback = function()
     vim.schedule(function()
+        for _, view in ipairs({ { before_win, source }, { after_win, changed } }) do
+            local available = vim.api.nvim_win_get_width(view[1]) - vim.fn.getwininfo(view[1])[1].textoff
+            for _, line in ipairs(view[2]) do
+                assert(vim.fn.strdisplaywidth(line) <= available, "Diff specimen must fit its pane without clipping")
+            end
+        end
         vim.api.nvim_win_set_cursor(0, { 5, 0 })
         vim.cmd("normal! Vj")
         report()

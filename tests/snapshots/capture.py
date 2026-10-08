@@ -15,7 +15,6 @@ GEOMETRY = {
     'columns': 100, 'rows': 40, 'font': 'Maple Mono NF', 'font_size': 28.5,
     'logical_font_size': 19, 'backing_scale': 2,
     'cell_height_adjustment': '12%', 'cell_width_adjustment': '2%',
-    'padding': 40, 'titlebar_height': 64, 'corner_radius': 28,
 }
 
 
@@ -60,8 +59,8 @@ def scene_geometry(spec):
 
 def capture(case):
     from PIL import Image
-    from ghostty import capture_terminal
-    from render import window
+    from ghostty import RENDER_ENV, capture_terminal
+    from render import frame_geometry, window
 
     scene, schema = case.rsplit('-', 1)
     spec = SCENES[scene]
@@ -82,6 +81,7 @@ def capture(case):
         terminal = capture_terminal(ROOT, OUTPUT, case, spec, geometry, log)
     image_path = OUTPUT / f'{case}.png'
     with Image.open(terminal) as text_image:
+        geometry.update(frame_geometry(text_image.width))
         image = window(text_image, Image.new('RGBA', text_image.size), terminal_theme(schema), geometry)
         image.save(image_path)
         dimensions = list(image.size)
@@ -109,6 +109,10 @@ def capture(case):
         'environment': {
             'renderer': 'Ghostty 1.3.1 / Xvfb / Mesa llvmpipe / RGB PNG / Pillow RGBA', 'platform': 'linux/amd64',
             'font_faces': fonts,
+            'render_environment': RENDER_ENV,
+            'alpha_blending': 'native',
+            'mesa_version': subprocess.check_output(
+                ['dpkg-query', '-W', '-f=${Version}', 'libgl1-mesa-dri'], text=True).strip(),
             'image_recipe_sha256': environment_digest(ROOT),
             'geometry': geometry,
         },

@@ -128,6 +128,7 @@ class CaptureProvenance(unittest.TestCase):
             runtime["server"] = {"name": "gopls", "version": "test", "settings": {}, "executable": str(executable)}
         elif kind == "lsp":
             runtime["hover"] = ["func Count(ctx context.Context, start int)"]
+            runtime["workspace"] = "/tmp/flume-lsp-go"
         runtime_file = self.root / "runtime.json"
         return runtime, runtime_file, image
 
@@ -175,6 +176,16 @@ class CaptureProvenance(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "did not report semantic tokens"):
             preflight.record("dusk", "go", runtime_file, "lsp", image=image)
 
+    def test_lsp_rejects_a_variable_workspace(self):
+        runtime, runtime_file, image = self.state_runtime("lsp")
+        runtime["server"] = {"token_counts": {"function": 1}}
+        for workspace in (None, "/tmp/nvim.501/random/0", "/tmp/nvim.1000/random/0"):
+            with self.subTest(workspace=workspace):
+                runtime["workspace"] = workspace
+                runtime_file.write_text(json.dumps(runtime))
+                with self.assertRaisesRegex(SystemExit, "stable isolated workspace"):
+                    preflight.record("dusk", "go", runtime_file, "lsp", image=image)
+
     def test_lsp_records_server_identity_without_machine_paths(self):
         runtime, runtime_file, image = self.state_runtime("lsp")
         executable = self.root / "server"
@@ -190,6 +201,11 @@ class CaptureProvenance(unittest.TestCase):
         self.assertEqual(metadata["server_executable_sha256"], preflight.digest(executable))
         self.assertNotIn(str(self.root), json.dumps(metadata))
         self.assertEqual(list(metadata["server"]["token_counts"]), ["function", "variable"])
+        self.assertEqual(metadata["workspace"], "/tmp/flume-lsp-go")
+        metadata["workspace"] = "/tmp/nvim.1000/random/0"
+        image.with_suffix(".json").write_text(json.dumps(metadata))
+        with self.assertRaisesRegex(SystemExit, "stable isolated workspace evidence"):
+            preflight.validate_capture(image)
 
     def test_missing_capture_renderer_is_rejected(self):
         sidecar = self.root / "assets/screenshots/dusk/zig.json"

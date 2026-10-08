@@ -12,8 +12,10 @@ vim.env.FLUME_SHOWCASE_METADATA = nil
 dofile("showcase.lua")
 vim.env.FLUME_SHOWCASE_METADATA = metadata_path
 local buf = vim.api.nvim_get_current_buf()
-local workspace = vim.fn.tempname()
-vim.fn.mkdir(workspace, "p")
+-- ZLS hover links include this path; random/UID-dependent paths change float width.
+-- Capture runs in a private container. Manual examples still use unique workspaces.
+local workspace = metadata_path and ("/tmp/flume-lsp-" .. language) or vim.fn.tempname()
+assert(vim.fn.mkdir(workspace, "", 448) == 1, "LSP fixture requires a fresh private workspace")
 local file = workspace .. "/main." .. server.extension
 vim.fn.writefile(vim.api.nvim_buf_get_lines(buf, 0, -1, false), file)
 if language == "go" then
@@ -77,6 +79,7 @@ local function show_hover()
         end
         vim.fn.writefile({ vim.json.encode({
             nvim = tostring(vim.version()), language = language, kind = "lsp", hover = hover,
+            workspace = workspace,
             parser = assert(vim.api.nvim_get_runtime_file("parser/" .. language .. ".*", false)[1]),
             queries = vim.treesitter.query.get_files(language, "highlights"),
             server = { name = server.name, version = vim.trim(version), executable = executable,

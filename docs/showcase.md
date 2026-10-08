@@ -114,11 +114,18 @@ are 28.5 and 18 at 96 DPI. Cell height increases by 12% and cell width by 2%.
 Capture checks the resolved font files and fails on fallback. Neovim keeps
 mode-specific, non-blinking cursor shapes: block in Normal mode, bar in Insert
 mode. Syntax specimens park the block cursor on whitespace to keep text readable.
-Capture does not mask pixels or allow comparison tolerance.
+Capture does not mask pixels or allow comparison tolerance. Ghostty explicitly
+uses native sRGB alpha blending instead of Linux's `linear-corrected` default.
+This follows macOS's native blending mode and avoids host-dependent rounding in
+the linear sRGB framebuffer path. Mesa llvmpipe provides single-threaded software
+rendering. The manifest records blending, the renderer environment, and the
+installed Mesa version. See [Ghostty's alpha-blending modes](https://ghostty.org/docs/config/reference#alpha-blending).
 
 Pinned Pillow adds padding, an understated title bar with three macOS-style
-buttons, no redundant window-title text, and antialiased rounded corners. It never resizes or filters terminal
-pixels. The terminal background is opaque; only the outer corners are transparent.
+buttons, no redundant window-title text, and antialiased rounded corners. Frame
+padding, controls, titlebar, and corners scale with captured width so they keep
+consistent proportions at a shared gallery display width. Terminal pixels are
+never resized or filtered. The terminal background is opaque; only the outer corners are transparent.
 Complete fixtures fit without scrolling. Gallery links embed the full-resolution
 images.
 
@@ -152,7 +159,9 @@ observed candidates, nonempty documentation, and rendered syntax highlights, not
 a hand-written list.
 
 [`lsp-showcase.lua`](../examples/lsp-showcase.lua) attaches real gopls v0.16.2 or
-ZLS 0.16.0 to an isolated workspace. Go 1.23.2 and Zig 0.16.0 are pinned with those
+ZLS 0.16.0 to an isolated workspace. Capture workspaces have stable paths inside
+each private container: ZLS includes file URLs in hover content, and variable
+path lengths change the popup width. Go 1.23.2 and Zig 0.16.0 are pinned with those
 servers. Readiness requires observed semantic tokens and server hover content;
 diagnostics are suppressed to isolate provider coloring. The hover shows the
 signature and available documentation at a real call site. Sidecars identify

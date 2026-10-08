@@ -15,7 +15,7 @@
   ],
   "fixture_sha256": "a14ef70b77a01b95d791fb658892d2e4570798c933517d85624ef3012b56e34c",
   "renderer_sha256": "91bd2fb1cc5d55f5a510a5649b7cfb9e179f1e59f46ba9bf8e8bea9f40c65160",
-  "image_sha256": "6ada14b4d4d258e161e666041e0e7bfeadd63864f8792148d4791594d89446ed",
+  "image_sha256": "bc36f29f3eace45ebcd64ad742d892d4025cde7ecf17be197e487a38032456ce",
   "theme_inputs": {
     "lua/flume/init.lua": "a1f69f1788b750c825d7ff175521ecabe813651ca5daa72035a1a7685d6acd9f",
     "lua/flume/palette.lua": "b50950afa72aebfcb41e4ec6f1b4acbfb2ede88f20b5a8164d2077c085f86bcf",
@@ -29,13 +29,13 @@
   },
   "capture_renderer": {
     "name": "Ghostty",
-    "script_sha256": "2b0cda1b228abc4584a76d3103a020d6beaed4d2db3b966e0ff5ac6b3a4e60c2",
-    "backend_sha256": "d0d459806f6b772d11c16ad34c2f7334e814e59a836ec466e98bb51bf714fe5f",
-    "compositor_sha256": "990dba04a9f2f8cf529e58bae88ea8957938e53fa8cc233895551d219c6b34aa",
+    "script_sha256": "bd5c36a4b04a39bdbea38d5af7c10ce8dc25f6232cfae75cb20bdcab95371196",
+    "backend_sha256": "eb8832aafd0a014bbb8912affa9eee47c66d5d5725e5c3b4143d08e542f52bf2",
+    "compositor_sha256": "94e226e398c36d2b75dfa8d47742ecf3d494bd169dec6db53afb0ccb22999759",
     "environment_sha256": "357534b6c6ea78e17a52ec62e8afe582db4ad0a745cf6bf64cf47d2a46f07626"
   },
   "kind": "completion",
-  "capture_script_sha256": "2b0cda1b228abc4584a76d3103a020d6beaed4d2db3b966e0ff5ac6b3a4e60c2",
+  "capture_script_sha256": "bd5c36a4b04a39bdbea38d5af7c10ce8dc25f6232cfae75cb20bdcab95371196",
   "server": {
     "name": "gopls",
     "version": "golang.org/x/tools/gopls v0.16.2",
@@ -54,9 +54,9 @@
     ],
     "documentation": "func(s string) string\n\nTrimSpace returns a slice of the string s, with all leading and trailing white space removed, as defined by Unicode.",
     "frontend": {
-      "border": "single",
       "name": "blink.cmp",
-      "treesitter_highlighting": true
+      "treesitter_highlighting": true,
+      "border": "single"
     },
     "documentation_highlights": 9
   }

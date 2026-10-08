@@ -40,7 +40,7 @@ def write_report(report: Path, findings: dict[str, str | None]) -> None:
         sections.append(f'<section><h2>{case}</h2><p>{html.escape(finding or "Unchanged")}</p><div>{"".join(images)}</div></section>')
     page = '<!doctype html><meta charset="utf-8"><title>Flume snapshot comparison</title>'
     page += '<style>body{font:16px sans-serif;margin:2rem;background:#eee;color:#222}div{display:flex;gap:1rem}figure{margin:0;flex:1;min-width:0}img{width:100%}section{margin-bottom:3rem}</style>'
-    page += '<h1>Flume snapshot comparison</h1><p>VHS application rendering; not native Ghostty or Kitty screenshots.</p>'
+    page += '<h1>Flume snapshot comparison</h1><p>Headless Ghostty application rendering; not native desktop screenshots.</p>'
     (report / 'index.html').write_text(page + ''.join(sections))
     (report / 'results.json').write_text(json.dumps(findings, indent=2) + '\n')
 

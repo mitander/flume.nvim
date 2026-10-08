@@ -13,6 +13,20 @@ FONT_FACES = {
 }
 
 
+def frame_geometry(terminal_width: int) -> dict:
+    """Keep chrome proportions consistent when different scenes share a display width."""
+    scale = terminal_width / 2720  # 2800px reference window, less its two 40px margins.
+    radius = max(1, round(14 * scale))
+    return {
+        'padding': max(1, round(40 * scale)),
+        'titlebar_height': max(4, round(64 * scale)),
+        'corner_radius': max(1, round(28 * scale)),
+        'button_radius': radius,
+        'button_inset': max(radius + 1, round(32 * scale)),
+        'button_spacing': max(2 * radius + 1, round(46 * scale)),
+    }
+
+
 def window(text: Image.Image, cursor: Image.Image, theme: dict, geometry: dict) -> Image.Image:
     if text.size != cursor.size:
         raise ValueError('Terminal text and cursor dimensions differ')
@@ -24,10 +38,9 @@ def window(text: Image.Image, cursor: Image.Image, theme: dict, geometry: dict) 
     size = (terminal.width + 2 * padding, terminal.height + 2 * padding + bar)
     result = Image.new('RGBA', size, theme['background'])
     result.alpha_composite(terminal, (padding, padding + bar))
-    draw = ImageDraw.Draw(result)
-    scale = geometry['backing_scale']
     for index, color in enumerate(((242, 105, 90), (249, 196, 47), (109, 192, 46))):
-        x, y, radius = (16 + index * 23) * scale, bar / 2, 7 * scale
+        x = geometry['button_inset'] + index * geometry['button_spacing']
+        y, radius = bar / 2, geometry['button_radius']
         # Shaded buttons retain the native capture's chrome without importing a desktop.
         button = Image.new('RGBA', (2 * radius + 1, 2 * radius + 1))
         pixels = ImageDraw.Draw(button)

@@ -24,7 +24,7 @@
 - Align legacy, Tree-sitter, and LSP macro roles; align imports, directives,
   and string escapes across providers.
 - Add real Neovim selection, diagnostic, diff, search, completion, and Go/Zig LSP
-  captures through VHS with runtime provenance. Refresh the clean palette specimens.
+  captures through headless Ghostty with runtime provenance. Refresh the clean palette specimens.
 
 ### Shared themes and integrations
 

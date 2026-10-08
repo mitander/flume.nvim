@@ -1,5 +1,6 @@
 """Render the shared capture scenarios in Ghostty on a private X11 display."""
 
+import os
 import re
 import subprocess
 import time
@@ -8,13 +9,20 @@ from pathlib import Path
 
 from PIL import Image
 
+# Keep capture on the software backend even when the parent requests another driver.
+RENDER_ENV = {
+    'LIBGL_ALWAYS_SOFTWARE': '1',
+    'GALLIUM_DRIVER': 'llvmpipe',
+    'LP_NUM_THREADS': '1',
+}
+
 
 def command(*args, timeout=10):
     return subprocess.check_output(args, text=True, stderr=subprocess.STDOUT, timeout=timeout).strip()
 
 
-def start(stack, log, *args):
-    process = subprocess.Popen(args, stdout=log, stderr=subprocess.STDOUT)
+def start(stack, log, *args, env=None):
+    process = subprocess.Popen(args, stdout=log, stderr=subprocess.STDOUT, env=env)
 
     def stop():
         if process.poll() is None:
@@ -111,7 +119,8 @@ def capture_terminal(root, output, case, spec, geometry, log):
         start_display(stack, log)
         schema = case.rsplit('-', 1)[1]
         process = start(stack, log, 'ghostty',
-            '--config-default-files=false', '--font-family=Maple Mono NF', '--font-style=SemiBold',
+            '--config-default-files=false', '--alpha-blending=native',
+            '--font-family=Maple Mono NF', '--font-style=SemiBold',
             '--font-style-bold=Bold', '--font-style-italic=SemiBold Italic', '--font-style-bold-italic=Bold Italic',
             f'--font-size={geometry["font_size"]}', '--adjust-cell-height=12%', '--adjust-cell-width=2%',
             f'--window-width={geometry["columns"]}', f'--window-height={geometry["rows"]}',
@@ -119,7 +128,8 @@ def capture_terminal(root, output, case, spec, geometry, log):
             '--gtk-single-instance=false', '--cursor-style-blink=false', '--app-notifications=false',
             '--shell-integration=none', '--confirm-close-surface=false',
             '--keybind=ctrl+shift+f12=write_screen_file:copy', f'--theme={root}/extras/ghostty/flume-{schema}',
-            '-e', 'sh', str(root / f'tests/snapshots/fixtures/{spec["app"]}.sh'))
+            '-e', 'sh', str(root / f'tests/snapshots/fixtures/{spec["app"]}.sh'),
+            env=os.environ | RENDER_ENV)
         window = ''
         deadline = time.monotonic() + 15
         while not window:

@@ -76,7 +76,7 @@ def compose(actual, baseline, cases):
             if name == 'showcase':
                 inputs['assets/background.png'] = digest(ROOT / 'assets/background.png')
             captured['cases'][name] = {'destination': destination(name), 'dimensions': list(result.size), 'png_sha256': digest(output), 'inputs': inputs,
-                'environment': {'renderer': 'Pillow composition of VHS snapshots', 'image_recipe_sha256': environment_digest(ROOT)}}
+                'environment': {'renderer': 'Pillow composition of Ghostty snapshots', 'image_recipe_sha256': environment_digest(ROOT)}}
         finally:
             for image in images:
                 image.close()
