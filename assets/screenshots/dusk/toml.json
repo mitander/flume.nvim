@@ -15,7 +15,7 @@
   ],
   "fixture_sha256": "820eb4b4132fcf76bb15fec7212020bf43fea150a204fa99676b62393224ff48",
   "renderer_sha256": "00d74b4c40a1b7db029de301a9819370e8d09ac8b93c67cad0814e219c9bfc44",
-  "image_sha256": "7f8fd16b1aafc6360393fd11886013c104e246270caed2855f3093ca889b08cb",
+  "image_sha256": "c00a202ac06da0f572718b2dbbc1804778e365a135282af31e795f65aaf1d4cd",
   "theme_inputs": {
     "lua/flume/init.lua": "a1f69f1788b750c825d7ff175521ecabe813651ca5daa72035a1a7685d6acd9f",
     "lua/flume/palette.lua": "b50950afa72aebfcb41e4ec6f1b4acbfb2ede88f20b5a8164d2077c085f86bcf",
@@ -28,8 +28,10 @@
     "extras/ghostty/flume-dusk": "945206d60c41674919ccbff8667839b011df1556d4b16fc2fc9e0fd21b0eb8cc"
   },
   "capture_renderer": {
-    "name": "VHS",
-    "script_sha256": "7bdf2cdee5719db2a95f26025185615b310003497ca1fa6b20c8dc172783befc",
-    "environment_sha256": "c45d231af2b84172d1d2d50a7f518254dd44bb1a2800961d9ae3d0805cdeec4d"
+    "name": "Ghostty",
+    "script_sha256": "2b0cda1b228abc4584a76d3103a020d6beaed4d2db3b966e0ff5ac6b3a4e60c2",
+    "backend_sha256": "d0d459806f6b772d11c16ad34c2f7334e814e59a836ec466e98bb51bf714fe5f",
+    "compositor_sha256": "990dba04a9f2f8cf529e58bae88ea8957938e53fa8cc233895551d219c6b34aa",
+    "environment_sha256": "357534b6c6ea78e17a52ec62e8afe582db4ad0a745cf6bf64cf47d2a46f07626"
   }
 }

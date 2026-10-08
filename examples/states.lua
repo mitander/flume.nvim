@@ -1,7 +1,7 @@
--- Real diff, diagnostics, search, and either Visual selection or completion.
+-- Real diff, synthetic diagnostic severities, search, and Visual selection.
 local schema = assert(vim.env.FLUME_SHOWCASE_SCHEMA)
 local kind = assert(vim.env.FLUME_CAPTURE_KIND)
-assert(kind == "selection" or kind == "completion")
+assert(kind == "selection")
 if vim.env.FLUME_TS_RUNTIME and vim.env.FLUME_TS_RUNTIME ~= "" then
     vim.opt.runtimepath:prepend(vim.env.FLUME_TS_RUNTIME)
 end
@@ -74,29 +74,10 @@ local function report()
     end
 end
 
-if kind == "selection" then
-    vim.api.nvim_create_autocmd("VimEnter", { once = true, callback = function()
-        vim.schedule(function()
-            vim.api.nvim_win_set_cursor(0, { 5, 0 })
-            vim.cmd("normal! Vj")
-            report()
-        end)
-    end })
-else
-    -- Complete a real identifier in Insert mode; do not paint a fake menu.
-    vim.api.nvim_win_set_cursor(0, { 11, 4 })
-    vim.api.nvim_create_autocmd("InsertEnter", { once = true, callback = function()
-        vim.schedule(function()
-            vim.fn.complete(5, {
-                { word = "name", menu = "[binding]" },
-                { word = "namespace", menu = "[module]" },
-                { word = "native", menu = "[function]" },
-            })
-            assert(vim.fn.pumvisible() == 1, "Completion menu must be visible")
-            report()
-        end)
-    end })
-    vim.api.nvim_create_autocmd("VimEnter", { once = true, callback = function()
-        vim.cmd("startinsert")
-    end })
-end
+vim.api.nvim_create_autocmd("VimEnter", { once = true, callback = function()
+    vim.schedule(function()
+        vim.api.nvim_win_set_cursor(0, { 5, 0 })
+        vim.cmd("normal! Vj")
+        report()
+    end)
+end })

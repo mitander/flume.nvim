@@ -29,6 +29,9 @@ def main():
                         raise ValueError('Archive entry must be a plain filename')
                     with bundle.open(filename) as incoming, (directory / filename).open('wb') as output:
                         shutil.copyfileobj(incoming, output)
+        elif tool.get('format') == 'deb':
+            # Dependencies come from the dated Debian archive in the Dockerfile.
+            run('dpkg-deb', '-x', str(archive), '/')
         else:
             run('tar', 'xf', str(archive), '-C', str(directory), '--strip-components=' + str(tool['strip']))
         archive.unlink()

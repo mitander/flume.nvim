@@ -139,7 +139,7 @@ class SnapshotCommands(unittest.TestCase):
         paths = [destination(case) for case in CASES]
         self.assertEqual(len(paths), len(set(paths)))
         self.assertTrue(all(path.startswith('assets/screenshots/') and '..' not in path for path in paths))
-        self.assertEqual(len(CASES), 84)
+        self.assertEqual(len(CASES), 88)
         self.assertFalse(any(case.startswith(('ghostty-', 'kitty-')) for case in CASES))
 
     def test_tool_lock_and_installer_are_part_of_environment_identity(self):
@@ -411,19 +411,17 @@ class SnapshotCommands(unittest.TestCase):
     def test_palette_header_uses_the_shipped_terminal_export(self):
         with patch.object(capture, 'ROOT', ROOT):
             theme = capture.terminal_theme('opal')
-            tape = capture.tape('fzf', 'opal')
         self.assertEqual(theme['background'], '#f2eff7')
         self.assertEqual(theme['foreground'], '#554e5d')
         self.assertEqual(theme['selection'], '#413b49')
         self.assertEqual(theme['brightBlue'], '#0071a3')
-        self.assertIn('Set CursorBlink false', tape)
-        self.assertIn('Output "/tmp/fzf-opal-frames/"', tape)
-        self.assertIn('Set FontFamily "Maple Mono NF"', tape)
-        self.assertIn('Set FontSize 38', tape)
-        self.assertIn('Set LineHeight 1.12', tape)
-        self.assertIn('Set LetterSpacing 2', tape)
-        self.assertNotIn('Screenshot ', tape)
-        self.assertNotIn('{{schema}}', tape)
+
+    def test_original_editor_geometry_is_compact_except_for_the_hero(self):
+        from common import SCENES
+        self.assertEqual(capture.scene_geometry(SCENES['neovim-go'])['font_size'], 18)
+        self.assertEqual(capture.scene_geometry(SCENES['neovim-zig'])['font_size'], 28.5)
+        self.assertEqual(capture.scene_geometry(SCENES['neovim-lsp-zig'])['font_size'], 18)
+        self.assertEqual(destination('neovim-neotree-dusk'), 'assets/screenshots/neotree/dusk/go.png')
 
     def test_test_reports_environment_changes_without_updating_baselines(self):
         evidence(self.actual, ['fzf-dusk'], environment={'renderer': 'new'})

@@ -81,5 +81,5 @@ application before claiming they work.
 
 When a source change makes committed screenshots stale, refresh them with the
 showcase procedures. Capture real application output: do not recolor pixels or
-hand-assign syntax highlights to approximate parser output. The maintained VHS
-snapshots do not qualify native Ghostty or Kitty rendering.
+hand-assign syntax highlights to approximate parser output. The maintained Linux
+Ghostty snapshots do not qualify macOS Ghostty or Kitty rendering.

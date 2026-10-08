@@ -1,9 +1,40 @@
 {
+  "ghostty": {
+    "url": "https://github.com/mkasberg/ghostty-ubuntu/releases/download/1.3.1-0-ppa2/ghostty_1.3.1-0.ppa2_amd64_trixie.deb",
+    "sha256": "9fda8e418d7a7f58149ba3ba823a255d6b80f8bb5431b3bd7e912ff597715b2e",
+    "format": "deb"
+  },
+  "blink": {
+    "url": "https://codeload.github.com/saghen/blink.cmp/tar.gz/485c03400608cb6534bbf84da8c1c471fc4808c0",
+    "sha256": "dc1bad3773a50f43fe14861308ef876b833228e3ba4c0eb382dcdadb6199334e",
+    "strip": 1,
+    "revision": "485c03400608cb6534bbf84da8c1c471fc4808c0"
+  },
+  "neo-tree": {
+    "url": "https://codeload.github.com/nvim-neo-tree/neo-tree.nvim/tar.gz/1a14083046d96e88e361d1da00761c40d45012f3",
+    "sha256": "74b1155135799a59c4fd6d19c287954e358186056fb65eaa5e225d3462714735",
+    "strip": 1
+  },
+  "devicons": {
+    "url": "https://codeload.github.com/nvim-tree/nvim-web-devicons/tar.gz/58447c1fca354bbf184425e4a8d01deecbd6f3c4",
+    "sha256": "b741f8d540a59b146251cf769e53e97271ebc7a2eaf29a765ba02b6a3cef9391",
+    "strip": 1
+  },
+  "plenary": {
+    "url": "https://codeload.github.com/nvim-lua/plenary.nvim/tar.gz/74b06c6c75e4eeb3108ec01852001636d85a932b",
+    "sha256": "d9e7562417b49f4c9c0bf6f7edeb1d798665d967dbfaad428b893c28f36478ba",
+    "strip": 1
+  },
+  "nui": {
+    "url": "https://codeload.github.com/MunifTanjim/nui.nvim/tar.gz/10fc361835c856ba4233ef5ea135b919bf3dce97",
+    "sha256": "06c5fef8af450928e62f93f8fecb015b14084e0c6d9b83b52352b09a9611f018",
+    "strip": 1
+  },
   "maple-font": {
     "url": "https://github.com/subframe7536/maple-font/releases/download/v7.9/MapleMono-NF-unhinted.zip",
     "sha256": "8248d6260660be1066b5ebe90d25131582df8383f38db1c284dd1f2dc9d2b46e",
     "format": "zip",
-    "files": ["MapleMono-NF-Medium.ttf", "MapleMono-NF-Bold.ttf", "MapleMono-NF-MediumItalic.ttf", "MapleMono-NF-BoldItalic.ttf", "LICENSE.txt"]
+    "files": ["MapleMono-NF-SemiBold.ttf", "MapleMono-NF-Bold.ttf", "MapleMono-NF-SemiBoldItalic.ttf", "MapleMono-NF-BoldItalic.ttf", "LICENSE.txt"]
   },
   "nvim": {
     "url": "https://github.com/neovim/neovim/releases/download/v0.12.5/nvim-linux-x86_64.tar.gz",

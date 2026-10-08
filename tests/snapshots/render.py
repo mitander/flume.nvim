@@ -6,24 +6,11 @@ from PIL import Image, ImageDraw
 
 FONT_DIRECTORY = Path('/usr/share/fonts/truetype/maple')
 FONT_FACES = {
-    'normal': ('MapleMono-NF-Medium.ttf', 'weight=regular'),
+    'normal': ('MapleMono-NF-SemiBold.ttf', 'weight=demibold'),
     'bold': ('MapleMono-NF-Bold.ttf', 'weight=bold'),
-    'italic': ('MapleMono-NF-MediumItalic.ttf', 'weight=regular:slant=italic'),
+    'italic': ('MapleMono-NF-SemiBoldItalic.ttf', 'weight=demibold:slant=italic'),
     'bold_italic': ('MapleMono-NF-BoldItalic.ttf', 'weight=bold:slant=italic'),
 }
-
-
-def last_frame(frames: Path) -> tuple[Path, Path]:
-    """Require the final text frame's cursor layer; never reuse an earlier pair."""
-    texts = sorted(frames.glob('frame-text-*.png'))
-    if not texts:
-        raise ValueError('VHS did not retain raw terminal frames')
-    text = texts[-1]
-    cursor = text.with_name(text.name.replace('frame-text-', 'frame-cursor-', 1))
-    for path in (text, cursor):
-        if path.is_symlink() or not path.is_file():
-            raise ValueError(f'Missing or unsafe terminal layer: {path.name}')
-    return text, cursor
 
 
 def window(text: Image.Image, cursor: Image.Image, theme: dict, geometry: dict) -> Image.Image:
@@ -39,9 +26,19 @@ def window(text: Image.Image, cursor: Image.Image, theme: dict, geometry: dict) 
     result.alpha_composite(terminal, (padding, padding + bar))
     draw = ImageDraw.Draw(result)
     scale = geometry['backing_scale']
-    for index, color in enumerate(('#ff5f57', '#febc2e', '#28c840')):
-        x, y, radius = (16 + index * 16) * scale, bar / 2, 5 * scale
-        draw.ellipse((x - radius, y - radius, x + radius, y + radius), fill=color)
+    for index, color in enumerate(((242, 105, 90), (249, 196, 47), (109, 192, 46))):
+        x, y, radius = (16 + index * 23) * scale, bar / 2, 7 * scale
+        # Shaded buttons retain the native capture's chrome without importing a desktop.
+        button = Image.new('RGBA', (2 * radius + 1, 2 * radius + 1))
+        pixels = ImageDraw.Draw(button)
+        for row in range(button.height):
+            brightness = 1.12 - 0.24 * row / (button.height - 1)
+            shade = tuple(min(255, round(channel * brightness)) for channel in color)
+            pixels.line((0, row, button.width, row), fill=shade)
+        button_mask = Image.new('L', (button.width * 4, button.height * 4))
+        ImageDraw.Draw(button_mask).ellipse((0, 0, button_mask.width - 1, button_mask.height - 1), fill=255)
+        button.putalpha(button_mask.resize(button.size, Image.Resampling.LANCZOS))
+        result.alpha_composite(button, (int(x - radius), int(y - radius)))
 
     # Antialias only the outer silhouette; terminal pixels are never filtered.
     supersampling = 4

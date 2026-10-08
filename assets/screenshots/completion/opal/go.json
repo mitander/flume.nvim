@@ -13,9 +13,9 @@
       "sha256": "81698c638abbf4c3a3ec8ccc3c6110be2cc725ad740bf87e6fa9ac685ecad267"
     }
   ],
-  "fixture_sha256": "a680a14711708fe88aa759eb539cd166be23865fde63fc0564077dfd9580b126",
-  "renderer_sha256": "601c0e777bd026f0bceae52a0172938373cd1ca2b444034c8c1c653a0bc7022c",
-  "image_sha256": "e899a6144a955d7b90994746421af18b1d2ad83b97793dc61f33b92923453f8a",
+  "fixture_sha256": "a14ef70b77a01b95d791fb658892d2e4570798c933517d85624ef3012b56e34c",
+  "renderer_sha256": "91bd2fb1cc5d55f5a510a5649b7cfb9e179f1e59f46ba9bf8e8bea9f40c65160",
+  "image_sha256": "785936d90970eb714d9ccc6fcfdc229f376459dbfbbad70b57bf6e50b93dea1c",
   "theme_inputs": {
     "lua/flume/init.lua": "a1f69f1788b750c825d7ff175521ecabe813651ca5daa72035a1a7685d6acd9f",
     "lua/flume/palette.lua": "b50950afa72aebfcb41e4ec6f1b4acbfb2ede88f20b5a8164d2077c085f86bcf",
@@ -28,16 +28,36 @@
     "extras/ghostty/flume-opal": "02b4982d0652d3a1dd02cccca1f06816e795103ab845d24ace7b2dfe4f44310e"
   },
   "capture_renderer": {
-    "name": "VHS",
-    "script_sha256": "7bdf2cdee5719db2a95f26025185615b310003497ca1fa6b20c8dc172783befc",
-    "environment_sha256": "c45d231af2b84172d1d2d50a7f518254dd44bb1a2800961d9ae3d0805cdeec4d"
+    "name": "Ghostty",
+    "script_sha256": "2b0cda1b228abc4584a76d3103a020d6beaed4d2db3b966e0ff5ac6b3a4e60c2",
+    "backend_sha256": "d0d459806f6b772d11c16ad34c2f7334e814e59a836ec466e98bb51bf714fe5f",
+    "compositor_sha256": "990dba04a9f2f8cf529e58bae88ea8957938e53fa8cc233895551d219c6b34aa",
+    "environment_sha256": "357534b6c6ea78e17a52ec62e8afe582db4ad0a745cf6bf64cf47d2a46f07626"
   },
   "kind": "completion",
-  "capture_script_sha256": "7bdf2cdee5719db2a95f26025185615b310003497ca1fa6b20c8dc172783befc",
+  "capture_script_sha256": "2b0cda1b228abc4584a76d3103a020d6beaed4d2db3b966e0ff5ac6b3a4e60c2",
+  "server": {
+    "name": "gopls",
+    "version": "golang.org/x/tools/gopls v0.16.2",
+    "settings": {
+      "gopls": {
+        "semanticTokens": true
+      }
+    }
+  },
+  "server_executable_sha256": "f1c4ff615da01bbb205dfa406e5498503fff7ed775f0ad968e7dd7b99a1a25f9",
   "runtime_states": {
-    "diff_text": true,
-    "diagnostics": 4,
-    "visual": false,
-    "completion": true
+    "completion": true,
+    "candidates": [
+      "TrimSpace",
+      "TrimSuffix"
+    ],
+    "documentation": "func(s string) string\n\nTrimSpace returns a slice of the string s, with all leading and trailing white space removed, as defined by Unicode.",
+    "frontend": {
+      "border": "single",
+      "treesitter_highlighting": true,
+      "name": "blink.cmp"
+    },
+    "documentation_highlights": 9
   }
 }

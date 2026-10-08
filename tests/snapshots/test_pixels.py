@@ -2,6 +2,12 @@
 
 import tempfile
 import unittest
+from contextlib import ExitStack
+from types import SimpleNamespace
+from unittest.mock import Mock, patch
+
+import ghostty
+import capture
 from pathlib import Path
 
 from PIL import Image, PngImagePlugin
@@ -9,7 +15,7 @@ from PIL import Image, PngImagePlugin
 from compare import compare_case
 from capture import GEOMETRY, font_evidence
 from compose import contact_sheet, showcase
-from render import last_frame, window
+from render import window
 
 
 class ExactPixels(unittest.TestCase):
@@ -48,11 +54,11 @@ class ExactPixels(unittest.TestCase):
 
 
 class FaithfulRendering(unittest.TestCase):
-    def test_font_faces_are_medium_and_real_bold_italic_variants(self):
+    def test_font_faces_are_semibold_and_real_bold_italic_variants(self):
         faces = font_evidence()
-        self.assertEqual(faces['normal']['filename'], 'MapleMono-NF-Medium.ttf')
+        self.assertEqual(faces['normal']['filename'], 'MapleMono-NF-SemiBold.ttf')
         self.assertEqual(faces['bold']['filename'], 'MapleMono-NF-Bold.ttf')
-        self.assertEqual(faces['italic']['filename'], 'MapleMono-NF-MediumItalic.ttf')
+        self.assertEqual(faces['italic']['filename'], 'MapleMono-NF-SemiBoldItalic.ttf')
         self.assertEqual(faces['bold_italic']['filename'], 'MapleMono-NF-BoldItalic.ttf')
         self.assertTrue(all(len(face['sha256']) == 64 for face in faces.values()))
 
@@ -68,7 +74,7 @@ class FaithfulRendering(unittest.TestCase):
         for offset, color in enumerate(colors):
             self.assertEqual(result.getpixel((x + offset, y)), color)
         self.assertEqual(result.getpixel((0, 0))[3], 0)
-        self.assertEqual(result.getpixel((32, GEOMETRY['titlebar_height'] // 2)), (255, 95, 87, 255))
+        self.assertEqual(result.getpixel((32, GEOMETRY['titlebar_height'] // 2)), (242, 105, 90, 255))
 
     def test_titlebar_has_buttons_but_no_title_text(self):
         terminal = Image.new('RGBA', (500, 100), '#232136')
@@ -101,22 +107,75 @@ class FaithfulRendering(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'dimensions differ'):
             window(Image.new('RGBA', (10, 10)), Image.new('RGBA', (9, 10)), {}, GEOMETRY)
 
-    def test_missing_final_cursor_cannot_reuse_an_earlier_frame(self):
-        with tempfile.TemporaryDirectory() as temporary:
-            frames = Path(temporary)
-            for name in ('frame-text-00001.png', 'frame-cursor-00001.png', 'frame-text-00002.png'):
-                (frames / name).write_bytes(b'frame')
-            with self.assertRaisesRegex(ValueError, 'frame-cursor-00002'):
-                last_frame(frames)
 
-    def test_frame_layers_cannot_be_symlinks(self):
+class GhosttyScenarios(unittest.TestCase):
+    def test_shared_tapes_have_known_launches_and_instructions(self):
+        for path in Path('/repo/tests/snapshots').glob('*.tape'):
+            with self.subTest(app=path.stem), patch.object(ghostty, 'wait_screen') as wait, \
+                 patch.object(ghostty, 'command'), patch.object(ghostty.time, 'sleep'):
+                ghostty.run_scenario(ghostty.scenario(path, path.stem), 'window', Mock())
+                self.assertGreater(wait.call_count, 0)
+
+    def test_neovim_posix_whitespace_pattern_matches_screen_text(self):
+        with patch.object(ghostty, 'screen_text', return_value='  NORMAL  main.go    17:1  \n'):
+            ghostty.wait_screen('window', r'(?m) [0-9]+:[0-9]+[[:space:]]*$', SimpleNamespace(poll=lambda: None))
+
+    def test_previous_runtime_evidence_is_removed_before_launch(self):
         with tempfile.TemporaryDirectory() as temporary:
-            frames = Path(temporary)
-            text = frames / 'frame-text-00001.png'
-            text.write_bytes(b'frame')
-            (frames / 'frame-cursor-00001.png').symlink_to(text)
-            with self.assertRaisesRegex(ValueError, 'unsafe terminal layer'):
-                last_frame(frames)
+            output = Path(temporary)
+            case = 'neovim-completion-go-dusk'
+            runtime = output / f'{case}-runtime.json'
+            runtime.write_text('{"completion": true}')
+
+            def inspect_launch(*args):
+                self.assertFalse(runtime.exists())
+                raise RuntimeError('checked fresh launch')
+
+            with patch.object(capture, 'OUTPUT', output), patch.object(capture, 'font_evidence', return_value={}), \
+                 patch.object(ghostty, 'capture_terminal', side_effect=inspect_launch):
+                with self.assertRaisesRegex(RuntimeError, 'checked fresh launch'):
+                    capture.capture(case)
+
+    def test_occupied_display_is_rejected_before_launch(self):
+        with patch.object(ghostty.Path, 'exists', return_value=True), patch.object(ghostty, 'start') as start:
+            with self.assertRaisesRegex(RuntimeError, 'already occupied'):
+                ghostty.start_display(Mock(), Mock())
+            start.assert_not_called()
+
+    def test_display_does_not_reset_between_probe_and_terminal_launch(self):
+        with patch.object(ghostty.Path, 'exists', return_value=False), \
+             patch.object(ghostty, 'start', return_value=SimpleNamespace(poll=lambda: None)) as start, \
+             patch.object(ghostty, 'command'):
+            ghostty.start_display(Mock(), Mock())
+            self.assertIn('-noreset', start.call_args.args)
+
+    def test_display_must_be_alive_before_it_is_used(self):
+        with patch.object(ghostty.Path, 'exists', return_value=False), \
+             patch.object(ghostty, 'start', return_value=SimpleNamespace(poll=lambda: 1)), \
+             patch.object(ghostty, 'command') as command:
+            with self.assertRaisesRegex(RuntimeError, 'did not start'):
+                ghostty.start_display(Mock(), Mock())
+            command.assert_not_called()
+
+    def test_failed_process_is_not_accepted_as_ready(self):
+        with self.assertRaisesRegex(RuntimeError, 'exited before'):
+            ghostty.wait_screen('window', 'ready', SimpleNamespace(poll=lambda: 1))
+
+    def test_clipboard_path_outside_private_tmp_is_not_read(self):
+        with patch.object(ghostty, 'command', return_value='/repo/examples/flume.go'), \
+             patch.object(ghostty.time, 'sleep'):
+            self.assertEqual(ghostty.screen_text('window'), '')
+
+    def test_capture_processes_are_reaped_on_failure(self):
+        process = Mock()
+        process.poll.return_value = None
+        with patch.object(ghostty.subprocess, 'Popen', return_value=process):
+            with self.assertRaisesRegex(RuntimeError, 'capture failed'):
+                with ExitStack() as stack:
+                    ghostty.start(stack, Mock(), 'ghostty')
+                    raise RuntimeError('capture failed')
+        process.terminate.assert_called_once()
+        process.wait.assert_called_once_with(timeout=5)
 
 
 if __name__ == '__main__':

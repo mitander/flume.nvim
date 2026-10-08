@@ -14,11 +14,13 @@ capture environment. Subsequent runs reuse it. No desktop windows open, and no
 Screen Recording or Accessibility permissions are needed.
 
 Capture runs offline with an isolated home, read-only source, fixed fixtures,
-locale, fonts, dimensions, and Linux amd64 tools. It retains VHS's raw terminal
-PNG layers and composes them in RGBA through pinned Pillow. It does not use
-VHS's FFmpeg screenshot compositor, whose default YUV conversion shifts colors.
-Regression tests require exact RGB preservation as well as exact pixel comparison. ARM Macs use the same binaries
-as CI. Two isolated capture containers run at a time. Pi and OpenCode restore
+locale, fonts, dimensions, and Linux amd64 tools. Ghostty 1.3.1 renders on a private
+Xvfb display with Mesa software OpenGL. Capture converts X11 pixels directly to
+RGB PNG, without intermediate YUV conversion, and composes them through pinned Pillow.
+Regression tests require exact RGB preservation as well as exact pixel comparison.
+ARM Macs use the same binaries as CI. The checksum-locked Linux Ghostty package
+comes from the community-maintained `mkasberg/ghostty-ubuntu` release; it is not an
+official Ghostty binary. The complete portfolio can take several minutes to capture. Two isolated capture containers run at a time. Pi and OpenCode restore
 synthetic sessions: they do not call models or use credentials, extensions,
 plugins, or personal configuration. OpenCode's code fence is plain code: this
 fixture covers basic Markdown layout, emphasis, inline code, and core UI colors,
@@ -92,7 +94,7 @@ The environment compiles grammars pinned by nvim-treesitter revision
 queries. These are capture dependencies, not requirements for using Flume.
 Each capture records parser revision/checksum, query fingerprints, fixture and
 theme inputs, image checksum, and renderer identity. Neovim itself reports
-readiness before VHS captures the painted terminal state. The capture fixture
+readiness before Ghostty captures the painted terminal state. The capture fixture
 reveals the real statusline location field only after readiness; no preview label
 is added to the image.
 
@@ -104,10 +106,11 @@ is added to the image.
 | Mesa | Light | [Languages, states, and integrations](themes/mesa.md) |
 
 Raw images live at `assets/screenshots/<schema>/<language>.png`. Geometry is
-112 columns × 32 rows for Zig and 100 × 48 for other editor scenes. Typography
-uses checksum-locked Maple Mono NF Medium, with real Bold, Medium Italic, and
-Bold Italic faces. The 19-point showcase size renders at 38 pixels for
-high-resolution images, with 1.12 line height and 2-pixel letter spacing.
+112 columns × 32 rows for the Zig hero and 100 × 48 for other language and LSP scenes.
+The Neo-tree scene uses 132 × 44. Typography uses checksum-locked Maple Mono NF
+SemiBold, with real Bold, SemiBold Italic, and Bold Italic faces. The hero uses a
+38-pixel em; compact editor scenes use a 24-pixel em. Ghostty's X11 point sizes
+are 28.5 and 18 at 96 DPI. Cell height increases by 12% and cell width by 2%.
 Capture checks the resolved font files and fails on fallback. Neovim keeps
 mode-specific, non-blinking cursor shapes: block in Normal mode, bar in Insert
 mode. Syntax specimens park the block cursor on whitespace to keep text readable.
@@ -119,9 +122,11 @@ pixels. The terminal background is opaque; only the outer corners are transparen
 Complete fixtures fit without scrolling. Gallery links embed the full-resolution
 images.
 
-These settings use the reference font faces with spacing chosen for a clear
-headless showcase, not identical Ghostty rasterization. Ghostty's macOS-only font thickening, ligature
-shaping, and `linear-corrected` text blending are not reproduced by Chromium.
+Ghostty shapes ligatures and Nerd Font icons and renders diagnostic undercurls.
+SemiBold approximates the fuller strokes of the original macOS captures without
+macOS-only font thickening. Linux FreeType/OpenGL rasterization does not reproduce
+macOS CoreText/Metal pixels exactly. The composed frame keeps native-style shading
+and generous padding, rather than capturing a desktop window.
 
 Syntax captures demonstrate Tree-sitter, not LSP semantic highlighting. Use the
 [native language checks](color-system.md#verify-language-highlighting) to inspect
@@ -133,19 +138,35 @@ OCR checks require Tesseract; the snapshot commands do not require host OCR tool
 
 [`states.go`](../examples/states.go) and [`states.lua`](../examples/states.lua)
 exercise Neovim's real diff engine, changed-word surfaces, search, four fixture
-diagnostics with signs/underlines/virtual text, and either Visual selection or
-Insert-mode completion. Selection and completion are separate scenes because
-one editor cannot show both modes at once. They do not paint imitation UI states.
+diagnostics with signs/undercurls/virtual text, and Visual selection.
+
+[`completion.go`](../examples/completion.go) and [`completion.lua`](../examples/completion.lua)
+show a separate editing moment: gopls supplies `strings.TrimSpace` and
+`strings.TrimSuffix` candidates for a partially typed call. Blink displays a
+completion menu and resolved, syntax-highlighted documentation popup. Both windows
+use single-line borders, the theme's `Normal` background, and `Visual` selection
+highlights. Blink is checksum-locked and uses its Lua matcher with binary downloads
+disabled for offline capture. To run the example separately, set
+`FLUME_BLINK_RUNTIME` to a Blink checkout. Capture requires server identity,
+observed candidates, nonempty documentation, and rendered syntax highlights, not
+a hand-written list.
 
 [`lsp-showcase.lua`](../examples/lsp-showcase.lua) attaches real gopls v0.16.2 or
 ZLS 0.16.0 to an isolated workspace. Go 1.23.2 and Zig 0.16.0 are pinned with those
-servers. Readiness requires observed semantic tokens; diagnostics are suppressed
-to isolate provider coloring. Sidecars identify server version, settings,
-executable checksum, and observed token counts. These images do not qualify
+servers. Readiness requires observed semantic tokens and server hover content;
+diagnostics are suppressed to isolate provider coloring. The hover shows the
+signature and available documentation at a real call site. Sidecars identify
+server version, settings, executable checksum, observed token counts, and hover content. These images do not qualify
 other server versions or languages.
 
 The lualine scene loads the real checksum-locked plugin with the named `flume`
-theme. Its statusline uses the same palette as the editor.
+theme, with real devicons. Its statusline uses the same palette as the editor.
+
+The Neo-tree scene loads the real checksum-locked plugin, Plenary, Nui, and
+nvim-web-devicons. Its isolated project contains staged additions, modified files,
+and an untracked file. The sidebar exercises file icons, directory colors, selection,
+indent guides, Git indicators, and inactive-window surfaces. No host repository or
+personal file names appear.
 
 | Palette | Selection and diagnostics | Completion | Tree-sitter + LSP |
 | --- | --- | --- | --- |
@@ -186,8 +207,8 @@ inside the canvas. There is no manual screenshot or separate ImageMagick step.
 
 ## Integration contact sheets
 
-These contact sheets show real applications through VHS's ttyd/Chromium terminal,
-not native Ghostty or Kitty rendering. Each uses the same app fixture and geometry
+These contact sheets show real applications through Linux Ghostty, not Kitty or
+macOS Ghostty rendering. Each uses the same app fixture and geometry
 across all four palettes. The short fzf, LSD, and Tmux fixtures use 16-row viewports
 instead of mostly empty windows. Pi/OpenCode content is synthetic, but their UI is real.
 
@@ -204,10 +225,10 @@ instead of mostly empty windows. Pi/OpenCode content is synthetic, but their UI 
 The palette galleries embed each app's snapshot. Each integration directory also
 contains `contact-sheet.png`, generated and tested from its four raw captures.
 
-Ghostty and Kitty exports remain configuration-contract checks: syntax,
-settings, ANSI slots, and exact canonical colors. Rendering those files in VHS
-would not test either terminal. Native selection/cursor/tab behavior and live
-reload remain optional, separate qualification rather than routine pixel tests.
+Ghostty and Kitty exports retain configuration-contract checks for syntax,
+settings, ANSI slots, and exact canonical colors. Captures also exercise Ghostty's
+Linux renderer, but not its selection, tabs, or live reload. Those behaviors and
+native Kitty rendering remain separate qualification checks.
 
 Historical hierarchy comparisons retain their inputs in
 [capture metadata](../assets/screenshots/hierarchy/metadata.json). They are

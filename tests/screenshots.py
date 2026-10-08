@@ -27,6 +27,7 @@ class CaptureProvenance(unittest.TestCase):
         files = [
             "examples/showcase.lua",
             "examples/states.lua",
+            "examples/completion.lua", "examples/completion.go",
             "examples/states.go",
             "examples/lsp-showcase.lua",
             "examples/flume.zig",
@@ -36,7 +37,7 @@ class CaptureProvenance(unittest.TestCase):
             "tests/snapshots/neovim.tape",
             "lua/flume/init.lua",
             "lua/flume/palette.lua",
-            "tests/snapshots/capture.py", "tests/snapshots/Dockerfile",
+            "tests/snapshots/capture.py", "tests/snapshots/ghostty.py", "tests/snapshots/render.py", "tests/snapshots/Dockerfile",
             "tests/snapshots/tools.json", "tests/snapshots/install.py",
         ]
         files += [
@@ -119,6 +120,14 @@ class CaptureProvenance(unittest.TestCase):
             "diff_text": True, "diagnostics": 4,
             "visual": kind == "selection", "completion": kind == "completion",
         }
+        if kind == "completion":
+            executable = self.root / "server"
+            executable.write_bytes(b"fixture server")
+            runtime.update(candidates=["TrimSpace", "TrimSuffix"], documentation="TrimSpace removes whitespace.",
+                           frontend={"name": "blink.cmp", "border": "single"}, documentation_highlights=5)
+            runtime["server"] = {"name": "gopls", "version": "test", "settings": {}, "executable": str(executable)}
+        elif kind == "lsp":
+            runtime["hover"] = ["func Count(ctx context.Context, start int)"]
         runtime_file = self.root / "runtime.json"
         return runtime, runtime_file, image
 
@@ -136,10 +145,28 @@ class CaptureProvenance(unittest.TestCase):
         runtime_file.write_text(json.dumps(runtime))
         preflight.record("dusk", "go", runtime_file, "completion", image=image)
         preflight.validate_capture(image)
-        renderer = self.root / "examples/states.lua"
+        renderer = self.root / "examples/completion.lua"
         renderer.write_text(renderer.read_text() + "\n-- changed\n")
         with self.assertRaisesRegex(SystemExit, "stale renderer_sha256"):
             preflight.validate_capture(image)
+
+    def test_completion_requires_server_candidates_and_documentation(self):
+        for field in ("server", "candidates", "documentation"):
+            with self.subTest(field=field):
+                runtime, runtime_file, image = self.state_runtime("completion")
+                del runtime[field]
+                runtime_file.write_text(json.dumps(runtime))
+                with self.assertRaisesRegex(SystemExit, "server candidates and documentation"):
+                    preflight.record("dusk", "go", runtime_file, "completion", image=image)
+
+    def test_completion_requires_blink_highlighted_documentation(self):
+        for field in ("frontend", "documentation_highlights"):
+            with self.subTest(field=field):
+                runtime, runtime_file, image = self.state_runtime("completion")
+                del runtime[field]
+                runtime_file.write_text(json.dumps(runtime))
+                with self.assertRaisesRegex(SystemExit, "Blink highlighted documentation"):
+                    preflight.record("dusk", "go", runtime_file, "completion", image=image)
 
     def test_lsp_requires_server_tokens(self):
         runtime, runtime_file, image = self.state_runtime("lsp")
@@ -169,7 +196,7 @@ class CaptureProvenance(unittest.TestCase):
         metadata = json.loads(sidecar.read_text())
         del metadata["capture_renderer"]
         sidecar.write_text(json.dumps(metadata))
-        with self.assertRaisesRegex(SystemExit, "stale VHS capture inputs"):
+        with self.assertRaisesRegex(SystemExit, "stale Ghostty capture inputs"):
             preflight.main()
 
     def test_legacy_record_commands_are_rejected(self):

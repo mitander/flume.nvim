@@ -58,14 +58,14 @@ with signs, underlines, and virtual text.
 
 ## Completion
 
-Native completion menu alongside the same diff and diagnostic fixture.
+Real gopls candidates in Blink's bordered menu with syntax-highlighted documentation.
 
 ![Mira completion menu](../../assets/screenshots/completion/mira/go.png)
 
 ## LSP
 
-These captures combine Tree-sitter with semantic tokens from gopls and ZLS.
-Diagnostics are suppressed here to isolate provider coloring.
+These captures combine Tree-sitter, semantic tokens, and server-provided hover
+signatures from gopls and ZLS. Diagnostics are suppressed here.
 [Capture provenance and supported versions](../showcase.md#working-state-and-lsp-captures).
 
 ### Go with gopls
@@ -79,12 +79,16 @@ Diagnostics are suppressed here to isolate provider coloring.
 ## Integrations
 
 [Setup recipes](../workflows.md#external-tools) · [Lualine setup](../workflows.md#lualine).
-These snapshots use real apps through VHS; Pi/OpenCode restore synthetic offline
-sessions. They do not prove native Ghostty/Kitty rendering.
+These snapshots use real apps through Linux Ghostty; Pi/OpenCode restore synthetic
+offline sessions. They do not qualify macOS Ghostty or Kitty rendering.
 
 ### Lualine
 
 ![Mira with the Flume lualine theme](../../assets/screenshots/lualine/mira/go.png)
+
+### Neo-tree
+
+![Mira Neo-tree sidebar with icons and Git state](../../assets/screenshots/neotree/mira/go.png)
 
 ### Terminal apps
 

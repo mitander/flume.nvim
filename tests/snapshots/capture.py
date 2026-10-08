@@ -1,10 +1,9 @@
-"""Capture real applications in the pinned, offline VHS environment."""
+"""Capture real applications in the pinned, offline Ghostty environment."""
 
 import argparse
 import importlib.util
 import json
 import os
-import shutil
 import subprocess
 from pathlib import Path
 
@@ -13,10 +12,10 @@ from common import APPS, SCHEMAS, SCENES, destination, digest, environment_diges
 ROOT = Path('/repo')
 OUTPUT = Path('/output')
 GEOMETRY = {
-    'columns': 100, 'rows': 40, 'font': 'Maple Mono NF', 'font_size': 38,
+    'columns': 100, 'rows': 40, 'font': 'Maple Mono NF', 'font_size': 28.5,
     'logical_font_size': 19, 'backing_scale': 2,
-    'line_height': 1.12, 'letter_spacing': 2,
-    'padding': 24, 'titlebar_height': 48, 'corner_radius': 20,
+    'cell_height_adjustment': '12%', 'cell_width_adjustment': '2%',
+    'padding': 40, 'titlebar_height': 64, 'corner_radius': 28,
 }
 
 
@@ -51,52 +50,43 @@ def terminal_theme(schema):
     return theme
 
 
-def tape(scene, schema):
-    spec = SCENES[scene]
+def scene_geometry(spec):
     geometry = GEOMETRY | {key: spec[key] for key in ('columns', 'rows')}
-    case = f'{scene}-{schema}'
-    header = '\n'.join((
-        'Set Shell bash', f'Set FontFamily "{geometry["font"]}"',
-        f'Set FontSize {geometry["font_size"]}', f'Set Columns {geometry["columns"]}', f'Set Rows {geometry["rows"]}',
-        f'Set LineHeight {geometry["line_height"]}', f'Set LetterSpacing {geometry["letter_spacing"]}',
-        'Set Padding 0', 'Set Margin 0', 'Set BorderRadius 0', 'Set CursorBlink false',
-        'Set Framerate 10', f'Output "/tmp/{case}-frames/"',
-        'Set TypingSpeed 0', 'Set WaitTimeout 90s', 'Set Theme ' + json.dumps(terminal_theme(schema)),
-        'Env PS1 ""', f'Env FLUME_SCHEMA "{schema}"', f'Env FLUME_SHOWCASE_SCHEMA "{schema}"',
-        f'Env FLUME_SHOWCASE_LANGUAGE "{spec.get("language", "")}"',
-        f'Env FLUME_CAPTURE_KIND "{spec.get("kind", "syntax")}"',
-        f'Env FLUME_LUALINE "{int(spec.get("lualine", False))}"',
-        f'Env FLUME_SHOWCASE_METADATA "/output/{case}-runtime.json"',
-    ))
-    body = (ROOT / f'tests/snapshots/{spec["app"]}.tape').read_text()
-    return header + '\n' + body.replace('{{schema}}', schema).replace('{{case}}', case)
+    # The original non-hero editor captures used a smaller, compact specimen.
+    if spec['app'] == 'neovim' and not (spec['language'] == 'zig' and spec['kind'] == 'syntax'):
+        geometry.update(font_size=18, logical_font_size=12)
+    return geometry
 
 
 def capture(case):
     from PIL import Image
-    from render import last_frame, window
+    from ghostty import capture_terminal
+    from render import window
 
     scene, schema = case.rsplit('-', 1)
     spec = SCENES[scene]
     fonts = font_evidence()
-    frames = Path('/tmp') / f'{case}-frames'
-    if frames.exists():
-        shutil.rmtree(frames)
-    path = Path('/tmp') / f'{case}.tape'
-    path.write_text(tape(scene, schema))
+    geometry = scene_geometry(spec)
+    runtime = OUTPUT / f'{case}-runtime.json'
+    runtime.unlink(missing_ok=True)
+    Path('/tmp/neotree-ready.json').unlink(missing_ok=True)
+    os.environ.update({
+        'FLUME_SCHEMA': schema, 'FLUME_SHOWCASE_SCHEMA': schema,
+        'FLUME_SHOWCASE_LANGUAGE': spec.get('language', ''),
+        'FLUME_CAPTURE_KIND': spec.get('kind', 'syntax'),
+        'FLUME_LUALINE': str(int(spec.get('lualine', False))),
+        'FLUME_NEOTREE': str(int(spec.get('neotree', False))),
+        'FLUME_SHOWCASE_METADATA': str(runtime),
+    })
     with (OUTPUT / f'{case}.log').open('w') as log:
-        result = subprocess.run(['vhs', str(path)], stdout=log, stderr=subprocess.STDOUT, timeout=150)
-    if result.returncode:
-        raise RuntimeError(f'{case}: capture failed; see {case}.log')
-    text, cursor = last_frame(frames)
-    geometry = GEOMETRY | {key: spec[key] for key in ('columns', 'rows')}
+        terminal = capture_terminal(ROOT, OUTPUT, case, spec, geometry, log)
     image_path = OUTPUT / f'{case}.png'
-    with Image.open(text) as text_image, Image.open(cursor) as cursor_image:
-        image = window(text_image, cursor_image, terminal_theme(schema), geometry)
+    with Image.open(terminal) as text_image:
+        image = window(text_image, Image.new('RGBA', text_image.size), terminal_theme(schema), geometry)
         image.save(image_path)
         dimensions = list(image.size)
-    shutil.rmtree(frames)
-    inputs = [ROOT / 'tests/snapshots/capture.py', ROOT / 'tests/snapshots/render.py', ROOT / 'tests/snapshots/common.py', ROOT / f'tests/snapshots/{spec["app"]}.tape', ROOT / f'extras/ghostty/flume-{schema}']
+    terminal.unlink()
+    inputs = [ROOT / 'tests/snapshots/capture.py', ROOT / 'tests/snapshots/ghostty.py', ROOT / 'tests/snapshots/render.py', ROOT / 'tests/snapshots/common.py', ROOT / f'tests/snapshots/{spec["app"]}.tape', ROOT / f'extras/ghostty/flume-{schema}']
     inputs += sorted((ROOT / 'tests/snapshots/fixtures').glob('*'))
     if spec['app'] == 'neovim':
         inputs += [ROOT / 'scripts/preflight-screenshots.py']
@@ -105,6 +95,11 @@ def capture(case):
         preflight = importlib.util.module_from_spec(loader)
         loader.loader.exec_module(preflight)
         preflight.record(schema, spec['language'], OUTPUT / f'{case}-runtime.json', spec['kind'], image=image_path)
+        if spec.get('neotree'):
+            sidecar = image_path.with_suffix('.json')
+            metadata = json.loads(sidecar.read_text())
+            metadata['editor_integration'] = json.loads(Path('/tmp/neotree-ready.json').read_text())
+            sidecar.write_text(json.dumps(metadata, indent=2) + '\n')
     else:
         inputs += sorted((ROOT / 'extras' / spec['app']).glob('*' + schema + '*'))
     record = {
@@ -112,10 +107,10 @@ def capture(case):
         'destination': destination(case),
         'inputs': {str(file.relative_to(ROOT)): digest(file) for file in inputs if file.is_file()},
         'environment': {
-            'renderer': 'VHS v0.12.1 raw PNG / ttyd / Chromium / Pillow RGBA', 'platform': 'linux/amd64',
+            'renderer': 'Ghostty 1.3.1 / Xvfb / Mesa llvmpipe / RGB PNG / Pillow RGBA', 'platform': 'linux/amd64',
             'font_faces': fonts,
             'image_recipe_sha256': environment_digest(ROOT),
-            'geometry': GEOMETRY | {key: spec[key] for key in ('columns', 'rows')},
+            'geometry': geometry,
         },
     }
     if spec['app'] == 'neovim':

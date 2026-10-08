@@ -47,17 +47,43 @@ assert(vim.wait(45000, function()
     end
     return next(tokens) ~= nil
 end, 100), "Server must attach and render semantic tokens")
-vim.cmd("redraw")
-if metadata_path then
-    local counts = {}
-    for _, token in pairs(tokens) do
-        counts[token.type] = (counts[token.type] or 0) + 1
-    end
-    vim.fn.writefile({ vim.json.encode({
-        nvim = tostring(vim.version()), language = language, kind = "lsp",
-        parser = assert(vim.api.nvim_get_runtime_file("parser/" .. language .. ".*", false)[1]),
-        queries = vim.treesitter.query.get_files(language, "highlights"),
-        server = { name = server.name, version = vim.trim(version), executable = executable,
-            settings = server.settings or {}, token_counts = counts },
-    }) }, metadata_path)
+-- Show a useful server result, not only the subtle semantic-token differences.
+local target = language == "go" and "Count(" or "fold("
+local hover_row, hover_col
+for row, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
+    local col = line:find(target, 1, true)
+    if col then hover_row, hover_col = row, col - 1 end
 end
+assert(hover_row, "LSP specimen must contain the hover target")
+vim.api.nvim_win_set_cursor(0, { hover_row, hover_col })
+local client = assert(vim.lsp.get_client_by_id(client_id))
+local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+local response = assert(client:request_sync("textDocument/hover", params, 10000, buf), "Server must answer hover")
+assert(response.result and response.result.contents, "Server must return hover documentation")
+local hover = vim.lsp.util.convert_input_to_markdown_lines(response.result.contents)
+assert(#hover > 0, "Hover must contain a signature or documentation")
+local function show_hover()
+    -- Opening before VimEnter lets startup cursor events close the float again.
+    vim.o.laststatus = 2
+    vim.lsp.util.open_floating_preview(hover, "markdown", {
+        border = "single", max_width = 64, max_height = 10, focusable = false,
+        close_events = {},
+    })
+    vim.cmd("redraw")
+    if metadata_path then
+        local counts = {}
+        for _, token in pairs(tokens) do
+            counts[token.type] = (counts[token.type] or 0) + 1
+        end
+        vim.fn.writefile({ vim.json.encode({
+            nvim = tostring(vim.version()), language = language, kind = "lsp", hover = hover,
+            parser = assert(vim.api.nvim_get_runtime_file("parser/" .. language .. ".*", false)[1]),
+            queries = vim.treesitter.query.get_files(language, "highlights"),
+            server = { name = server.name, version = vim.trim(version), executable = executable,
+                settings = server.settings or {}, token_counts = counts },
+        }) }, metadata_path)
+    end
+end
+vim.api.nvim_create_autocmd("VimEnter", { once = true, callback = function()
+    vim.schedule(show_hover)
+end })

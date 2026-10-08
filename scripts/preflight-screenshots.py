@@ -52,7 +52,7 @@ def theme_inputs(schema: str) -> dict[str, str]:
 
 
 def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax", *, image: Path) -> None:
-    """Record parser evidence beside a staged VHS image; publication belongs to snapshots."""
+    """Record parser evidence beside a staged Ghostty image; publication belongs to snapshots."""
     if kind not in ("syntax", "selection", "completion", "lsp"):
         raise SystemExit("Unknown capture kind")
     if schema not in SCHEMAS or language not in LANGUAGES:
@@ -64,17 +64,26 @@ def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax",
     revision_file = parser.parent.parent / f"parser-info/{language}.revision"
     renderer = "showcase.lua"
     fixture = f"flume.{LANGUAGES[language]}"
-    if kind in ("selection", "completion"):
+    if kind == "selection":
         renderer, fixture = "states.lua", "states.go"
         if runtime.get("kind") != kind or runtime.get("diagnostics") != 4 or not runtime.get("diff_text"):
             raise SystemExit("State fixture did not report its diff and diagnostics")
-        required_state = "visual" if kind == "selection" else "completion"
-        if not runtime.get(required_state):
-            raise SystemExit(f"State fixture did not render {required_state}")
+        if not runtime.get("visual"):
+            raise SystemExit("State fixture did not render visual")
+    elif kind == "completion":
+        renderer, fixture = "completion.lua", "completion.go"
+        if runtime.get("kind") != kind or not runtime.get("completion"):
+            raise SystemExit("State fixture did not render completion")
+        if not runtime.get("server") or not runtime.get("candidates") or not runtime.get("documentation"):
+            raise SystemExit("Completion fixture did not report server candidates and documentation")
+        if runtime.get("frontend", {}).get("name") != "blink.cmp" or not runtime.get("documentation_highlights"):
+            raise SystemExit("Completion fixture did not render Blink highlighted documentation")
     elif kind == "lsp":
         renderer = "lsp-showcase.lua"
         if runtime.get("kind") != kind or not runtime.get("server", {}).get("token_counts"):
             raise SystemExit("LSP fixture did not report semantic tokens")
+        if not runtime.get("hover"):
+            raise SystemExit("LSP fixture did not report hover documentation")
     metadata = {
         "schema": schema,
         "language": language,
@@ -94,18 +103,24 @@ def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax",
         "theme_inputs": theme_inputs(schema),
     }
     metadata['capture_renderer'] = {
-        'name': 'VHS', 'script_sha256': digest(ROOT / 'tests/snapshots/capture.py'),
+        'name': 'Ghostty', 'script_sha256': digest(ROOT / 'tests/snapshots/capture.py'),
+        'backend_sha256': digest(ROOT / 'tests/snapshots/ghostty.py'),
+        'compositor_sha256': digest(ROOT / 'tests/snapshots/render.py'),
         'environment_sha256': environment_digest(ROOT),
     }
     if kind != "syntax":
         metadata["kind"] = kind
         metadata["capture_script_sha256"] = digest(ROOT / 'tests/snapshots/capture.py')
-        if kind == "lsp":
-            metadata["base_renderer_sha256"] = digest(ROOT / "examples/showcase.lua")
+        if kind in ("lsp", "completion"):
             server = runtime["server"]
             metadata["server"] = {key: server[key] for key in ("name", "version", "settings")}
-            metadata["server"]["token_counts"] = dict(sorted(server["token_counts"].items()))
             metadata["server_executable_sha256"] = digest(Path(server["executable"]))
+            if kind == "lsp":
+                metadata["base_renderer_sha256"] = digest(ROOT / "examples/showcase.lua")
+                metadata["server"]["token_counts"] = dict(sorted(server["token_counts"].items()))
+                metadata["hover"] = runtime.get("hover", [])
+            else:
+                metadata["runtime_states"] = {key: runtime[key] for key in ("completion", "candidates", "documentation", "frontend", "documentation_highlights")}
         else:
             metadata["runtime_states"] = {
                 key: runtime[key] for key in ("diff_text", "diagnostics", "visual", "completion")
@@ -119,15 +134,22 @@ def validate_capture(path: Path) -> tuple[str, str]:
         raise SystemExit(f"{path.name} has no parser-backed capture metadata; recapture it")
     metadata = json.loads(sidecar.read_text())
     language = path.stem
-    expected = {'name': 'VHS', 'script_sha256': digest(ROOT / 'tests/snapshots/capture.py'), 'environment_sha256': environment_digest(ROOT)}
+    expected = {
+        'name': 'Ghostty', 'script_sha256': digest(ROOT / 'tests/snapshots/capture.py'),
+        'backend_sha256': digest(ROOT / 'tests/snapshots/ghostty.py'),
+        'compositor_sha256': digest(ROOT / 'tests/snapshots/render.py'),
+        'environment_sha256': environment_digest(ROOT),
+    }
     if metadata.get('capture_renderer') != expected:
-        raise SystemExit(f'{path.name} has stale VHS capture inputs; recapture it')
+        raise SystemExit(f'{path.name} has stale Ghostty capture inputs; recapture it')
     kind = metadata.get("kind", "syntax")
     renderer = "showcase.lua"
     fixture = f"flume.{LANGUAGES[language]}"
     expected_highlighting = "treesitter"
-    if kind in ("selection", "completion"):
+    if kind == "selection":
         renderer, fixture = "states.lua", "states.go"
+    elif kind == "completion":
+        renderer, fixture = "completion.lua", "completion.go"
     elif kind == "lsp":
         renderer = "lsp-showcase.lua"
         expected_highlighting = "treesitter+lsp"
@@ -143,10 +165,19 @@ def validate_capture(path: Path) -> tuple[str, str]:
                 raise SystemExit(f"{path.name} has a stale base renderer; recapture it")
             if not metadata.get("server", {}).get("token_counts") or not metadata.get("server_executable_sha256"):
                 raise SystemExit(f"{path.name} has no server token evidence")
+            if not metadata.get("hover"):
+                raise SystemExit(f"{path.name} has no hover evidence")
+        elif kind == "completion":
+            states = metadata.get("runtime_states", {})
+            if not states.get("completion") or not states.get("candidates") or not states.get("documentation"):
+                raise SystemExit(f"{path.name} has incomplete completion evidence")
+            if not metadata.get("server") or not metadata.get("server_executable_sha256"):
+                raise SystemExit(f"{path.name} has no completion server evidence")
+            if states.get("frontend", {}).get("name") != "blink.cmp" or not states.get("documentation_highlights"):
+                raise SystemExit(f"{path.name} has no Blink highlighted documentation evidence")
         else:
             states = metadata.get("runtime_states", {})
-            required_state = "visual" if kind == "selection" else "completion"
-            if not states.get(required_state) or states.get("diagnostics") != 4 or not states.get("diff_text"):
+            if not states.get("visual") or states.get("diagnostics") != 4 or not states.get("diff_text"):
                 raise SystemExit(f"{path.name} has incomplete state evidence")
     wrong_capture = (
         metadata["schema"] != path.parent.name
@@ -205,7 +236,7 @@ def main() -> None:
                 raise SystemExit(f"Missing state capture: {path.relative_to(ROOT)}")
             language, identity = validate_capture(path)
             metadata = json.loads(path.with_suffix(".json").read_text())
-            if metadata["kind"] == "lsp":
+            if metadata["kind"] in ("lsp", "completion"):
                 identity += json.dumps({
                     "server": {key: metadata["server"][key] for key in ("name", "version", "settings")},
                     "executable_sha256": metadata["server_executable_sha256"],

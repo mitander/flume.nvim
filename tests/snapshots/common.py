@@ -18,6 +18,7 @@ for kind, languages in (('selection', ('go',)), ('completion', ('go',)), ('lsp',
     for language in languages:
         SCENES[f'neovim-{kind}-{language}'] = {'app': 'neovim', 'language': language, 'kind': kind, 'columns': 100, 'rows': 48}
 SCENES['neovim-lualine'] = {'app': 'neovim', 'language': 'go', 'kind': 'syntax', 'lualine': True, 'columns': 100, 'rows': 48}
+SCENES['neovim-neotree'] = {'app': 'neovim', 'language': 'go', 'kind': 'syntax', 'neotree': True, 'columns': 132, 'rows': 44}
 RAW_CASES = tuple(f'{scene}-{schema}' for scene in SCENES for schema in SCHEMAS)
 CASES = (*RAW_CASES, *(f'contact-{app}' for app in INTEGRATIONS), 'showcase')
 
@@ -32,7 +33,9 @@ def destination(case: str) -> str:
     if spec['app'] != 'neovim':
         return f'assets/screenshots/integrations/{scene}/{schema}.png'
     directory = 'assets/screenshots'
-    if spec.get('lualine'):
+    if spec.get('neotree'):
+        directory += '/neotree'
+    elif spec.get('lualine'):
         directory += '/lualine'
     elif spec['kind'] != 'syntax':
         directory += '/' + spec['kind']

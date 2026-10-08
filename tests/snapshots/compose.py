@@ -17,7 +17,7 @@ def contact_sheet(images):
         raise ValueError('Contact-sheet capture dimensions differ')
     sheet = Image.new('RGB', (width * 2 + 72, height * 2 + 144), '#1c1b20')
     draw = ImageDraw.Draw(sheet)
-    font = ImageFont.truetype('/usr/share/fonts/truetype/maple/MapleMono-NF-Medium.ttf', 32)
+    font = ImageFont.truetype('/usr/share/fonts/truetype/maple/MapleMono-NF-SemiBold.ttf', 32)
     for index, (schema, image) in enumerate(zip(SCHEMAS, images)):
         x, y = 24 + (index % 2) * (width + 24), 60 + (index // 2) * (height + 60)
         draw.text((x, y - 34), schema.title(), font=font, fill='#d9d4df')

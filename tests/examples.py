@@ -79,6 +79,15 @@ class ConfigExample(unittest.TestCase):
 
 
 class ExampleViewport(unittest.TestCase):
+    def test_completion_fixture_uses_the_shipped_palette_backgrounds(self):
+        source = (ROOT / 'examples/completion.go').read_text()
+        for schema in ('dusk', 'opal', 'mira', 'mesa'):
+            export = (ROOT / f'extras/ghostty/flume-{schema}').read_text()
+            background = next(line.split('=', 1)[1].strip() for line in export.splitlines() if line.startswith('background ='))
+            self.assertIn(f'{{Name: "{schema}", Background: "{background}"}}', source)
+        self.assertLessEqual(len(source.splitlines()), 46)
+        self.assertLessEqual(max(len(line) for line in source.splitlines()), 92)
+
     def test_complete_files_fit_capture(self):
         import sys
         sys.path.insert(0, str(ROOT / 'tests/snapshots'))
