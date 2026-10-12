@@ -2,10 +2,10 @@
 
 Light palette with a cool paper canvas. [All galleries](../gallery.md).
 
-[Go](#go) · [Rust](#rust) · [Python](#python) · [TypeScript](#typescript) ·
-[Zig](#zig) · [Elixir](#elixir) · [TOML](#toml) ·
-[Diagnostics and working states](#diagnostics-and-working-states) ·
-[Completion](#completion) · [LSP](#lsp) · [Integrations](#integrations)
+[Go](#go) · [Rust](#rust) · [Python](#python) · [TypeScript](#typescript) · [Zig](#zig) ·
+[Elixir](#elixir) · [TOML](#toml) ·
+[Diagnostics and working states](#diagnostics-and-working-states) · [Completion](#completion) ·
+[LSP](#lsp) · [Integrations](#integrations)
 
 ## Go
 
@@ -51,8 +51,8 @@ Light palette with a cool paper canvas. [All galleries](../gallery.md).
 
 ## Diagnostics and working states
 
-Real diff panes, changed words, search matches, selection, and fixture diagnostics
-with signs, underlines, and virtual text.
+Real diff panes, changed words, search matches, selection, and fixture diagnostics with signs,
+underlines, and virtual text.
 
 ![Opal diagnostics, selection, search, and diffs](../../assets/screenshots/selection/opal/go.png)
 
@@ -64,8 +64,8 @@ Real gopls candidates in Blink's bordered menu with syntax-highlighted documenta
 
 ## LSP
 
-These captures combine Tree-sitter, semantic tokens, and server-provided hover
-signatures from gopls and ZLS. Diagnostics are suppressed here.
+These captures combine Tree-sitter, semantic tokens, and server-provided hover signatures from gopls
+and ZLS. Diagnostics are suppressed here.
 [Capture provenance and supported versions](../showcase.md#working-state-and-lsp-captures).
 
 ### Go with gopls
@@ -78,9 +78,9 @@ signatures from gopls and ZLS. Diagnostics are suppressed here.
 
 ## Integrations
 
-[Setup recipes](../workflows.md#external-tools) · [Lualine setup](../workflows.md#lualine).
-These snapshots use real apps through Linux Ghostty; Pi/OpenCode restore synthetic
-offline sessions. They do not qualify macOS Ghostty or Kitty rendering.
+[Setup recipes](../workflows.md#external-tools) · [Lualine setup](../workflows.md#lualine). These
+snapshots use real apps through Linux Ghostty; Pi/OpenCode restore synthetic offline sessions. They
+do not qualify macOS Ghostty or Kitty rendering.
 
 ### Lualine
 
@@ -102,14 +102,14 @@ offline sessions. They do not qualify macOS Ghostty or Kitty rendering.
 
 Matching configuration files:
 
-| Integration | Opal configuration |
-| --- | --- |
-| Ghostty | [Theme](../../extras/ghostty/flume-opal) |
-| Kitty | [Theme](../../extras/kitty/flume-opal.conf) |
-| Tmux | [Theme](../../extras/tmux/colors-opal.conf) |
-| LSD | [Colors](../../extras/lsd/colors-opal.yaml) |
-| OpenCode | [Theme](../../extras/opencode/flume-opal.json) |
-| Lazygit | [Theme](../../extras/lazygit/flume-opal.yml) |
-| fzf | [Options](../../extras/fzf/flume-opal.opts) |
-| Delta | [Configuration](../../extras/delta/flume-opal.gitconfig) |
-| Pi | [Theme](../../extras/pi/flume-opal.json) |
+| Integration | Opal configuration                                       |
+| ----------- | -------------------------------------------------------- |
+| Ghostty     | [Theme](../../extras/ghostty/flume-opal)                 |
+| Kitty       | [Theme](../../extras/kitty/flume-opal.conf)              |
+| Tmux        | [Theme](../../extras/tmux/colors-opal.conf)              |
+| LSD         | [Colors](../../extras/lsd/colors-opal.yaml)              |
+| OpenCode    | [Theme](../../extras/opencode/flume-opal.json)           |
+| Lazygit     | [Theme](../../extras/lazygit/flume-opal.yml)             |
+| fzf         | [Options](../../extras/fzf/flume-opal.opts)              |
+| Delta       | [Configuration](../../extras/delta/flume-opal.gitconfig) |
+| Pi          | [Theme](../../extras/pi/flume-opal.json)                 |

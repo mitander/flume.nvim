@@ -3,8 +3,7 @@
 The same Rust source and Tree-sitter runtime in all four themes.
 [Source and capture details](../showcase.md#code-examples).
 
-[Dusk](#dusk) · [Opal](#opal) · [Mira](#mira) · [Mesa](#mesa) ·
-[All galleries](../gallery.md)
+[Dusk](#dusk) · [Opal](#opal) · [Mira](#mira) · [Mesa](#mesa) · [All galleries](../gallery.md)
 
 ## Dusk
 
