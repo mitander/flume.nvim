@@ -39,6 +39,55 @@ function M.register(test, equal, truthy)
         end
     end)
 
+    test("Linux sync reloads Ghostty with SIGUSR2 and reports adapter failures", function()
+        local state = require("flume.state")
+        local original_activate = state.activate
+        local original_system = vim.fn.system
+        local original_executable = vim.fn.executable
+        local original_has = vim.fn.has
+        local original_home = vim.env.HOME
+        local original_tmux = vim.env.TMUX
+        local calls, exit_code, available = {}, 0, true
+        state.activate = function() return {} end
+        vim.env.HOME = ""
+        vim.env.TMUX = nil
+        vim.fn.has = function(name)
+            if name == "linux" then return 1 end
+            if name == "mac" then return 0 end
+            return original_has(name)
+        end
+        vim.fn.executable = function(name)
+            return name == "pkill" and available and 1 or 0
+        end
+        vim.fn.system = function(command)
+            calls[#calls + 1] = command
+            -- Set the real shell status without signalling any host processes.
+            return original_system({ "sh", "-c", "exit " .. exit_code })
+        end
+        local ok, err = xpcall(function()
+            local sync = require("flume.sync")
+            local result = sync.run({ schema = "mira", quiet = true })
+            equal(result.ghostty_reloaded, true, "successful Linux reload")
+            equal(#calls, 1, "Linux adapter call count")
+            equal(table.concat(calls[1], ","), "pkill,-USR2,-x,ghostty", "Linux reload command")
+            exit_code = 1
+            result = sync.run({ schema = "mira", quiet = true })
+            equal(result.ghostty_reloaded, false, "failed Linux reload reported success")
+            equal(#calls, 2, "failed reload did not invoke adapter")
+            available = false
+            result = sync.run({ schema = "mira", quiet = true })
+            equal(result.ghostty_reloaded, false, "missing pkill reported success")
+            equal(#calls, 2, "missing pkill invoked adapter")
+        end, debug.traceback)
+        state.activate = original_activate
+        vim.fn.system = original_system
+        vim.fn.executable = original_executable
+        vim.fn.has = original_has
+        vim.env.HOME = original_home
+        vim.env.TMUX = original_tmux
+        if not ok then error(err) end
+    end)
+
     test("real sync command publishes before reload adapters and editor notification", function()
         local flume = require("flume")
         local state = require("flume.state")
@@ -74,7 +123,9 @@ function M.register(test, equal, truthy)
             return (name == "osascript" or name == "tmux") and 1 or 0
         end
         vim.fn.has = function(name)
-            return name == "mac" and 1 or original_has(name)
+            if name == "mac" then return 1 end
+            if name == "linux" then return 0 end
+            return original_has(name)
         end
         vim.fn.system = function(command)
             equal(state.get_schema(), requested, "reload adapter preceded publication")
