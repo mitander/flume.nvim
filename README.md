@@ -40,6 +40,11 @@ more languages, selections, and diffs.
 
 </details>
 
+> [!WARNING]
+> Flume’s palettes are still evolving. Updates may change colors, including
+> backgrounds. Significant visual changes are noted in the changelog.
+> Pin the plugin to a release tag or commit if you want a fixed appearance.
+
 ## Install
 
 Requires Neovim 0.9+ and a true-color terminal. Add this to your

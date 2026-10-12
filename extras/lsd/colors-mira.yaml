@@ -10,40 +10,40 @@ permission:
   write: 179            # quiet metadata (#d8a36b)
   exec: 109             # quiet metadata (#84b39f)
   exec-sticky: 175      # error (#e187a6)
-  no-access: 243        # placeholder (#746d7c)
+  no-access: 248        # muted (#a6a0ad)
   octal: 248            # muted (#a6a0ad)
-  acl: 73              # accent (#72b5bf)
-  context: 247          # doc_comment (#9b94a3)
+  acl: 110              # accent (#82b8d4)
+  context: 247          # doc_comment (#9b94a4)
 
 date:
   hour-old: 248         # muted (#a6a0ad)
   day-old: 248          # muted (#a6a0ad)
-  older: 243            # placeholder (#746d7c)
+  older: 248            # muted (#a6a0ad)
 
 size:
-  none: 243             # placeholder (#746d7c)
+  none: 248             # muted (#a6a0ad)
   small: 248            # muted (#a6a0ad)
   medium: 248           # muted (#a6a0ad)
-  large: 179            # warning (#d8a36b)
+  large: 180            # warning (#d7b879)
 
 inode:
   valid: 248            # muted (#a6a0ad)
-  invalid: 243          # placeholder (#746d7c)
+  invalid: 248          # muted (#a6a0ad)
 
 links:
   valid: 248            # muted (#a6a0ad)
-  invalid: 243          # placeholder (#746d7c)
+  invalid: 248          # muted (#a6a0ad)
 
 tree-edge: 237          # border_variant (#383547)
 
 git-status:
-  default: 243          # placeholder (#746d7c)
-  unmodified: 243       # placeholder (#746d7c)
-  ignored: 243          # placeholder (#746d7c)
-  new-in-index: 109     # success (#84b39f)
-  new-in-workdir: 109   # success (#84b39f)
-  typechange: 179       # warning (#d8a36b)
+  default: 248          # muted (#a6a0ad)
+  unmodified: 248       # muted (#a6a0ad)
+  ignored: 248          # muted (#a6a0ad)
+  new-in-index: 109     # success (#8bbca7)
+  new-in-workdir: 109   # success (#8bbca7)
+  typechange: 180       # warning (#d7b879)
   deleted: 175          # error (#e187a6)
-  renamed: 73          # accent (#72b5bf)
-  modified: 179         # warning (#d8a36b)
+  renamed: 110          # accent (#82b8d4)
+  modified: 180         # warning (#d7b879)
   conflicted: 175       # error (#e187a6)

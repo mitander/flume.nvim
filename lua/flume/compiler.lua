@@ -129,7 +129,6 @@ end
 
 function M.compile_ghostty(schema)
     local palette = get_palette(schema)
-    local selection_foreground = is_light(schema) and palette.on_accent or palette.fg
     local template = [[# Flume Theme for Ghostty
 background = %s
 foreground = %s
@@ -159,8 +158,8 @@ palette = 15=%s
         template,
         palette.terminal_bg,
         palette.fg,
-        palette.black, -- selection-background
-        selection_foreground,
+        palette.selection_bg, -- selection-background
+        palette.selection_fg,
         palette.accent,
         palette.on_accent, -- cursor-text
         palette.black,
@@ -187,7 +186,6 @@ end
 
 function M.compile_kitty(schema)
     local palette = get_palette(schema)
-    local selection_foreground = is_light(schema) and palette.on_accent or palette.fg
     local template = [[# Flume Theme for Kitty
 background            %s
 foreground            %s
@@ -242,8 +240,8 @@ inactive_tab_font_style   normal
         template,
         palette.terminal_bg,
         palette.fg,
-        palette.black, -- selection_background
-        selection_foreground,
+        palette.selection_bg, -- selection_background
+        palette.selection_fg,
         palette.accent,
         palette.on_accent, -- cursor_text_color
         palette.black,
@@ -332,7 +330,7 @@ permission:
   write: %d            # quiet metadata (%s)
   exec: %d             # quiet metadata (%s)
   exec-sticky: %d      # error (%s)
-  no-access: %d        # placeholder (%s)
+  no-access: %d        # muted (%s)
   octal: %d            # muted (%s)
   acl: %d              # accent (%s)
   context: %d          # doc_comment (%s)
@@ -340,28 +338,28 @@ permission:
 date:
   hour-old: %d         # muted (%s)
   day-old: %d          # muted (%s)
-  older: %d            # placeholder (%s)
+  older: %d            # muted (%s)
 
 size:
-  none: %d             # placeholder (%s)
+  none: %d             # muted (%s)
   small: %d            # muted (%s)
   medium: %d           # muted (%s)
   large: %d            # warning (%s)
 
 inode:
   valid: %d            # muted (%s)
-  invalid: %d          # placeholder (%s)
+  invalid: %d          # muted (%s)
 
 links:
   valid: %d            # muted (%s)
-  invalid: %d          # placeholder (%s)
+  invalid: %d          # muted (%s)
 
 tree-edge: %d          # border_variant (%s)
 
 git-status:
-  default: %d          # placeholder (%s)
-  unmodified: %d       # placeholder (%s)
-  ignored: %d          # placeholder (%s)
+  default: %d          # muted (%s)
+  unmodified: %d       # muted (%s)
+  ignored: %d          # muted (%s)
   new-in-index: %d     # success (%s)
   new-in-workdir: %d   # success (%s)
   typechange: %d       # warning (%s)
@@ -384,25 +382,25 @@ git-status:
         permission_write,
         permission_exec,
         palette.error,
-        palette.placeholder,
+        metadata,
         metadata,
         palette.accent,
         palette.syntax_doc_comment,
         metadata,
         metadata,
-        palette.placeholder,
-        palette.placeholder,
+        metadata,
+        metadata,
         metadata,
         metadata,
         palette.warning,
         metadata,
-        palette.placeholder,
         metadata,
-        palette.placeholder,
+        metadata,
+        metadata,
         palette.border_variant,
-        palette.placeholder,
-        palette.placeholder,
-        palette.placeholder,
+        metadata,
+        metadata,
+        metadata,
         palette.success,
         palette.success,
         palette.warning,
@@ -736,7 +734,7 @@ function M.compile_opencode(schema)
     "diffAddedBg":                "diff_add_bg",
     "diffRemovedBg":              "diff_delete_bg",
     "diffContextBg":              "surface",
-    "diffLineNumber":             "placeholder",
+    "diffLineNumber":             "muted",
     "diffAddedLineNumberBg":      "diff_add_bg",
     "diffRemovedLineNumberBg":    "diff_delete_bg",
     "markdownText":               "fg",
@@ -744,7 +742,7 @@ function M.compile_opencode(schema)
     "markdownLink":               "blue",
     "markdownLinkText":           "bright_blue",
     "markdownCode":               "cyan",
-    "markdownBlockQuote":         "placeholder",
+    "markdownBlockQuote":         "muted",
     "markdownEmph":               "syntax_boolean",
     "markdownStrong":             "yellow",
     "markdownHorizontalRule":     "border",

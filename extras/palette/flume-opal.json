@@ -56,6 +56,8 @@
     "placeholder": "#817987",
     "predictive": "#817987",
     "red": "#a43b62",
+    "selection_bg": "#756681",
+    "selection_fg": "#fff9ff",
     "success": "#246b23",
     "surface": "#ebe6f0",
     "surface_alt": "#e4dee9",

@@ -166,17 +166,15 @@ test("configured state groups use readable semantic pairs", function()
     local flume = require("flume")
     local pairs = {
         { "Normal", "Normal" }, { "Normal", "DiffText" }, { "Normal", "DiffDelete" },
-        { "Comment", "CursorLine" }, { "Comment", "Visual" },
-        { "@comment.documentation", "Visual" }, { "@comment.documentation", "DiffText" },
-        { "@property", "Visual" }, { "@property", "DiffText" },
-        { "@module", "Visual" }, { "@module", "DiffText" },
+        { "Comment", "CursorLine" }, { "Visual", "Visual" },
+        { "@comment.documentation", "DiffText" },
+        { "@property", "DiffText" }, { "@module", "DiffText" },
         { "Pmenu", "Pmenu" }, { "PmenuSel", "PmenuSel" },
         { "StatusLine", "StatusLine" }, { "StatusLineNC", "StatusLineNC" },
         { "Folded", "Folded" }, { "MatchParen", "MatchParen" }, { "WildMenu", "WildMenu" },
         { "TabLine", "TabLine" }, { "TabLineSel", "TabLineSel" },
         { "CursorLineNr", "CursorLineNr" },
         { "Search", "Search" }, { "IncSearch", "IncSearch" }, { "CurSearch", "CurSearch" },
-        { "Search", "Visual" }, { "IncSearch", "Visual" }, { "CurSearch", "Visual" },
         { "Search", "DiffText" }, { "CurSearch", "DiffText" },
         { "DiagnosticVirtualTextError", "DiagnosticVirtualTextError" },
         { "DiagnosticVirtualTextWarn", "DiagnosticVirtualTextWarn" },
@@ -196,6 +194,41 @@ test("configured state groups use readable semantic pairs", function()
             truthy(ratio >= 4.5, string.format("%s %s on %s: %.2f:1", schema, pair[1], pair[2], ratio))
         end
     end
+end)
+
+test("selection is visible without brightening retained syntax", function()
+    for _, schema in ipairs(schema_names) do
+        local colors = palettes[schema]
+        for _, surface in ipairs({ "bg", "active_line", "surface", "surface_alt" }) do
+            truthy(contrast(colors.selection_bg, colors[surface]) >= 3,
+                schema .. " selection must stand apart from " .. surface)
+            truthy(contrast(colors.muted, colors[surface]) >= 4.5,
+                schema .. " secondary content must be readable on " .. surface)
+        end
+        truthy(contrast(colors.selection_fg, colors.selection_bg) >= 4.5,
+            schema .. " selected text must be readable")
+        require("flume").setup({ schema = schema, watch_sync = false })
+        for _, group in ipairs({ "Visual", "PmenuSel", "WildMenu" }) do
+            local actual = vim.api.nvim_get_hl(0, { name = group, link = false })
+            equal(actual.fg, color_number(colors.selection_fg), schema .. " " .. group .. " foreground")
+            equal(actual.bg, color_number(colors.selection_bg), schema .. " " .. group .. " background")
+        end
+        for _, group in ipairs({ "OilHidden", "NeoTreeGitIgnored", "NvimTreeGitIgnored", "FoldColumn" }) do
+            equal(vim.api.nvim_get_hl(0, { name = group, link = false }).fg,
+                color_number(colors.muted), schema .. " " .. group .. " is content, not decoration")
+        end
+        for _, app in ipairs({ "ghostty", "kitty" }) do
+            local path = "extras/" .. app .. "/flume-" .. schema .. (app == "kitty" and ".conf" or "")
+            local export = table.concat(vim.fn.readfile(path), "\n")
+            local separator = app == "kitty" and "_" or "%-"
+            equal(export:match("\nselection" .. separator .. "foreground%s*=?%s*(#[%x]+)"),
+                colors.selection_fg, schema .. " " .. app .. " selected ink")
+            equal(export:match("\nselection" .. separator .. "background%s*=?%s*(#[%x]+)"),
+                colors.selection_bg, schema .. " " .. app .. " selection fill")
+        end
+    end
+    equal(palettes.mira.syntax_comment, palettes.mira.syntax_doc_comment,
+        "Mira comment roles deliberately share one ink")
 end)
 
 test("Markdown technical text stays upright while prose retains italics", function()
@@ -244,7 +277,7 @@ test("stable schema registry and light foundations are preserved", function()
         local colors = palettes[schema]
         truthy(luminance(colors.bg) > luminance(colors.surface), schema .. " surface must recede from the canvas")
         truthy(luminance(colors.surface) > luminance(colors.surface_alt), schema .. " alternate surface keeps depth")
-        equal(colors.element_active, colors.surface_alt, schema .. " light selections use the strong surface")
+        equal(colors.element_active, colors.surface_alt, schema .. " active controls use the strong surface")
     end
 end)
 
@@ -266,6 +299,14 @@ test("Mira and Mesa preserve their editor-first design anchors", function()
     local mesa = palettes.mesa
 
     equal(mira.bg, "#24212f", "Mira violet-charcoal foundation")
+    equal(mira.surface, "#292634", "Mira violet-charcoal raised surface")
+    equal(mira.syntax_primary, "#cbc5d2", "Mira quiet neutral identifiers")
+    equal(mira.syntax_comment, "#9b94a4", "Mira subordinate comments")
+    equal(mira.syntax_function, "#82b8d4", "Mira cool blue functions")
+    equal(mira.syntax_type, "#d7b879", "Mira golden-sand types")
+    equal(mira.syntax_boolean, "#e4a084", "Mira copper literals")
+    equal(mira.syntax_property, "#d683a5", "Mira berry properties")
+    equal(mira.syntax_namespace, mira.syntax_property, "Mira deliberately shares berry ink")
     equal(mesa.bg, "#f3ede8", "Mesa rose-mineral foundation")
     truthy(mira.bg ~= "#282e34", "Mira regressed to the source website canvas")
     truthy(mesa.bg ~= "#e5e2d9", "Mesa regressed to the source website canvas")
@@ -846,22 +887,30 @@ test("generated extras are current and machine-readable", function()
         local suffix = require("flume.palette").schemas[schema].suffix
         local lsd = read_all("extras/lsd/colors" .. suffix .. ".yaml")
         truthy(not lsd:find("\nname:", 1, true), schema .. " LSD theme uses unsupported name keys")
+        local metadata_ink = lsd:match("\n  read: (%d+)")
+        for _, key in ipairs({ "older", "none", "no%-access", "unmodified", "ignored" }) do
+            equal(lsd:match("\n  " .. key .. ": (%d+)"), metadata_ink,
+                schema .. " LSD secondary content uses readable metadata ink")
+        end
+        local opencode = vim.json.decode(read_all("extras/opencode/flume" .. suffix .. ".json"))
+        equal(opencode.theme.diffLineNumber, "muted", schema .. " OpenCode line numbers are content")
+        equal(opencode.theme.markdownBlockQuote, "muted", schema .. " OpenCode block quotes are content")
         if require("flume.palette").schemas[schema].appearance == "light" then
             local read_color = lsd:match("\n  read: (%d+)")
             equal(lsd:match("\n  write: (%d+)"), read_color, schema .. " quiet write permission")
             equal(lsd:match("\n  exec: (%d+)"), read_color, schema .. " quiet exec permission")
 
-            local on_accent = require("flume.palette")[schema].on_accent
+            local selection_fg = require("flume.palette")[schema].selection_fg
             local ghostty = read_all("extras/ghostty/flume" .. suffix)
             equal(
                 ghostty:match("\nselection%-foreground = (#[%x]+)"),
-                on_accent,
+                selection_fg,
                 schema .. " Ghostty selection foreground"
             )
             local kitty = read_all("extras/kitty/flume" .. suffix .. ".conf")
             equal(
                 kitty:match("\nselection_foreground%s+(#[%x]+)"),
-                on_accent,
+                selection_fg,
                 schema .. " Kitty selection foreground"
             )
         end

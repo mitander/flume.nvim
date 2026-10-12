@@ -413,7 +413,7 @@ class SnapshotCommands(unittest.TestCase):
             theme = capture.terminal_theme('opal')
         self.assertEqual(theme['background'], '#f2eff7')
         self.assertEqual(theme['foreground'], '#554e5d')
-        self.assertEqual(theme['selection'], '#413b49')
+        self.assertEqual(theme['selection'], '#756681')
         self.assertEqual(theme['brightBlue'], '#0071a3')
 
     def test_original_editor_geometry_is_compact_except_for_the_hero(self):

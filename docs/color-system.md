@@ -7,13 +7,20 @@ contrast pairs from the canonical Lua table.
 
 ## Palette direction
 
-Dusk and Mira use violet-charcoal foundations. Opal pairs cool paper with vivid
-inks; Mesa pairs warm rose-mineral paper with restrained inks. Light palettes
-use darker foregrounds, not inverted dark-palette RGB values.
+The V1 set contains four palettes: Dusk, Opal, Mira, and Mesa. Dusk keeps its
+violet canvas, amber types, sage strings, dusty rose properties, and teal functions.
+Mira uses violet-charcoal surfaces, berry properties, sea-glass strings,
+cool blue functions, golden-sand types, and copper literals. Opal pairs cool
+paper with vivid inks; Mesa pairs warm rose-mineral paper with restrained inks.
+Light palettes use darker foregrounds, not inverted dark-palette RGB values.
 
-Mira and Mesa use cyan for functions, amber for types, violet for keywords,
-teal for strings, and magenta for namespaces and properties. The manifest lists
-the exact colors.
+Mira and Mesa retain the same function, type, keyword, string, and berry families.
+Their ink mixtures and foundations differ; neither is an inversion of a dark or
+light sibling. The manifest lists the exact colors.
+
+The palettes are still evolving. Color changes should address readability or
+mapping problems while preserving each palette's identity. Record significant
+visual changes in the [changelog](../CHANGELOG.md).
 
 ## Principles
 
@@ -22,22 +29,31 @@ the exact colors.
 3. **Controlled saturation.** Stronger color marks state or structure; ordinary identifiers remain neutral.
 4. **Stable hierarchy.** Color families keep the same meaning across Tree-sitter, LSP, plugins, and generated extras.
 5. **Palette intensity.** A palette may change chroma, as Opal does, without changing semantic assignments or surface hierarchy.
-6. **Explicit contrast.** Syntax text targets 4.5:1 on the canvas, cursor line, selection, and diff surfaces. Menu text, diagnostic virtual text, and filled labels also target 4.5:1. Focused, state-bearing boundaries target 3:1. Decorative separators remain intentionally quieter and do not carry state by color alone.
+6. **Explicit contrast.** Syntax text targets 4.5:1 on the canvas, cursor line, raised surfaces, and diff surfaces. Selected text uses a separate pair targeting 4.5:1; its fill targets 3:1 against the canvas and raised surfaces. Menu text, diagnostic virtual text, and filled labels also target 4.5:1. Focused, state-bearing boundaries target 3:1. Decorative separators remain intentionally quieter and do not carry state by color alone.
 
 ## Layers
 
 ### Surfaces and text
 
-`bg`, `surface`, and `surface_alt` establish depth. `element_active` marks selections and active controls. `text`, `fg`, `muted`, and `placeholder` form the text hierarchy. `on_accent` is reserved for text rendered on a filled accent or state color.
+`bg`, `surface`, and `surface_alt` establish depth. `element_active` is a quiet
+active-control surface that retains syntax inks. `selection_bg` and `selection_fg`
+form a stronger pair for Visual selection, completion selection, command-line
+menus, and terminal selection. These states replace the original text color;
+they do not require brighter syntax throughout the palette.
+
+`text` and `fg` are primary inks. `muted` renders readable secondary content,
+including hidden and ignored filenames, fold controls, inactive status text,
+exported metadata, and quoted prose. `placeholder` is for decoration or
+intentionally suppressed content, not filenames. `on_accent` is reserved for
+text rendered on a filled accent or state color.
 
 ### Semantic states
 
 `error`, `warning`, `success`, `info`, and `match` describe application state. `diff_add`, `diff_change`, and `diff_delete` describe version-control state. Their default values may share hues with ANSI colors, but users can override them independently. `diff_text_bg` marks changed words while retaining syntax foregrounds. It is distinct from `diff_change_bg` and does not consume an ANSI ink.
 
 Search uses `match` text on `warn_bg`, with an underline. Current matches use
-bold, underlined `text` on `diff_text_bg`. These foregrounds remain readable when
-Visual selection replaces the search background. Filled `on_accent` text does
-not have that property.
+bold, underlined `text` on `diff_text_bg`. Visual selection replaces both the
+foreground and background while retaining the search underline.
 
 ### Syntax
 
@@ -65,7 +81,8 @@ Language-qualified corrections live in `lua/flume/languages/`, one file per lang
 
 ### Integration colors
 
-Plugin integrations must resolve visible colors through semantic roles instead of accepting plugin-provided named colors. Actions and key bindings use `accent`; descriptions and secondary metadata use `muted`; search matches use `match`; selections use `element_active`; success and version-control state use their corresponding semantic roles. This prevents light-mode defaults such as fzf-lua's `MediumSpringGreen` from leaking into any schema.
+Plugin integrations must resolve visible colors through semantic roles instead of accepting plugin-provided named colors. Actions and key bindings use `accent`; descriptions and secondary metadata use `muted`; search matches use `match`; retained-ink active rows use `element_active`; explicit selected text uses the
+`selection_fg` / `selection_bg` pair; success and version-control state use their corresponding semantic roles. This prevents light-mode defaults such as fzf-lua's `MediumSpringGreen` from leaking into any schema.
 
 ### Terminal colors
 

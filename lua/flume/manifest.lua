@@ -58,6 +58,10 @@ function M.render()
         { "match", "element_active", 4.5 },
         { "text", "diff_text_bg", 4.5 },
         { "border_focused", "bg", 3.0 },
+        { "selection_fg", "selection_bg", 4.5 },
+        { "selection_bg", "bg", 3.0 },
+        { "selection_bg", "active_line", 3.0 },
+        { "muted", "surface_alt", 4.5 },
     }
     for _, schema in ipairs(palettes.schema_order) do
         local colors = palettes[schema]

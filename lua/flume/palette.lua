@@ -21,6 +21,8 @@ M.dusk = {
     element = "#232136",
     element_hover = "#262938",
     element_active = "#2f2c40",
+    selection_bg = "#857891",
+    selection_fg = "#100d15",
     on_accent = "#232136",
 
     -- Semantic states
@@ -111,6 +113,8 @@ M.opal = {
     element = "#f2eff7",
     element_hover = "#ebe6f0",
     element_active = "#e4dee9",
+    selection_bg = "#756681",
+    selection_fg = "#fff9ff",
     on_accent = "#fbf8fa",
 
     -- Semantic states
@@ -200,7 +204,7 @@ end
 -- Mira and Mesa borrow Kapsel's accent relationships, not its public identity or
 -- large-field website canvases. Neutral foundations preserve Flume's hierarchy.
 M.mira = complete_palette({
-    -- Base UI: violet-charcoal rather than the website's green-slate canvas.
+    -- Violet-charcoal foundation with mineral syntax inks.
     bg = "#24212f",
     fg = "#cbc5d2",
     text = "#d9d4df",
@@ -212,19 +216,21 @@ M.mira = complete_palette({
     indent_guide = "#323043",
     border = "#4b485a",
     border_variant = "#383547",
-    border_focused = "#72b5bf",
-    accent = "#72b5bf",
+    border_focused = "#82b8d4",
+    accent = "#82b8d4",
     surface = "#292634",
     surface_alt = "#302b3c",
     element_hover = "#292634",
     element_active = "#312d3e",
+    selection_bg = "#857891",
+    selection_fg = "#100d15",
     on_accent = "#24212f",
 
     -- Semantic states: softened source-logo accents.
     error = "#e187a6",
-    warning = "#d8a36b",
-    success = "#84b39f",
-    info = "#73a9c8",
+    warning = "#d7b879",
+    success = "#8bbca7",
+    info = "#82b8d4",
 
     -- Terminal / Base 16 Palette
     black = "#4b485a",
@@ -253,18 +259,19 @@ M.mira = complete_palette({
     dim_white = "#918a9a",
 
     -- Syntax Highlighting
-    syntax_boolean = "#e49a7b",
+    syntax_boolean = "#e4a084",
     syntax_comment = "#9b94a4",
-    syntax_doc_comment = "#9b94a3",
-    syntax_type = "#d8a36b",
+    syntax_doc_comment = "#9b94a4",
+    -- Golden sand is lighter and yellower than copper literals.
+    syntax_type = "#d7b879",
     syntax_keyword = "#b69bd2",
-    syntax_namespace = "#dd789b",
+    syntax_namespace = "#d683a5",
     syntax_primary = "#cbc5d2",
-    syntax_property = "#d18099",
+    syntax_property = "#d683a5",
     syntax_punctuation = "#9d96aa",
     syntax_punctuation_bracket = "#9b94a4",
-    syntax_punctuation_special = "#e49a7b",
-    syntax_string = "#84b39f",
+    syntax_punctuation_special = "#e4a084",
+    syntax_string = "#8bbca7",
     predictive = "#596073",
 
     -- Git Diff / Diagnostics
@@ -297,6 +304,8 @@ M.mesa = complete_palette({
     surface_alt = "#e5dcd9",
     element_hover = "#ebe3de",
     element_active = "#e5dcd9",
+    selection_bg = "#7c685d",
+    selection_fg = "#fffaf6",
     on_accent = "#fbf8fa",
 
     -- Semantic states: darker mixtures retain identity and text contrast.

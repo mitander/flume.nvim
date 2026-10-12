@@ -18,9 +18,9 @@ for mode, accent in pairs({
 end
 
 theme.inactive = {
-    a = { fg = c.placeholder, bg = c.surface },
-    b = { fg = c.placeholder, bg = c.surface },
-    c = { fg = c.placeholder, bg = c.surface, gui = "bold" },
+    a = { fg = c.muted, bg = c.surface },
+    b = { fg = c.muted, bg = c.surface },
+    c = { fg = c.muted, bg = c.surface, gui = "bold" },
 }
 
 return theme

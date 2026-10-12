@@ -254,6 +254,9 @@ function M.register(test, equal, truthy)
             end
             equal(theme.normal.a.fg, "#abcdef", "lualine ignored override")
             equal(theme.inactive.c.bg, c.surface, "inactive surface")
+            for _, section in ipairs({ "a", "b", "c" }) do
+                equal(theme.inactive[section].fg, c.muted, "inactive statusline content uses readable muted ink")
+            end
             local highlight = vim.api.nvim_get_hl(0, { name = "NvimTreeStatusLine", link = false })
             equal(highlight.fg, tonumber(c.text:sub(2), 16), "tree statusline text")
             equal(highlight.bg, tonumber(c.surface_alt:sub(2), 16), "tree statusline surface")

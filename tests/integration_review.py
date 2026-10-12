@@ -52,7 +52,7 @@ class IntegrationReviewTests(unittest.TestCase):
             pair.label: pair for pair in review.integration_pairs(ROOT, "lsd", "opal")
         }
         self.assertEqual(
-            lsd["permission.no-access (Ghostty host)"].foreground, "#706878"
+            lsd["permission.no-access (Ghostty host)"].foreground, "#626262"
         )
         self.assertEqual(lsd["user (Ghostty host)"].foreground, "#626262")
 

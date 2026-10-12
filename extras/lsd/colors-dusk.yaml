@@ -10,7 +10,7 @@ permission:
   write: 179            # quiet metadata (#dfb86b)
   exec: 144             # quiet metadata (#a4b78a)
   exec-sticky: 210      # error (#f08692)
-  no-access: 60        # placeholder (#67627d)
+  no-access: 145        # muted (#a6a2bb)
   octal: 145            # muted (#a6a2bb)
   acl: 109              # accent (#7dacbb)
   context: 247          # doc_comment (#9297a9)
@@ -18,28 +18,28 @@ permission:
 date:
   hour-old: 145         # muted (#a6a2bb)
   day-old: 145          # muted (#a6a2bb)
-  older: 60            # placeholder (#67627d)
+  older: 145            # muted (#a6a2bb)
 
 size:
-  none: 60             # placeholder (#67627d)
+  none: 145             # muted (#a6a2bb)
   small: 145            # muted (#a6a2bb)
   medium: 145           # muted (#a6a2bb)
   large: 179            # warning (#dfb86b)
 
 inode:
   valid: 145            # muted (#a6a2bb)
-  invalid: 60          # placeholder (#67627d)
+  invalid: 145          # muted (#a6a2bb)
 
 links:
   valid: 145            # muted (#a6a2bb)
-  invalid: 60          # placeholder (#67627d)
+  invalid: 145          # muted (#a6a2bb)
 
 tree-edge: 237          # border_variant (#343949)
 
 git-status:
-  default: 60          # placeholder (#67627d)
-  unmodified: 60       # placeholder (#67627d)
-  ignored: 60          # placeholder (#67627d)
+  default: 145          # muted (#a6a2bb)
+  unmodified: 145       # muted (#a6a2bb)
+  ignored: 145          # muted (#a6a2bb)
   new-in-index: 144     # success (#a4b78a)
   new-in-workdir: 144   # success (#a4b78a)
   typechange: 179       # warning (#dfb86b)

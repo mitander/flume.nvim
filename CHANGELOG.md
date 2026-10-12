@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- Refine Mira's golden-sand types, copper literals, and cool blue functions while
+  retaining its violet-charcoal surfaces, quiet neutral inks, berry properties,
+  and sea-glass strings.
+- Add explicit selection foreground/background roles for Visual, completion,
+  command-line menus, Ghostty, and Kitty. Retain quieter active-control surfaces.
+- Use readable muted ink for hidden and ignored filenames, fold controls,
+  inactive lualine text, LSD metadata, and OpenCode quoted prose and line numbers.
+- Deliberately share Mira's comment and documentation-comment inks.
+
 ## v0.3.0
 
 ### Upgrade notes
