@@ -1,6 +1,14 @@
 local M = {}
 
 local function reload_ghostty()
+    -- Ghostty on GTK reloads its configuration on SIGUSR2.
+    if vim.fn.has("linux") == 1 then
+        if vim.fn.executable("pkill") ~= 1 then
+            return false
+        end
+        vim.fn.system({ "pkill", "-USR2", "-x", "ghostty" })
+        return vim.v.shell_error == 0
+    end
     if vim.fn.has("mac") ~= 1 or vim.fn.executable("osascript") ~= 1 then
         return false
     end
