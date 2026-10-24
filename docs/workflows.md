@@ -17,9 +17,9 @@ directory. Select or include the active file in each application. Keep these inc
 shell and application configuration. Merge the examples into existing settings rather than replacing
 your whole configuration.
 
-For the five installable tools below, run the named `:FlumeInstallExtras` command in Neovim first.
-It refuses regular files and directories but replaces symlinks; check the destination if you already
-manage a theme there.
+For the six installable tools below, run the named `:FlumeInstallExtras` command
+in Neovim first. It refuses regular files and directories but replaces symlinks;
+check the destination if you already manage a theme there.
 
 ### Ghostty
 
@@ -128,15 +128,22 @@ file in a wrapper per invocation.
 
 ### Lazygit
 
-Layer the active Flume file after your personal configuration:
+Install the active fragment with `:FlumeInstallExtras lazygit`. It creates:
 
-```sh
-lazygit --use-config-file "$HOME/.config/lazygit/config.yml,/absolute/path/to/flume-data/current/lazygit.yml"
+```text
+~/.config/lazygit/flume.yml
 ```
 
-Use your actual config location; `lazygit --print-config-dir` reports the default directory. Keep
-keybindings and non-theme options in the personal file. New invocations read the active set; this
-example does not reload an already running Lazygit instance.
+Set `LG_CONFIG_FILE` after your personal configuration:
+
+```sh
+export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/flume.yml"
+```
+
+Use your actual config location; `lazygit --print-config-dir` reports the default directory.
+Keep keybindings and non-theme options in the personal file. New invocations read the active
+symlink, so future `:FlumeSync` calls update the theme without rewriting your configuration.
+An already running Lazygit instance does not reload.
 
 ### Delta
 

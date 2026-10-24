@@ -313,7 +313,7 @@ function M.register(test, equal, truthy)
         end
     end)
 
-    test("auto-install destinations remain the exact safe five", function()
+    test("auto-install destinations remain safe", function()
         local apps_config = require("flume.extras").get_apps()
         local expected = {
             ghostty = "~/.config/ghostty/themes/flume",
@@ -321,6 +321,7 @@ function M.register(test, equal, truthy)
             opencode = "~/.config/opencode/themes/flume.json",
             tmux = "~/.tmux/flume-theme.conf",
             lsd = "~/.config/lsd/colors.yaml",
+            lazygit = "~/.config/lazygit/flume.yml",
         }
         equal(sorted_keys(apps_config), sorted_keys(expected), "auto-install app set")
         for app, destination in pairs(expected) do
@@ -331,6 +332,7 @@ function M.register(test, equal, truthy)
         truthy(not instructions:find("ln -sf", 1, true), "manual instructions force-replace destinations")
         truthy(instructions:find("if [ -e '", 1, true), "manual instructions do not refuse existing files")
         truthy(instructions:find("ln -s '", 1, true), "manual instructions do not shell-quote links")
+        truthy(instructions:find("export LG_CONFIG_FILE=", 1, true), "Lazygit instructions configure layered files")
     end)
 
     test("generated palette manifest matches canonical Lua palette", function()

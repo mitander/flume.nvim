@@ -190,11 +190,11 @@ Commands become available when Flume is loaded.
 
 :FlumeInstallExtras [app]                                *:FlumeInstallExtras*
     Link an external theme at a standard destination. With no argument, link
-    all five installable apps. See |flume-install-extras| before running it.
+    all six installable apps. See |flume-install-extras| before running it.
 
 :FlumeExtras                                                    *:FlumeExtras*
     Open a scratch buffer with the current paths and shell link instructions
-    for the five installable apps. Shell instructions refuse existing paths.
+    for the six installable apps. Shell instructions refuse existing paths.
 
 :checkhealth flume                                         *flume-checkhealth*
     Check Neovim, 'termguicolors', palette, shared state, installer links, and
@@ -237,10 +237,13 @@ symlink destinations:
     opencode  ~/.config/opencode/themes/flume.json
     tmux      ~/.tmux/flume-theme.conf
     lsd       ~/.config/lsd/colors.yaml
+    lazygit   ~/.config/lazygit/flume.yml
 
 It refuses existing regular files and directories, but replaces existing
 symlinks. Check the destination first if you already manage a theme there.
 Move an existing file aside only after preserving any personal settings.
+For Lazygit, export `LG_CONFIG_FILE` with your personal config first and
+`~/.config/lazygit/flume.yml` second so the active fragment is layered.
 
 For application setup examples, see docs/workflows.md. Other
 tools have no automatic installer because their include locations vary.

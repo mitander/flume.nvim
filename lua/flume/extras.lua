@@ -45,6 +45,10 @@ local apps = {
         src = "extras/current/lsd.yaml",
         dest = "~/.config/lsd/colors.yaml",
     },
+    lazygit = {
+        src = "extras/current/lazygit.yml",
+        dest = "~/.config/lazygit/flume.yml",
+    },
 }
 
 function M.get_apps()
@@ -158,6 +162,7 @@ function M.get_instruction_lines()
         ":FlumeInstallExtras opencode",
         ":FlumeInstallExtras tmux",
         ":FlumeInstallExtras lsd",
+        ":FlumeInstallExtras lazygit",
         "```",
         "",
         "## Option 2: Copy-paste terminal commands",
@@ -186,6 +191,12 @@ function M.get_instruction_lines()
         table.insert(lines, "```")
         table.insert(lines, "")
     end
+
+    table.insert(lines, "Set this environment variable so new Lazygit sessions layer the active theme:")
+    table.insert(lines, "```bash")
+    table.insert(lines, "export LG_CONFIG_FILE=\"$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/flume.yml\"")
+    table.insert(lines, "```")
+    table.insert(lines, "")
     return lines
 end
 
