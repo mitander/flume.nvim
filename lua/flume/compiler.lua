@@ -318,12 +318,14 @@ function M.compile_lsd(schema)
     local permission_write = light and palette.muted or palette.yellow
     local permission_exec = light and palette.muted or palette.green
     local metadata = palette.muted
+    local date = palette.syntax_doc_comment
+    local size = palette.info
     local template = [[# Flume colors for lsd.
 # lsd color themes only style metadata; file names continue to use LS_COLORS.
 # Numeric values are xterm-256 approximations supported by crossterm.
 
-user: %d              # muted (%s)
-group: %d             # muted (%s)
+user: %d              # syntax_primary (%s)
+group: %d             # syntax_property (%s)
 
 permission:
   read: %d             # quiet metadata (%s)
@@ -336,23 +338,23 @@ permission:
   context: %d          # doc_comment (%s)
 
 date:
-  hour-old: %d         # muted (%s)
-  day-old: %d          # muted (%s)
-  older: %d            # muted (%s)
+  hour-old: %d         # syntax_doc_comment (%s)
+  day-old: %d          # syntax_doc_comment (%s)
+  older: %d            # syntax_doc_comment (%s)
 
 size:
-  none: %d             # muted (%s)
-  small: %d            # muted (%s)
-  medium: %d           # muted (%s)
+  none: %d             # info (%s)
+  small: %d            # info (%s)
+  medium: %d           # info (%s)
   large: %d            # warning (%s)
 
 inode:
-  valid: %d            # muted (%s)
-  invalid: %d          # muted (%s)
+  valid: %d            # placeholder (%s)
+  invalid: %d          # error (%s)
 
 links:
-  valid: %d            # muted (%s)
-  invalid: %d          # muted (%s)
+  valid: %d            # accent (%s)
+  invalid: %d          # error (%s)
 
 tree-edge: %d          # border_variant (%s)
 
@@ -376,8 +378,8 @@ git-status:
     end
 
     for _, value in ipairs({
-        metadata,
-        metadata,
+        palette.syntax_primary,
+        palette.syntax_property,
         permission_read,
         permission_write,
         permission_exec,
@@ -386,17 +388,17 @@ git-status:
         metadata,
         palette.accent,
         palette.syntax_doc_comment,
-        metadata,
-        metadata,
-        metadata,
-        metadata,
-        metadata,
-        metadata,
+        date,
+        date,
+        date,
+        size,
+        size,
+        size,
         palette.warning,
-        metadata,
-        metadata,
-        metadata,
-        metadata,
+        palette.placeholder,
+        palette.error,
+        palette.accent,
+        palette.error,
         palette.border_variant,
         metadata,
         metadata,

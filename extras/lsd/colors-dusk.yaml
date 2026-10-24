@@ -2,8 +2,8 @@
 # lsd color themes only style metadata; file names continue to use LS_COLORS.
 # Numeric values are xterm-256 approximations supported by crossterm.
 
-user: 145              # muted (#a6a2bb)
-group: 145             # muted (#a6a2bb)
+user: 252              # syntax_primary (#c9c5d9)
+group: 174             # syntax_property (#ce818d)
 
 permission:
   read: 145             # quiet metadata (#a6a2bb)
@@ -16,23 +16,23 @@ permission:
   context: 247          # doc_comment (#9297a9)
 
 date:
-  hour-old: 145         # muted (#a6a2bb)
-  day-old: 145          # muted (#a6a2bb)
-  older: 145            # muted (#a6a2bb)
+  hour-old: 247         # syntax_doc_comment (#9297a9)
+  day-old: 247          # syntax_doc_comment (#9297a9)
+  older: 247            # syntax_doc_comment (#9297a9)
 
 size:
-  none: 145             # muted (#a6a2bb)
-  small: 145            # muted (#a6a2bb)
-  medium: 145           # muted (#a6a2bb)
+  none: 109             # info (#7dacbb)
+  small: 109            # info (#7dacbb)
+  medium: 109           # info (#7dacbb)
   large: 179            # warning (#dfb86b)
 
 inode:
-  valid: 145            # muted (#a6a2bb)
-  invalid: 145          # muted (#a6a2bb)
+  valid: 60            # placeholder (#67627d)
+  invalid: 210          # error (#f08692)
 
 links:
-  valid: 145            # muted (#a6a2bb)
-  invalid: 145          # muted (#a6a2bb)
+  valid: 109            # accent (#7dacbb)
+  invalid: 210          # error (#f08692)
 
 tree-edge: 237          # border_variant (#343949)
 

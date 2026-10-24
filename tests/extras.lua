@@ -209,6 +209,9 @@ function M.register(test, equal, truthy)
                 end
             end
             equal(sorted_keys(lsd), sorted_keys(lsd_keys), schema .. " LSD keys")
+            truthy(lsd.user ~= lsd.group, schema .. " LSD user/group roles stay distinct")
+            truthy(lsd["date.hour-old"] ~= lsd["size.none"], schema .. " LSD date/size roles stay distinct")
+            truthy(lsd["inode.valid"] ~= lsd["links.valid"], schema .. " LSD inode/link roles stay distinct")
             for key, value in pairs(lsd) do
                 truthy(value >= 0 and value <= 255, schema .. " LSD " .. key .. " outside xterm range")
             end

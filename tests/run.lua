@@ -888,10 +888,14 @@ test("generated extras are current and machine-readable", function()
         local lsd = read_all("extras/lsd/colors" .. suffix .. ".yaml")
         truthy(not lsd:find("\nname:", 1, true), schema .. " LSD theme uses unsupported name keys")
         local metadata_ink = lsd:match("\n  read: (%d+)")
-        for _, key in ipairs({ "older", "none", "no%-access", "unmodified", "ignored" }) do
+        for _, key in ipairs({ "no%-access", "unmodified", "ignored" }) do
             equal(lsd:match("\n  " .. key .. ": (%d+)"), metadata_ink,
                 schema .. " LSD secondary content uses readable metadata ink")
         end
+        equal(lsd:match("\n  older: (%d+)"), lsd:match("\n  context: (%d+)"),
+            schema .. " LSD dates use documentation ink")
+        equal(lsd:match("\n  none: (%d+)"), lsd:match("\n  small: (%d+)"),
+            schema .. " LSD sizes use a shared info ink")
         local opencode = vim.json.decode(read_all("extras/opencode/flume" .. suffix .. ".json"))
         equal(opencode.theme.diffLineNumber, "muted", schema .. " OpenCode line numbers are content")
         equal(opencode.theme.markdownBlockQuote, "muted", schema .. " OpenCode block quotes are content")

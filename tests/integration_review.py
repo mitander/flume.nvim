@@ -54,7 +54,7 @@ class IntegrationReviewTests(unittest.TestCase):
         self.assertEqual(
             lsd["permission.no-access (Ghostty host)"].foreground, "#626262"
         )
-        self.assertEqual(lsd["user (Ghostty host)"].foreground, "#626262")
+        self.assertEqual(lsd["user (Ghostty host)"].foreground, "#4e4e4e")
 
     def test_report_highlights_real_changes_without_blessing_contrast(self):
         old = {"demo": {"opal": [review.Pair("Selection", "#ffffff", "#000000")]}}
