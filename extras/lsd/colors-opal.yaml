@@ -1,49 +1,49 @@
 # Flume colors for lsd.
 # lsd color themes only style metadata; file names continue to use LS_COLORS.
-# Numeric values are xterm-256 approximations supported by crossterm.
+# Quoted hex colors preserve the selected palette through lsd's crossterm parser.
 
-user: 239              # syntax_primary (#514e57)
-group: 131             # syntax_property (#9d395e)
+user: "#514e57"              # syntax_primary (#514e57)
+group: "#9d395e"             # syntax_property (#9d395e)
 
 permission:
-  read: 241             # quiet metadata (#615a68)
-  write: 241            # quiet metadata (#615a68)
-  exec: 241             # quiet metadata (#615a68)
-  exec-sticky: 131      # error (#9d395e)
-  no-access: 241        # muted (#615a68)
-  octal: 241            # muted (#615a68)
-  acl: 24              # accent (#00667e)
-  context: 241          # doc_comment (#636064)
+  read: "#615a68"             # quiet metadata (#615a68)
+  write: "#615a68"            # quiet metadata (#615a68)
+  exec: "#615a68"             # quiet metadata (#615a68)
+  exec-sticky: "#9d395e"      # error (#9d395e)
+  no-access: "#615a68"        # muted (#615a68)
+  octal: "#615a68"            # muted (#615a68)
+  acl: "#00667e"              # accent (#00667e)
+  context: "#636064"          # doc_comment (#636064)
 
 date:
-  hour-old: 241         # syntax_doc_comment (#636064)
-  day-old: 241          # syntax_doc_comment (#636064)
-  older: 241            # syntax_doc_comment (#636064)
+  hour-old: "#636064"         # syntax_doc_comment (#636064)
+  day-old: "#636064"          # syntax_doc_comment (#636064)
+  older: "#636064"            # syntax_doc_comment (#636064)
 
 size:
-  none: 24             # info (#00667e)
-  small: 24            # info (#00667e)
-  medium: 24           # info (#00667e)
-  large: 94            # warning (#7e5500)
+  none: "#00667e"             # info (#00667e)
+  small: "#00667e"            # info (#00667e)
+  medium: "#00667e"           # info (#00667e)
+  large: "#7e5500"            # warning (#7e5500)
 
 inode:
-  valid: 8            # placeholder (#817987)
-  invalid: 131          # error (#9d395e)
+  valid: "#817987"            # placeholder (#817987)
+  invalid: "#9d395e"          # error (#9d395e)
 
 links:
-  valid: 24            # accent (#00667e)
-  invalid: 131          # error (#9d395e)
+  valid: "#00667e"            # accent (#00667e)
+  invalid: "#9d395e"          # error (#9d395e)
 
-tree-edge: 251          # border_variant (#c8c0ca)
+tree-edge: "#c8c0ca"          # border_variant (#c8c0ca)
 
 git-status:
-  default: 241          # muted (#615a68)
-  unmodified: 241       # muted (#615a68)
-  ignored: 241          # muted (#615a68)
-  new-in-index: 22     # success (#246b23)
-  new-in-workdir: 22   # success (#246b23)
-  typechange: 94       # warning (#7e5500)
-  deleted: 131          # error (#9d395e)
-  renamed: 24          # accent (#00667e)
-  modified: 94         # warning (#7e5500)
-  conflicted: 131       # error (#9d395e)
+  default: "#615a68"          # muted (#615a68)
+  unmodified: "#615a68"       # muted (#615a68)
+  ignored: "#615a68"          # muted (#615a68)
+  new-in-index: "#246b23"     # success (#246b23)
+  new-in-workdir: "#246b23"   # success (#246b23)
+  typechange: "#7e5500"       # warning (#7e5500)
+  deleted: "#9d395e"          # error (#9d395e)
+  renamed: "#00667e"          # accent (#00667e)
+  modified: "#7e5500"          # warning (#7e5500)
+  conflicted: "#9d395e"        # error (#9d395e)

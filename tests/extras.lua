@@ -257,20 +257,20 @@ function M.register(test, equal, truthy)
 
             local lsd, section = {}, nil
             for line in read_all(path("lsd", schema)):gmatch("[^\n]+") do
-                line = line:gsub("%s+#.*$", "")
+                line = line:gsub("(#[%x]+)%s+#.*$", "%1"):gsub('"', "")
                 local top = line:match("^([%w%-]+):%s*$")
                 if top then
                     section = top
                 else
-                    local key, value = line:match("^([%w%-]+):%s*(%d+)")
+                    local key, value = line:match("^([%w%-]+):%s*(#[%x]+)")
                     if key then
-                        lsd[key] = tonumber(value)
+                        lsd[key] = value
                         section = nil
                     else
-                        key, value = line:match("^  ([%w%-]+):%s*(%d+)")
+                        key, value = line:match("^  ([%w%-]+):%s*(#[%x]+)")
                         if key then
                             truthy(section, schema .. " LSD nested key without section")
-                            lsd[section .. "." .. key] = tonumber(value)
+                            lsd[section .. "." .. key] = value
                         end
                     end
                 end
@@ -280,7 +280,7 @@ function M.register(test, equal, truthy)
             truthy(lsd["date.hour-old"] ~= lsd["size.none"], schema .. " LSD date/size roles stay distinct")
             truthy(lsd["inode.valid"] ~= lsd["links.valid"], schema .. " LSD inode/link roles stay distinct")
             for key, value in pairs(lsd) do
-                truthy(value >= 0 and value <= 255, schema .. " LSD " .. key .. " outside xterm range")
+                truthy(value:match("^#[%x]+$") ~= nil, schema .. " LSD " .. key .. " is not a hex color")
             end
 
             local fzf_options = read_all(path("fzf", schema))
@@ -333,10 +333,13 @@ function M.register(test, equal, truthy)
             "inactiveBorderColor",
             "searchingActiveBorderColor",
             "optionsTextColor",
+            "selectedLineFgColor",
             "selectedLineBgColor",
             "inactiveViewSelectedLineBgColor",
             "cherryPickedCommitBgColor",
             "cherryPickedCommitFgColor",
+            "markedBaseCommitBgColor",
+            "markedBaseCommitFgColor",
             "unstagedChangesColor",
             "defaultFgColor",
         })
@@ -368,6 +371,14 @@ function M.register(test, equal, truthy)
                 lazygit[key] = true
             end
             equal(sorted_keys(lazygit), sorted_keys(lazygit_keys), schema .. " Lazygit theme keys")
+            truthy(
+                lazygit_content:find('authorColors:\n      "*": "' .. colors.syntax_primary .. '"', 1, true),
+                schema .. " Lazygit author color"
+            )
+            truthy(
+                lazygit_content:find('branchColorPatterns:\n      ".*": "' .. colors.accent .. '"', 1, true),
+                schema .. " Lazygit branch color"
+            )
             for _, mapping in ipairs({
                 '--minus-style="syntax ' .. colors.diff_delete_bg .. '"',
                 '--minus-emph-style="syntax ' .. colors.diff_delete_emphasis .. '"',

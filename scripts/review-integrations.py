@@ -240,16 +240,12 @@ def integration_pairs(
             heading = re.match(r"^([\w-]+):\s*$", line)
             if heading:
                 section = heading[1] + "."
-            match = re.match(r"^(\s*)([\w-]+):\s*(\d+)", line)
+            match = re.match(r'^(\s*)([\w-]+):\s*"?(#[\da-fA-F]{6}|\d+)"?', line)
             if match:
-                indent, key, index = match.groups()
+                indent, key, value = match.groups()
                 label = (section if indent else "") + key
-                # Slots 0..15 follow Ghostty, not the stock xterm palette.
-                add(
-                    label + " (Ghostty host)",
-                    xterm_color(int(index), ansi),
-                    terminal_bg,
-                )
+                color = value if value.startswith("#") else xterm_color(int(value), ansi)
+                add(label + " (LSD host)", color, terminal_bg)
     elif app == "delta":
         values = dict(
             re.findall(r'^\s+([\w-]+) = .*?"(#[\da-fA-F]{6})"', text, re.MULTILINE)

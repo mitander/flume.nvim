@@ -5,12 +5,19 @@ gui:
     inactiveBorderColor: ["#8c837f"]
     searchingActiveBorderColor: ["#7d521e", bold]
     optionsTextColor: ["#5f5964"]
+    selectedLineFgColor: ["#fffaf6"]
     selectedLineBgColor: ["#e5dcd9"]
     inactiveViewSelectedLineBgColor: ["#ebe3de"]
     cherryPickedCommitBgColor: ["#e5dcd9"]
     cherryPickedCommitFgColor: ["#695187"]
+    markedBaseCommitBgColor: ["#e9ded1"]
+    markedBaseCommitFgColor: ["#695187"]
     unstagedChangesColor: ["#89455f"]
     defaultFgColor: ["#524f50"]
+    authorColors:
+      "*": "#524f50"
+    branchColorPatterns:
+      ".*": "#2f6271"
 git:
   pagers:
     - colorArg: always

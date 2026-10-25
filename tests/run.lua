@@ -1033,27 +1033,31 @@ test("generated extras are current and machine-readable", function()
         local suffix = require("flume.palette").schemas[schema].suffix
         local lsd = read_all("extras/lsd/colors" .. suffix .. ".yaml")
         truthy(not lsd:find("\nname:", 1, true), schema .. " LSD theme uses unsupported name keys")
-        local metadata_ink = lsd:match("\n  read: (%d+)")
+        local metadata_ink = lsd:match("\n  read: (#[%x]+)")
         for _, key in ipairs({ "no%-access", "unmodified", "ignored" }) do
             equal(
-                lsd:match("\n  " .. key .. ": (%d+)"),
+                lsd:match("\n  " .. key .. ": (#[%x]+)"),
                 metadata_ink,
                 schema .. " LSD secondary content uses readable metadata ink"
             )
         end
         equal(
-            lsd:match("\n  older: (%d+)"),
-            lsd:match("\n  context: (%d+)"),
+            lsd:match("\n  older: (#[%x]+)"),
+            lsd:match("\n  context: (#[%x]+)"),
             schema .. " LSD dates use documentation ink"
         )
-        equal(lsd:match("\n  none: (%d+)"), lsd:match("\n  small: (%d+)"), schema .. " LSD sizes use a shared info ink")
+        equal(
+            lsd:match("\n  none: (#[%x]+)"),
+            lsd:match("\n  small: (#[%x]+)"),
+            schema .. " LSD sizes use a shared info ink"
+        )
         local opencode = vim.json.decode(read_all("extras/opencode/flume" .. suffix .. ".json"))
         equal(opencode.theme.diffLineNumber, "muted", schema .. " OpenCode line numbers are content")
         equal(opencode.theme.markdownBlockQuote, "muted", schema .. " OpenCode block quotes are content")
         if require("flume.palette").schemas[schema].appearance == "light" then
-            local read_color = lsd:match("\n  read: (%d+)")
-            equal(lsd:match("\n  write: (%d+)"), read_color, schema .. " quiet write permission")
-            equal(lsd:match("\n  exec: (%d+)"), read_color, schema .. " quiet exec permission")
+            local read_color = lsd:match("\n  read: (#[%x]+)")
+            equal(lsd:match("\n  write: (#[%x]+)"), read_color, schema .. " quiet write permission")
+            equal(lsd:match("\n  exec: (#[%x]+)"), read_color, schema .. " quiet exec permission")
 
             local selection_fg = require("flume.palette")[schema].selection_fg
             local ghostty = read_all("extras/ghostty/flume" .. suffix)

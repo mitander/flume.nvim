@@ -324,58 +324,58 @@ function M.compile_lsd(schema)
     local size = palette.info
     local template = [[# Flume colors for lsd.
 # lsd color themes only style metadata; file names continue to use LS_COLORS.
-# Numeric values are xterm-256 approximations supported by crossterm.
+# Quoted hex colors preserve the selected palette through lsd's crossterm parser.
 
-user: %d              # syntax_primary (%s)
-group: %d             # syntax_property (%s)
+user: "%s"              # syntax_primary (%s)
+group: "%s"             # syntax_property (%s)
 
 permission:
-  read: %d             # quiet metadata (%s)
-  write: %d            # quiet metadata (%s)
-  exec: %d             # quiet metadata (%s)
-  exec-sticky: %d      # error (%s)
-  no-access: %d        # muted (%s)
-  octal: %d            # muted (%s)
-  acl: %d              # accent (%s)
-  context: %d          # doc_comment (%s)
+  read: "%s"             # quiet metadata (%s)
+  write: "%s"            # quiet metadata (%s)
+  exec: "%s"             # quiet metadata (%s)
+  exec-sticky: "%s"      # error (%s)
+  no-access: "%s"        # muted (%s)
+  octal: "%s"            # muted (%s)
+  acl: "%s"              # accent (%s)
+  context: "%s"          # doc_comment (%s)
 
 date:
-  hour-old: %d         # syntax_doc_comment (%s)
-  day-old: %d          # syntax_doc_comment (%s)
-  older: %d            # syntax_doc_comment (%s)
+  hour-old: "%s"         # syntax_doc_comment (%s)
+  day-old: "%s"          # syntax_doc_comment (%s)
+  older: "%s"            # syntax_doc_comment (%s)
 
 size:
-  none: %d             # info (%s)
-  small: %d            # info (%s)
-  medium: %d           # info (%s)
-  large: %d            # warning (%s)
+  none: "%s"             # info (%s)
+  small: "%s"            # info (%s)
+  medium: "%s"           # info (%s)
+  large: "%s"            # warning (%s)
 
 inode:
-  valid: %d            # placeholder (%s)
-  invalid: %d          # error (%s)
+  valid: "%s"            # placeholder (%s)
+  invalid: "%s"          # error (%s)
 
 links:
-  valid: %d            # accent (%s)
-  invalid: %d          # error (%s)
+  valid: "%s"            # accent (%s)
+  invalid: "%s"          # error (%s)
 
-tree-edge: %d          # border_variant (%s)
+tree-edge: "%s"          # border_variant (%s)
 
 git-status:
-  default: %d          # muted (%s)
-  unmodified: %d       # muted (%s)
-  ignored: %d          # muted (%s)
-  new-in-index: %d     # success (%s)
-  new-in-workdir: %d   # success (%s)
-  typechange: %d       # warning (%s)
-  deleted: %d          # error (%s)
-  renamed: %d          # accent (%s)
-  modified: %d         # warning (%s)
-  conflicted: %d       # error (%s)
+  default: "%s"          # muted (%s)
+  unmodified: "%s"       # muted (%s)
+  ignored: "%s"          # muted (%s)
+  new-in-index: "%s"     # success (%s)
+  new-in-workdir: "%s"   # success (%s)
+  typechange: "%s"       # warning (%s)
+  deleted: "%s"          # error (%s)
+  renamed: "%s"          # accent (%s)
+  modified: "%s"          # warning (%s)
+  conflicted: "%s"        # error (%s)
 ]]
 
     local args = {}
     local function add(value)
-        args[#args + 1] = hex_to_xterm(value)
+        args[#args + 1] = value
         args[#args + 1] = value
     end
 
@@ -572,12 +572,19 @@ gui:
     inactiveBorderColor: ["%s"]
     searchingActiveBorderColor: ["%s", bold]
     optionsTextColor: ["%s"]
+    selectedLineFgColor: ["%s"]
     selectedLineBgColor: ["%s"]
     inactiveViewSelectedLineBgColor: ["%s"]
     cherryPickedCommitBgColor: ["%s"]
     cherryPickedCommitFgColor: ["%s"]
+    markedBaseCommitBgColor: ["%s"]
+    markedBaseCommitFgColor: ["%s"]
     unstagedChangesColor: ["%s"]
     defaultFgColor: ["%s"]
+    authorColors:
+      "*": "%s"
+    branchColorPatterns:
+      ".*": "%s"
 git:
   pagers:
     - colorArg: always
@@ -589,12 +596,17 @@ git:
         palette.border,
         palette.match,
         palette.muted,
+        palette.selection_fg,
         palette.element_active,
         palette.active_line,
         palette.element_active,
         palette.syntax_keyword,
+        palette.warn_bg,
+        palette.syntax_keyword,
         palette.diff_delete,
         palette.syntax_primary,
+        palette.syntax_primary,
+        palette.accent,
         is_light(schema) and "light" or "dark",
         palette.diff_delete_bg,
         palette.diff_delete_emphasis,

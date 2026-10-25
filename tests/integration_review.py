@@ -52,9 +52,9 @@ class IntegrationReviewTests(unittest.TestCase):
             pair.label: pair for pair in review.integration_pairs(ROOT, "lsd", "opal")
         }
         self.assertEqual(
-            lsd["permission.no-access (Ghostty host)"].foreground, "#626262"
+            lsd["permission.no-access (LSD host)"].foreground, "#615a68"
         )
-        self.assertEqual(lsd["user (Ghostty host)"].foreground, "#4e4e4e")
+        self.assertEqual(lsd["user (LSD host)"].foreground, "#514e57")
 
     def test_report_highlights_real_changes_without_blessing_contrast(self):
         old = {"demo": {"opal": [review.Pair("Selection", "#ffffff", "#000000")]}}
