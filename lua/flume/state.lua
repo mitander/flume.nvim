@@ -155,10 +155,14 @@ function M.activate(schema)
 
         local changes = {}
         for _, integration in ipairs(integrations) do
-            changes[integration.name] = copy(root .. "/" .. integration.source:format(palette.suffix), integration.current)
+            changes[integration.name] =
+                copy(root .. "/" .. integration.source:format(palette.suffix), integration.current)
         end
 
-        local set_name = set_prefix .. schema .. "-" .. vim.fn.sha256(table.concat(manifest, "\n")):sub(1, digest_length)
+        local set_name = set_prefix
+            .. schema
+            .. "-"
+            .. vim.fn.sha256(table.concat(manifest, "\n")):sub(1, digest_length)
         local set_path = extras .. "/" .. set_name
         local promoted, promote_error = uv.fs_rename(staged_set, set_path)
         if not promoted then
@@ -195,8 +199,11 @@ function M.activate(schema)
                 -- Verify complete recovery sets before reuse, even when inactive.
                 local prefix = set_name .. "-"
                 for name, kind in vim.fs.dir(extras) do
-                    if kind == "directory" and name:sub(1, #prefix) == prefix
-                        and identical_set(extras .. "/" .. name) then
+                    if
+                        kind == "directory"
+                        and name:sub(1, #prefix) == prefix
+                        and identical_set(extras .. "/" .. name)
+                    then
                         set_name = name
                         set_path = extras .. "/" .. name
                         reusable = true
@@ -274,8 +281,13 @@ function M.activate(schema)
     end
     local forwarded, forward_error = M.forward_legacy()
     if not forwarded then
-        vim.notify("Flume synchronized, but legacy links could not be updated: " .. forward_error
-            .. ". Relink integrations to " .. current, vim.log.levels.WARN)
+        vim.notify(
+            "Flume synchronized, but legacy links could not be updated: "
+                .. forward_error
+                .. ". Relink integrations to "
+                .. current,
+            vim.log.levels.WARN
+        )
     end
     return result
 end

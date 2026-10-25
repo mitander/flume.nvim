@@ -107,23 +107,58 @@ test("schemas have identical valid palette contracts", function()
         end
         for key, value in pairs(colors) do
             truthy(palette[key], "Dusk palette is missing " .. key)
-            truthy(type(value) == "string" and value:match("^#%x%x%x%x%x%x$"), schema .. " " .. key .. " is not #RRGGBB")
+            truthy(
+                type(value) == "string" and value:match("^#%x%x%x%x%x%x$"),
+                schema .. " " .. key .. " is not #RRGGBB"
+            )
         end
     end
 end)
 
 test("primary and filled text meet contrast contracts", function()
     local ansi_roles = {
-        "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white",
-        "bright_black", "bright_red", "bright_green", "bright_yellow", "bright_blue",
-        "bright_magenta", "bright_cyan", "bright_white",
+        "black",
+        "red",
+        "green",
+        "yellow",
+        "blue",
+        "magenta",
+        "cyan",
+        "white",
+        "bright_black",
+        "bright_red",
+        "bright_green",
+        "bright_yellow",
+        "bright_blue",
+        "bright_magenta",
+        "bright_cyan",
+        "bright_white",
     }
     local light_foreground_roles = {
-        "error", "warning", "success", "info", "match", "diff_add", "diff_change", "diff_delete",
-        "syntax_attribute", "syntax_boolean", "syntax_comment", "syntax_doc_comment", "syntax_constant",
-        "syntax_function", "syntax_keyword", "syntax_namespace", "syntax_primary", "syntax_property",
-        "syntax_punctuation", "syntax_punctuation_bracket", "syntax_punctuation_special", "syntax_special",
-        "syntax_string", "syntax_type",
+        "error",
+        "warning",
+        "success",
+        "info",
+        "match",
+        "diff_add",
+        "diff_change",
+        "diff_delete",
+        "syntax_attribute",
+        "syntax_boolean",
+        "syntax_comment",
+        "syntax_doc_comment",
+        "syntax_constant",
+        "syntax_function",
+        "syntax_keyword",
+        "syntax_namespace",
+        "syntax_primary",
+        "syntax_property",
+        "syntax_punctuation",
+        "syntax_punctuation_bracket",
+        "syntax_punctuation_special",
+        "syntax_special",
+        "syntax_string",
+        "syntax_type",
     }
     for _, schema in ipairs(schema_names) do
         local colors = palettes[schema]
@@ -136,7 +171,10 @@ test("primary and filled text meet contrast contracts", function()
                 truthy(contrast(colors[role], colors.bg) >= 4.5, schema .. " " .. role .. " is below 4.5:1")
             end
             for _, role in ipairs(ansi_roles) do
-                truthy(contrast(colors[role], colors.terminal_bg) >= 4.5, schema .. " ANSI " .. role .. " is below 4.5:1")
+                truthy(
+                    contrast(colors[role], colors.terminal_bg) >= 4.5,
+                    schema .. " ANSI " .. role .. " is below 4.5:1"
+                )
             end
         end
     end
@@ -144,8 +182,15 @@ end)
 
 test("syntax text stays readable on retained-foreground surfaces", function()
     local surfaces = {
-        "bg", "active_line", "surface", "surface_alt", "element_active",
-        "diff_add_bg", "diff_change_bg", "diff_delete_bg", "diff_text_bg",
+        "bg",
+        "active_line",
+        "surface",
+        "surface_alt",
+        "element_active",
+        "diff_add_bg",
+        "diff_change_bg",
+        "diff_delete_bg",
+        "diff_text_bg",
     }
     for _, schema in ipairs(schema_names) do
         local colors = palettes[schema]
@@ -165,17 +210,29 @@ end)
 test("configured state groups use readable semantic pairs", function()
     local flume = require("flume")
     local pairs = {
-        { "Normal", "Normal" }, { "Normal", "DiffText" }, { "Normal", "DiffDelete" },
-        { "Comment", "CursorLine" }, { "Visual", "Visual" },
+        { "Normal", "Normal" },
+        { "Normal", "DiffText" },
+        { "Normal", "DiffDelete" },
+        { "Comment", "CursorLine" },
+        { "Visual", "Visual" },
         { "@comment.documentation", "DiffText" },
-        { "@property", "DiffText" }, { "@module", "DiffText" },
-        { "Pmenu", "Pmenu" }, { "PmenuSel", "PmenuSel" },
-        { "StatusLine", "StatusLine" }, { "StatusLineNC", "StatusLineNC" },
-        { "Folded", "Folded" }, { "MatchParen", "MatchParen" }, { "WildMenu", "WildMenu" },
-        { "TabLine", "TabLine" }, { "TabLineSel", "TabLineSel" },
+        { "@property", "DiffText" },
+        { "@module", "DiffText" },
+        { "Pmenu", "Pmenu" },
+        { "PmenuSel", "PmenuSel" },
+        { "StatusLine", "StatusLine" },
+        { "StatusLineNC", "StatusLineNC" },
+        { "Folded", "Folded" },
+        { "MatchParen", "MatchParen" },
+        { "WildMenu", "WildMenu" },
+        { "TabLine", "TabLine" },
+        { "TabLineSel", "TabLineSel" },
         { "CursorLineNr", "CursorLineNr" },
-        { "Search", "Search" }, { "IncSearch", "IncSearch" }, { "CurSearch", "CurSearch" },
-        { "Search", "DiffText" }, { "CurSearch", "DiffText" },
+        { "Search", "Search" },
+        { "IncSearch", "IncSearch" },
+        { "CurSearch", "CurSearch" },
+        { "Search", "DiffText" },
+        { "CurSearch", "DiffText" },
         { "DiagnosticVirtualTextError", "DiagnosticVirtualTextError" },
         { "DiagnosticVirtualTextWarn", "DiagnosticVirtualTextWarn" },
         { "DiagnosticVirtualTextInfo", "DiagnosticVirtualTextInfo" },
@@ -183,10 +240,16 @@ test("configured state groups use readable semantic pairs", function()
     }
     for _, schema in ipairs(schema_names) do
         flume.setup({ schema = schema, watch_sync = false })
-        equal(vim.api.nvim_get_hl(0, { name = "DiffText", link = false }).bg,
-            color_number(palettes[schema].diff_text_bg), schema .. " DiffText surface")
-        equal(vim.api.nvim_get_hl(0, { name = "DiffText", link = false }).fg, nil,
-            schema .. " DiffText retains syntax foregrounds")
+        equal(
+            vim.api.nvim_get_hl(0, { name = "DiffText", link = false }).bg,
+            color_number(palettes[schema].diff_text_bg),
+            schema .. " DiffText surface"
+        )
+        equal(
+            vim.api.nvim_get_hl(0, { name = "DiffText", link = false }).fg,
+            nil,
+            schema .. " DiffText retains syntax foregrounds"
+        )
         for _, pair in ipairs(pairs) do
             local foreground = vim.api.nvim_get_hl(0, { name = pair[1], link = false }).fg
             local background = vim.api.nvim_get_hl(0, { name = pair[2], link = false }).bg
@@ -200,13 +263,16 @@ test("selection is visible without brightening retained syntax", function()
     for _, schema in ipairs(schema_names) do
         local colors = palettes[schema]
         for _, surface in ipairs({ "bg", "active_line", "surface", "surface_alt" }) do
-            truthy(contrast(colors.selection_bg, colors[surface]) >= 3,
-                schema .. " selection must stand apart from " .. surface)
-            truthy(contrast(colors.muted, colors[surface]) >= 4.5,
-                schema .. " secondary content must be readable on " .. surface)
+            truthy(
+                contrast(colors.selection_bg, colors[surface]) >= 3,
+                schema .. " selection must stand apart from " .. surface
+            )
+            truthy(
+                contrast(colors.muted, colors[surface]) >= 4.5,
+                schema .. " secondary content must be readable on " .. surface
+            )
         end
-        truthy(contrast(colors.selection_fg, colors.selection_bg) >= 4.5,
-            schema .. " selected text must be readable")
+        truthy(contrast(colors.selection_fg, colors.selection_bg) >= 4.5, schema .. " selected text must be readable")
         require("flume").setup({ schema = schema, watch_sync = false })
         for _, group in ipairs({ "Visual", "PmenuSel", "WildMenu" }) do
             local actual = vim.api.nvim_get_hl(0, { name = group, link = false })
@@ -214,21 +280,33 @@ test("selection is visible without brightening retained syntax", function()
             equal(actual.bg, color_number(colors.selection_bg), schema .. " " .. group .. " background")
         end
         for _, group in ipairs({ "OilHidden", "NeoTreeGitIgnored", "NvimTreeGitIgnored", "FoldColumn" }) do
-            equal(vim.api.nvim_get_hl(0, { name = group, link = false }).fg,
-                color_number(colors.muted), schema .. " " .. group .. " is content, not decoration")
+            equal(
+                vim.api.nvim_get_hl(0, { name = group, link = false }).fg,
+                color_number(colors.muted),
+                schema .. " " .. group .. " is content, not decoration"
+            )
         end
         for _, app in ipairs({ "ghostty", "kitty" }) do
             local path = "extras/" .. app .. "/flume-" .. schema .. (app == "kitty" and ".conf" or "")
             local export = table.concat(vim.fn.readfile(path), "\n")
             local separator = app == "kitty" and "_" or "%-"
-            equal(export:match("\nselection" .. separator .. "foreground%s*=?%s*(#[%x]+)"),
-                colors.selection_fg, schema .. " " .. app .. " selected ink")
-            equal(export:match("\nselection" .. separator .. "background%s*=?%s*(#[%x]+)"),
-                colors.selection_bg, schema .. " " .. app .. " selection fill")
+            equal(
+                export:match("\nselection" .. separator .. "foreground%s*=?%s*(#[%x]+)"),
+                colors.selection_fg,
+                schema .. " " .. app .. " selected ink"
+            )
+            equal(
+                export:match("\nselection" .. separator .. "background%s*=?%s*(#[%x]+)"),
+                colors.selection_bg,
+                schema .. " " .. app .. " selection fill"
+            )
         end
     end
-    equal(palettes.mira.syntax_comment, palettes.mira.syntax_doc_comment,
-        "Mira comment roles deliberately share one ink")
+    equal(
+        palettes.mira.syntax_comment,
+        palettes.mira.syntax_doc_comment,
+        "Mira comment roles deliberately share one ink"
+    )
 end)
 
 test("Markdown technical text stays upright while prose retains italics", function()
@@ -238,19 +316,26 @@ test("Markdown technical text stays upright while prose retains italics", functi
             local actual = vim.api.nvim_get_hl(0, { name = group, link = false })
             truthy(not actual.italic, schema .. " " .. group .. " must stay upright")
         end
-        truthy(vim.api.nvim_get_hl(0, { name = "@markup.link.url", link = false }).underline,
-            schema .. " URLs retain their underline")
+        truthy(
+            vim.api.nvim_get_hl(0, { name = "@markup.link.url", link = false }).underline,
+            schema .. " URLs retain their underline"
+        )
         for _, group in ipairs({ "@markup.italic", "@markup.quote" }) do
-            truthy(vim.api.nvim_get_hl(0, { name = group, link = false }).italic,
-                schema .. " " .. group .. " retains prose italics")
+            truthy(
+                vim.api.nvim_get_hl(0, { name = group, link = false }).italic,
+                schema .. " " .. group .. " retains prose italics"
+            )
         end
     end
 end)
 
 test("macro, import, directive and escape providers agree", function()
     for _, schema in ipairs(schema_names) do
-        require("flume").setup({ schema = schema, watch_sync = false,
-            styles = { functions = { italic = true } } })
+        require("flume").setup({
+            schema = schema,
+            watch_sync = false,
+            styles = { functions = { italic = true } },
+        })
         for _, groups in ipairs({
             { "Macro", "@function.macro", "@lsp.type.macro" },
             { "Include", "@keyword.import" },
@@ -353,7 +438,6 @@ test("named schema entry points resolve before overrides", function()
         equal(vim.o.background, palettes.schemas[schema].appearance, schema .. " background option")
         equal(vim.g.colors_name, "flume-" .. schema, schema .. " colorscheme name")
     end
-
 end)
 
 test("supported plugin highlights stay inside every schema palette", function()
@@ -492,10 +576,16 @@ test("syntax roles stay consistent across language providers", function()
     local zig_namespace = vim.api.nvim_get_hl(0, { name = "@lsp.type.namespace.zig", link = false })
     equal(zig_namespace.fg, color_number(palette.syntax_namespace), "Zig namespaces keep their semantic role")
     for _, group in ipairs({
-        "@lsp.typemod.variable.readonly", "@lsp.typemod.variable.static",
-        "@lsp.typemod.property.readonly", "@lsp.typemod.property.static",
+        "@lsp.typemod.variable.readonly",
+        "@lsp.typemod.variable.static",
+        "@lsp.typemod.property.readonly",
+        "@lsp.typemod.property.static",
     }) do
-        equal(next(vim.api.nvim_get_hl(0, { name = group, link = false })), nil, group .. " must not recolor identifiers")
+        equal(
+            next(vim.api.nvim_get_hl(0, { name = group, link = false })),
+            nil,
+            group .. " must not recolor identifiers"
+        )
     end
 
     equal(
@@ -571,21 +661,27 @@ end)
 
 test("active editors follow externally synchronized schemas", function()
     local flume = require("flume")
-    local original = "dusk"
-    local synchronized = "opal"
-    require("flume.compiler").activate(original)
-    flume.setup({ schema = original })
+    local original_schema = "dusk"
+    local synchronized_schema = "opal"
+    require("flume.compiler").activate(original_schema)
+    flume.setup({ schema = original_schema })
 
-    require("flume.compiler").activate(synchronized)
-    truthy(vim.wait(2000, function()
-        return flume.config.schema == synchronized
-    end, 10), "filesystem watcher did not apply the synchronized schema")
+    require("flume.compiler").activate(synchronized_schema)
+    truthy(
+        vim.wait(2000, function()
+            return flume.config.schema == synchronized_schema
+        end, 10),
+        "filesystem watcher did not apply the synchronized schema"
+    )
     equal(vim.g.colors_name, "flume-opal", "watched colorscheme")
 
-    require("flume.compiler").activate(original)
-    truthy(vim.wait(2000, function()
-        return flume.config.schema == original
-    end, 10), "filesystem watcher did not restore the original schema")
+    require("flume.compiler").activate(original_schema)
+    truthy(
+        vim.wait(2000, function()
+            return flume.config.schema == original_schema
+        end, 10),
+        "filesystem watcher did not restore the original schema"
+    )
 end)
 
 test("disabled sync watcher ignores queued schema changes", function()
@@ -600,14 +696,19 @@ test("disabled sync watcher ignores queued schema changes", function()
             queued[#queued + 1] = callback
         end
         require("flume.compiler").activate("opal")
-        truthy(vim.wait(2000, function()
-            return #queued > 0
-        end, 10), "watcher did not schedule a schema change")
+        truthy(
+            vim.wait(2000, function()
+                return #queued > 0
+            end, 10),
+            "watcher did not schedule a schema change"
+        )
+
         flume.setup({ schema = "mira", watch_sync = false })
         for _, callback in ipairs(queued) do
             callback()
         end
         equal(flume.config.schema, "mira", "queued change overrode independent palette")
+
         -- Restarting must not make callbacks from the old watcher valid again.
         flume.setup({ schema = "mira" })
         for _, callback in ipairs(queued) do
@@ -615,6 +716,7 @@ test("disabled sync watcher ignores queued schema changes", function()
         end
         equal(flume.config.schema, "mira", "stale callback survived watcher restart")
     end, debug.traceback)
+
     vim.schedule = original_schedule
     require("flume.compiler").activate("dusk")
     flume.setup({ schema = "dusk" })
@@ -627,16 +729,23 @@ test("sync watcher ignores unrelated integration activity", function()
     local flume = require("flume")
     require("flume.compiler").activate("dusk")
     flume.setup({ schema = "mira" })
+
     local unrelated = "extras/.watch-test-" .. vim.fn.getpid()
     vim.fn.mkdir(unrelated)
     vim.fn.delete(unrelated, "d")
-    vim.wait(200, function() return false end, 10)
+    vim.wait(200, function()
+        return false
+    end, 10)
     equal(flume.config.schema, "mira", "unrelated filesystem event changed the palette")
 
     require("flume.compiler").activate("opal")
-    truthy(vim.wait(2000, function()
-        return flume.config.schema == "opal"
-    end, 10), "watcher did not follow a successful activation")
+    truthy(
+        vim.wait(2000, function()
+            return flume.config.schema == "opal"
+        end, 10),
+        "watcher did not follow a successful activation"
+    )
+
     require("flume.compiler").activate("dusk")
     flume.setup({ schema = "dusk" })
 end)
@@ -647,18 +756,28 @@ test("sync watcher reconciles activation before its first filesystem event", fun
     local uv = vim.uv or vim.loop
     compiler.activate("dusk")
     flume.setup({ schema = "mira", watch_sync = false })
+
     local original_event, original_schedule = uv.new_fs_event, vim.schedule
     local queued = {}
     local closed = false
     uv.new_fs_event = function()
         return {
-            start = function() return true end,
+            start = function()
+                return true
+            end,
             stop = function() end,
-            close = function() closed = true end,
-            is_closing = function() return closed end,
+            close = function()
+                closed = true
+            end,
+            is_closing = function()
+                return closed
+            end,
         }
     end
-    vim.schedule = function(callback) queued[#queued + 1] = callback end
+    vim.schedule = function(callback)
+        queued[#queued + 1] = callback
+    end
+
     local ok, err = xpcall(function()
         flume.setup({ schema = "mira" })
         equal(flume.config.schema, "mira", "watcher followed the unchanged startup activation")
@@ -677,11 +796,14 @@ test("sync watcher reconciles activation before its first filesystem event", fun
         queued[3]()
         equal(flume.config.schema, "dusk", "stopped watcher retained initial reconciliation")
     end, debug.traceback)
+
     require("flume.watch").stop()
     uv.new_fs_event, vim.schedule = original_event, original_schedule
     compiler.activate("dusk")
     flume.setup({ schema = "dusk" })
-    if not ok then error(err) end
+    if not ok then
+        error(err)
+    end
 end)
 
 test("sync watcher stops when another colorscheme takes over", function()
@@ -693,26 +815,36 @@ test("sync watcher stops when another colorscheme takes over", function()
         -- Switching between Flume entry points must keep watching.
         vim.cmd.colorscheme("flume-mira")
         compiler.activate("opal")
-        truthy(vim.wait(2000, function()
-            return vim.g.colors_name == "flume-opal"
-        end, 10), "Flume entry-point switch stopped watching")
+        truthy(
+            vim.wait(2000, function()
+                return vim.g.colors_name == "flume-opal"
+            end, 10),
+            "Flume entry-point switch stopped watching"
+        )
 
         vim.cmd.colorscheme("habamax")
         compiler.activate("mesa")
-        vim.wait(200, function() return false end, 10)
+        vim.wait(200, function()
+            return false
+        end, 10)
         equal(vim.g.colors_name, "habamax", "sync replaced another colorscheme")
         local watching = pcall(vim.api.nvim_get_autocmds, { group = "FlumeSyncWatch" })
         equal(watching, false, "inactive Flume watcher was not stopped")
 
         flume.setup({ schema = "dusk" })
         compiler.activate("mira")
-        truthy(vim.wait(2000, function()
-            return vim.g.colors_name == "flume-mira"
-        end, 10), "setup did not restart watching")
+        truthy(
+            vim.wait(2000, function()
+                return vim.g.colors_name == "flume-mira"
+            end, 10),
+            "setup did not restart watching"
+        )
     end, debug.traceback)
     compiler.activate("dusk")
     flume.setup({ schema = "dusk" })
-    if not ok then error(err) end
+    if not ok then
+        error(err)
+    end
 end)
 
 test("queued sync cannot replace another colorscheme", function()
@@ -720,22 +852,33 @@ test("queued sync cannot replace another colorscheme", function()
     local compiler = require("flume.compiler")
     compiler.activate("dusk")
     flume.setup({ schema = "dusk" })
-    local schedule = vim.schedule
+    local original_schedule = vim.schedule
     local queued = {}
     local ok, err = xpcall(function()
         vim.schedule = function(callback)
             queued[#queued + 1] = callback
         end
         compiler.activate("opal")
-        truthy(vim.wait(2000, function() return #queued > 0 end, 10), "no queued sync callback")
+        truthy(
+            vim.wait(2000, function()
+                return #queued > 0
+            end, 10),
+            "no queued sync callback"
+        )
+
         vim.cmd.colorscheme("habamax")
-        for _, callback in ipairs(queued) do callback() end
+        for _, callback in ipairs(queued) do
+            callback()
+        end
         equal(vim.g.colors_name, "habamax", "queued sync replaced another colorscheme")
     end, debug.traceback)
-    vim.schedule = schedule
+
+    vim.schedule = original_schedule
     compiler.activate("dusk")
     flume.setup({ schema = "dusk" })
-    if not ok then error(err) end
+    if not ok then
+        error(err)
+    end
 end)
 
 test("reload preserves colorscheme entry identity", function()
@@ -830,8 +973,8 @@ test("generated extras are current and machine-readable", function()
             '--minus-emph-style="syntax ' .. palette.diff_delete_emphasis .. '"',
             '--plus-style="syntax ' .. palette.diff_add_bg .. '"',
             '--plus-emph-style="syntax ' .. palette.diff_add_emphasis .. '"',
-            '--line-numbers-minus-style=' .. palette.diff_delete,
-            '--line-numbers-plus-style=' .. palette.diff_add,
+            "--line-numbers-minus-style=" .. palette.diff_delete,
+            "--line-numbers-plus-style=" .. palette.diff_add,
         },
         ["extras/delta/flume-dusk.gitconfig"] = {
             'minus-style = syntax "' .. palette.diff_delete_bg .. '"',
@@ -849,7 +992,10 @@ test("generated extras are current and machine-readable", function()
         for _, expected in ipairs(expected_mappings) do
             truthy(generated_content:find(expected, 1, true), path .. " is missing mapping " .. expected)
         end
-        truthy(not generated_content:find("\n    selectedRangeBgColor:", 1, true), path .. " uses a removed Lazygit key")
+        truthy(
+            not generated_content:find("\n    selectedRangeBgColor:", 1, true),
+            path .. " uses a removed Lazygit key"
+        )
         truthy(not generated_content:find("\n    stagedChangesColor:", 1, true), path .. " uses a removed Lazygit key")
     end
 
@@ -889,13 +1035,18 @@ test("generated extras are current and machine-readable", function()
         truthy(not lsd:find("\nname:", 1, true), schema .. " LSD theme uses unsupported name keys")
         local metadata_ink = lsd:match("\n  read: (%d+)")
         for _, key in ipairs({ "no%-access", "unmodified", "ignored" }) do
-            equal(lsd:match("\n  " .. key .. ": (%d+)"), metadata_ink,
-                schema .. " LSD secondary content uses readable metadata ink")
+            equal(
+                lsd:match("\n  " .. key .. ": (%d+)"),
+                metadata_ink,
+                schema .. " LSD secondary content uses readable metadata ink"
+            )
         end
-        equal(lsd:match("\n  older: (%d+)"), lsd:match("\n  context: (%d+)"),
-            schema .. " LSD dates use documentation ink")
-        equal(lsd:match("\n  none: (%d+)"), lsd:match("\n  small: (%d+)"),
-            schema .. " LSD sizes use a shared info ink")
+        equal(
+            lsd:match("\n  older: (%d+)"),
+            lsd:match("\n  context: (%d+)"),
+            schema .. " LSD dates use documentation ink"
+        )
+        equal(lsd:match("\n  none: (%d+)"), lsd:match("\n  small: (%d+)"), schema .. " LSD sizes use a shared info ink")
         local opencode = vim.json.decode(read_all("extras/opencode/flume" .. suffix .. ".json"))
         equal(opencode.theme.diffLineNumber, "muted", schema .. " OpenCode line numbers are content")
         equal(opencode.theme.markdownBlockQuote, "muted", schema .. " OpenCode block quotes are content")
@@ -983,6 +1134,7 @@ test("interleaved activations preserve complete immutable sets", function()
                 end
                 compiler.activate("dusk")
                 uv.fs_rename = rename
+
                 truthy(interleaved, "second activation was not interleaved")
                 local expected_schema = timing == "before" and "dusk" or second_schema
                 local current_schema = vim.fn.readfile("extras/current/schema")[1]
@@ -992,15 +1144,22 @@ test("interleaved activations preserve complete immutable sets", function()
                     for _, integration in ipairs(require("flume.extras").integrations) do
                         local actual = vim.fn.readfile("extras/" .. set .. "/" .. integration.current, "b")
                         local expected = vim.fn.readfile(integration.source:format("-" .. schema), "b")
-                        equal(table.concat(actual, "\n"), table.concat(expected, "\n"), "interleaved " .. integration.name)
+                        equal(
+                            table.concat(actual, "\n"),
+                            table.concat(expected, "\n"),
+                            "interleaved " .. integration.name
+                        )
                     end
                 end
             end
         end
     end, debug.traceback)
+
     uv.fs_rename = rename
     compiler.activate(original_schema)
-    if not ok then error(err) end
+    if not ok then
+        error(err)
+    end
 end)
 
 test("activation reuses intact sets and recovers the final integration", function()
@@ -1017,21 +1176,27 @@ test("activation reuses intact sets and recovers the final integration", functio
         for name, changed in pairs(changes) do
             equal(changed, false, name .. " unchanged artifact")
         end
+
         vim.fn.writefile({ "corrupt" }, current)
         compiler.activate(schema)
         truthy(uv.fs_readlink("extras/current") ~= original_set, "corrupt set was reused")
         equal(table.concat(vim.fn.readfile(current, "b"), "\n"), table.concat(expected, "\n"), "recovered artifact")
+
         local recovered_set = uv.fs_readlink("extras/current")
         compiler.activate(schema)
         equal(uv.fs_readlink("extras/current"), recovered_set, "active recovery set was not reused")
+
         compiler.activate(schema == "opal" and "dusk" or "opal")
         compiler.activate(schema)
         equal(uv.fs_readlink("extras/current"), recovered_set, "inactive recovery set was not reused")
     end, debug.traceback)
+
     -- Restore the deliberately corrupted immutable set, not the current link.
     vim.fn.writefile(expected, "extras/" .. original_set .. "/pi.json", "b")
     compiler.activate(schema)
-    if not ok then error(err) end
+    if not ok then
+        error(err)
+    end
 end)
 
 test("activation rejects sets with obsolete artifacts", function()
@@ -1047,15 +1212,19 @@ test("activation rejects sets with obsolete artifacts", function()
         truthy(uv.fs_readlink("extras/current") ~= original_set, "obsolete set was reused")
         equal(#vim.fn.glob("extras/current/*", false, true), 11, "nine apps plus semantic palette and schema")
         equal(vim.fn.filereadable("extras/current/obsolete.json"), 0, "obsolete artifact survived")
+
         local recovered_set = uv.fs_readlink("extras/current")
         compiler.activate(schema == "opal" and "dusk" or "opal")
         compiler.activate(schema)
         equal(uv.fs_readlink("extras/current"), recovered_set, "clean recovery set was not reused")
         equal(vim.fn.filereadable(obsolete), 1, "previous immutable set was deleted")
     end, debug.traceback)
+
     uv.fs_unlink(obsolete)
     compiler.activate(schema)
-    if not ok then error(err) end
+    if not ok then
+        error(err)
+    end
 end)
 
 require("tests.extras").register(test, equal, truthy)

@@ -56,9 +56,12 @@ function M.get_apps()
 end
 
 function M.get_source_path(source)
-    local active = source:match("^extras/current/(.+)$")
-    return active and require("flume.state").get_current() .. "/" .. active
-        or M.get_plugin_dir() .. "/" .. source
+    local active_relative_path = source:match("^extras/current/(.+)$")
+    if active_relative_path then
+        return require("flume.state").get_current() .. "/" .. active_relative_path
+    end
+
+    return M.get_plugin_dir() .. "/" .. source
 end
 
 function M.install(name)
@@ -178,15 +181,19 @@ function M.get_instruction_lines()
 
     for _, name in ipairs(keys) do
         local app = apps[name]
-        local src_path = M.get_source_path(app.src)
+        local source = M.get_source_path(app.src)
         table.insert(lines, "### " .. name:sub(1, 1):upper() .. name:sub(2))
         table.insert(lines, "```bash")
+
         local destination = vim.fn.expand(app.dest)
-        table.insert(lines, "if [ -e " .. shell_quote(destination) .. " ] || [ -L " .. shell_quote(destination) .. " ]; then")
+        table.insert(
+            lines,
+            "if [ -e " .. shell_quote(destination) .. " ] || [ -L " .. shell_quote(destination) .. " ]; then"
+        )
         table.insert(lines, "  echo " .. shell_quote("Refusing to replace existing path: " .. destination) .. " >&2")
         table.insert(lines, "else")
         table.insert(lines, "  mkdir -p " .. shell_quote(vim.fn.fnamemodify(destination, ":h")))
-        table.insert(lines, "  ln -s " .. shell_quote(src_path) .. " " .. shell_quote(destination))
+        table.insert(lines, "  ln -s " .. shell_quote(source) .. " " .. shell_quote(destination))
         table.insert(lines, "fi")
         table.insert(lines, "```")
         table.insert(lines, "")
@@ -194,7 +201,7 @@ function M.get_instruction_lines()
 
     table.insert(lines, "Set this environment variable so new Lazygit sessions layer the active theme:")
     table.insert(lines, "```bash")
-    table.insert(lines, "export LG_CONFIG_FILE=\"$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/flume.yml\"")
+    table.insert(lines, 'export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/flume.yml"')
     table.insert(lines, "```")
     table.insert(lines, "")
     return lines

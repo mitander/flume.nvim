@@ -236,6 +236,8 @@ inactive_tab_foreground   %s
 inactive_tab_background   %s
 inactive_tab_font_style   normal
 ]]
+    -- Keep positional tab-bar annotations aligned so the template mapping is easy to scan.
+    -- stylua: ignore
     local content = string.format(
         template,
         palette.terminal_bg,
@@ -604,7 +606,10 @@ git:
         palette.border
     )
 
-    return write_file_if_changed(get_plugin_dir() .. "/extras/lazygit/flume" .. schema_suffix(schema) .. ".yml", content)
+    return write_file_if_changed(
+        get_plugin_dir() .. "/extras/lazygit/flume" .. schema_suffix(schema) .. ".yml",
+        content
+    )
 end
 
 function M.compile_fzf(schema)
@@ -673,7 +678,10 @@ function M.compile_delta(schema)
         palette.border
     )
 
-    return write_file_if_changed(get_plugin_dir() .. "/extras/delta/flume" .. schema_suffix(schema) .. ".gitconfig", content)
+    return write_file_if_changed(
+        get_plugin_dir() .. "/extras/delta/flume" .. schema_suffix(schema) .. ".gitconfig",
+        content
+    )
 end
 
 function M.compile_opencode(schema)
@@ -819,8 +827,10 @@ function M.compile_palette(schema)
     end
     lines[#lines + 1] = "  }"
     lines[#lines + 1] = "}"
-    return write_file_if_changed(get_plugin_dir() .. "/extras/palette/flume" .. meta.suffix .. ".json",
-        table.concat(lines, "\n") .. "\n")
+    return write_file_if_changed(
+        get_plugin_dir() .. "/extras/palette/flume" .. meta.suffix .. ".json",
+        table.concat(lines, "\n") .. "\n"
+    )
 end
 
 -- Kept for callers that activated sets through the compiler before state owned publication.

@@ -3,24 +3,35 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
+# Check Lua formatting and behavior.
+stylua --check --verify .
 nvim --headless --clean -c "lua dofile('tests/run.lua')"
+
+# Reject whitespace errors.
 git diff --check
 
 if git ls-files -z --cached --others --exclude-standard -- \
-    '*.lua' '*.md' '*.txt' '*.yml' '*.yaml' '*.sh' 'scripts/check' \
-    | xargs -0 grep -nH '[[:blank:]]$' 2>/dev/null; then
-    echo "Trailing whitespace found" >&2
-    exit 1
+  '*.lua' '*.md' '*.txt' '*.yml' '*.yaml' '*.sh' 'scripts/check' |
+  xargs -0 grep -nH '[[:blank:]]$' 2>/dev/null; then
+  echo "Trailing whitespace found" >&2
+  exit 1
 fi
 
+# Check script syntax without running snapshot fixtures.
 sh -n scripts/check
-python3 -m py_compile scripts/check-links.py scripts/preflight-screenshots.py scripts/review-integrations.py scripts/snapshots tests/snapshots/*.py
-for fixture in tests/snapshots/fixtures/*.sh; do
-    sh -n "$fixture"
+python3 -m py_compile \
+  scripts/check-links.py scripts/preflight-screenshots.py \
+  scripts/review-integrations.py scripts/snapshots tests/snapshots/*.py
+for fixture_script in tests/snapshots/fixtures/*.sh; do
+  sh -n "$fixture_script"
 done
+
+# Validate documentation and screenshot provenance.
 python3 scripts/check-links.py
 python3 scripts/preflight-screenshots.py --source-only
 python3 scripts/preflight-screenshots.py --states
+
+# Run Python tests.
 python3 -m unittest discover -s tests -p 'documentation_links.py'
 python3 -m unittest discover -s tests -p 'examples.py'
 python3 -m unittest discover -s tests -p 'screenshots.py'

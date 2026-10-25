@@ -105,13 +105,29 @@ function M.register(test, equal, truthy)
     end)
 
     test("terminal integration contracts parse for every schema", function()
-        local ghost_scalars = keyset({
-            "background", "foreground", "selection-background", "selection-foreground", "cursor-color", "cursor-text",
+        local ghostty_scalar_keys = keyset({
+            "background",
+            "foreground",
+            "selection-background",
+            "selection-foreground",
+            "cursor-color",
+            "cursor-text",
         })
         local kitty_keys = keyset({
-            "background", "foreground", "selection_background", "selection_foreground", "cursor", "cursor_text_color",
-            "tab_bar_background", "tab_bar_margin_color", "active_tab_foreground", "active_tab_background",
-            "active_tab_font_style", "inactive_tab_foreground", "inactive_tab_background", "inactive_tab_font_style",
+            "background",
+            "foreground",
+            "selection_background",
+            "selection_foreground",
+            "cursor",
+            "cursor_text_color",
+            "tab_bar_background",
+            "tab_bar_margin_color",
+            "active_tab_foreground",
+            "active_tab_background",
+            "active_tab_font_style",
+            "inactive_tab_foreground",
+            "inactive_tab_background",
+            "inactive_tab_font_style",
         })
         for index = 0, 15 do
             kitty_keys["color" .. index] = true
@@ -136,7 +152,8 @@ function M.register(test, equal, truthy)
                     slots[index] = color
                 end
             end
-            equal(sorted_keys(scalars), sorted_keys(ghost_scalars), schema .. " Ghostty scalar keys")
+
+            equal(sorted_keys(scalars), sorted_keys(ghostty_scalar_keys), schema .. " Ghostty scalar keys")
             equal(vim.tbl_count(slots), 16, schema .. " Ghostty ANSI count")
             for index = 0, 15 do
                 truthy(slots[index], schema .. " missing Ghostty ANSI " .. index)
@@ -154,6 +171,7 @@ function M.register(test, equal, truthy)
                     end
                 end
             end
+
             equal(sorted_keys(kitty), sorted_keys(kitty_keys), schema .. " Kitty keys")
             equal(kitty.background, colors.terminal_bg, schema .. " Kitty background")
             equal(kitty.color0, colors.black, schema .. " Kitty ANSI 0")
@@ -163,21 +181,70 @@ function M.register(test, equal, truthy)
 
     test("tmux lsd and fzf contracts parse for every schema", function()
         local tmux_keys = keyset({
-            "thm_bg", "thm_fg", "thm_black", "thm_gray", "thm_lgray", "thm_accent", "thm_red",
-            "thm_green", "thm_yellow", "thm_blue", "thm_pink", "thm_cyan", "thm_orange",
+            "thm_bg",
+            "thm_fg",
+            "thm_black",
+            "thm_gray",
+            "thm_lgray",
+            "thm_accent",
+            "thm_red",
+            "thm_green",
+            "thm_yellow",
+            "thm_blue",
+            "thm_pink",
+            "thm_cyan",
+            "thm_orange",
         })
         local lsd_keys = keyset({
-            "user", "group", "permission.read", "permission.write", "permission.exec", "permission.exec-sticky",
-            "permission.no-access", "permission.octal", "permission.acl", "permission.context", "date.hour-old",
-            "date.day-old", "date.older", "size.none", "size.small", "size.medium", "size.large", "inode.valid",
-            "inode.invalid", "links.valid", "links.invalid", "tree-edge", "git-status.default",
-            "git-status.unmodified", "git-status.ignored", "git-status.new-in-index", "git-status.new-in-workdir",
-            "git-status.typechange", "git-status.deleted", "git-status.renamed", "git-status.modified",
+            "user",
+            "group",
+            "permission.read",
+            "permission.write",
+            "permission.exec",
+            "permission.exec-sticky",
+            "permission.no-access",
+            "permission.octal",
+            "permission.acl",
+            "permission.context",
+            "date.hour-old",
+            "date.day-old",
+            "date.older",
+            "size.none",
+            "size.small",
+            "size.medium",
+            "size.large",
+            "inode.valid",
+            "inode.invalid",
+            "links.valid",
+            "links.invalid",
+            "tree-edge",
+            "git-status.default",
+            "git-status.unmodified",
+            "git-status.ignored",
+            "git-status.new-in-index",
+            "git-status.new-in-workdir",
+            "git-status.typechange",
+            "git-status.deleted",
+            "git-status.renamed",
+            "git-status.modified",
             "git-status.conflicted",
         })
         local fzf_keys = keyset({
-            "fg", "bg", "hl", "fg+", "bg+", "hl+", "info", "prompt", "pointer", "marker", "spinner",
-            "header", "border", "gutter", "query",
+            "fg",
+            "bg",
+            "hl",
+            "fg+",
+            "bg+",
+            "hl+",
+            "info",
+            "prompt",
+            "pointer",
+            "marker",
+            "spinner",
+            "header",
+            "border",
+            "gutter",
+            "query",
         })
 
         for _, schema in ipairs(palettes.schema_order) do
@@ -216,15 +283,16 @@ function M.register(test, equal, truthy)
                 truthy(value >= 0 and value <= 255, schema .. " LSD " .. key .. " outside xterm range")
             end
 
-            local opts = read_all(path("fzf", schema))
-            truthy(opts:match("^%-%-no%-bold %-%-color="), schema .. " fzf prefix")
-            local parsed = {}
-            for key, value in opts:gmatch("([%w+]+):(#[%x]+)") do
-                parsed[key] = value
+            local fzf_options = read_all(path("fzf", schema))
+            truthy(fzf_options:match("^%-%-no%-bold %-%-color="), schema .. " fzf prefix")
+            local fzf_colors = {}
+            for key, value in fzf_options:gmatch("([%w+]+):(#[%x]+)") do
+                fzf_colors[key] = value
             end
-            equal(sorted_keys(parsed), sorted_keys(fzf_keys), schema .. " fzf keys")
-            equal(parsed.bg, palettes[schema].bg, schema .. " fzf background")
-            equal(parsed.prompt, palettes[schema].accent, schema .. " fzf prompt")
+
+            equal(sorted_keys(fzf_colors), sorted_keys(fzf_keys), schema .. " fzf keys")
+            equal(fzf_colors.bg, palettes[schema].bg, schema .. " fzf background")
+            equal(fzf_colors.prompt, palettes[schema].accent, schema .. " fzf prompt")
         end
     end)
 
@@ -249,7 +317,10 @@ function M.register(test, equal, truthy)
             local opencode = vim.json.decode(read_all(path("opencode", schema)))
             equal(sorted_keys(opencode), sorted_keys(opencode_top), schema .. " OpenCode top-level keys")
             for key, alias in pairs(opencode.theme) do
-                truthy(opencode.defs[alias], schema .. " OpenCode theme." .. key .. " has unknown alias " .. tostring(alias))
+                truthy(
+                    opencode.defs[alias],
+                    schema .. " OpenCode theme." .. key .. " has unknown alias " .. tostring(alias)
+                )
             end
             equal(opencode.defs.bg, colors.bg, schema .. " OpenCode background")
             equal(opencode.theme.syntaxVariable, "syntax_primary", schema .. " OpenCode neutral variables")
@@ -258,17 +329,34 @@ function M.register(test, equal, truthy)
 
     test("Lazygit and Delta contracts parse for every schema", function()
         local lazygit_keys = keyset({
-            "activeBorderColor", "inactiveBorderColor", "searchingActiveBorderColor", "optionsTextColor",
-            "selectedLineBgColor", "inactiveViewSelectedLineBgColor", "cherryPickedCommitBgColor",
-            "cherryPickedCommitFgColor", "unstagedChangesColor", "defaultFgColor",
+            "activeBorderColor",
+            "inactiveBorderColor",
+            "searchingActiveBorderColor",
+            "optionsTextColor",
+            "selectedLineBgColor",
+            "inactiveViewSelectedLineBgColor",
+            "cherryPickedCommitBgColor",
+            "cherryPickedCommitFgColor",
+            "unstagedChangesColor",
+            "defaultFgColor",
         })
         local delta_keys = keyset({
-            "delta.light", "delta.features", "delta.syntax-theme", "delta.flume.minus-style",
-            "delta.flume.minus-emph-style", "delta.flume.plus-style", "delta.flume.plus-emph-style",
-            "delta.flume.line-numbers", "delta.flume.line-numbers-minus-style",
-            "delta.flume.line-numbers-plus-style", "delta.flume.line-numbers-left-style",
-            "delta.flume.line-numbers-right-style", "delta.flume.commit-decoration-style",
-            "delta.flume.file-style", "delta.flume.file-decoration-style", "delta.flume.hunk-header-style",
+            "delta.light",
+            "delta.features",
+            "delta.syntax-theme",
+            "delta.flume.minus-style",
+            "delta.flume.minus-emph-style",
+            "delta.flume.plus-style",
+            "delta.flume.plus-emph-style",
+            "delta.flume.line-numbers",
+            "delta.flume.line-numbers-minus-style",
+            "delta.flume.line-numbers-plus-style",
+            "delta.flume.line-numbers-left-style",
+            "delta.flume.line-numbers-right-style",
+            "delta.flume.commit-decoration-style",
+            "delta.flume.file-style",
+            "delta.flume.file-decoration-style",
+            "delta.flume.hunk-header-style",
             "delta.flume.hunk-header-decoration-style",
         })
 
@@ -298,6 +386,7 @@ function M.register(test, equal, truthy)
                 parsed_delta[key] = true
             end
             equal(sorted_keys(parsed_delta), sorted_keys(delta_keys), schema .. " Delta keys")
+
             local delta_content = read_all(delta_path)
             for _, mapping in ipairs({
                 'minus-style = syntax "' .. colors.diff_delete_bg .. '"',
@@ -309,10 +398,15 @@ function M.register(test, equal, truthy)
             }) do
                 truthy(delta_content:find(mapping, 1, true), schema .. " Delta missing " .. mapping)
             end
-            local light = vim.fn.system({ "git", "config", "--file", delta_path, "--get", "delta.light" }):gsub("%s+$", "")
-            equal(vim.v.shell_error, 0, schema .. " Delta light parse")
-            equal(light, palettes.schemas[schema].appearance == "light" and "true" or "false", schema .. " Delta light mode")
 
+            local light =
+                vim.fn.system({ "git", "config", "--file", delta_path, "--get", "delta.light" }):gsub("%s+$", "")
+            equal(vim.v.shell_error, 0, schema .. " Delta light parse")
+            equal(
+                light,
+                palettes.schemas[schema].appearance == "light" and "true" or "false",
+                schema .. " Delta light mode"
+            )
         end
     end)
 

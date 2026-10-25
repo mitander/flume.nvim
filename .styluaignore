@@ -1,0 +1,6 @@
+# Highlighting specimens and exact rendering fixtures are not formatting targets.
+/examples/
+/tests/snapshots/
+
+# Exported artifacts are maintained by their generators.
+/extras/

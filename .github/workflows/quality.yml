@@ -30,6 +30,13 @@ jobs:
           neovim: true
           version: ${{ matrix.neovim }}
 
+      - name: Setup StyLua
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: v2.5.2
+          args: false
+
       - name: Run release quality gate
         run: ./scripts/check
 

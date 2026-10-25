@@ -6,23 +6,28 @@ function M.register(test, equal, truthy)
         local original_dir = extras.get_plugin_dir
         local original_data = vim.env.FLUME_DATA_DIR
         local root = vim.fn.tempname()
+
         vim.env.FLUME_DATA_DIR = root .. "/extras"
         vim.fn.mkdir(root .. "/extras/current", "p")
         extras.get_plugin_dir = function()
             return root
         end
+
         local ok, err = xpcall(function()
             local flume = require("flume")
             flume.setup({ schema = "mesa", follow_sync = true, watch_sync = false })
             equal(flume.config.schema, "mesa", "missing state fallback")
             equal(flume.get_active_schema(), nil, "missing marker")
+
             vim.fn.writefile({ "mira" }, root .. "/extras/current/schema")
             flume.setup({ schema = "mesa", follow_sync = true, watch_sync = false })
             equal(flume.config.schema, "mira", "remembered runtime choice")
             equal(vim.g.colors_name, "flume-mira")
             equal(vim.fn.readfile(root .. "/extras/current/schema")[1], "mira", "startup wrote runtime state")
+
             flume.setup({ schema = "mesa", watch_sync = false })
             equal(flume.config.schema, "mesa", "explicit fixed schema")
+
             for _, invalid in ipairs({ "unknown", "", "mira trailing-data" }) do
                 vim.fn.writefile({ invalid }, root .. "/extras/current/schema")
                 equal(flume.get_active_schema(), nil, "invalid marker")
@@ -30,6 +35,7 @@ function M.register(test, equal, truthy)
                 equal(flume.config.schema, "mesa", "invalid state fallback")
             end
         end, debug.traceback)
+
         extras.get_plugin_dir = original_dir
         vim.env.FLUME_DATA_DIR = original_data
         vim.fn.delete(root, "rf")
@@ -47,45 +53,58 @@ function M.register(test, equal, truthy)
         local original_has = vim.fn.has
         local original_home = vim.env.HOME
         local original_tmux = vim.env.TMUX
-        local calls, exit_code, available = {}, 0, true
-        state.activate = function() return {} end
+        local calls, exit_code, pkill_available = {}, 0, true
+
+        state.activate = function()
+            return {}
+        end
         vim.env.HOME = ""
         vim.env.TMUX = nil
         vim.fn.has = function(name)
-            if name == "linux" then return 1 end
-            if name == "mac" then return 0 end
+            if name == "linux" then
+                return 1
+            end
+            if name == "mac" then
+                return 0
+            end
             return original_has(name)
         end
         vim.fn.executable = function(name)
-            return name == "pkill" and available and 1 or 0
+            return name == "pkill" and pkill_available and 1 or 0
         end
         vim.fn.system = function(command)
             calls[#calls + 1] = command
             -- Set the real shell status without signalling any host processes.
             return original_system({ "sh", "-c", "exit " .. exit_code })
         end
+
         local ok, err = xpcall(function()
             local sync = require("flume.sync")
             local result = sync.run({ schema = "mira", quiet = true })
             equal(result.ghostty_reloaded, true, "successful Linux reload")
             equal(#calls, 1, "Linux adapter call count")
             equal(table.concat(calls[1], ","), "pkill,-USR2,-x,ghostty", "Linux reload command")
+
             exit_code = 1
             result = sync.run({ schema = "mira", quiet = true })
             equal(result.ghostty_reloaded, false, "failed Linux reload reported success")
             equal(#calls, 2, "failed reload did not invoke adapter")
-            available = false
+
+            pkill_available = false
             result = sync.run({ schema = "mira", quiet = true })
             equal(result.ghostty_reloaded, false, "missing pkill reported success")
             equal(#calls, 2, "missing pkill invoked adapter")
         end, debug.traceback)
+
         state.activate = original_activate
         vim.fn.system = original_system
         vim.fn.executable = original_executable
         vim.fn.has = original_has
         vim.env.HOME = original_home
         vim.env.TMUX = original_tmux
-        if not ok then error(err) end
+        if not ok then
+            error(err)
+        end
     end)
 
     test("real sync command publishes before reload adapters and editor notification", function()
@@ -100,11 +119,14 @@ function M.register(test, equal, truthy)
         local original_has = vim.fn.has
         local original_notify = vim.notify
         local root = vim.fn.tempname()
-        state.get_legacy_current = function() return root .. "/legacy" end
+        state.get_legacy_current = function()
+            return root .. "/legacy"
+        end
         vim.env.FLUME_DATA_DIR = root .. "/data"
         vim.env.HOME = root
         vim.env.TMUX = "test-session"
         flume.setup({ schema = "dusk", watch_sync = false, overrides = { accent = "#abcdef" } })
+
         local requested, previous
         local calls, events, notices = {}, 0, 0
         local group = vim.api.nvim_create_augroup("FlumeRealSyncTest", { clear = true })
@@ -119,12 +141,17 @@ function M.register(test, equal, truthy)
                 equal(table.concat(calls, ","), "osascript,tmux", "notification preceded reload adapters")
             end,
         })
+
         vim.fn.executable = function(name)
             return (name == "osascript" or name == "tmux") and 1 or 0
         end
         vim.fn.has = function(name)
-            if name == "mac" then return 1 end
-            if name == "linux" then return 0 end
+            if name == "mac" then
+                return 1
+            end
+            if name == "linux" then
+                return 0
+            end
             return original_has(name)
         end
         vim.fn.system = function(command)
@@ -140,18 +167,25 @@ function M.register(test, equal, truthy)
                 truthy(message:find("synchronized", 1, true), "unexpected success notice")
             end
         end
+
         local ok, err = xpcall(function()
             for _, schema in ipairs({ "opal", "mira", "mesa", "dusk" }) do
                 requested, previous = schema, flume.config.schema
                 calls = {}
                 vim.cmd("FlumeSync " .. schema)
                 equal(flume.config.schema, schema, "real command did not apply palette")
-                local export = vim.json.decode(table.concat(vim.fn.readfile(state.get_current() .. "/palette.json"), "\n"))
+                local export =
+                    vim.json.decode(table.concat(vim.fn.readfile(state.get_current() .. "/palette.json"), "\n"))
                 equal(export.schema, schema, "export did not switch")
-                equal(export.colors.accent, require("flume.palette")[schema].accent, "editor override leaked into export")
+                equal(
+                    export.colors.accent,
+                    require("flume.palette")[schema].accent,
+                    "editor override leaked into export"
+                )
             end
             equal(events, 4, "command notification count")
             equal(notices, 4, "synchronization success count")
+
             requested, previous = "opal", flume.config.schema
             calls = {}
             local result = require("flume.sync").run({ schema = requested, quiet = true })
@@ -166,7 +200,9 @@ function M.register(test, equal, truthy)
             local uv = vim.uv or vim.loop
             local rename = uv.fs_rename
             uv.fs_rename = function(source, destination, ...)
-                if destination == state.get_current() then return nil, "injected publication failure" end
+                if destination == state.get_current() then
+                    return nil, "injected publication failure"
+                end
                 return rename(source, destination, ...)
             end
             local synchronized = pcall(vim.cmd, "FlumeSync " .. requested)
@@ -178,6 +214,7 @@ function M.register(test, equal, truthy)
             equal(events, 4, "failed publication notified editor")
             equal(notices, 4, "failed publication reported synchronization")
         end, debug.traceback)
+
         vim.api.nvim_del_augroup_by_id(group)
         vim.fn.system = original_system
         vim.fn.executable = original_executable
@@ -189,7 +226,9 @@ function M.register(test, equal, truthy)
         vim.env.TMUX = original_tmux
         vim.fn.delete(root, "rf")
         flume.setup({ watch_sync = false })
-        if not ok then error(err) end
+        if not ok then
+            error(err)
+        end
     end)
 
     test("development reload clears source caches and preserves the editor choice", function()
@@ -209,6 +248,7 @@ function M.register(test, equal, truthy)
             local old_palette = require("flume.palette")
             old_palette.mira.text = "#abcdef"
             local old_flume = require("flume")
+
             vim.api.nvim_exec_autocmds(
                 "BufWritePost",
                 { pattern = root .. "/lua/flume/languages/rust.lua", modeline = false }
@@ -221,8 +261,10 @@ function M.register(test, equal, truthy)
             equal(flume.config.dev, true, "reload dropped developer preference")
             truthy(flume.colors.text ~= "#abcdef", "stale source color survived")
             equal(#vim.api.nvim_get_autocmds({ group = "FlumeDevReload" }), 1, "duplicate reload hooks")
+
             vim.api.nvim_exec_autocmds("BufWritePost", { pattern = root .. "/other.lua", modeline = false })
             equal(require("flume"), flume, "unrelated source triggered reload")
+
             vim.cmd.colorscheme("habamax")
             local live_root = require("flume.extras").get_plugin_dir()
             vim.api.nvim_exec_autocmds(
@@ -230,9 +272,11 @@ function M.register(test, equal, truthy)
                 { pattern = live_root .. "/lua/flume/palette.lua", modeline = false }
             )
             equal(vim.g.colors_name, "habamax", "development hook replaced another colorscheme")
+
             flume.setup({ schema = "mira", watch_sync = false })
             equal(pcall(vim.api.nvim_get_autocmds, { group = "FlumeDevReload" }), false, "disabled hook survived")
         end, debug.traceback)
+
         -- Reload created a fresh extras module; the captured module may be stale.
         extras.get_plugin_dir = original_dir
         vim.env.FLUME_DATA_DIR = original_data
@@ -246,12 +290,14 @@ function M.register(test, equal, truthy)
 
     test("failed development reload restores caches and recovers on the next save", function()
         local original_notify = vim.notify
-        local errors = 0
+        local reload_error_count = 0
+
         vim.notify = function(_, level)
             if level == vim.log.levels.ERROR then
-                errors = errors + 1
+                reload_error_count = reload_error_count + 1
             end
         end
+
         local ok, err = xpcall(function()
             for _, module in ipairs({ "flume", "flume.palette", "flume.dev" }) do
                 local flume = require("flume")
@@ -277,13 +323,15 @@ function M.register(test, equal, truthy)
                 equal(flume.config.schema, "mira", "failed reload lost editor choice")
                 equal(flume.colors.accent, "#abcdef", "failed reload lost overrides")
                 equal(#vim.api.nvim_get_autocmds({ group = "FlumeDevReload" }), 1, "recovery save hook is missing")
+
                 package.preload[module] = nil
                 vim.api.nvim_exec_autocmds("BufWritePost", { pattern = path, modeline = false })
                 truthy(require("flume") ~= flume, "corrected source did not reload")
                 equal(require("flume").config.schema, "mira", "recovered reload lost schema")
             end
-            equal(errors, 3, "reload failures were not reported")
+            equal(reload_error_count, 3, "reload failures were not reported")
         end, debug.traceback)
+
         package.preload["flume"] = nil
         package.preload["flume.palette"] = nil
         package.preload["flume.dev"] = nil
@@ -297,20 +345,22 @@ function M.register(test, equal, truthy)
     test("named lualine theme follows palettes and runtime overrides", function()
         for _, schema in ipairs(require("flume.palette").schema_order) do
             require("flume").setup({ schema = schema, watch_sync = false, overrides = { accent = "#abcdef" } })
-            local c = require("flume").colors
+            local colors = require("flume").colors
             local theme = dofile("lua/lualine/themes/flume.lua")
+
             for _, mode in ipairs({ "normal", "insert", "visual", "replace", "command", "terminal" }) do
-                equal(theme[mode].c.fg, c.text, schema .. " " .. mode .. " text")
-                equal(theme[mode].c.bg, c.surface_alt, schema .. " " .. mode .. " surface")
+                equal(theme[mode].c.fg, colors.text, schema .. " " .. mode .. " text")
+                equal(theme[mode].c.bg, colors.surface_alt, schema .. " " .. mode .. " surface")
             end
             equal(theme.normal.a.fg, "#abcdef", "lualine ignored override")
-            equal(theme.inactive.c.bg, c.surface, "inactive surface")
+            equal(theme.inactive.c.bg, colors.surface, "inactive surface")
             for _, section in ipairs({ "a", "b", "c" }) do
-                equal(theme.inactive[section].fg, c.muted, "inactive statusline content uses readable muted ink")
+                equal(theme.inactive[section].fg, colors.muted, "inactive statusline content uses readable muted ink")
             end
+
             local highlight = vim.api.nvim_get_hl(0, { name = "NvimTreeStatusLine", link = false })
-            equal(highlight.fg, tonumber(c.text:sub(2), 16), "tree statusline text")
-            equal(highlight.bg, tonumber(c.surface_alt:sub(2), 16), "tree statusline surface")
+            equal(highlight.fg, tonumber(colors.text:sub(2), 16), "tree statusline text")
+            equal(highlight.bg, tonumber(colors.surface_alt:sub(2), 16), "tree statusline surface")
             equal(highlight.bold, true, "tree statusline weight")
         end
         require("flume").setup({})
