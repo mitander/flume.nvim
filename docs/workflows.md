@@ -87,6 +87,14 @@ Run `lsd -l` to see metadata colors. New invocations read the shared palette; fi
 follow `LS_COLORS`. Classic mode disables color. See
 [LSD's configuration guide](https://github.com/lsd-rs/lsd#customizing-lsd-configuration-and-theming).
 
+For readable world-writable directory names (`drwxrwxrwx`), `:FlumeExtras` prints Fish and Bash/Zsh
+commands that append `ow=0;35` to `LS_COLORS`. Add the appropriate command after existing
+`LS_COLORS` setup in your shell configuration. It uses ANSI magenta on the normal background
+(pink with Flume's terminal palette) and preserves other entries, including sticky-directory colors.
+This targets non-sticky world-writable directories, not directories such as `/tmp` with the sticky
+bit set. GNU `ls` also reads `LS_COLORS`, but macOS's built-in BSD `ls` does not. The YAML theme
+alone cannot change filename colors.
+
 ### OpenCode
 
 Run `:FlumeInstallExtras opencode`, then use `/theme` in OpenCode to select `flume`. To set it in

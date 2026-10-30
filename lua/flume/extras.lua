@@ -199,6 +199,26 @@ function M.get_instruction_lines()
         table.insert(lines, "")
     end
 
+    table.insert(lines, "## LSD filename colors")
+    table.insert(lines, "The YAML theme styles metadata. Add this after existing LS_COLORS setup in your shell config")
+    table.insert(
+        lines,
+        "for world-writable directory names in ANSI magenta on the normal background (pink with Flume)."
+    )
+    table.insert(
+        lines,
+        "Other entries, including sticky-directory colors, stay unchanged. GNU ls also uses this setting."
+    )
+    table.insert(lines, "Fish:")
+    table.insert(lines, "```fish")
+    table.insert(lines, 'set -gx LS_COLORS "$LS_COLORS:ow=0;35"')
+    table.insert(lines, "```")
+    table.insert(lines, "Bash or Zsh:")
+    table.insert(lines, "```sh")
+    table.insert(lines, 'export LS_COLORS="${LS_COLORS:+$LS_COLORS:}ow=0;35"')
+    table.insert(lines, "```")
+    table.insert(lines, "")
+    table.insert(lines, "## Lazygit configuration layering")
     table.insert(lines, "Set this environment variable so new Lazygit sessions layer the active theme:")
     table.insert(lines, "```bash")
     table.insert(lines, 'export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/flume.yml"')

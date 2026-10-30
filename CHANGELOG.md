@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add LSD shell setup to `:FlumeExtras` for pink world-writable directory names without a background.
 - Refine Mira's golden-sand types, copper literals, and cool blue functions while retaining its
   violet-charcoal surfaces, quiet neutral inks, berry properties, and sea-glass strings.
 - Add explicit selection foreground/background roles for Visual, completion, command-line menus,

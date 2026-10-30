@@ -443,6 +443,41 @@ function M.register(test, equal, truthy)
         truthy(instructions:find("export LG_CONFIG_FILE=", 1, true), "Lazygit instructions configure layered files")
     end)
 
+    test("LSD filename instructions preserve existing color entries", function()
+        local lines = require("flume.extras").get_instruction_lines()
+        local instructions = table.concat(lines, "\n")
+        truthy(instructions:find('set -gx LS_COLORS "$LS_COLORS:ow=0;35"', 1, true), "Fish LSD filename setup")
+        truthy(
+            instructions:find('export LS_COLORS="${LS_COLORS:+$LS_COLORS:}ow=0;35"', 1, true),
+            "Bash/Zsh LSD filename setup"
+        )
+
+        local command
+        for _, line in ipairs(lines) do
+            if line:find("export LS_COLORS=", 1, true) == 1 then
+                command = line
+            end
+        end
+        truthy(command, "LSD shell command missing")
+
+        for _, case in ipairs({
+            { setup = "unset LS_COLORS", expected = "ow=0;35" },
+            { setup = "LS_COLORS=''", expected = "ow=0;35" },
+            {
+                setup = "LS_COLORS='di=01;34:ow=30;42:tw=30;43:*.rs=35'",
+                expected = "di=01;34:ow=30;42:tw=30;43:*.rs=35:ow=0;35",
+            },
+        }) do
+            local output = vim.fn.system({
+                "sh",
+                "-c",
+                case.setup .. "; " .. command .. '; printf "%s" "$LS_COLORS"',
+            })
+            equal(vim.v.shell_error, 0, "LSD shell setup exits successfully")
+            equal(output, case.expected, "LSD shell setup preserves prior entries and appends override")
+        end
+    end)
+
     test("generated palette manifest matches canonical Lua palette", function()
         equal(read_all("docs/palette-manifest.md"), require("flume.manifest").render(), "palette manifest drift")
     end)

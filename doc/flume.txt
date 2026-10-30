@@ -245,6 +245,10 @@ Move an existing file aside only after preserving any personal settings.
 For Lazygit, export `LG_CONFIG_FILE` with your personal config first and
 `~/.config/lazygit/flume.yml` second so the active fragment is layered.
 
+For LSD filename colors, |:FlumeExtras| prints Fish and Bash/Zsh commands that
+set world-writable directory names to magenta on the normal background via
+LS_COLORS. The YAML theme alone only styles metadata.
+
 For application setup examples, see docs/workflows.md. Other
 tools have no automatic installer because their include locations vary.
 
