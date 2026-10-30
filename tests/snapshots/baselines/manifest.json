@@ -68,13 +68,13 @@
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
-        "lsd-dusk": "6535c036a73008daff9826c3cff8ddc7459d10240b6a233bc8d20eb979cbe116",
-        "lsd-mesa": "4143579abddb6e0ac6cae7edc0572ebf45db9e87088a0d5415b98e3c78821c10",
-        "lsd-mira": "19067bf4be77a0d1177f2fdd1deab06e36fe7d85529356ed62a6204691aa274b",
-        "lsd-opal": "47ffe546251c8599c3caae7b7a7af8b9e25343d52bce3f749353f5587010172b",
+        "lsd-dusk": "13c8d0df7ebfb1532330b7b8cc2cc2344ee50942c316093a18ca9fe3fc9db5cc",
+        "lsd-mesa": "9f904b1c316b44a968882d61f9a35c21b38e3267760b6badccca72868a6b5d1f",
+        "lsd-mira": "172ae5ce9212cec24e570e1422e37d264c43195cae7b8f6d5b8d6914931ba49a",
+        "lsd-opal": "f13dbea01fbc2a8d3c641fa62b81517f7a5d003da04c56fb89dcc6c4ffc3a55c",
         "tests/snapshots/compose.py": "4bca1ba510f3bd92f8cc974e818868954b3fd8d474def2aab9e7af64a550d655"
       },
-      "png_sha256": "bd84f7a22cbe88416eb3be5720dedb1c23bc0aabeda1d5a3b7f21d99c8618fe3"
+      "png_sha256": "87759f129f4af17173edeb94e665ba37ea6be83561b120322328409a9e8e0ca9"
     },
     "contact-opencode": {
       "destination": "assets/screenshots/integrations/opencode/contact-sheet.png",
@@ -1135,7 +1135,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-dusk": "5da727853c6fb8d66f97eda9bd42d1adbd7c09186a6751c230719cbce509b8cb",
-        "extras/lsd/colors-dusk.yaml": "dc58fe95ec4b115faa2bd796a232988787a1458a8ce2e52722ad579f8f6192fe",
+        "extras/lsd/colors-dusk.yaml": "a30e8827cc6d9a1078d4f3b85ed19f7f52afc57eff8bb5ffaf2deb544cd2e1e1",
         "tests/snapshots/capture.py": "bd5c36a4b04a39bdbea38d5af7c10ce8dc25f6232cfae75cb20bdcab95371196",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -1158,7 +1158,7 @@
         "tests/snapshots/lsd.tape": "a1143f8f7930e3a167e8b7e076ade36d9dc2307b1f50dc8cdf3f3f4ea081950b",
         "tests/snapshots/render.py": "94e226e398c36d2b75dfa8d47742ecf3d494bd169dec6db53afb0ccb22999759"
       },
-      "png_sha256": "6535c036a73008daff9826c3cff8ddc7459d10240b6a233bc8d20eb979cbe116"
+      "png_sha256": "13c8d0df7ebfb1532330b7b8cc2cc2344ee50942c316093a18ca9fe3fc9db5cc"
     },
     "lsd-mesa": {
       "destination": "assets/screenshots/integrations/lsd/mesa.png",
@@ -1214,7 +1214,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mesa": "2d098496e956651b08a1fd7a6078cdc987fce3166f4d370f208482f1f317e2cf",
-        "extras/lsd/colors-mesa.yaml": "d9b6c5141e2e3c2951f0f0c0b0848095016c442ce57dbb56c4fd18868e4ef02d",
+        "extras/lsd/colors-mesa.yaml": "72c4319e1b047ce4d9bc58e6dfdbfd4b0acb879f119ba2ca72e4d054f41f4204",
         "tests/snapshots/capture.py": "bd5c36a4b04a39bdbea38d5af7c10ce8dc25f6232cfae75cb20bdcab95371196",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -1237,7 +1237,7 @@
         "tests/snapshots/lsd.tape": "a1143f8f7930e3a167e8b7e076ade36d9dc2307b1f50dc8cdf3f3f4ea081950b",
         "tests/snapshots/render.py": "94e226e398c36d2b75dfa8d47742ecf3d494bd169dec6db53afb0ccb22999759"
       },
-      "png_sha256": "4143579abddb6e0ac6cae7edc0572ebf45db9e87088a0d5415b98e3c78821c10"
+      "png_sha256": "9f904b1c316b44a968882d61f9a35c21b38e3267760b6badccca72868a6b5d1f"
     },
     "lsd-mira": {
       "destination": "assets/screenshots/integrations/lsd/mira.png",
@@ -1293,7 +1293,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mira": "fd77bbdfce78f601c46158666bf7590a983a3826e32363b009d03fd140bff3b2",
-        "extras/lsd/colors-mira.yaml": "44fd69f8072fa8a51e0247654ca6819da981091b69654fdccc0234ce9ad3a739",
+        "extras/lsd/colors-mira.yaml": "35ad493ceba4748e81de8f2a308e8d04569c8890d08a91c144da9fe967e809c3",
         "tests/snapshots/capture.py": "bd5c36a4b04a39bdbea38d5af7c10ce8dc25f6232cfae75cb20bdcab95371196",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -1316,7 +1316,7 @@
         "tests/snapshots/lsd.tape": "a1143f8f7930e3a167e8b7e076ade36d9dc2307b1f50dc8cdf3f3f4ea081950b",
         "tests/snapshots/render.py": "94e226e398c36d2b75dfa8d47742ecf3d494bd169dec6db53afb0ccb22999759"
       },
-      "png_sha256": "19067bf4be77a0d1177f2fdd1deab06e36fe7d85529356ed62a6204691aa274b"
+      "png_sha256": "172ae5ce9212cec24e570e1422e37d264c43195cae7b8f6d5b8d6914931ba49a"
     },
     "lsd-opal": {
       "destination": "assets/screenshots/integrations/lsd/opal.png",
@@ -1372,7 +1372,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
-        "extras/lsd/colors-opal.yaml": "4683a24340f882bdb6c9ccd3c2dd5fcafa3f417833d2ac3e5e0fc5c3183e456b",
+        "extras/lsd/colors-opal.yaml": "c3a72693f83b48adb6c6807bf4b17dc1018e7f1304b95a094c8bebceeaa889f6",
         "tests/snapshots/capture.py": "bd5c36a4b04a39bdbea38d5af7c10ce8dc25f6232cfae75cb20bdcab95371196",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -1395,7 +1395,7 @@
         "tests/snapshots/lsd.tape": "a1143f8f7930e3a167e8b7e076ade36d9dc2307b1f50dc8cdf3f3f4ea081950b",
         "tests/snapshots/render.py": "94e226e398c36d2b75dfa8d47742ecf3d494bd169dec6db53afb0ccb22999759"
       },
-      "png_sha256": "47ffe546251c8599c3caae7b7a7af8b9e25343d52bce3f749353f5587010172b"
+      "png_sha256": "f13dbea01fbc2a8d3c641fa62b81517f7a5d003da04c56fb89dcc6c4ffc3a55c"
     },
     "neovim-completion-go-dusk": {
       "destination": "assets/screenshots/completion/dusk/go.png",
