@@ -56,10 +56,10 @@ class ExactPixels(unittest.TestCase):
 class FaithfulRendering(unittest.TestCase):
     def test_font_faces_are_semibold_and_real_bold_italic_variants(self):
         faces = font_evidence()
-        self.assertEqual(faces['normal']['filename'], 'MapleMono-NF-SemiBold.ttf')
-        self.assertEqual(faces['bold']['filename'], 'MapleMono-NF-Bold.ttf')
-        self.assertEqual(faces['italic']['filename'], 'MapleMono-NF-SemiBoldItalic.ttf')
-        self.assertEqual(faces['bold_italic']['filename'], 'MapleMono-NF-BoldItalic.ttf')
+        self.assertEqual(faces['normal']['filename'], 'JetBrainsMonoNerdFontMono-SemiBold.ttf')
+        self.assertEqual(faces['bold']['filename'], 'JetBrainsMonoNerdFontMono-Bold.ttf')
+        self.assertEqual(faces['italic']['filename'], 'JetBrainsMonoNerdFontMono-SemiBoldItalic.ttf')
+        self.assertEqual(faces['bold_italic']['filename'], 'JetBrainsMonoNerdFontMono-BoldItalic.ttf')
         self.assertTrue(all(len(face['sha256']) == 64 for face in faces.values()))
 
     def test_opaque_terminal_colors_are_preserved_in_every_channel(self):
@@ -162,6 +162,8 @@ class GhosttyScenarios(unittest.TestCase):
                 ghostty.capture_terminal(Path('/repo'), Path('/output'), 'neovim-zig-dusk',
                                          {'app': 'neovim'}, GEOMETRY, Mock())
         self.assertIn('--alpha-blending=native', start.call_args.args)
+        self.assertIn('--font-family=JetBrainsMono Nerd Font Mono', start.call_args.args)
+        self.assertIn('--font-style=SemiBold', start.call_args.args)
         environment = start.call_args.kwargs['env']
         self.assertEqual(environment['EXTRA'], 'preserved')
         self.assertEqual({key: environment[key] for key in ghostty.RENDER_ENV}, {

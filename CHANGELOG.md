@@ -2,9 +2,19 @@
 
 ## Unreleased
 
+- Add editor-local `schema_overrides` for per-palette role customization. Resolve global overrides
+  first, then the selected palette's overrides, with exact highlight overrides last.
 - Add LSD shell setup to `:FlumeExtras` for pink world-writable directory names without a background.
-- Refine Mira's golden-sand types, copper literals, and cool blue functions while retaining its
-  violet-charcoal surfaces, quiet neutral inks, berry properties, and sea-glass strings.
+- Give Mira a near-neutral charcoal foundation distinct from Dusk's violet canvas. Soften its
+  syntax and ANSI inks around mineral blue and sea-glass, with muted berry properties, sand types,
+  and copper literals. Soften neutral foregrounds without dimming structural accents. Retain
+  readable selections, diagnostics, and diff surfaces.
+- Refine Opal's syntax around purple types, red fields/imports, copper literals, sea-glass strings,
+  and softened teal functions on its existing cool paper canvas. Deepen the inks for readable
+  working states and use a clearer yellow warning fill. Keep neutral identifiers, semantic state
+  inks, and ANSI slots unchanged.
+- Move Mesa from warm beige paper to soft rose-gray with a slight mauve undertone. Coordinate
+  raised, selection, and diff surfaces while retaining its restrained syntax and ANSI inks.
 - Add explicit selection foreground/background roles for Visual, completion, command-line menus,
   Ghostty, and Kitty. Retain quieter active-control surfaces.
 - Use readable muted ink for hidden and ignored filenames, fold controls, inactive lualine text, LSD
@@ -76,10 +86,10 @@
   the same pinned pipeline. Preserve real parser, diagnostic, completion, and language-server
   evidence, with exact pixel comparisons and visual reports. Keep Ghostty/Kitty configuration checks
   separate from native renderer qualification.
-- Pin Maple Mono NF Medium and its bold/italic faces for high-resolution captures. Preserve exact
-  RGB colors by composing VHS's raw PNG layers, and add rounded corners with a restrained
-  macOS-style title bar. Keep complete foreground windows visible in the hero and use compact
-  viewports for short app fixtures. Use larger showcase typography, clean title bars, and
+- Pin JetBrains Mono Nerd Font Mono SemiBold and its real bold/italic faces for high-resolution
+  captures across every palette and application. Preserve exact RGB colors from Ghostty's X11
+  output through PNG composition, and add rounded corners with a restrained macOS-style title bar.
+  Keep complete foreground windows visible in the hero and use compact viewports for short app fixtures. Use larger showcase typography, clean title bars, and
   mode-specific non-blinking cursors. Signal capture readiness through real status information
   instead of adding preview labels to the images.
 

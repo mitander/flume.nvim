@@ -1,4 +1,4 @@
 flume-dusk: quiet violet canvas
 flume-opal: cool paper and vivid inks
-flume-mira: cyan functions and amber types
-flume-mesa: warm paper and restrained inks
+flume-mira: charcoal and mineral inks
+flume-mesa: rose-gray paper and restrained inks

@@ -34,7 +34,7 @@ links:
   valid: "#2f6271"            # accent (#2f6271)
   invalid: "#89455f"          # error (#89455f)
 
-tree-edge: "#c9bfbb"          # border_variant (#c9bfbb)
+tree-edge: "#c7bdc9"          # border_variant (#c7bdc9)
 
 git-status:
   default: "#5f5964"          # muted (#5f5964)

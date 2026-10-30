@@ -5,9 +5,9 @@ Compare Flume's two dark and two light palettes on the same code and editor stat
 ## Browse by palette
 
 - [Dusk](themes/dusk.md): dark, with a quiet violet canvas.
-- [Opal](themes/opal.md): light, with vivid inks on cool paper.
-- [Mira](themes/mira.md): dark, with a plum canvas and brighter accents.
-- [Mesa](themes/mesa.md): light, with restrained inks on warm paper.
+- [Opal](themes/opal.md): light, with purple, red, and sea-glass inks on cool porcelain paper.
+- [Mira](themes/mira.md): dark, with a charcoal canvas and restrained mineral accents.
+- [Mesa](themes/mesa.md): light, with restrained inks on soft rose-gray paper.
 
 Each palette page includes languages, selections, diffs, diagnostics, completion, Go/Zig LSP hover
 examples, gopls completion, lualine, Neo-tree, and real terminal-app snapshots. All maintained

@@ -120,7 +120,7 @@ def capture_terminal(root, output, case, spec, geometry, log):
         schema = case.rsplit('-', 1)[1]
         process = start(stack, log, 'ghostty',
             '--config-default-files=false', '--alpha-blending=native',
-            '--font-family=Maple Mono NF', '--font-style=SemiBold',
+            '--font-family=JetBrainsMono Nerd Font Mono', '--font-style=SemiBold',
             '--font-style-bold=Bold', '--font-style-italic=SemiBold Italic', '--font-style-bold-italic=Bold Italic',
             f'--font-size={geometry["font_size"]}', '--adjust-cell-height=12%', '--adjust-cell-width=2%',
             f'--window-width={geometry["columns"]}', f'--window-height={geometry["rows"]}',

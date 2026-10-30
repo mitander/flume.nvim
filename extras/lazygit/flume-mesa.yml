@@ -2,13 +2,13 @@
 gui:
   theme:
     activeBorderColor: ["#2f6271", bold]
-    inactiveBorderColor: ["#8c837f"]
+    inactiveBorderColor: ["#89818d"]
     searchingActiveBorderColor: ["#7d521e", bold]
     optionsTextColor: ["#5f5964"]
-    selectedLineFgColor: ["#fffaf6"]
-    selectedLineBgColor: ["#e5dcd9"]
-    inactiveViewSelectedLineBgColor: ["#ebe3de"]
-    cherryPickedCommitBgColor: ["#e5dcd9"]
+    selectedLineFgColor: ["#fffaff"]
+    selectedLineBgColor: ["#e2dae2"]
+    inactiveViewSelectedLineBgColor: ["#e8e1e7"]
+    cherryPickedCommitBgColor: ["#e2dae2"]
     cherryPickedCommitFgColor: ["#695187"]
     markedBaseCommitBgColor: ["#e9ded1"]
     markedBaseCommitFgColor: ["#695187"]
@@ -21,4 +21,4 @@ gui:
 git:
   pagers:
     - colorArg: always
-      pager: 'delta --light --features="" --paging=never --syntax-theme=ansi --minus-style="syntax #ead9de" --minus-emph-style="syntax #d9c0c8" --plus-style="syntax #dce5e0" --plus-emph-style="syntax #c4d5ce" --line-numbers --line-numbers-minus-style=#89455f --line-numbers-plus-style=#43615a --line-numbers-left-style=#8c837f --line-numbers-right-style=#8c837f'
+      pager: 'delta --light --features="" --paging=never --syntax-theme=ansi --minus-style="syntax #ead9e2" --minus-emph-style="syntax #d9c0cc" --plus-style="syntax #dce5e0" --plus-emph-style="syntax #c4d5ce" --line-numbers --line-numbers-minus-style=#89455f --line-numbers-plus-style=#43615a --line-numbers-left-style=#89818d --line-numbers-right-style=#89818d'

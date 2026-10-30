@@ -1,7 +1,7 @@
 # Mira examples
 
-Dark palette with violet-charcoal surfaces, berry properties, sea-glass strings, golden-sand types,
-copper literals, and cool blue functions. [All galleries](../gallery.md).
+Dark palette with near-neutral charcoal surfaces, mineral blue functions, and sea-glass strings.
+Muted berry properties, sand types, and copper literals add restrained warmth. [All galleries](../gallery.md).
 
 [Go](#go) · [Rust](#rust) · [Python](#python) · [TypeScript](#typescript) · [Zig](#zig) ·
 [Elixir](#elixir) · [TOML](#toml) ·

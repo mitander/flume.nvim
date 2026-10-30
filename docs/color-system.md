@@ -8,9 +8,16 @@ the canonical Lua table.
 ## Palette direction
 
 The V1 set contains four palettes: Dusk, Opal, Mira, and Mesa. Dusk keeps its violet canvas, amber
-types, sage strings, dusty rose properties, and teal functions. Mira uses violet-charcoal surfaces,
-berry properties, sea-glass strings, cool blue functions, golden-sand types, and copper literals.
-Opal pairs cool paper with vivid inks; Mesa pairs warm rose-mineral paper with restrained inks.
+types, sage strings, dusty rose properties, and teal functions. Mira uses near-neutral charcoal
+surfaces with mineral blue functions and sea-glass strings. Muted berry properties, sand types, and
+copper literals provide restrained warmth rather than competing bright accents.
+Opal pairs cool lilac paper with purple types and keywords, red fields and imports, copper literals,
+sea-glass strings, and softened teal functions. Types stay in the purple family rather than adding
+another warm accent beside red fields. The inks retain contrast on raised and diff surfaces, not
+only on the canvas. Amber warning ink sits on a clearer yellow fill, independent of syntax colors.
+Mesa pairs softer rose-gray paper with restrained mineral inks.
+Mesa's slight mauve undertone avoids a yellow cast without making it a second Opal. Dusk and Opal
+carry the stronger violet character, while Mira and Mesa provide more neutral foundations.
 Light palettes use darker foregrounds, not inverted dark-palette RGB values.
 
 Mira and Mesa retain the same function, type, keyword, string, and berry families. Their ink
@@ -125,7 +132,8 @@ staged GitSigns.
 - Palette values are explicit `#RRGGBB` colors.
 - Semantic state highlights do not consume ANSI roles directly.
 - `on_accent` is never made transparent.
-- `overrides` are applied after the base palette resolves.
+- Global `overrides` are applied after the base palette resolves.
+- The selected `schema_overrides[schema]` are applied after global overrides.
 - User `highlights` are applied last and therefore win.
 - Generated extras compile from the canonical palette, not editor-local overrides.
 - Customization uses exact role overrides, not global saturation or chroma transforms.

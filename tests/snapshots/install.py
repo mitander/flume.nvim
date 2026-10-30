@@ -35,9 +35,9 @@ def main():
         else:
             run('tar', 'xf', str(archive), '-C', str(directory), '--strip-components=' + str(tool['strip']))
         archive.unlink()
-    fonts = Path('/usr/share/fonts/truetype/maple')
+    fonts = Path('/usr/share/fonts/truetype/jetbrains-mono')
     fonts.mkdir(parents=True)
-    for font in (Path('/opt/tools') / 'maple-font').glob('*.ttf'):
+    for font in (Path('/opt/tools') / 'jetbrains-mono').glob('*.ttf'):
         shutil.copyfile(font, fonts / font.name)
     run('fc-cache', '-f')
     runtime = Path('/opt/treesitter')

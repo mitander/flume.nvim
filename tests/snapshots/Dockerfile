@@ -24,6 +24,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends git ripgrep fd-
     && ln -s /usr/bin/fdfind /usr/local/bin/fd \
     && rm -rf /var/lib/apt/lists/*
 
+# The base image carries an older copy of this family. It must not win Fontconfig
+# resolution over the checksum-locked faces installed above.
+RUN rm -rf /usr/share/fonts/jetbrains-mono-nerd && fc-cache -f
+
 ENV PATH=/opt/tools/go/bin:$PATH GOROOT=/opt/tools/go \
     GOPROXY=off GOSUMDB=off GOCACHE=/tmp/go-cache GOPATH=/tmp/gopath \
     FLUME_TS_RUNTIME=/opt/treesitter \

@@ -356,8 +356,8 @@ test("stable schema registry and light foundations are preserved", function()
     equal(table.concat(schema_names, ","), "dusk,opal,mira,mesa")
     equal(palettes.opal.bg, "#f2eff7")
     equal(palettes.opal.surface, "#ebe6f0")
-    equal(palettes.mesa.bg, "#f3ede8")
-    equal(palettes.mesa.surface, "#ebe3de")
+    equal(palettes.mesa.bg, "#f0ebef")
+    equal(palettes.mesa.surface, "#e8e1e7")
     for _, schema in ipairs({ "opal", "mesa" }) do
         local colors = palettes[schema]
         truthy(luminance(colors.bg) > luminance(colors.surface), schema .. " surface must recede from the canvas")
@@ -379,21 +379,55 @@ test("comments remain subordinate and shared syntax accents stay related", funct
     end
 end)
 
+test("Opal keeps porcelain syntax distinct from warning and success states", function()
+    local opal = palettes.opal
+
+    equal(opal.syntax_type, "#705883", "Opal purple types remain readable on working surfaces")
+    equal(opal.syntax_keyword, "#70558a", "Opal keywords retain a related purple ink")
+    equal(opal.syntax_property, "#9c4260", "Opal fields retain their red family")
+    equal(opal.syntax_namespace, opal.syntax_property, "Opal imports retain the red family")
+    equal(opal.syntax_boolean, "#8d513c", "Opal warm copper literals")
+    equal(opal.syntax_punctuation_special, opal.syntax_boolean, "Opal copper special punctuation")
+    equal(opal.syntax_string, "#2d6a60", "Opal sea-glass strings")
+    equal(opal.syntax_primary, "#514e57", "Opal retains neutral identifiers")
+    equal(opal.syntax_function, "#356475", "Opal softened teal functions")
+    equal(opal.warn_bg, "#f3e3a6", "Opal warning surfaces keep the brighter yellow")
+    equal(opal.warning, "#7e5500", "Opal warnings retain their amber ink")
+    equal(opal.success, "#246b23", "Opal success retains its green ink")
+    truthy(opal.syntax_type ~= opal.warning, "Opal types must not inherit warning gold")
+    truthy(opal.syntax_string ~= opal.success, "Opal strings must not inherit success green")
+end)
+
 test("Mira and Mesa preserve their editor-first design anchors", function()
     local mira = palettes.mira
     local mesa = palettes.mesa
 
-    equal(mira.bg, "#24212f", "Mira violet-charcoal foundation")
-    equal(mira.surface, "#292634", "Mira violet-charcoal raised surface")
-    equal(mira.syntax_primary, "#cbc5d2", "Mira quiet neutral identifiers")
-    equal(mira.syntax_comment, "#9b94a4", "Mira subordinate comments")
-    equal(mira.syntax_function, "#82b8d4", "Mira cool blue functions")
-    equal(mira.syntax_type, "#d7b879", "Mira golden-sand types")
-    equal(mira.syntax_boolean, "#e4a084", "Mira copper literals")
-    equal(mira.syntax_property, "#d683a5", "Mira berry properties")
+    equal(mira.bg, "#242429", "Mira near-neutral charcoal foundation")
+    equal(mira.surface, "#292a30", "Mira cool charcoal raised surface")
+    equal(mira.fg, "#bdc0c8", "Mira softer neutral foreground")
+    equal(mira.syntax_primary, mira.fg, "Mira identifiers follow the neutral foreground")
+    equal(mira.syntax_comment, "#989ba5", "Mira subordinate comments")
+    equal(mira.syntax_function, "#8caabd", "Mira mineral blue functions")
+    equal(mira.syntax_type, "#c5b18d", "Mira restrained sand types")
+    equal(mira.syntax_boolean, "#c49c89", "Mira copper literals")
+    equal(mira.syntax_property, "#b495a7", "Mira muted berry properties")
     equal(mira.syntax_namespace, mira.syntax_property, "Mira deliberately shares berry ink")
-    equal(mesa.bg, "#f3ede8", "Mesa rose-mineral foundation")
-    truthy(mira.bg ~= "#282e34", "Mira regressed to the source website canvas")
+    -- Delta retains ANSI syntax inks on its added and emphasized deleted surfaces.
+    truthy(contrast(mira.red, mira.diff_add_bg) >= 4.5, "Mira ANSI red on Delta additions")
+    truthy(contrast(mira.white, mira.diff_delete_emphasis) >= 4.5, "Mira ANSI white on Delta deletions")
+    equal(mesa.bg, "#f0ebef", "Mesa rose-gray foundation")
+    equal(mesa.selection_bg, "#766878", "Mesa selection follows the cooler foundation")
+    equal(mesa.syntax_primary, "#524f50", "Mesa retains its restrained neutral ink")
+    equal(mesa.syntax_type, "#7d521e", "Mesa retains warm mineral types")
+    truthy(mira.bg ~= palettes.dusk.bg, "Mira needs its own charcoal foundation")
+    truthy(
+        contrast(mira.syntax_property, mira.bg) < contrast(mira.syntax_function, mira.bg),
+        "Mira's frequent properties must recede behind function structure"
+    )
+    truthy(
+        contrast(mira.syntax_punctuation, mira.bg) < contrast(mira.syntax_primary, mira.bg),
+        "Mira punctuation must recede behind identifiers"
+    )
     truthy(mesa.bg ~= "#e5e2d9", "Mesa regressed to the source website canvas")
 
     equal(mira.syntax_function, mira.accent, "Mira function structure")
@@ -488,6 +522,49 @@ test("setup starts from defaults on every call", function()
     equal(vim.api.nvim_get_hl(0, { name = "Comment", link = false }).fg, 0xabcdef)
     flume.setup({})
     equal(vim.api.nvim_get_hl(0, { name = "Comment", link = false }).fg, color_number(palette.syntax_comment))
+end)
+
+test("schema overrides follow palette switches and preserve global overrides", function()
+    local flume = require("flume")
+    local canonical = vim.deepcopy(palettes.opal)
+    local schema_overrides = {
+        opal = { syntax_comment = "#234567", syntax_function = "#345678" },
+        mira = { syntax_function = "#456789" },
+    }
+    flume.setup({
+        schema = "opal",
+        watch_sync = false,
+        overrides = { syntax_comment = "#123456" },
+        schema_overrides = schema_overrides,
+        highlights = { Comment = { fg = "#56789a" } },
+    })
+    equal(flume.colors.syntax_comment, "#234567", "schema override wins over global role")
+    equal(vim.api.nvim_get_hl(0, { name = "Comment", link = false }).fg, 0x56789a, "exact highlight wins last")
+    equal(flume.colors.syntax_function, "#345678", "Opal function override")
+    equal(flume.get_colors("mira").syntax_function, "#456789", "explicit schema resolution")
+
+    flume.apply("mira")
+    equal(flume.colors.syntax_comment, "#123456", "global role remains available")
+    equal(flume.colors.syntax_function, "#456789", "Mira uses its own override")
+    flume.apply("dusk")
+    equal(flume.colors.syntax_comment, "#123456", "unconfigured schema retains global override")
+    equal(flume.colors.syntax_function, palettes.dusk.syntax_function, "Opal override does not leak")
+    vim.cmd.colorscheme("flume-opal")
+    equal(flume.colors.syntax_function, "#345678", "colorscheme entry applies schema override")
+    truthy(flume.reload(), "reload with schema overrides")
+    equal(flume.colors.syntax_function, "#345678", "reload retains schema overrides")
+    truthy(vim.deep_equal(palettes.opal, canonical), "editor overrides must not mutate the export palette")
+    require("flume.compiler").compile_palette("opal")
+    local export = vim.json.decode(table.concat(vim.fn.readfile("extras/palette/flume-opal.json"), "\n"))
+    equal(export.colors.syntax_function, canonical.syntax_function, "generated export ignores editor overrides")
+    truthy(
+        vim.deep_equal(flume.config.schema_overrides, schema_overrides),
+        "resolution must not mutate schema overrides"
+    )
+
+    flume.setup({ watch_sync = false })
+    equal(next(flume.config.schema_overrides), nil, "setup resets schema overrides")
+    equal(flume.colors.syntax_function, palettes.dusk.syntax_function, "setup restores canonical inks")
 end)
 
 test("transparent mode keeps inverse text and clears the primary background", function()

@@ -8,6 +8,7 @@ local default_config = {
     follow_sync = false,
     dev = false,
     overrides = {},
+    schema_overrides = {},
     highlights = {},
     styles = {
         comments = {},
@@ -148,8 +149,10 @@ function M.get_active_schema()
 end
 
 function M.get_colors(schema)
-    local palette = require("flume.palette").get(schema or M.config.schema)
-    return vim.tbl_deep_extend("force", {}, palette.colors, M.config.overrides or {})
+    schema = schema or M.config.schema
+    local palette = require("flume.palette").get(schema)
+    local schema_overrides = M.config.schema_overrides or {}
+    return vim.tbl_deep_extend("force", {}, palette.colors, M.config.overrides or {}, schema_overrides[schema] or {})
 end
 
 function M.load(schema, colorscheme)

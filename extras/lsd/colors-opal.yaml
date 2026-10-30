@@ -3,7 +3,7 @@
 # Quoted hex colors preserve the selected palette through lsd's crossterm parser.
 
 user: "#514e57"              # syntax_primary (#514e57)
-group: "#9d395e"             # syntax_property (#9d395e)
+group: "#9c4260"             # syntax_property (#9c4260)
 
 permission:
   read: "#615a68"             # quiet metadata (#615a68)

@@ -4,12 +4,12 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-FONT_DIRECTORY = Path('/usr/share/fonts/truetype/maple')
+FONT_DIRECTORY = Path('/usr/share/fonts/truetype/jetbrains-mono')
 FONT_FACES = {
-    'normal': ('MapleMono-NF-SemiBold.ttf', 'weight=demibold'),
-    'bold': ('MapleMono-NF-Bold.ttf', 'weight=bold'),
-    'italic': ('MapleMono-NF-SemiBoldItalic.ttf', 'weight=demibold:slant=italic'),
-    'bold_italic': ('MapleMono-NF-BoldItalic.ttf', 'weight=bold:slant=italic'),
+    'normal': ('JetBrainsMonoNerdFontMono-SemiBold.ttf', 'weight=demibold'),
+    'bold': ('JetBrainsMonoNerdFontMono-Bold.ttf', 'weight=bold'),
+    'italic': ('JetBrainsMonoNerdFontMono-SemiBoldItalic.ttf', 'weight=demibold:slant=italic'),
+    'bold_italic': ('JetBrainsMonoNerdFontMono-BoldItalic.ttf', 'weight=bold:slant=italic'),
 }
 
 

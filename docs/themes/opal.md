@@ -1,6 +1,7 @@
 # Opal examples
 
-Light palette with a cool paper canvas. [All galleries](../gallery.md).
+Light palette with cool porcelain paper, purple types, red fields, copper literals, sea-glass
+strings, and softened teal functions. [All galleries](../gallery.md).
 
 [Go](#go) · [Rust](#rust) · [Python](#python) · [TypeScript](#typescript) · [Zig](#zig) ·
 [Elixir](#elixir) · [TOML](#toml) ·

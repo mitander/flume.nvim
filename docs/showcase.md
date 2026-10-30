@@ -101,8 +101,12 @@ added to the image.
 
 Raw images live at `assets/screenshots/<schema>/<language>.png`. Geometry is 112 columns × 32 rows
 for the Zig hero and 100 × 48 for other language and LSP scenes. The Neo-tree scene uses 132 × 44.
-Typography uses checksum-locked Maple Mono NF SemiBold, with real Bold, SemiBold Italic, and Bold
-Italic faces. The hero uses a 38-pixel em; compact editor scenes use a 24-pixel em. Ghostty's X11
+Typography uses checksum-locked JetBrains Mono 2.304 from the
+[Nerd Fonts 3.5.1 release](https://github.com/ryanoasis/nerd-fonts/releases/tag/v3.5.1). Its
+`JetBrainsMono Nerd Font Mono` family preserves ligatures and supplies monospaced icons. Every
+palette and app uses SemiBold, with real Bold, SemiBold Italic, and Bold Italic faces. Contact-sheet
+labels use the same family. This capture choice does not change the user's terminal font.
+The hero uses a 38-pixel em; compact editor scenes use a 24-pixel em. Ghostty's X11
 point sizes are 28.5 and 18 at 96 DPI. Cell height increases by 12% and cell width by 2%. Capture
 checks the resolved font files and fails on fallback. Neovim keeps mode-specific, non-blinking
 cursor shapes: block in Normal mode, bar in Insert mode. Syntax specimens park the block cursor on
@@ -120,8 +124,8 @@ Terminal pixels are never resized or filtered. The terminal background is opaque
 corners are transparent. Complete fixtures fit without scrolling. Gallery links embed the
 full-resolution images.
 
-Ghostty shapes ligatures and Nerd Font icons and renders diagnostic undercurls. SemiBold
-approximates the fuller strokes of the original macOS captures without macOS-only font thickening.
+Ghostty shapes ligatures and Nerd Font icons and renders diagnostic undercurls. One family and
+weight across the portfolio keep font choice from becoming another palette-comparison variable.
 Linux FreeType/OpenGL rasterization does not reproduce macOS CoreText/Metal pixels exactly. The
 composed frame keeps native-style shading and generous padding, rather than capturing a desktop
 window.

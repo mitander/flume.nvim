@@ -30,11 +30,11 @@
     "sha256": "06c5fef8af450928e62f93f8fecb015b14084e0c6d9b83b52352b09a9611f018",
     "strip": 1
   },
-  "maple-font": {
-    "url": "https://github.com/subframe7536/maple-font/releases/download/v7.9/MapleMono-NF-unhinted.zip",
-    "sha256": "8248d6260660be1066b5ebe90d25131582df8383f38db1c284dd1f2dc9d2b46e",
+  "jetbrains-mono": {
+    "url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/JetBrainsMono.zip",
+    "sha256": "fab782a66f7d3019da64f6572db9fc5d3a4bcb19f9fa13e2d8a62e3693d6396e",
     "format": "zip",
-    "files": ["MapleMono-NF-SemiBold.ttf", "MapleMono-NF-Bold.ttf", "MapleMono-NF-SemiBoldItalic.ttf", "MapleMono-NF-BoldItalic.ttf", "LICENSE.txt"]
+    "files": ["JetBrainsMonoNerdFontMono-SemiBold.ttf", "JetBrainsMonoNerdFontMono-Bold.ttf", "JetBrainsMonoNerdFontMono-SemiBoldItalic.ttf", "JetBrainsMonoNerdFontMono-BoldItalic.ttf", "OFL.txt"]
   },
   "nvim": {
     "url": "https://github.com/neovim/neovim/releases/download/v0.12.5/nvim-linux-x86_64.tar.gz",

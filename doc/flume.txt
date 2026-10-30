@@ -41,9 +41,9 @@ PALETTES                                                      *flume-palettes*
 
 Schema  Appearance  Character ~
     dusk    dark    quiet violet
-    opal    light   vivid inks on cool opalescent paper
-    mira    dark    violet-charcoal with berry, sea-glass, and sand
-    mesa    light   restrained inks on warm rose-mineral paper
+    opal    light   purple, red, and sea-glass on cool porcelain
+    mira    dark    mineral blue and sea-glass on neutral charcoal
+    mesa    light   restrained mineral inks on soft rose-gray paper
 
 The colorscheme names are flume-dusk, flume-opal, flume-mira, and flume-mesa.
 Each palette sets 'background' to its appearance.
@@ -85,6 +85,7 @@ Defaults:
         follow_sync = false,
         dev = false,
         overrides = {},
+        schema_overrides = {},
         highlights = {},
         styles = {
             comments = {}, functions = {}, keywords = {}, strings = {},
@@ -139,8 +140,24 @@ overrides ~                                                  *flume-overrides*
         overrides = { syntax_comment = "#7a747a" },
     })
 <
-    External themes use the palette's default colors, not these overrides.
+    Global overrides apply to every palette. Use |flume-schema_overrides| for
+    palette-specific changes. Exact |flume-highlights| overrides apply last.
+    External themes use the palette's default colors, not editor overrides.
     Check contrast against your rendered background after customization.
+
+schema_overrides ~                                    *flume-schema_overrides*
+    Palette-role overrides keyed by schema. Each load resolves canonical colors,
+    then global `overrides`, then the selected schema's overrides. Switching
+    palettes or reloading selects the corresponding table automatically.
+>
+    require("flume").setup({
+        schema_overrides = {
+            opal = { syntax_function = "#345678" },
+        },
+    })
+<
+    This changes Opal only. Other palettes keep their canonical colors and any
+    global overrides. Generated external themes retain their canonical colors.
 
 styles ~                                                        *flume-styles*
     Adds text attributes to the syntax families shown in the defaults above.

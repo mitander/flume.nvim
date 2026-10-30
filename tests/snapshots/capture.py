@@ -12,7 +12,7 @@ from common import APPS, SCHEMAS, SCENES, destination, digest, environment_diges
 ROOT = Path('/repo')
 OUTPUT = Path('/output')
 GEOMETRY = {
-    'columns': 100, 'rows': 40, 'font': 'Maple Mono NF', 'font_size': 28.5,
+    'columns': 100, 'rows': 40, 'font': 'JetBrainsMono Nerd Font Mono', 'font_size': 28.5,
     'logical_font_size': 19, 'backing_scale': 2,
     'cell_height_adjustment': '12%', 'cell_width_adjustment': '2%',
 }
@@ -23,7 +23,7 @@ def font_evidence():
 
     evidence = {}
     for role, (filename, pattern) in FONT_FACES.items():
-        resolved = subprocess.check_output(['fc-match', '-f', '%{file}', 'Maple Mono NF:' + pattern], text=True)
+        resolved = subprocess.check_output(['fc-match', '-f', '%{file}', 'JetBrainsMono Nerd Font Mono:' + pattern], text=True)
         expected = FONT_DIRECTORY / filename
         if Path(resolved).resolve() != expected.resolve():
             raise ValueError(f'Terminal font fallback for {role}: {resolved}')

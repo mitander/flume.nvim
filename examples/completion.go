@@ -13,8 +13,8 @@ type Palette struct {
 var palettes = []Palette{
     {Name: "dusk", Background: "#232136"},
     {Name: "opal", Background: "#f2eff7"},
-    {Name: "mira", Background: "#24212f"},
-    {Name: "mesa", Background: "#f3ede8"},
+    {Name: "mira", Background: "#242429"},
+    {Name: "mesa", Background: "#f0ebef"},
 }
 
 // FindPalette accepts names copied from a config file or terminal prompt.

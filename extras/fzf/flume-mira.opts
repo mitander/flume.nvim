@@ -1,1 +1,1 @@
---no-bold --color=fg:#cbc5d2,bg:#24212f,hl:#d7b879,fg+:#d9d4df,bg+:#312d3e,hl+:#d7b879,info:#a6a0ad,prompt:#82b8d4,pointer:#e187a6,marker:#8bbca7,spinner:#b69bd2,header:#a6a0ad,border:#4b485a,gutter:#24212f,query:#d9d4df
+--no-bold --color=fg:#bdc0c8,bg:#242429,hl:#c5b18d,fg+:#d5d7dc,bg+:#303137,hl+:#c5b18d,info:#a1a3ad,prompt:#8caabd,pointer:#cc91a5,marker:#95b0a2,spinner:#a99bbd,header:#a1a3ad,border:#494c58,gutter:#242429,query:#d5d7dc
