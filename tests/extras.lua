@@ -44,6 +44,7 @@ function M.register(test, equal, truthy)
         "lsd",
         "opencode",
         "lazygit",
+        "fish",
         "fzf",
         "delta",
         "pi",
@@ -63,6 +64,7 @@ function M.register(test, equal, truthy)
             lsd = "extras/lsd/colors%s.yaml",
             opencode = "extras/opencode/flume%s.json",
             lazygit = "extras/lazygit/flume%s.yml",
+            fish = "extras/fish/flume%s.fish",
             fzf = "extras/fzf/flume%s.opts",
             delta = "extras/delta/flume%s.gitconfig",
             pi = "extras/pi/flume%s.json",
@@ -71,7 +73,7 @@ function M.register(test, equal, truthy)
         return patterns[app]:format(ending)
     end
 
-    test("generated inventory is four schemas by nine apps and semantic export", function()
+    test("generated inventory is four schemas by ten apps and semantic export", function()
         local expected = {}
         for _, app in ipairs(apps) do
             for _, schema in ipairs(palettes.schema_order) do
@@ -87,7 +89,7 @@ function M.register(test, equal, truthy)
             end
         end
         equal(sorted_keys(actual), sorted_keys(expected), "generated integration inventory")
-        equal(vim.tbl_count(actual), 40, "generated artifact count")
+        equal(vim.tbl_count(actual), 44, "generated artifact count")
     end)
 
     test("versioned semantic exports contain exact canonical roles", function()
@@ -178,6 +180,120 @@ function M.register(test, equal, truthy)
             equal(kitty.color15, colors.bright_white, schema .. " Kitty ANSI 15")
         end
     end)
+
+    test("Fish fragments replace all pager row colors with semantic roles", function()
+        for _, schema in ipairs(palettes.schema_order) do
+            local colors = palettes[schema]
+            local values = {}
+            for line in read_all(path("fish", schema)):gmatch("[^\n]+") do
+                if not line:match("^#") then
+                    local name, value = line:match("^set %-g ([%w_]+) (.+)$")
+                    truthy(name, schema .. " unexpected Fish statement: " .. line)
+                    truthy(not values[name], schema .. " duplicate Fish variable")
+                    values[name] = value
+                end
+            end
+            equal(vim.tbl_count(values), 31, schema .. " Fish variable count")
+            for _, variant in ipairs({ "", "secondary_" }) do
+                local prefix = "fish_pager_color_" .. variant
+                equal(values[prefix .. "background"], "--background=normal", schema .. " transparent pager")
+                equal(values[prefix .. "prefix"], colors.match:sub(2) .. " --underline", schema .. " pager match")
+                equal(values[prefix .. "completion"], colors.text:sub(2), schema .. " pager text")
+                equal(values[prefix .. "description"], colors.muted:sub(2), schema .. " pager description")
+            end
+            equal(
+                values.fish_pager_color_selected_background,
+                "--background=" .. colors.selection_bg:sub(2),
+                schema .. " selected background"
+            )
+            for _, part in ipairs({ "prefix", "completion", "description" }) do
+                local style = part == "prefix" and " --underline" or ""
+                equal(
+                    values["fish_pager_color_selected_" .. part],
+                    colors.selection_fg:sub(2) .. style,
+                    schema .. " selected ink"
+                )
+            end
+            truthy(contrast(colors.selection_fg, colors.selection_bg) >= 4.5, schema .. " Fish selection contrast")
+            truthy(contrast(colors.muted, colors.terminal_bg) >= 4.5, schema .. " Fish description contrast")
+            equal(values.fish_color_command, colors.syntax_function:sub(2), schema .. " Fish commands")
+            equal(values.fish_color_param, colors.syntax_primary:sub(2), schema .. " Fish parameters")
+            equal(values.fish_color_valid_path, "--underline", schema .. " paths retain syntax ink")
+        end
+    end)
+
+    if vim.fn.executable("fish") == 1 then
+        test("Fish startup loads conf.d colors before personal config overrides", function()
+            local root = vim.fn.tempname()
+            vim.fn.mkdir(root .. "/fish/conf.d", "p")
+            local ok, err = pcall(function()
+                assert(
+                    (vim.uv or vim.loop).fs_symlink(
+                        vim.fn.fnamemodify(path("fish", "dusk"), ":p"),
+                        root .. "/fish/conf.d/flume.fish"
+                    )
+                )
+                local function read_startup_color()
+                    local output = vim.fn.system({
+                        "env",
+                        "XDG_CONFIG_HOME=" .. root,
+                        "fish",
+                        "--private",
+                        "-c",
+                        "printf '%s\\n' $fish_pager_color_description",
+                    })
+                    equal(vim.v.shell_error, 0, "Fish startup exit")
+                    return output
+                end
+                equal(read_startup_color(), palettes.dusk.muted:sub(2) .. "\n", "conf.d startup colors")
+                vim.fn.writefile({ "set -g fish_pager_color_description red" }, root .. "/fish/config.fish")
+                equal(read_startup_color(), "red\n", "config.fish overrides conf.d")
+            end)
+            vim.fn.delete(root, "rf")
+            if not ok then
+                error(err)
+            end
+        end)
+
+        test("Fish sources fragments in an isolated session and replaces previous colors", function()
+            local config = vim.fn.tempname()
+            vim.fn.mkdir(config, "p")
+            local ok, err = pcall(function()
+                for _, schema in ipairs(palettes.schema_order) do
+                    local output = vim.fn.system({
+                        "env",
+                        "XDG_CONFIG_HOME=" .. config,
+                        "fish",
+                        "--no-config",
+                        "--private",
+                        "-c",
+                        "set -g fish_pager_color_secondary_description red; "
+                            .. "source $argv[1]; or exit 1; "
+                            .. "printf '%s\\n' $fish_pager_color_selected_background "
+                            .. "$fish_pager_color_selected_description $fish_pager_color_secondary_description; "
+                            .. "set --query --global fish_color_command",
+                        path("fish", schema),
+                    })
+                    equal(vim.v.shell_error, 0, schema .. " Fish source")
+                    equal(
+                        output,
+                        "--background="
+                            .. palettes[schema].selection_bg:sub(2)
+                            .. "\n"
+                            .. palettes[schema].selection_fg:sub(2)
+                            .. "\n"
+                            .. palettes[schema].muted:sub(2)
+                            .. "\n",
+                        schema .. " native Fish pager variables"
+                    )
+                end
+            end)
+            vim.fn.delete(config, "rf")
+            if not ok then
+                error(err)
+            end
+        end)
+    end
 
     test("tmux lsd and fzf contracts parse for every schema", function()
         local tmux_keys = keyset({
@@ -421,9 +537,70 @@ function M.register(test, equal, truthy)
         end
     end)
 
+    test("Fish installation requires consent and never edits config.fish", function()
+        local extras = require("flume.extras")
+        local app = extras.get_apps().fish
+        local original_dest, original_select, original_notify = app.dest, vim.ui.select, vim.notify
+        local root = vim.fn.tempname()
+        local destination = root .. "/fish/conf.d/flume.fish"
+        local config = root .. "/fish/config.fish"
+        local uv = vim.uv or vim.loop
+        local callback, notification
+        vim.fn.mkdir(root .. "/fish", "p")
+        vim.fn.writefile({ "# personal config" }, config)
+        app.dest = destination
+        vim.ui.select = function(items, opts, on_choice)
+            equal(table.concat(items, ","), "Yes,No", "Fish consent choices")
+            truthy(opts.prompt:find("config.fish can override", 1, true), "startup ordering warning")
+            callback = on_choice
+        end
+        vim.notify = function(message)
+            notification = message
+        end
+        local ok, err = pcall(function()
+            extras.install("fish")
+            equal(vim.fn.getftype(destination), "", "no writes before consent")
+            callback("No")
+            equal(vim.fn.getftype(destination), "", "decline leaves destination absent")
+            truthy(notification:find("if status is-interactive", 1, true), "manual Fish guard")
+            truthy(notification:find(extras.get_source_path(app.src), 1, true), "manual active path")
+
+            notification = nil
+            extras.install("fish")
+            callback(nil)
+            equal(notification, nil, "cancel is silent")
+            equal(vim.fn.getftype(destination), "", "cancel leaves destination absent")
+
+            extras.install("fish")
+            callback("Yes")
+            equal(uv.fs_readlink(destination), extras.get_source_path(app.src), "accepted active link")
+            extras.install("fish")
+            callback("No")
+            equal(uv.fs_readlink(destination), extras.get_source_path(app.src), "decline preserves existing link")
+
+            assert(uv.fs_unlink(destination))
+            vim.fn.writefile({ "# keep fragment" }, destination)
+            extras.install("fish")
+            callback("Yes")
+            equal(vim.fn.readfile(destination)[1], "# keep fragment", "regular fragment preserved")
+            truthy(notification:find("Refusing to replace", 1, true), "regular fragment refusal")
+            equal(vim.fn.readfile(config)[1], "# personal config", "personal config preserved")
+        end)
+        app.dest, vim.ui.select, vim.notify = original_dest, original_select, original_notify
+        vim.fn.delete(root, "rf")
+        if not ok then
+            error(err)
+        end
+    end)
+
     test("auto-install destinations remain safe", function()
         local apps_config = require("flume.extras").get_apps()
+        local config_home = vim.env.XDG_CONFIG_HOME
+        if not config_home or config_home == "" then
+            config_home = "~/.config"
+        end
         local expected = {
+            fish = config_home .. "/fish/conf.d/flume.fish",
             ghostty = "~/.config/ghostty/themes/flume",
             kitty = "~/.config/kitty/themes/flume.conf",
             opencode = "~/.config/opencode/themes/flume.json",

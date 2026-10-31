@@ -230,6 +230,7 @@ Tmux      extras/tmux/colors-dusk.conf              tmux.conf
 LSD       extras/lsd/colors-dusk.yaml               lsd.yaml
 OpenCode  extras/opencode/flume-dusk.json           opencode.json
 Lazygit   extras/lazygit/flume-dusk.yml             lazygit.yml
+Fish      extras/fish/flume-dusk.fish               fish.fish
 fzf       extras/fzf/flume-dusk.opts                fzf.opts
 Delta     extras/delta/flume-dusk.gitconfig         delta.gitconfig
 Pi        extras/pi/flume-dusk.json                 pi.json
@@ -255,6 +256,7 @@ symlink destinations:
     tmux      ~/.tmux/flume-theme.conf
     lsd       ~/.config/lsd/colors.yaml
     lazygit   ~/.config/lazygit/flume.yml
+    fish      ~/.config/fish/conf.d/flume.fish (or $XDG_CONFIG_HOME/fish/conf.d/)
 
 It refuses existing regular files and directories, but replaces existing
 symlinks. Check the destination first if you already manage a theme there.
@@ -265,6 +267,17 @@ For Lazygit, export `LG_CONFIG_FILE` with your personal config first and
 For LSD filename colors, |:FlumeExtras| prints Fish and Bash/Zsh commands that
 set world-writable directory names to magenta on the normal background via
 LS_COLORS. The YAML theme alone only styles metadata.
+
+For Fish, the installer asks Yes/No before linking the auto-loaded conf.d
+fragment. No prints a manual source snippet with the active path. Cancel makes
+no changes. It never edits config.fish. The no-argument installer also prompts
+for Fish. conf.d runs before config.fish, so later color settings can override
+Flume. For manual setup, source <data-dir>/current/fish.fish after other color
+settings in your Fish config.fish instead.
+
+The Fish fragment colors command-line syntax and the completion pager without
+changing your prompt or writing universal variables. Source it again in existing
+shells after synchronization. New shells apply it at startup.
 
 For application setup examples, see docs/workflows.md. Other
 tools have no automatic installer because their include locations vary.

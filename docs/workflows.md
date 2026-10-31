@@ -17,7 +17,7 @@ directory. Select or include the active file in each application. Keep these inc
 shell and application configuration. Merge the examples into existing settings rather than replacing
 your whole configuration.
 
-For the six installable tools below, run the named `:FlumeInstallExtras` command
+For the installable tools below, run the named `:FlumeInstallExtras` command
 in Neovim first. It refuses regular files and directories but replaces symlinks;
 check the destination if you already manage a theme there.
 
@@ -111,6 +111,44 @@ Restart OpenCode after changing the shared palette if it still shows the old col
 request an OpenCode reload. These instructions follow the
 [current OpenCode theme guide](https://opencode.ai/docs/themes/); older versions may keep the theme
 setting in `opencode.json` instead.
+
+### Fish
+
+Run `:FlumeInstallExtras fish` to choose how to load Fish colors:
+
+- **Yes** links the active fragment into `~/.config/fish/conf.d/flume.fish`, or
+  `$XDG_CONFIG_HOME/fish/conf.d/flume.fish` when set. New Fish shells load it automatically.
+- **No** leaves your files alone and prints the manual snippet below with your actual active path.
+  Canceling makes no changes.
+
+The installer never edits `config.fish`. It refuses existing regular files and directories, but may
+replace an existing symlink after confirmation. Fish loads `conf.d` before `config.fish`, so later
+color settings can override Flume. If that happens, source the active fragment after those settings
+in your Fish `config.fish` instead:
+
+
+```fish
+if status is-interactive
+    source /absolute/path/to/flume-data/current/fish.fish
+end
+```
+
+To try a fixed palette from a checkout instead:
+
+```fish
+source /absolute/path/to/flume.nvim/extras/fish/flume-mira.fish
+```
+
+Type `cargo ` and press Tab to see the completion pager. Completions use neutral text, descriptions
+use muted text, and prefixes are underlined in the match color. The selected row uses Flume's
+selection foreground and background, including its description. Alternate rows use the same colors
+as ordinary rows so a previous Fish theme cannot leave stripes behind.
+
+The fragment also colors command-line syntax, autosuggestions, history matches, and visual
+selections. It sets session-global variables, not persistent universal variables, and does not
+replace your prompt or key bindings. Existing shells need to source the active file again after
+`:FlumeSync`. New shells read it at startup. There is no automatic Fish reload.
+See [Fish's pager color variables](https://fishshell.com/docs/current/interactive.html#pager-color-variables).
 
 ### fzf
 

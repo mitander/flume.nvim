@@ -18,13 +18,23 @@ M.integrations = {
     { name = "lsd", label = "LSD", source = "extras/lsd/colors%s.yaml", current = "lsd.yaml" },
     { name = "opencode", label = "OpenCode", source = "extras/opencode/flume%s.json", current = "opencode.json" },
     { name = "lazygit", label = "Lazygit", source = "extras/lazygit/flume%s.yml", current = "lazygit.yml" },
+    { name = "fish", label = "Fish", source = "extras/fish/flume%s.fish", current = "fish.fish" },
     { name = "fzf", label = "fzf", source = "extras/fzf/flume%s.opts", current = "fzf.opts" },
     { name = "delta", label = "Delta", source = "extras/delta/flume%s.gitconfig", current = "delta.gitconfig" },
     { name = "pi", label = "Pi", source = "extras/pi/flume%s.json", current = "pi.json" },
     { name = "palette", label = "Semantic palette", source = "extras/palette/flume%s.json", current = "palette.json" },
 }
 
+local config_home = vim.env.XDG_CONFIG_HOME
+if not config_home or config_home == "" then
+    config_home = "~/.config"
+end
+
 local apps = {
+    fish = {
+        src = "extras/current/fish.fish",
+        dest = config_home .. "/fish/conf.d/flume.fish",
+    },
     ghostty = {
         src = "extras/current/ghostty",
         dest = "~/.config/ghostty/themes/flume",
@@ -64,13 +74,7 @@ function M.get_source_path(source)
     return M.get_plugin_dir() .. "/" .. source
 end
 
-function M.install(name)
-    local app = apps[name]
-    if not app then
-        vim.notify("Unknown extra: " .. tostring(name), vim.log.levels.ERROR)
-        return
-    end
-
+local function install_link(name, app)
     local src_path = M.get_source_path(app.src)
     local dest_path = vim.fn.expand(app.dest)
 
@@ -134,6 +138,44 @@ function M.install(name)
     vim.notify("Successfully linked " .. name .. " extra to " .. app.dest, vim.log.levels.INFO)
 end
 
+local function fish_source_lines()
+    local source = M.get_source_path(apps.fish.src)
+    -- Fish single-quoted strings escape backslashes and quotes, unlike POSIX sh.
+    source = "'" .. source:gsub("\\", "\\\\"):gsub("'", "\\'") .. "'"
+    return {
+        "if status is-interactive",
+        "    source " .. source,
+        "end",
+    }
+end
+
+function M.install(name)
+    local app = apps[name]
+    if not app then
+        vim.notify("Unknown extra: " .. tostring(name), vim.log.levels.ERROR)
+        return
+    end
+    if name ~= "fish" then
+        return install_link(name, app)
+    end
+
+    vim.ui.select({ "Yes", "No" }, {
+        prompt = "Auto-load Fish colors via "
+            .. app.dest
+            .. "? config.fish can override them. Existing symlinks may be replaced.",
+    }, function(choice)
+        if choice == "Yes" then
+            install_link(name, app)
+        elseif choice == "No" then
+            vim.notify(
+                "Fish was not installed. After :FlumeSync, add this after other color settings in your Fish config.fish:\n"
+                    .. table.concat(fish_source_lines(), "\n"),
+                vim.log.levels.INFO
+            )
+        end
+    end)
+end
+
 function M.install_all()
     for name in pairs(apps) do
         M.install(name)
@@ -166,6 +208,7 @@ function M.get_instruction_lines()
         ":FlumeInstallExtras tmux",
         ":FlumeInstallExtras lsd",
         ":FlumeInstallExtras lazygit",
+        ":FlumeInstallExtras fish",
         "```",
         "",
         "## Option 2: Copy-paste terminal commands",
@@ -199,6 +242,18 @@ function M.get_instruction_lines()
         table.insert(lines, "")
     end
 
+    table.insert(lines, "## Fish startup colors")
+    table.insert(lines, "The Fish installer asks before linking conf.d/flume.fish. It never edits config.fish.")
+    table.insert(lines, "conf.d loads before config.fish, so later color settings can override Flume.")
+    table.insert(lines, "For manual setup, add this after other color settings in your Fish config.fish:")
+    table.insert(lines, "```fish")
+    vim.list_extend(lines, fish_source_lines())
+    table.insert(lines, "```")
+    table.insert(
+        lines,
+        "After :FlumeSync, source the active file again in existing shells. New shells load it at startup."
+    )
+    table.insert(lines, "")
     table.insert(lines, "## LSD filename colors")
     table.insert(lines, "The YAML theme styles metadata. Add this after existing LS_COLORS setup in your shell config")
     table.insert(

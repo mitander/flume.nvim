@@ -1284,7 +1284,7 @@ test("activation reuses intact sets and recovers the final integration", functio
     local ok, err = xpcall(function()
         local changes = compiler.activate(schema)
         equal(uv.fs_readlink("extras/current"), original_set, "intact set identity")
-        equal(vim.tbl_count(changes), 10, "activation result inventory")
+        equal(vim.tbl_count(changes), 11, "activation result inventory")
         for name, changed in pairs(changes) do
             equal(changed, false, name .. " unchanged artifact")
         end
@@ -1322,7 +1322,7 @@ test("activation rejects sets with obsolete artifacts", function()
         vim.fn.writefile({ "obsolete" }, obsolete)
         compiler.activate(schema)
         truthy(uv.fs_readlink("extras/current") ~= original_set, "obsolete set was reused")
-        equal(#vim.fn.glob("extras/current/*", false, true), 11, "nine apps plus semantic palette and schema")
+        equal(#vim.fn.glob("extras/current/*", false, true), 12, "ten apps plus semantic palette and schema")
         equal(vim.fn.filereadable("extras/current/obsolete.json"), 0, "obsolete artifact survived")
 
         local recovered_set = uv.fs_readlink("extras/current")

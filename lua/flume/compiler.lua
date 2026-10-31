@@ -624,6 +624,55 @@ git:
     )
 end
 
+function M.compile_fish(schema)
+    local palette = get_palette(schema)
+    local lines = {
+        "# Flume colors for Fish. Source this file after other color settings.",
+        "# Session-local globals only. No universal variables or prompt changes.",
+    }
+    local function color(name, role, options)
+        local value = palette[role]:sub(2)
+        lines[#lines + 1] = "set -g " .. name .. " " .. value .. (options and " " .. options or "")
+    end
+    local selection = "--background=" .. palette.selection_bg:sub(2)
+    color("fish_color_normal", "text")
+    color("fish_color_command", "syntax_function")
+    color("fish_color_builtin", "syntax_function")
+    color("fish_color_function", "syntax_function")
+    color("fish_color_keyword", "syntax_keyword")
+    color("fish_color_quote", "syntax_string")
+    color("fish_color_redirection", "syntax_punctuation")
+    color("fish_color_end", "syntax_punctuation")
+    color("fish_color_error", "error")
+    color("fish_color_param", "syntax_primary")
+    color("fish_color_option", "syntax_primary")
+    lines[#lines + 1] = "set -g fish_color_valid_path --underline"
+    color("fish_color_comment", "syntax_comment")
+    color("fish_color_operator", "syntax_punctuation")
+    color("fish_color_escape", "syntax_special")
+    color("fish_color_autosuggestion", "muted")
+    color("fish_color_selection", "selection_fg", selection)
+    color("fish_color_search_match", "match", "--background=" .. palette.warn_bg:sub(2) .. " --underline")
+    lines[#lines + 1] = ""
+    -- Set every row variant so existing Fish themes cannot leak alternate-row colors.
+    for _, variant in ipairs({ "", "secondary_" }) do
+        lines[#lines + 1] = "set -g fish_pager_color_" .. variant .. "background --background=normal"
+        color("fish_pager_color_" .. variant .. "prefix", "match", "--underline")
+        color("fish_pager_color_" .. variant .. "completion", "text")
+        color("fish_pager_color_" .. variant .. "description", "muted")
+    end
+    lines[#lines + 1] = "set -g fish_pager_color_selected_background " .. selection
+    color("fish_pager_color_selected_prefix", "selection_fg", "--underline")
+    color("fish_pager_color_selected_completion", "selection_fg")
+    color("fish_pager_color_selected_description", "selection_fg")
+    color("fish_pager_color_progress", "muted")
+    lines[#lines + 1] = ""
+    return write_file_if_changed(
+        get_plugin_dir() .. "/extras/fish/flume" .. schema_suffix(schema) .. ".fish",
+        table.concat(lines, "\n")
+    )
+end
+
 function M.compile_fzf(schema)
     local palette = get_palette(schema)
     local colors = {

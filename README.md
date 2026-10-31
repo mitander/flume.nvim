@@ -88,7 +88,7 @@ matching theme.
 For **lualine**, set `options = { theme = "flume" }` in your existing setup. The named theme follows
 palette changes; see `:help flume-lualine`.
 
-Matching themes are available for **Ghostty, Kitty, Tmux, LSD, OpenCode, Lazygit, fzf, Delta, and
+Matching themes are available for **Ghostty, Kitty, Tmux, LSD, OpenCode, Lazygit, Fish, fzf, Delta, and
 Pi**. See `:help flume-extras` for supported installation paths and reload behavior.
 
 Once they're configured, switch the editor and shared themes together:
