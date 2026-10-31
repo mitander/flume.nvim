@@ -13,12 +13,12 @@ permission:
   no-access: "#a1a3ad"        # muted (#a1a3ad)
   octal: "#a1a3ad"            # muted (#a1a3ad)
   acl: "#8caabd"              # accent (#8caabd)
-  context: "#989ba5"          # doc_comment (#989ba5)
+  context: "#969ca5"          # doc_comment (#969ca5)
 
 date:
-  hour-old: "#989ba5"         # syntax_doc_comment (#989ba5)
-  day-old: "#989ba5"          # syntax_doc_comment (#989ba5)
-  older: "#989ba5"            # syntax_doc_comment (#989ba5)
+  hour-old: "#969ca5"         # syntax_doc_comment (#969ca5)
+  day-old: "#969ca5"          # syntax_doc_comment (#969ca5)
+  older: "#969ca5"            # syntax_doc_comment (#969ca5)
 
 size:
   none: "#8caabd"             # info (#8caabd)

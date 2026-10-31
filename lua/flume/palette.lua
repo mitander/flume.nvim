@@ -61,21 +61,22 @@ M.dusk = {
     bright_white = "#e0dcf0",
     dim_white = "#8a85a6",
 
-    -- Syntax Highlighting
+    -- Muted amber and rose keep repeated types and fields from competing.
+    -- Syntax warmth stays independent of the stronger state and ANSI inks.
     syntax_attribute = "#73a6b6",
-    syntax_boolean = "#ea9f8c",
-    syntax_comment = "#9995a8",
-    syntax_doc_comment = "#9297a9",
+    syntax_boolean = "#d1a393",
+    syntax_comment = "#9498a5",
+    syntax_doc_comment = "#9498a5",
     syntax_constant = "#73a6b6",
     syntax_function = "#73a6b6",
-    syntax_type = "#dfb86b",
+    syntax_type = "#cfb584",
     syntax_keyword = "#b391d6",
-    syntax_namespace = "#ca838c",
+    syntax_namespace = "#ba929b",
     syntax_primary = "#c9c5d9",
-    syntax_property = "#ce818d",
+    syntax_property = "#bd939d",
     syntax_punctuation = "#9899b5",
     syntax_punctuation_bracket = "#9396ae",
-    syntax_punctuation_special = "#bd8b85",
+    syntax_punctuation_special = "#b79a95",
     syntax_string = "#a4b78a",
     syntax_special = "#73a6b6",
     predictive = "#536178",
@@ -160,8 +161,8 @@ M.opal = {
     -- State colors and ANSI slots remain independent of these text-sized accents.
     syntax_attribute = "#356475",
     syntax_boolean = "#8d513c",
-    syntax_comment = "#646064",
-    syntax_doc_comment = "#636064",
+    syntax_comment = "#5d626b",
+    syntax_doc_comment = "#5d626b",
     syntax_constant = "#356475",
     syntax_function = "#356475",
     syntax_type = "#705883",
@@ -262,8 +263,8 @@ M.mira = complete_palette({
 
     -- Syntax Highlighting
     syntax_boolean = "#c49c89",
-    syntax_comment = "#989ba5",
-    syntax_doc_comment = "#989ba5",
+    syntax_comment = "#969ca5",
+    syntax_doc_comment = "#969ca5",
     -- Sand keeps types distinct from copper literals without a bright gold accent.
     syntax_type = "#c5b18d",
     syntax_keyword = "#a99bbd",
@@ -345,8 +346,8 @@ M.mesa = complete_palette({
 
     -- Syntax Highlighting
     syntax_boolean = "#8b4940",
-    syntax_comment = "#636063",
-    syntax_doc_comment = "#626064",
+    syntax_comment = "#5e6069",
+    syntax_doc_comment = "#5e6069",
     syntax_type = "#7d521e",
     syntax_keyword = "#695187",
     syntax_namespace = "#89455f",

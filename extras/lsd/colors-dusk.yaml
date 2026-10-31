@@ -3,7 +3,7 @@
 # Quoted hex colors preserve the selected palette through lsd's crossterm parser.
 
 user: "#c9c5d9"              # syntax_primary (#c9c5d9)
-group: "#ce818d"             # syntax_property (#ce818d)
+group: "#bd939d"             # syntax_property (#bd939d)
 
 permission:
   read: "#a6a2bb"             # quiet metadata (#a6a2bb)
@@ -13,12 +13,12 @@ permission:
   no-access: "#a6a2bb"        # muted (#a6a2bb)
   octal: "#a6a2bb"            # muted (#a6a2bb)
   acl: "#7dacbb"              # accent (#7dacbb)
-  context: "#9297a9"          # doc_comment (#9297a9)
+  context: "#9498a5"          # doc_comment (#9498a5)
 
 date:
-  hour-old: "#9297a9"         # syntax_doc_comment (#9297a9)
-  day-old: "#9297a9"          # syntax_doc_comment (#9297a9)
-  older: "#9297a9"            # syntax_doc_comment (#9297a9)
+  hour-old: "#9498a5"         # syntax_doc_comment (#9498a5)
+  day-old: "#9498a5"          # syntax_doc_comment (#9498a5)
+  older: "#9498a5"            # syntax_doc_comment (#9498a5)
 
 size:
   none: "#7dacbb"             # info (#7dacbb)

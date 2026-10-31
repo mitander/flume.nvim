@@ -302,11 +302,6 @@ test("selection is visible without brightening retained syntax", function()
             )
         end
     end
-    equal(
-        palettes.mira.syntax_comment,
-        palettes.mira.syntax_doc_comment,
-        "Mira comment roles deliberately share one ink"
-    )
 end)
 
 test("Markdown technical text stays upright while prose retains italics", function()
@@ -370,6 +365,7 @@ test("comments remain subordinate and shared syntax accents stay related", funct
     for _, schema in ipairs(schema_names) do
         local colors = palettes[schema]
         local primary = contrast(colors.syntax_primary, colors.bg)
+        equal(colors.syntax_doc_comment, colors.syntax_comment, schema .. " comment roles share quiet prose ink")
         for _, role in ipairs({ "syntax_comment", "syntax_doc_comment" }) do
             truthy(contrast(colors[role], colors.bg) < primary, schema .. " " .. role .. " must recede from code")
         end
@@ -377,6 +373,25 @@ test("comments remain subordinate and shared syntax accents stay related", funct
             equal(colors[role], colors.syntax_function, schema .. " " .. role .. " shares the function accent")
         end
     end
+end)
+
+test("Dusk softens syntax warmth without dimming state or terminal inks", function()
+    local dusk = palettes.dusk
+
+    equal(dusk.bg, "#232136", "Dusk retains its violet canvas")
+    equal(dusk.syntax_type, "#cfb584", "Dusk muted amber types")
+    equal(dusk.syntax_property, "#bd939d", "Dusk dusty rose fields")
+    equal(dusk.syntax_namespace, "#ba929b", "Dusk related rose namespaces")
+    equal(dusk.syntax_boolean, "#d1a393", "Dusk softened coral literals")
+    equal(dusk.syntax_punctuation_special, "#b79a95", "Dusk quiet warm punctuation")
+    equal(dusk.syntax_function, "#73a6b6", "Dusk retains teal functions")
+    equal(dusk.syntax_keyword, "#b391d6", "Dusk retains lavender keywords")
+    equal(dusk.syntax_string, "#a4b78a", "Dusk retains sage strings")
+    equal(dusk.warning, "#dfb86b", "Dusk warning amber stays strong")
+    equal(dusk.error, "#f08692", "Dusk error rose stays strong")
+    equal(dusk.yellow, "#dfb86b", "Dusk ANSI amber is unchanged")
+    equal(dusk.red, "#ee7583", "Dusk ANSI red is unchanged")
+    truthy(dusk.syntax_type ~= dusk.warning, "Dusk types must not inherit warning amber")
 end)
 
 test("Opal keeps porcelain syntax distinct from warning and success states", function()
@@ -406,7 +421,7 @@ test("Mira and Mesa preserve their editor-first design anchors", function()
     equal(mira.surface, "#292a30", "Mira cool charcoal raised surface")
     equal(mira.fg, "#bdc0c8", "Mira softer neutral foreground")
     equal(mira.syntax_primary, mira.fg, "Mira identifiers follow the neutral foreground")
-    equal(mira.syntax_comment, "#989ba5", "Mira subordinate comments")
+    equal(mira.syntax_comment, "#969ca5", "Mira subordinate cool-gray comments")
     equal(mira.syntax_function, "#8caabd", "Mira mineral blue functions")
     equal(mira.syntax_type, "#c5b18d", "Mira restrained sand types")
     equal(mira.syntax_boolean, "#c49c89", "Mira copper literals")

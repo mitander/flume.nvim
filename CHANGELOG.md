@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Soften Dusk's amber types, rose fields and namespaces, and coral literals. Retain its violet
+  canvas, teal functions, lavender keywords, sage strings, and stronger state and ANSI inks.
 - Add editor-local `schema_overrides` for per-palette role customization. Resolve global overrides
   first, then the selected palette's overrides, with exact highlight overrides last.
 - Add LSD shell setup to `:FlumeExtras` for pink world-writable directory names without a background.
@@ -19,7 +21,8 @@
   Ghostty, and Kitty. Retain quieter active-control surfaces.
 - Use readable muted ink for hidden and ignored filenames, fold controls, inactive lualine text, LSD
   metadata, and OpenCode quoted prose and line numbers.
-- Deliberately share Mira's comment and documentation-comment inks.
+- Use restrained cool-gray comments in all four palettes. Share ordinary and documentation-comment
+  inks within each palette, keeping prose secondary to code while preserving readable contrast.
 
 ## v0.3.0
 

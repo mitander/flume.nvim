@@ -15,10 +15,10 @@
   ],
   "fixture_sha256": "9c31be87f1a3644a4a70ca5ae1823577828259bcb73f05a4caccb795a6f94bb1",
   "renderer_sha256": "00d74b4c40a1b7db029de301a9819370e8d09ac8b93c67cad0814e219c9bfc44",
-  "image_sha256": "9f4cfcef31074634042be84584d276ba76656e8e303a1afd3622dbd42d2adb1b",
+  "image_sha256": "1170c05ceecedb83d7f52ed33881eec0065b7784fbac640bee49f7b2c902f1b0",
   "theme_inputs": {
     "lua/flume/init.lua": "33a0268537b3825decb53344b208055b127d2a8b91f0faf22eba4387d8b11b5b",
-    "lua/flume/palette.lua": "ed1e20a586ce86702a8c6b43ac605c1406ac17b67bd65fddec728fd55a323472",
+    "lua/flume/palette.lua": "5c0b3812485831db55bec707799edb7ac9614bbe5ebc686a672be30787906830",
     "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
     "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
     "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",
@@ -35,9 +35,10 @@
     "environment_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c"
   },
   "editor_integration": {
+    "icons": true,
     "git_status": true,
     "selected_file": "src/main.go",
-    "plugin": "neo-tree",
+    "source": "filesystem",
     "sidebar_lines": [
       " \ue5fe /tmp/flume-demo",
       "   \ue5ff docs",
@@ -50,7 +51,6 @@
       "   \uf48a notes.md                 \uf128 ",
       "   (1 hidden item)"
     ],
-    "source": "filesystem",
-    "icons": true
+    "plugin": "neo-tree"
   }
 }

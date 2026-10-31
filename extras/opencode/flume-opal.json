@@ -20,7 +20,7 @@
     "bright_blue":           "#0071a3",
     "cyan":                  "#006b85",
     "magenta":               "#7540a3",
-    "syntax_comment":        "#646064",
+    "syntax_comment":        "#5d626b",
     "syntax_keyword":        "#70558a",
     "syntax_function":       "#356475",
     "syntax_primary":        "#514e57",

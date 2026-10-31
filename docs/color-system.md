@@ -8,9 +8,11 @@ the canonical Lua table.
 ## Palette direction
 
 The V1 set contains four palettes: Dusk, Opal, Mira, and Mesa. Dusk keeps its violet canvas, amber
-types, sage strings, dusty rose properties, and teal functions. Mira uses near-neutral charcoal
-surfaces with mineral blue functions and sea-glass strings. Muted berry properties, sand types, and
-copper literals provide restrained warmth rather than competing bright accents.
+types, sage strings, dusty rose properties, and teal functions. Muted amber types and softened coral
+literals keep repeated warm accents from dominating, while state colors and ANSI inks stay stronger.
+Mira uses near-neutral charcoal surfaces with mineral blue functions and sea-glass strings.
+Muted berry properties, sand types, and copper literals provide restrained warmth rather than
+competing bright accents.
 Opal pairs cool lilac paper with purple types and keywords, red fields and imports, copper literals,
 sea-glass strings, and softened teal functions. Types stay in the purple family rather than adding
 another warm accent beside red fields. The inks retain contrast on raised and diff surfaces, not
@@ -79,6 +81,11 @@ retaining the search underline.
 | Structure | `syntax_function`, `syntax_type`, `syntax_keyword`, `syntax_namespace`  |
 | Values    | `syntax_string`, `syntax_boolean`, `syntax_constant`, `syntax_property` |
 | Detail    | `syntax_attribute`, `syntax_special`, `syntax_punctuation*`             |
+
+Comments use low-chroma cool-gray ink, readable but secondary to ordinary code. Documentation
+comments share the same ink so long prose blocks do not compete with syntax accents. Both roles
+retain the syntax contrast target on canvas, raised, cursor-line, and diff surfaces rather than
+fading toward placeholder text.
 
 Specific Tree-sitter captures and LSP token types resolve through these families. Provider mappings
 follow these rules:
