@@ -7,9 +7,9 @@
   explicit plain-text fallback status, example diagnostics and labelled UI swatches. Keep editor configuration,
   global highlights, terminal colors and shared integrations unchanged.
 
-- Add nine dedicated `icon_*` palette roles for consistent file-icon hue families across all four
-  schemas. Keep gold/yellow distinct from copper/orange in light palettes without borrowing syntax
-  or ANSI colors. Export the roles in the version 1 semantic palette.
+- Add dedicated `icon_*` palette roles for consistent file-icon hue families across all four
+  schemas. Keep muted, earthy copper distinct from brighter orange and gold/yellow without borrowing
+  syntax or ANSI colors. Export the roles in the version 1 semantic palette.
 
 - Render named constants in the neutral identifier ink across all four palettes. Keep numbers,
   booleans, built-in constants, tags, and symbol literals accented.

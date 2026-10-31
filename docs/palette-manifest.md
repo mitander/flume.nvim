@@ -50,6 +50,7 @@ Generated from `lua/flume/palette.lua`; do not edit by hand.
 | `hint` | `#8fc9d2` | `#00667e` | `#9dcdd3` | `#306077` |
 | `hint_bg` | `#273343` | `#dce7e9` | `#293640` | `#d9e4e7` |
 | `icon_blue` | `#7eb6e8` | `#286aab` | `#b5cfee` | `#3d6d9c` |
+| `icon_copper` | `#c0826d` | `#8e4937` | `#bf8f7b` | `#874737` |
 | `icon_cyan` | `#9bd6df` | `#087b87` | `#b3dce0` | `#317583` |
 | `icon_green` | `#b0ca9b` | `#44752b` | `#cadbb8` | `#527238` |
 | `icon_neutral` | `#a6a2bb` | `#615a68` | `#acabb9` | `#5f5964` |
@@ -124,6 +125,8 @@ Generated from `lua/flume/palette.lua`; do not edit by hand.
 | Dusk | `icon_neutral` / `element_active` | 5.47:1 | 3.0:1 |
 | Dusk | `icon_red` / `bg` | 6.64:1 | 3.0:1 |
 | Dusk | `icon_red` / `element_active` | 5.73:1 | 3.0:1 |
+| Dusk | `icon_copper` / `bg` | 4.96:1 | 3.0:1 |
+| Dusk | `icon_copper` / `element_active` | 4.28:1 | 3.0:1 |
 | Dusk | `icon_orange` / `bg` | 7.18:1 | 3.0:1 |
 | Dusk | `icon_orange` / `element_active` | 6.20:1 | 3.0:1 |
 | Dusk | `icon_yellow` / `bg` | 9.81:1 | 3.0:1 |
@@ -162,6 +165,8 @@ Generated from `lua/flume/palette.lua`; do not edit by hand.
 | Opal | `icon_neutral` / `element_active` | 5.02:1 | 3.0:1 |
 | Opal | `icon_red` / `bg` | 5.07:1 | 3.0:1 |
 | Opal | `icon_red` / `element_active` | 4.37:1 | 3.0:1 |
+| Opal | `icon_copper` / `bg` | 5.85:1 | 3.0:1 |
+| Opal | `icon_copper` / `element_active` | 5.04:1 | 3.0:1 |
 | Opal | `icon_orange` / `bg` | 4.17:1 | 3.0:1 |
 | Opal | `icon_orange` / `element_active` | 3.60:1 | 3.0:1 |
 | Opal | `icon_yellow` / `bg` | 4.18:1 | 3.0:1 |
@@ -200,6 +205,8 @@ Generated from `lua/flume/palette.lua`; do not edit by hand.
 | Mira | `icon_neutral` / `element_active` | 5.63:1 | 3.0:1 |
 | Mira | `icon_red` / `bg` | 8.26:1 | 3.0:1 |
 | Mira | `icon_red` / `element_active` | 6.99:1 | 3.0:1 |
+| Mira | `icon_copper` / `bg` | 5.33:1 | 3.0:1 |
+| Mira | `icon_copper` / `element_active` | 4.51:1 | 3.0:1 |
 | Mira | `icon_orange` / `bg` | 8.79:1 | 3.0:1 |
 | Mira | `icon_orange` / `element_active` | 7.43:1 | 3.0:1 |
 | Mira | `icon_yellow` / `bg` | 10.71:1 | 3.0:1 |
@@ -238,6 +245,8 @@ Generated from `lua/flume/palette.lua`; do not edit by hand.
 | Mesa | `icon_neutral` / `element_active` | 4.96:1 | 3.0:1 |
 | Mesa | `icon_red` / `bg` | 5.12:1 | 3.0:1 |
 | Mesa | `icon_red` / `element_active` | 4.41:1 | 3.0:1 |
+| Mesa | `icon_copper` / `bg` | 5.97:1 | 3.0:1 |
+| Mesa | `icon_copper` / `element_active` | 5.14:1 | 3.0:1 |
 | Mesa | `icon_orange` / `bg` | 4.29:1 | 3.0:1 |
 | Mesa | `icon_orange` / `element_active` | 3.70:1 | 3.0:1 |
 | Mesa | `icon_yellow` / `bg` | 4.17:1 | 3.0:1 |

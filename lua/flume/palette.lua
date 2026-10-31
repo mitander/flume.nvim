@@ -64,6 +64,7 @@ M.dusk = {
     -- File icons keep their hue families independently of syntax and ANSI slots.
     icon_neutral = "#a6a2bb",
     icon_red = "#f48a94",
+    icon_copper = "#c0826d",
     icon_orange = "#e5a16b",
     icon_yellow = "#edc87e",
     icon_green = "#b0ca9b",
@@ -170,6 +171,7 @@ M.opal = {
     -- Gold and copper remain distinct on paper, including retained-ink active rows.
     icon_neutral = "#615a68",
     icon_red = "#b5365b",
+    icon_copper = "#8e4937",
     icon_orange = "#b45a20",
     icon_yellow = "#8b7000",
     icon_green = "#44752b",
@@ -285,6 +287,7 @@ M.mira = complete_palette({
     -- File icons
     icon_neutral = "#acabb9",
     icon_red = "#f0afb6",
+    icon_copper = "#bf8f7b",
     icon_orange = "#ebbd96",
     icon_yellow = "#ecd7b2",
     icon_green = "#cadbb8",
@@ -379,6 +382,7 @@ M.mesa = complete_palette({
     -- File icons
     icon_neutral = "#5f5964",
     icon_red = "#a34353",
+    icon_copper = "#874737",
     icon_orange = "#a65b2b",
     icon_yellow = "#8a6d14",
     icon_green = "#527238",

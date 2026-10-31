@@ -118,6 +118,7 @@ end)
 test("file icon families retain their hues and contrast in every schema", function()
     local hue_ranges = {
         red = { 340, 365 },
+        copper = { 10, 22 },
         orange = { 15, 35 },
         yellow = { 35, 75 },
         green = { 75, 165 },
@@ -129,7 +130,18 @@ test("file icon families retain their hues and contrast in every schema", functi
     for _, schema in ipairs(schema_names) do
         local colors = palettes[schema]
         local hues = {}
-        for _, family in ipairs({ "neutral", "red", "orange", "yellow", "green", "cyan", "blue", "purple", "pink" }) do
+        for _, family in ipairs({
+            "neutral",
+            "red",
+            "copper",
+            "orange",
+            "yellow",
+            "green",
+            "cyan",
+            "blue",
+            "purple",
+            "pink",
+        }) do
             local role = "icon_" .. family
             local color = assert(colors[role], "missing " .. role)
             for _, surface in ipairs({ "bg", "active_line", "surface", "surface_alt", "element_active" }) do
@@ -159,7 +171,14 @@ test("file icon families retain their hues and contrast in every schema", functi
                 truthy(hue >= range[1] and hue <= range[2], schema .. " " .. role .. " left its hue family")
             end
         end
-        truthy(hues.yellow - hues.orange >= 10, schema .. " gold and copper icons have converged")
+        -- Copper stays redder and darker than orange, not just a second name for it.
+        truthy(hues.orange - hues.copper >= 8, schema .. " copper and orange hues have converged")
+        truthy(luminance(colors.icon_copper) < luminance(colors.icon_orange), schema .. " copper must be darker")
+        truthy(
+            contrast(colors.icon_copper, colors.icon_orange) >= 1.35,
+            schema .. " copper and orange tones have converged"
+        )
+        truthy(hues.yellow - hues.orange >= 10, schema .. " gold and orange icons have converged")
         truthy(hues.blue - hues.cyan >= 10, schema .. " blue and cyan icons have converged")
     end
 end)

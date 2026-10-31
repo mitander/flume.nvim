@@ -137,23 +137,30 @@ state use their corresponding semantic roles. This prevents light-mode defaults 
 
 ### File icon colors
 
-`icon_neutral`, `icon_red`, `icon_orange`, `icon_yellow`, `icon_green`, `icon_cyan`,
-`icon_blue`, `icon_purple`, and `icon_pink` provide a stable set of file-icon hue families.
+`icon_neutral`, `icon_red`, `icon_copper`, `icon_orange`, `icon_yellow`, `icon_green`,
+`icon_cyan`, `icon_blue`, `icon_purple`, and `icon_pink` provide stable file-icon hue families.
 Every palette defines these roles explicitly, independently of syntax and ANSI slots. Light
-palettes use gold for yellow and copper for orange rather than collapsing both into brown.
-Dusk and Mira retain brighter, softer shades of those same families.
+palettes keep gold, orange and copper separate. Copper is redder and darker than orange, giving
+an earthy rust ink its own family without changing brighter orange icons. Dusk and Mira retain
+softer shades of those same families.
 
 Consumers assign file types to families once, then resolve the selected palette's `icon_*` role.
-For example, Python and JavaScript can use yellow, Rust orange, Lua blue, Go cyan, and Gleam pink.
-Assign aliases sharing an icon highlight identity to the same family. An upstream-hue fallback
-can cover unlisted formats, but must not override explicit file-type assignments or reclassify
-already-themed colors after a switch. File-type inventories belong to the consumer, not Flume.
+For example, a consumer can use blue for Python, copper for Rust, purple for Lua, gold for
+JavaScript, cyan for Go, and pink for Gleam. Brand colors are not mandatory. Review source,
+declaration, compiled and configuration companions together so an alias does not gain an unrelated
+color. Assign aliases sharing an icon highlight identity to the same family. Keep unreviewed
+formats quiet rather than inferring their meaning from upstream RGB. File-type inventories belong
+to the consumer, not Flume.
 
 Icon inks target 3:1 on the canvas, raised surfaces, cursor line, and retained-ink active rows.
 Keep a filename or distinct glyph alongside color. Strong selections that replace foregrounds
 should use `selection_fg` instead. The manifest records canvas and active-row contrast pairs.
-Tests also preserve hue ranges and separation between gold/copper and blue/cyan. These checks
+Tests also preserve hue ranges, copper/orange hue and luminance separation, and separation between
+gold/orange and blue/cyan. These checks
 prevent family collapse, but do not establish perceptual distinction for every viewer or renderer.
+Review glyphs at actual picker size, together with filenames and selected rows, across all palettes.
+Hundreds of file types cannot each have a unique hue. Distinct glyphs and coherent identity families
+matter more than making every icon colorful.
 
 ### Terminal colors
 
