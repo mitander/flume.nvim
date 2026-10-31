@@ -89,6 +89,11 @@ comments share the same ink so long prose blocks do not compete with syntax acce
 retain the syntax contrast target on canvas, raised, cursor-line, and diff surfaces rather than
 fading toward placeholder text.
 
+Named constants use `syntax_constant`, sharing the neutral `syntax_primary` ink in every palette.
+Uppercase identifiers remain distinguishable without competing with function calls. Numbers,
+booleans, and built-in constants retain `syntax_boolean`; tags and symbol literals use
+`syntax_special` to preserve their accent independently of named constants.
+
 Specific Tree-sitter captures and LSP token types resolve through these families. Provider mappings
 follow these rules:
 
@@ -129,6 +134,26 @@ metadata use `muted`; search matches use `match`; retained-ink active rows use `
 explicit selected text uses the `selection_fg` / `selection_bg` pair; success and version-control
 state use their corresponding semantic roles. This prevents light-mode defaults such as fzf-lua's
 `MediumSpringGreen` from leaking into any schema.
+
+### File icon colors
+
+`icon_neutral`, `icon_red`, `icon_orange`, `icon_yellow`, `icon_green`, `icon_cyan`,
+`icon_blue`, `icon_purple`, and `icon_pink` provide a stable set of file-icon hue families.
+Every palette defines these roles explicitly, independently of syntax and ANSI slots. Light
+palettes use gold for yellow and copper for orange rather than collapsing both into brown.
+Dusk and Mira retain brighter, softer shades of those same families.
+
+Consumers assign file types to families once, then resolve the selected palette's `icon_*` role.
+For example, Python and JavaScript can use yellow, Rust orange, Lua blue, Go cyan, and Gleam pink.
+Assign aliases sharing an icon highlight identity to the same family. An upstream-hue fallback
+can cover unlisted formats, but must not override explicit file-type assignments or reclassify
+already-themed colors after a switch. File-type inventories belong to the consumer, not Flume.
+
+Icon inks target 3:1 on the canvas, raised surfaces, cursor line, and retained-ink active rows.
+Keep a filename or distinct glyph alongside color. Strong selections that replace foregrounds
+should use `selection_fg` instead. The manifest records canvas and active-row contrast pairs.
+Tests also preserve hue ranges and separation between gold/copper and blue/cyan. These checks
+prevent family collapse, but do not establish perceptual distinction for every viewer or renderer.
 
 ### Terminal colors
 

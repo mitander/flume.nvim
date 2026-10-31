@@ -131,7 +131,7 @@ function M.activate(schema)
     schema = require("flume.palette").resolve(schema or "dusk")
     local extras_config = require("flume.extras")
     local root = extras_config.get_plugin_dir()
-    local integrations = extras_config.integrations
+    local integrations = require("flume.integrations").list
     local extras = M.get_dir()
     local current = M.get_current()
     local token = tostring(vim.fn.getpid()) .. "-" .. string.format("%.0f", uv.hrtime())

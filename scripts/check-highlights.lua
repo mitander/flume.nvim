@@ -51,7 +51,7 @@ local function check()
             "tsx",
             {
                 { "const value =", "value", "variable", "syntax_primary" },
-                { "export const demo", "UndoCounter", "tag", "syntax_constant" },
+                { "export const demo", "UndoCounter", "tag", "syntax_special" },
                 { "<section aria", "section", "tag.builtin", "syntax_special" },
             },
         },

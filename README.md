@@ -58,6 +58,18 @@ Try another palette in the current editor:
 The colorscheme names are `flume-dusk`, `flume-opal`, `flume-mira`, and `flume-mesa`. Change
 `schema` in your setup to use that palette at startup.
 
+## Tweak a palette locally
+
+```vim
+:FlumeTweak
+```
+
+Compare role colors in isolated preview windows without changing your editor theme or shared
+integrations. Use `h`/`l` for darker/lighter candidates, `c` for another palette ink, and Enter for a
+hex color. Cycle palettes with `p` and language samples with `s`. Press `y` to copy draft
+`schema_overrides`, or `q` to discard the preview. See the [preview guide](docs/tweak.md) for controls,
+parser requirements and limits.
+
 ## Configuration
 
 For italic comments and a custom current line number, replace your setup call with:
@@ -88,8 +100,8 @@ matching theme.
 For **lualine**, set `options = { theme = "flume" }` in your existing setup. The named theme follows
 palette changes; see `:help flume-lualine`.
 
-Matching themes are available for **Ghostty, Kitty, Tmux, LSD, OpenCode, Lazygit, Fish, fzf, Delta, and
-Pi**. See `:help flume-extras` for supported installation paths and reload behavior.
+Matching themes are available for **Ghostty, Kitty, Tmux, LSD, OpenCode, Lazygit, Fish, fzf, Delta,
+and Pi**. See `:help flume-extras` for supported installation paths and reload behavior.
 
 Once they're configured, switch the editor and shared themes together:
 
@@ -110,10 +122,27 @@ independent, set both `follow_sync = false` and `watch_sync = false`.
 - `:checkhealth flume` to verify your setup and integration files are correct.
 - [Palette manifest](docs/palette-manifest.md) for color roles and values for overrides.
 
-## Contributing
+<a id="contributing"></a>
 
-See the [contributor guide](docs/contributing.md) for local development, checks, and visual review.
-The [changelog](CHANGELOG.md) records releases.
+## Development
+
+Start with [Contributing](CONTRIBUTING.md) for setup and the edit/check loop.
+[Testing](docs/TESTING.md) selects parser, integration and screenshot evidence. Source checks do not
+activate shared themes or change live user configuration.
+
+## Documentation
+
+- [Contributing](CONTRIBUTING.md): change workflow, review and user-state safety.
+- [Development](docs/DEVELOPMENT.md): prerequisites, local commands and artifact regeneration.
+- [Testing](docs/TESTING.md): check selection, native boundaries and hosted CI.
+- [Style](STYLE.md): code, fixture and documentation conventions.
+- [Design](docs/DESIGN.md): palette resolution, compilation and shared activation.
+- [Color system](docs/color-system.md): role meanings, mappings and contrast targets.
+- [Semantic export](docs/semantic-export.md): versioned consumer format and migration.
+- [Gallery](docs/gallery.md): palette and language comparisons.
+- [External-tool recipes](docs/workflows.md): includes, installation and reload behavior.
+- [Showcase](docs/showcase.md): capture procedures and evidence limits.
+- [Changelog](CHANGELOG.md): releases and significant visual changes.
 
 ## License
 

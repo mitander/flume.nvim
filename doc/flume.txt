@@ -129,7 +129,7 @@ dev ~                                                              *flume-dev*
     Includes language modules and the lualine theme. Preserves the current
     schema and options; does not synchronize extras or replace another theme.
     A failed reload restores the previous modules and theme. Fix and save the
-    source to retry. See docs/contributing.md for development checks.
+    source to retry. See docs/DEVELOPMENT.md for development commands.
 
 overrides ~                                                  *flume-overrides*
     Changes palette colors by role before highlights are built. Exact roles
@@ -192,6 +192,19 @@ COMMANDS                                                      *flume-commands*
 
 Commands become available when Flume is loaded.
 
+:FlumeTweak [schema]                              *:FlumeTweak* *flume-tweak*
+    Open an isolated role-color preview in a scratch tab. h/l cycle shade
+    candidates, c chooses another palette ink, Enter accepts #RRGGBB, and r
+    resets a role. p/P switch palettes and s/S switch realistic language samples.
+    y copies edited schema_overrides to the unnamed register. q or Escape closes
+    and discards the draft. No global palette, config or shared theme is changed.
+
+    The preview uses actual installed Tree-sitter captures or explicitly labelled
+    plain text. It does not source global Vim syntax definitions. It uses opaque surfaces and bypasses exact
+    highlight overrides. Diagnostic examples and labelled UI swatches are not
+    language-server output or live menus. No parser or server is installed.
+    Changing colorscheme or reloading Flume closes it. See docs/tweak.md.
+
 :FlumeReload                                                    *:FlumeReload*
     Reload source modules and the editor-local palette. Preserves options and
     notifies ColorScheme integrations without synchronizing external themes.
@@ -207,11 +220,12 @@ Commands become available when Flume is loaded.
 
 :FlumeInstallExtras [app]                                *:FlumeInstallExtras*
     Link an external theme at a standard destination. With no argument, link
-    all six installable apps. See |flume-install-extras| before running it.
+    all supported install destinations, with separate Fish consent prompts.
+    See |flume-install-extras| before running it.
 
 :FlumeExtras                                                    *:FlumeExtras*
     Open a scratch buffer with the current paths and shell link instructions
-    for the six installable apps. Shell instructions refuse existing paths.
+    for supported install destinations. Shell instructions refuse existing paths.
 
 :checkhealth flume                                         *flume-checkhealth*
     Check Neovim, 'termguicolors', palette, shared state, installer links, and
@@ -231,6 +245,7 @@ LSD       extras/lsd/colors-dusk.yaml               lsd.yaml
 OpenCode  extras/opencode/flume-dusk.json           opencode.json
 Lazygit   extras/lazygit/flume-dusk.yml             lazygit.yml
 Fish      extras/fish/flume-dusk.fish               fish.fish
+Tools     extras/fish/flume-tools.fish              fish-tools.fish
 fzf       extras/fzf/flume-dusk.opts                fzf.opts
 Delta     extras/delta/flume-dusk.gitconfig         delta.gitconfig
 Pi        extras/pi/flume-dusk.json                 pi.json
@@ -257,6 +272,8 @@ symlink destinations:
     lsd       ~/.config/lsd/colors.yaml
     lazygit   ~/.config/lazygit/flume.yml
     fish      ~/.config/fish/conf.d/flume.fish (or $XDG_CONFIG_HOME/fish/conf.d/)
+    fish_tools ~/.config/fish/conf.d/flume-tools.fish (same XDG rule)
+    pi        ~/.pi/agent/themes/flume.json
 
 It refuses existing regular files and directories, but replaces existing
 symlinks. Check the destination first if you already manage a theme there.
@@ -279,15 +296,42 @@ The Fish fragment colors command-line syntax and the completion pager without
 changing your prompt or writing universal variables. Source it again in existing
 shells after synchronization. New shells apply it at startup.
 
-For application setup examples, see docs/workflows.md. Other
-tools have no automatic installer because their include locations vary.
+Optional Fish 3.5+ tool setup:
+>
+    :FlumeInstallExtras fish_tools
+<
+Choose Use Flume settings or Keep existing settings to link
+conf.d/flume-tools.fish. Do not install or cancel makes no changes. Both modes
+configure fzf's active options file, Lazygit's layered config and the non-sticky
+world-writable-directory LS_COLORS rule when the fragment is sourced.
+
+Use Flume settings prints a source command with --adopt. Run that exact command
+in Fish to replace session FZF_DEFAULT_OPTS_FILE and LG_CONFIG_FILE exports.
+Keep existing settings prints a command without --adopt, preserving exports
+for already configured tools. Linking alone has not taken over an existing
+shell. Neovim cannot change its parent shell's environment. No variable clearing
+or shell restart is needed.
+
+Normal startup respects explicit tool exports in either mode. --adopt is a
+one-time source argument, not a saved preference. It does not modify persistent
+universal variables. Later config.fish settings can override the defaults.
+Reinstalling refreshes a stale tool fragment while retaining the shared palette.
+Lazygit owns config-directory discovery. Repeated sourcing does not grow
+LS_COLORS. This does not change macOS BSD ls or prompts.
+
+Pi can be linked with :FlumeInstallExtras pi, then selected in Pi's settings.
+Installation reports the destination and next setup step, not application
+readiness. For examples and manual recipes, see docs/workflows.md. Other tools
+have no automatic installer because their include locations vary.
 
 RELOAD BEHAVIOR ~
 
-:FlumeSync asks running Ghostty on macOS to reload, sources ~/.tmux.conf when
-inside Tmux, and notifies a linked ~/.pi/agent/themes/flume.json theme. Apps
-must already select or include Flume. Other apps need their own reload action
-or a new invocation; publishing an active set does not make them reload.
+:FlumeSync requests Ghostty reloads through AppleScript on macOS, or SIGUSR2
+on Linux when pkill is available. It sources ~/.tmux.conf when inside Tmux and
+notifies a linked ~/.pi/agent/themes/flume.json theme. Apps must already select
+or include Flume. A reload request is not proof that the application applied it.
+Other apps need their own reload action or a new invocation; publishing an
+active set does not make them reload.
 
 SHARED DATA                                                       *flume-data*
 

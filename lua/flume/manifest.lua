@@ -63,6 +63,10 @@ function M.render()
         { "selection_bg", "active_line", 3.0 },
         { "muted", "surface_alt", 4.5 },
     }
+    for _, family in ipairs({ "neutral", "red", "orange", "yellow", "green", "cyan", "blue", "purple", "pink" }) do
+        pairs[#pairs + 1] = { "icon_" .. family, "bg", 3.0 }
+        pairs[#pairs + 1] = { "icon_" .. family, "element_active", 3.0 }
+    end
     for _, schema in ipairs(palettes.schema_order) do
         local colors = palettes[schema]
         for _, pair in ipairs(pairs) do

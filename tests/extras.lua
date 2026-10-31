@@ -73,8 +73,8 @@ function M.register(test, equal, truthy)
         return patterns[app]:format(ending)
     end
 
-    test("generated inventory is four schemas by ten apps and semantic export", function()
-        local expected = {}
+    test("integration inventory includes generated palettes and static Fish tool setup", function()
+        local expected = { ["extras/fish/flume-tools.fish"] = true }
         for _, app in ipairs(apps) do
             for _, schema in ipairs(palettes.schema_order) do
                 expected[path(app, schema)] = true
@@ -89,7 +89,14 @@ function M.register(test, equal, truthy)
             end
         end
         equal(sorted_keys(actual), sorted_keys(expected), "generated integration inventory")
-        equal(vim.tbl_count(actual), 44, "generated artifact count")
+        equal(vim.tbl_count(actual), 45, "generated and static artifact count")
+        local registered = {}
+        for _, integration in ipairs(require("flume.integrations").list) do
+            for _, schema in ipairs(palettes.schema_order) do
+                registered[integration.source:format(suffix(schema))] = true
+            end
+        end
+        equal(sorted_keys(registered), sorted_keys(expected), "registered artifact inventory")
     end)
 
     test("versioned semantic exports contain exact canonical roles", function()
@@ -571,9 +578,21 @@ function M.register(test, equal, truthy)
             equal(notification, nil, "cancel is silent")
             equal(vim.fn.getftype(destination), "", "cancel leaves destination absent")
 
-            extras.install("fish")
+            local result
+            extras.install("fish", function(completed)
+                result = completed
+            end)
+            equal(result, nil, "completion waits for consent")
             callback("Yes")
+            equal(result.status, "linked", "accepted installation result")
+            equal(result.destination, destination, "actual installation destination")
+            truthy(result.next_step:find("Existing shells", 1, true), "post-install reload instruction")
             equal(uv.fs_readlink(destination), extras.get_source_path(app.src), "accepted active link")
+            extras.install("fish", function(completed)
+                result = completed
+            end)
+            callback("Yes")
+            equal(result.status, "already_linked", "repeated installation result")
             extras.install("fish")
             callback("No")
             equal(uv.fs_readlink(destination), extras.get_source_path(app.src), "decline preserves existing link")
@@ -593,6 +612,83 @@ function M.register(test, equal, truthy)
         end
     end)
 
+    test("Fish tool adoption asks before writing and reports cancellation and refusal", function()
+        local extras = require("flume.extras")
+        local app = extras.get_apps().fish_tools
+        local original_dest, original_data = app.dest, vim.env.FLUME_DATA_DIR
+        local original_select, original_notify = vim.ui.select, vim.notify
+        local root = vim.fn.tempname()
+        local callback, result
+        app.dest = root .. "/fish/conf.d/flume-tools.fish"
+        vim.env.FLUME_DATA_DIR = root .. "/shared"
+        vim.ui.select = function(items, _, done)
+            equal(table.concat(items, ","), "Use Flume settings,Keep existing settings,Do not install", "tool choices")
+            callback = done
+        end
+        vim.notify = function() end
+        local function install()
+            result = nil
+            extras.install("fish_tools", function(completed)
+                result = completed
+            end)
+            equal(result, nil, "completion waits for a choice")
+        end
+        local ok, err = pcall(function()
+            install()
+            equal(vim.fn.isdirectory(root), 0, "no directories created before consent")
+            callback(nil)
+            equal(result.status, "cancelled", "cancel settles installation")
+            equal(vim.fn.isdirectory(root), 0, "cancel makes no changes")
+            install()
+            callback("Do not install")
+            equal(result.status, "declined", "decline settles installation")
+            equal(result.reload_command, nil, "decline does not suggest application")
+            equal(vim.fn.isdirectory(root), 0, "decline makes no changes")
+            vim.fn.mkdir(vim.fn.fnamemodify(app.dest, ":h"), "p")
+            vim.fn.writefile({ "# personal file" }, app.dest)
+            install()
+            callback("Use Flume settings")
+            equal(result.status, "refused", "adoption cannot overwrite a personal regular file")
+            equal(result.reload_command, nil, "failed installation has no reload command")
+            equal(vim.fn.readfile(app.dest)[1], "# personal file", "personal fragment preserved")
+        end)
+        app.dest, vim.env.FLUME_DATA_DIR = original_dest, original_data
+        vim.ui.select, vim.notify = original_select, original_notify
+        vim.fn.delete(root, "rf")
+        if not ok then
+            error(err)
+        end
+    end)
+
+    test("all-app installation waits for each completion before the next prompt", function()
+        local extras = require("flume.extras")
+        local original_install = extras.install
+        local calls, pending, completed = {}, nil, nil
+        extras.install = function(name, done)
+            calls[#calls + 1] = name
+            pending = done
+        end
+        local ok, err = pcall(function()
+            extras.install_all(function(results)
+                completed = results
+            end)
+            equal(table.concat(calls, ","), "ghostty", "only one install starts")
+            local names = { "ghostty", "kitty", "tmux", "lsd", "opencode", "lazygit", "fish", "fish_tools", "pi" }
+            for index, name in ipairs(names) do
+                equal(calls[index], name, "ordered install")
+                equal(#calls, index, "no overlapping install")
+                equal(completed, nil, "batch completion waits")
+                pending({ app = name, status = name == "fish" and "cancelled" or "linked" })
+            end
+            equal(#completed, #names, "every outcome is reported")
+            equal(completed[7].status, "cancelled", "cancelled prompt still settles")
+        end)
+        extras.install = original_install
+        if not ok then
+            error(err)
+        end
+    end)
+
     test("auto-install destinations remain safe", function()
         local apps_config = require("flume.extras").get_apps()
         local config_home = vim.env.XDG_CONFIG_HOME
@@ -601,6 +697,8 @@ function M.register(test, equal, truthy)
         end
         local expected = {
             fish = config_home .. "/fish/conf.d/flume.fish",
+            fish_tools = config_home .. "/fish/conf.d/flume-tools.fish",
+            pi = "~/.pi/agent/themes/flume.json",
             ghostty = "~/.config/ghostty/themes/flume",
             kitty = "~/.config/kitty/themes/flume.conf",
             opencode = "~/.config/opencode/themes/flume.json",

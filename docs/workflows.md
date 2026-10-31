@@ -17,9 +17,9 @@ directory. Select or include the active file in each application. Keep these inc
 shell and application configuration. Merge the examples into existing settings rather than replacing
 your whole configuration.
 
-For the installable tools below, run the named `:FlumeInstallExtras` command
-in Neovim first. It refuses regular files and directories but replaces symlinks;
-check the destination if you already manage a theme there.
+For the installable tools below, run the named `:FlumeInstallExtras` command in Neovim first. It
+refuses regular files and directories but replaces symlinks; check the destination if you already
+manage a theme there.
 
 ### Ghostty
 
@@ -29,8 +29,9 @@ Run `:FlumeInstallExtras ghostty`, then add this to your Ghostty config:
 theme = flume
 ```
 
-Reload Ghostty's configuration to see the theme. On macOS, future `:FlumeSync` calls ask running
-Ghostty windows to reload. On other platforms, reload manually. See
+Reload Ghostty's configuration to see the theme. Future `:FlumeSync` calls request reloads through
+AppleScript on macOS, or `SIGUSR2` on Linux when `pkill` is available. Reload manually if that
+request is unavailable or the running application does not apply it. See
 [Ghostty's theme configuration](https://ghostty.org/docs/config/reference#theme).
 
 ### Kitty
@@ -89,11 +90,11 @@ follow `LS_COLORS`. Classic mode disables color. See
 
 For readable world-writable directory names (`drwxrwxrwx`), `:FlumeExtras` prints Fish and Bash/Zsh
 commands that append `ow=0;35` to `LS_COLORS`. Add the appropriate command after existing
-`LS_COLORS` setup in your shell configuration. It uses ANSI magenta on the normal background
-(pink with Flume's terminal palette) and preserves other entries, including sticky-directory colors.
-This targets non-sticky world-writable directories, not directories such as `/tmp` with the sticky
-bit set. GNU `ls` also reads `LS_COLORS`, but macOS's built-in BSD `ls` does not. The YAML theme
-alone cannot change filename colors.
+`LS_COLORS` setup in your shell configuration. It uses ANSI magenta on the normal background (pink
+with Flume's terminal palette) and preserves other entries, including sticky-directory colors. This
+targets non-sticky world-writable directories, not directories such as `/tmp` with the sticky bit
+set. GNU `ls` also reads `LS_COLORS`, but macOS's built-in BSD `ls` does not. The YAML theme alone
+cannot change filename colors.
 
 ### OpenCode
 
@@ -126,7 +127,6 @@ replace an existing symlink after confirmation. Fish loads `conf.d` before `conf
 color settings can override Flume. If that happens, source the active fragment after those settings
 in your Fish `config.fish` instead:
 
-
 ```fish
 if status is-interactive
     source /absolute/path/to/flume-data/current/fish.fish
@@ -147,8 +147,48 @@ as ordinary rows so a previous Fish theme cannot leave stripes behind.
 The fragment also colors command-line syntax, autosuggestions, history matches, and visual
 selections. It sets session-global variables, not persistent universal variables, and does not
 replace your prompt or key bindings. Existing shells need to source the active file again after
-`:FlumeSync`. New shells read it at startup. There is no automatic Fish reload.
-See [Fish's pager color variables](https://fishshell.com/docs/current/interactive.html#pager-color-variables).
+`:FlumeSync`. New shells read it at startup. There is no automatic Fish reload. See
+[Fish's pager color variables](https://fishshell.com/docs/current/interactive.html#pager-color-variables).
+
+### Fish tool setup
+
+Fish 3.5+ users can replace manual fzf, Lazygit and filename-color plumbing with an optional setup
+fragment:
+
+```vim
+:FlumeInstallExtras fish_tools
+```
+
+Choose how to adopt the tool settings:
+
+- **Use Flume settings** links `conf.d/flume-tools.fish` and prints a quoted `source` command with
+  `--adopt`. Run that command in Fish to replace the current session's fzf/Lazygit exports.
+- **Keep existing settings** installs the same fragment but prints a source command without
+  `--adopt`. Configured tools retain their exports. Unset tools receive Flume defaults.
+- **Do not install** or cancel leaves files unchanged.
+
+Both source modes apply the filename-color rule described below. Neovim cannot change the parent
+shell's environment. Linking alone has not applied the settings to an existing shell. There is no
+need to clear variables or restart Fish: run the exact command printed by the installer.
+
+This is separate from `:FlumeInstallExtras fish`, which only installs command-line syntax and pager
+colors. Neither command edits `config.fish`. Normal startup respects explicit tool exports in both
+modes. `--adopt` is a one-time source argument, not a persistent preference, and it does not modify
+Fish's persistent universal variables. Reinstalling a stale tool fragment refreshes the complete
+shared set without changing its selected palette.
+
+The tool fragment keeps fzf on the stable shared `current/fzf.opts` path. It asks installed Lazygit
+for its config directory and layers its personal `config.yml`, when present, before
+`current/lazygit.yml`. This follows Lazygit's native macOS, XDG and custom-directory rules without a
+second path resolver. If Lazygit is absent, its setup waits until a shell starts with it installed.
+Without `--adopt`, existing `FZF_DEFAULT_OPTS_FILE` and `LG_CONFIG_FILE` variables take precedence,
+including inherited and universal choices. Lazygit reads `LG_CONFIG_FILE` natively, so no shell
+function or command wrapper is needed.
+
+It also replaces the `ow` rule in `LS_COLORS` with `ow=0;35`, preserving other rules and remaining
+unchanged when sourced repeatedly. This affects GNU `ls` and LSD, not macOS's built-in BSD `ls`.
+Later personal configuration can override any of this setup. Existing running applications are not
+reloaded. The manual recipes below remain available for other shells or custom arrangements.
 
 ### fzf
 
@@ -186,10 +226,10 @@ Set `LG_CONFIG_FILE` after your personal configuration:
 export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/flume.yml"
 ```
 
-Use your actual config location; `lazygit --print-config-dir` reports the default directory.
-Keep keybindings and non-theme options in the personal file. New invocations read the active
-symlink, so future `:FlumeSync` calls update the theme without rewriting your configuration.
-An already running Lazygit instance does not reload.
+Use your actual config location; `lazygit --print-config-dir` reports the default directory. Keep
+keybindings and non-theme options in the personal file. New invocations read the active symlink, so
+future `:FlumeSync` calls update the theme without rewriting your configuration. An already running
+Lazygit instance does not reload.
 
 ### Delta
 

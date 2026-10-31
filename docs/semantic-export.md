@@ -74,7 +74,7 @@ v0.3 stores active sets outside the plugin checkout. Startup can read a valid ol
 `extras/current` symlink to the new owner and emits a directory event for legacy watchers when the
 checkout is writable. Old sets are retained.
 
-Relink the five installable integrations with `:FlumeInstallExtras`. Update manual includes to
+Relink installed integrations with `:FlumeInstallExtras`. Update manual includes to
 `<data-dir>/current/...`. The forwarding link is transitional: deleting the plugin checkout still
 breaks paths through it, but direct links to the data directory survive replacement.
 

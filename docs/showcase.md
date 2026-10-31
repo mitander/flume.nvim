@@ -69,8 +69,8 @@ unselected captures. Refresh all palettes when changing the environment; do not 
 from different tool versions.
 
 Palette/exporter changes still need the generated-extra refresh described in the
-[contributor checks](contributing.md#checks). App fixtures consume the shipped exports, not
-editor-local overrides.
+[development commands](DEVELOPMENT.md#regenerate-palette-artifacts). App fixtures consume the
+shipped exports, not editor-local overrides.
 
 Tapes, fixtures, inventory, and composition live in `tests/snapshots/`. Its `Dockerfile` pins the
 base image and Debian archive; `tools.json` locks release and grammar archives by checksum. Change
@@ -92,12 +92,12 @@ identity. Neovim itself reports readiness before Ghostty captures the painted te
 capture fixture reveals the real statusline location field only after readiness; no preview label is
 added to the image.
 
-| Palette | Appearance | Gallery                                               |
-| ------- | ---------- | ----------------------------------------------------- |
-| Dusk    | Dark       | [Languages, states, and integrations](themes/dusk.md) |
-| Opal    | Light      | [Languages, states, and integrations](themes/opal.md) |
-| Mira    | Dark       | [Languages, states, and integrations](themes/mira.md) |
-| Mesa    | Light      | [Languages, states, and integrations](themes/mesa.md) |
+| Palette | Appearance | Gallery |
+| - | - | - |
+| Dusk | Dark | [Languages, states, and integrations](themes/dusk.md) |
+| Opal | Light | [Languages, states, and integrations](themes/opal.md) |
+| Mira | Dark | [Languages, states, and integrations](themes/mira.md) |
+| Mesa | Light | [Languages, states, and integrations](themes/mesa.md) |
 
 Raw images live at `assets/screenshots/<schema>/<language>.png`. Geometry is 112 columns × 32 rows
 for the Zig hero and 100 × 48 for other language and LSP scenes. The Neo-tree scene uses 132 × 44.
@@ -105,16 +105,16 @@ Typography uses checksum-locked JetBrains Mono 2.304 from the
 [Nerd Fonts 3.5.1 release](https://github.com/ryanoasis/nerd-fonts/releases/tag/v3.5.1). Its
 `JetBrainsMono Nerd Font Mono` family preserves ligatures and supplies monospaced icons. Every
 palette and app uses SemiBold, with real Bold, SemiBold Italic, and Bold Italic faces. Contact-sheet
-labels use the same family. This capture choice does not change the user's terminal font.
-The hero uses a 38-pixel em; compact editor scenes use a 24-pixel em. Ghostty's X11
-point sizes are 28.5 and 18 at 96 DPI. Cell height increases by 12% and cell width by 2%. Capture
-checks the resolved font files and fails on fallback. Neovim keeps mode-specific, non-blinking
-cursor shapes: block in Normal mode, bar in Insert mode. Syntax specimens park the block cursor on
-whitespace to keep text readable. Capture does not mask pixels or allow comparison tolerance.
-Ghostty explicitly uses native sRGB alpha blending instead of Linux's `linear-corrected` default.
-This follows macOS's native blending mode and avoids host-dependent rounding in the linear sRGB
-framebuffer path. Mesa llvmpipe provides single-threaded software rendering. The manifest records
-blending, the renderer environment, and the installed Mesa version. See
+labels use the same family. This capture choice does not change the user's terminal font. The hero
+uses a 38-pixel em; compact editor scenes use a 24-pixel em. Ghostty's X11 point sizes are 28.5 and
+18 at 96 DPI. Cell height increases by 12% and cell width by 2%. Capture checks the resolved font
+files and fails on fallback. Neovim keeps mode-specific, non-blinking cursor shapes: block in Normal
+mode, bar in Insert mode. Syntax specimens park the block cursor on whitespace to keep text
+readable. Capture does not mask pixels or allow comparison tolerance. Ghostty explicitly uses native
+sRGB alpha blending instead of Linux's `linear-corrected` default. This follows macOS's native
+blending mode and avoids host-dependent rounding in the linear sRGB framebuffer path. Mesa llvmpipe
+provides single-threaded software rendering. The manifest records blending, the renderer
+environment, and the installed Mesa version. See
 [Ghostty's alpha-blending modes](https://ghostty.org/docs/config/reference#alpha-blending).
 
 Pinned Pillow adds padding, an understated title bar with three macOS-style buttons, no redundant
@@ -168,32 +168,32 @@ isolated project contains staged additions, modified files, and an untracked fil
 exercises file icons, directory colors, selection, indent guides, Git indicators, and
 inactive-window surfaces. No host repository or personal file names appear.
 
-| Palette | Selection and diagnostics                               | Completion                        | Tree-sitter + LSP                                                       |
-| ------- | ------------------------------------------------------- | --------------------------------- | ----------------------------------------------------------------------- |
-| Dusk    | [States](themes/dusk.md#diagnostics-and-working-states) | [Menu](themes/dusk.md#completion) | [Go](themes/dusk.md#go-with-gopls) · [Zig](themes/dusk.md#zig-with-zls) |
-| Opal    | [States](themes/opal.md#diagnostics-and-working-states) | [Menu](themes/opal.md#completion) | [Go](themes/opal.md#go-with-gopls) · [Zig](themes/opal.md#zig-with-zls) |
-| Mira    | [States](themes/mira.md#diagnostics-and-working-states) | [Menu](themes/mira.md#completion) | [Go](themes/mira.md#go-with-gopls) · [Zig](themes/mira.md#zig-with-zls) |
-| Mesa    | [States](themes/mesa.md#diagnostics-and-working-states) | [Menu](themes/mesa.md#completion) | [Go](themes/mesa.md#go-with-gopls) · [Zig](themes/mesa.md#zig-with-zls) |
+| Palette | Selection and diagnostics | Completion | Tree-sitter + LSP |
+| - | - | - | - |
+| Dusk | [States](themes/dusk.md#diagnostics-and-working-states) | [Menu](themes/dusk.md#completion) | [Go](themes/dusk.md#go-with-gopls) · [Zig](themes/dusk.md#zig-with-zls) |
+| Opal | [States](themes/opal.md#diagnostics-and-working-states) | [Menu](themes/opal.md#completion) | [Go](themes/opal.md#go-with-gopls) · [Zig](themes/opal.md#zig-with-zls) |
+| Mira | [States](themes/mira.md#diagnostics-and-working-states) | [Menu](themes/mira.md#completion) | [Go](themes/mira.md#go-with-gopls) · [Zig](themes/mira.md#zig-with-zls) |
+| Mesa | [States](themes/mesa.md#diagnostics-and-working-states) | [Menu](themes/mesa.md#completion) | [Go](themes/mesa.md#go-with-gopls) · [Zig](themes/mesa.md#zig-with-zls) |
 
 ## Code examples
 
 Sources live in `examples/`. They use each language's conventions rather than translating the same
 exercise. Role coverage spans the examples; no single file demonstrates every highlight group.
 
-| Source                         | Mechanism                                                               |
-| ------------------------------ | ----------------------------------------------------------------------- |
-| [Go](../examples/flume.go)     | A channel producer stops on cancellation; its caller waits for cleanup. |
-| [Rust](../examples/flume.rs)   | Typestate permits opening only after unlocking.                         |
-| [Python](../examples/flume.py) | A JSON-lines event counter reports frequencies and percentages.         |
-| [TSX](../examples/flume.tsx)   | A React counter records undo history through functional updates.        |
-| [Zig](../examples/flume.zig)   | Recursive constant folding over a tagged expression union.              |
-| [Elixir](../examples/flume.ex) | A regex parser feeds a frequency-counting pipeline.                     |
-| [TOML](../examples/flume.toml) | Illustrative preview-server configuration, not Flume configuration.     |
+| Source | Mechanism |
+| - | - |
+| [Go](../examples/flume.go) | A channel producer stops on cancellation; its caller waits for cleanup. |
+| [Rust](../examples/flume.rs) | Typestate permits opening only after unlocking. |
+| [Python](../examples/flume.py) | A JSON-lines event counter reports frequencies and percentages. |
+| [TSX](../examples/flume.tsx) | A React counter records undo history through functional updates. |
+| [Zig](../examples/flume.zig) | Recursive constant folding over a tagged expression union. |
+| [Elixir](../examples/flume.ex) | A regex parser feeds a frequency-counting pipeline. |
+| [TOML](../examples/flume.toml) | Illustrative preview-server configuration, not Flume configuration. |
 
-Go requires 1.22+, Python 3.10+, and Elixir 1.10+. TSX requires React and its TypeScript types. `zig
-run examples/flume.zig` prints `add folded = 42` with Zig 0.16.0. Run `python3 examples/flume.py
-events.jsonl --limit 3` with records such as `{"event":"play"}`, or `elixir tests/examples.exs` to
-check its parser.
+Go requires 1.22+, Python 3.10+, and Elixir 1.10+. TSX requires React and its TypeScript types.
+`zig run examples/flume.zig` prints `add folded = 42` with Zig 0.16.0. Run
+`python3 examples/flume.py events.jsonl --limit 3` with records such as `{"event":"play"}`, or
+`elixir tests/examples.exs` to check its parser.
 
 ## README composite
 
@@ -210,15 +210,15 @@ rendering. Each uses the same app fixture and geometry across all four palettes.
 and Tmux fixtures use 16-row viewports instead of mostly empty windows. Pi/OpenCode content is
 synthetic, but their UI is real.
 
-| Integration | Exercised surface                                                                                |
-| ----------- | ------------------------------------------------------------------------------------------------ |
-| Tmux        | Exported status variables and active window                                                      |
-| LSD         | File types, permissions, sizes, dates, symlinks, and Git state                                   |
-| OpenCode    | Core UI colors, Markdown emphasis, inline code, and plain code/diff text from an offline session |
-| Lazygit     | Repository files and add/change/delete diff state                                                |
-| fzf         | Search, current item, and multi-selection                                                        |
-| Delta       | Added/changed/deleted diff lines and line numbers                                                |
-| Pi          | Markdown, code, thinking, and successful/failed tool results                                     |
+| Integration | Exercised surface |
+| - | - |
+| Tmux | Exported status variables and active window |
+| LSD | File types, permissions, sizes, dates, symlinks, and Git state |
+| OpenCode | Core UI colors, Markdown emphasis, inline code, and plain code/diff text from an offline session |
+| Lazygit | Repository files and add/change/delete diff state |
+| fzf | Search, current item, and multi-selection |
+| Delta | Added/changed/deleted diff lines and line numbers |
+| Pi | Markdown, code, thinking, and successful/failed tool results |
 
 The palette galleries embed each app's snapshot. Each integration directory also contains
 `contact-sheet.png`, generated and tested from its four raw captures.

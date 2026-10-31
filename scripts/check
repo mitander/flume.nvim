@@ -19,6 +19,7 @@ fi
 
 # Check script syntax without running snapshot fixtures.
 sh -n scripts/check
+bash -n tests/fish-tools.sh
 python3 -m py_compile \
   scripts/check-links.py scripts/preflight-screenshots.py \
   scripts/review-integrations.py scripts/snapshots tests/snapshots/*.py

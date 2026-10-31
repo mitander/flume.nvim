@@ -51,7 +51,7 @@ local fixture = vim.fn.tempname()
 vim.fn.mkdir(fixture, "p")
 fixture = assert((vim.uv or vim.loop).fs_realpath(fixture))
 local copy = { "cp", "-R" }
-for _, name in ipairs({ "lua", "colors", "extras", "tests", "scripts", "docs", "doc", "README.md" }) do
+for _, name in ipairs({ "lua", "colors", "plugin", "extras", "tests", "scripts", "docs", "doc", "README.md" }) do
     copy[#copy + 1] = repository .. "/" .. name
 end
 copy[#copy + 1] = fixture
@@ -112,6 +112,55 @@ test("schemas have identical valid palette contracts", function()
                 schema .. " " .. key .. " is not #RRGGBB"
             )
         end
+    end
+end)
+
+test("file icon families retain their hues and contrast in every schema", function()
+    local hue_ranges = {
+        red = { 340, 365 },
+        orange = { 15, 35 },
+        yellow = { 35, 75 },
+        green = { 75, 165 },
+        cyan = { 165, 200 },
+        blue = { 200, 255 },
+        purple = { 255, 290 },
+        pink = { 290, 340 },
+    }
+    for _, schema in ipairs(schema_names) do
+        local colors = palettes[schema]
+        local hues = {}
+        for _, family in ipairs({ "neutral", "red", "orange", "yellow", "green", "cyan", "blue", "purple", "pink" }) do
+            local role = "icon_" .. family
+            local color = assert(colors[role], "missing " .. role)
+            for _, surface in ipairs({ "bg", "active_line", "surface", "surface_alt", "element_active" }) do
+                truthy(contrast(color, colors[surface]) >= 3, schema .. " " .. role .. " on " .. surface)
+            end
+            if family ~= "neutral" then
+                local red = tonumber(color:sub(2, 3), 16)
+                local green = tonumber(color:sub(4, 5), 16)
+                local blue = tonumber(color:sub(6, 7), 16)
+                local high, low = math.max(red, green, blue), math.min(red, green, blue)
+                local delta = high - low
+                truthy(delta / high >= 0.1, schema .. " " .. role .. " lost its chromatic identity")
+                local hue
+                if high == red then
+                    hue = ((green - blue) / delta) % 6
+                elseif high == green then
+                    hue = (blue - red) / delta + 2
+                else
+                    hue = (red - green) / delta + 4
+                end
+                hue = hue * 60
+                if family == "red" and hue < 15 then
+                    hue = hue + 360
+                end
+                hues[family] = hue
+                local range = hue_ranges[family]
+                truthy(hue >= range[1] and hue <= range[2], schema .. " " .. role .. " left its hue family")
+            end
+        end
+        truthy(hues.yellow - hues.orange >= 10, schema .. " gold and copper icons have converged")
+        truthy(hues.blue - hues.cyan >= 10, schema .. " blue and cyan icons have converged")
     end
 end)
 
@@ -369,8 +418,31 @@ test("comments remain subordinate and shared syntax accents stay related", funct
         for _, role in ipairs({ "syntax_comment", "syntax_doc_comment" }) do
             truthy(contrast(colors[role], colors.bg) < primary, schema .. " " .. role .. " must recede from code")
         end
-        for _, role in ipairs({ "syntax_attribute", "syntax_constant", "syntax_special" }) do
+        for _, role in ipairs({ "syntax_attribute", "syntax_special" }) do
             equal(colors[role], colors.syntax_function, schema .. " " .. role .. " shares the function accent")
+        end
+    end
+end)
+
+test("named constants stay neutral while literals and tags retain their accents", function()
+    for _, schema in ipairs(schema_names) do
+        local colors = palettes[schema]
+        equal(colors.syntax_constant, colors.syntax_primary, schema .. " constants share identifier ink")
+        truthy(colors.syntax_constant ~= colors.syntax_function, schema .. " constants differ from calls")
+        truthy(colors.syntax_constant ~= colors.syntax_boolean, schema .. " literals remain accented")
+
+        require("flume").setup({ schema = schema, watch_sync = false })
+        for _, group in ipairs({ "Constant", "@constant", "@constant.macro", "@lsp.type.enumMember" }) do
+            local actual = vim.api.nvim_get_hl(0, { name = group, link = false })
+            equal(actual.fg, color_number(colors.syntax_primary), schema .. " " .. group .. " stays neutral")
+        end
+        for _, group in ipairs({ "Number", "Float", "Boolean", "@number", "@boolean", "@constant.builtin" }) do
+            local actual = vim.api.nvim_get_hl(0, { name = group, link = false })
+            equal(actual.fg, color_number(colors.syntax_boolean), schema .. " " .. group .. " retains literal ink")
+        end
+        for _, group in ipairs({ "Tag", "@tag", "@string.special.symbol" }) do
+            local actual = vim.api.nvim_get_hl(0, { name = group, link = false })
+            equal(actual.fg, color_number(colors.syntax_special), schema .. " " .. group .. " retains its accent")
         end
     end
 end)
@@ -677,7 +749,7 @@ test("syntax roles stay consistent across language providers", function()
     equal(readonly_property.fg, color_number(palette.syntax_property), "readonly property foreground")
 
     local tsx_constructor = vim.api.nvim_get_hl(0, { name = "@constructor.tsx", link = false })
-    equal(tsx_constructor.fg, color_number(palette.syntax_constant), "TSX constructor foreground")
+    equal(tsx_constructor.fg, color_number(palette.syntax_special), "TSX constructor foreground")
 
     local namespace = vim.api.nvim_get_hl(0, { name = "@lsp.type.namespace", link = false })
     equal(namespace.fg, color_number(palette.syntax_namespace), "generic namespace foreground")
@@ -731,13 +803,24 @@ test("setup applies and announces one schema exactly once", function()
 end)
 
 test("public commands are registered", function()
+    dofile("plugin/flume.lua")
     require("flume").setup({})
-    for _, command in ipairs({ "FlumeReload", "FlumeCompile", "FlumeSync", "FlumeInstallExtras", "FlumeExtras" }) do
+    for _, command in ipairs({
+        "FlumeTweak",
+        "FlumeReload",
+        "FlumeCompile",
+        "FlumeSync",
+        "FlumeInstallExtras",
+        "FlumeExtras",
+    }) do
         equal(vim.fn.exists(":" .. command), 2, command .. " command")
     end
     local schemas = vim.fn.getcompletion("FlumeSync ", "cmdline")
     table.sort(schemas)
     equal(table.concat(schemas, ","), "dusk,mesa,mira,opal", "FlumeSync schema completion")
+    local previews = vim.fn.getcompletion("FlumeTweak ", "cmdline")
+    table.sort(previews)
+    equal(table.concat(previews, ","), "dusk,mesa,mira,opal", "FlumeTweak schema completion")
 end)
 
 test("screenshot initialization uses the single setup path", function()
@@ -1284,7 +1367,7 @@ test("activation reuses intact sets and recovers the final integration", functio
     local ok, err = xpcall(function()
         local changes = compiler.activate(schema)
         equal(uv.fs_readlink("extras/current"), original_set, "intact set identity")
-        equal(vim.tbl_count(changes), 11, "activation result inventory")
+        equal(vim.tbl_count(changes), 12, "activation result inventory")
         for name, changed in pairs(changes) do
             equal(changed, false, name .. " unchanged artifact")
         end
@@ -1322,7 +1405,7 @@ test("activation rejects sets with obsolete artifacts", function()
         vim.fn.writefile({ "obsolete" }, obsolete)
         compiler.activate(schema)
         truthy(uv.fs_readlink("extras/current") ~= original_set, "obsolete set was reused")
-        equal(#vim.fn.glob("extras/current/*", false, true), 12, "ten apps plus semantic palette and schema")
+        equal(#vim.fn.glob("extras/current/*", false, true), 13, "ten apps, tool setup, semantic palette and schema")
         equal(vim.fn.filereadable("extras/current/obsolete.json"), 0, "obsolete artifact survived")
 
         local recovered_set = uv.fs_readlink("extras/current")
@@ -1340,6 +1423,8 @@ test("activation rejects sets with obsolete artifacts", function()
 end)
 
 require("tests.extras").register(test, equal, truthy)
+require("tests.fish_tools").register(test, equal, truthy)
+require("tests.tweak").register(test, equal, truthy)
 require("tests.workflows").register(test, equal, truthy)
 require("tests.state").register(test, equal, truthy)
 

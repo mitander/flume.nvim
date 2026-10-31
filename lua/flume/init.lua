@@ -23,10 +23,6 @@ local default_config = {
 M.colors = {}
 M.config = vim.deepcopy(default_config)
 
-local function hi(group, opts)
-    vim.api.nvim_set_hl(0, group, opts)
-end
-
 local function styled(opts, style)
     return vim.tbl_deep_extend("force", opts, style or {})
 end
@@ -155,30 +151,16 @@ function M.get_colors(schema)
     return vim.tbl_deep_extend("force", {}, palette.colors, M.config.overrides or {}, schema_overrides[schema] or {})
 end
 
-function M.load(schema, colorscheme)
-    if schema then
-        local palette_module = require("flume.palette")
-        M.config.schema = palette_module.resolve(schema)
-        M.config.colorscheme = colorscheme
+-- Apply one mapping to the editor or an isolated preview namespace. This does
+-- not select a palette, change config/terminal globals, or publish shared state.
+---@param namespace integer
+---@param c table<string, string>
+---@param config table
+function M.set_highlights(namespace, c, config)
+    local styles = config.styles or {}
+    local function hi(group, opts)
+        vim.api.nvim_set_hl(namespace, group, opts)
     end
-    local palette = require("flume.palette").get(M.config.schema)
-    local colors_name = editor_name(M.config)
-    M.colors = M.get_colors(M.config.schema)
-    local c = M.colors
-    local styles = M.config.styles or {}
-
-    if M.config.transparent then
-        c.bg = "NONE"
-        c.element = "NONE"
-    end
-
-    vim.g.colors_name = nil
-    vim.o.background = palette.appearance
-    vim.cmd("highlight clear")
-    if vim.fn.exists("syntax_on") == 1 then
-        vim.cmd("syntax reset")
-    end
-    vim.g.colors_name = colors_name
 
     hi("Normal", { fg = c.syntax_primary, bg = c.bg })
     hi("NormalNC", { fg = c.syntax_primary, bg = c.bg })
@@ -276,7 +258,7 @@ function M.load(schema, colorscheme)
     hi("Typedef", styled({ fg = c.syntax_type }, styles.types))
     hi("Special", { fg = c.syntax_special })
     hi("SpecialChar", { fg = c.syntax_special })
-    hi("Tag", { fg = c.syntax_constant })
+    hi("Tag", { fg = c.syntax_special })
     hi("Delimiter", { fg = c.syntax_punctuation })
     hi("SpecialComment", { fg = c.syntax_doc_comment })
     hi("Debug", { fg = c.error })
@@ -335,8 +317,8 @@ function M.load(schema, colorscheme)
     hi("@string.escape", { fg = c.syntax_special })
     hi("@string.regexp", { fg = c.syntax_boolean })
     hi("@string.special", { fg = c.syntax_boolean })
-    hi("@string.special.symbol", { fg = c.syntax_constant })
-    hi("@tag", { fg = c.syntax_constant })
+    hi("@string.special.symbol", { fg = c.syntax_special })
+    hi("@tag", { fg = c.syntax_special })
     hi("@tag.attribute", { fg = c.syntax_attribute })
     hi("@tag.builtin", { fg = c.syntax_special })
     hi("@tag.delimiter", { fg = c.syntax_punctuation_special })
@@ -531,6 +513,40 @@ function M.load(schema, colorscheme)
         set_highlight = hi,
     })
 
+    for group, opts in pairs(config.highlights or {}) do
+        if type(opts) == "function" then
+            opts = opts(c)
+        end
+        if opts then
+            hi(group, opts)
+        end
+    end
+end
+
+function M.load(schema, colorscheme)
+    if schema then
+        local palette_module = require("flume.palette")
+        M.config.schema = palette_module.resolve(schema)
+        M.config.colorscheme = colorscheme
+    end
+    local palette = require("flume.palette").get(M.config.schema)
+    local colors_name = editor_name(M.config)
+    M.colors = M.get_colors(M.config.schema)
+    local c = M.colors
+
+    if M.config.transparent then
+        c.bg = "NONE"
+        c.element = "NONE"
+    end
+
+    vim.g.colors_name = nil
+    vim.o.background = palette.appearance
+    vim.cmd("highlight clear")
+    if vim.fn.exists("syntax_on") == 1 then
+        vim.cmd("syntax reset")
+    end
+    vim.g.colors_name = colors_name
+
     if M.config.terminal_colors then
         local terminal_colors = {
             c.black,
@@ -560,14 +576,7 @@ function M.load(schema, colorscheme)
         end
     end
 
-    for group, opts in pairs(M.config.highlights or {}) do
-        if type(opts) == "function" then
-            opts = opts(c)
-        end
-        if opts then
-            hi(group, opts)
-        end
-    end
+    M.set_highlights(0, c, M.config)
 
     vim.api.nvim_create_user_command("FlumeReload", M.reload, {})
     vim.api.nvim_create_user_command("FlumeCompile", function()

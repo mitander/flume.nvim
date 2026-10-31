@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+- Add `:FlumeTweak [schema]` for isolated role-color exploration, shade/ink candidates, custom RGB
+  input and copyable per-palette overrides. Include realistic code samples with actual parser or
+  explicit plain-text fallback status, example diagnostics and labelled UI swatches. Keep editor configuration,
+  global highlights, terminal colors and shared integrations unchanged.
+
+- Add nine dedicated `icon_*` palette roles for consistent file-icon hue families across all four
+  schemas. Keep gold/yellow distinct from copper/orange in light palettes without borrowing syntax
+  or ANSI colors. Export the roles in the version 1 semantic palette.
+
+- Render named constants in the neutral identifier ink across all four palettes. Keep numbers,
+  booleans, built-in constants, tags, and symbol literals accented.
+
+- Add opt-in `:FlumeInstallExtras fish_tools` for shared fzf and Lazygit setup and idempotent
+  `LS_COLORS` configuration in Fish 3.5+. Offer a one-command session adoption or preservation of
+  explicit tool choices, without restarting Fish or changing persistent variables. Refresh stale
+  setup fragments without switching the shared palette. Keep syntax colors separate and leave
+  `config.fish` untouched. Add Pi theme linking and installation results with next steps.
+- Give artifact names, install destinations and setup hints one integration inventory. Separate
+  palette renderers from file writes while preserving existing compiler entry points and output.
+
 - Refine Dusk's warm syntax with muted amber types, clearer rose-red fields, quiet rose namespaces,
   and softened coral literals. Retain its violet canvas, teal functions, lavender keywords, sage
   strings, and stronger state and ANSI inks.

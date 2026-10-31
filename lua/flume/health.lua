@@ -62,10 +62,11 @@ function M.check()
     end
     ok("Reload: Ghostty on macOS, Tmux inside a session, and linked Pi themes are notified by :FlumeSync")
     ok("Other apps require manual reload or a new invocation; installing a file does not select the theme")
+    ok("Fish conf.d loads before config.fish; later settings can override colors or tool setup")
 
     local suffix = palette.suffix
     local root = extras.get_plugin_dir()
-    for _, integration in ipairs(extras.integrations) do
+    for _, integration in ipairs(require("flume.integrations").list) do
         local label = integration.label
         local path = root .. "/" .. integration.source:format(suffix)
         if vim.fn.filereadable(path) == 1 then

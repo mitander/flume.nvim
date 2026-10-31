@@ -61,13 +61,24 @@ M.dusk = {
     bright_white = "#e0dcf0",
     dim_white = "#8a85a6",
 
+    -- File icons keep their hue families independently of syntax and ANSI slots.
+    icon_neutral = "#a6a2bb",
+    icon_red = "#f48a94",
+    icon_orange = "#e5a16b",
+    icon_yellow = "#edc87e",
+    icon_green = "#b0ca9b",
+    icon_cyan = "#9bd6df",
+    icon_blue = "#7eb6e8",
+    icon_purple = "#c6a8e8",
+    icon_pink = "#dd99be",
+
     -- Muted amber types balance clearer rose-red fields on the violet canvas.
     -- Syntax warmth stays independent of the stronger state and ANSI inks.
     syntax_attribute = "#73a6b6",
     syntax_boolean = "#d1a393",
     syntax_comment = "#9498a5",
     syntax_doc_comment = "#9498a5",
-    syntax_constant = "#73a6b6",
+    syntax_constant = "#c9c5d9",
     syntax_function = "#73a6b6",
     syntax_type = "#cfb584",
     syntax_keyword = "#b391d6",
@@ -156,6 +167,17 @@ M.opal = {
     bright_white = "#413b49",
     dim_white = "#706878",
 
+    -- Gold and copper remain distinct on paper, including retained-ink active rows.
+    icon_neutral = "#615a68",
+    icon_red = "#b5365b",
+    icon_orange = "#b45a20",
+    icon_yellow = "#8b7000",
+    icon_green = "#44752b",
+    icon_cyan = "#087b87",
+    icon_blue = "#286aab",
+    icon_purple = "#873a9d",
+    icon_pink = "#ad4386",
+
     -- Purple types balance red fields on porcelain paper. Keep the trial's hue
     -- relationships, with deeper inks for contrast on raised and diff surfaces.
     -- State colors and ANSI slots remain independent of these text-sized accents.
@@ -163,7 +185,7 @@ M.opal = {
     syntax_boolean = "#8d513c",
     syntax_comment = "#5d626b",
     syntax_doc_comment = "#5d626b",
-    syntax_constant = "#356475",
+    syntax_constant = "#514e57",
     syntax_function = "#356475",
     syntax_type = "#705883",
     syntax_keyword = "#70558a",
@@ -197,7 +219,7 @@ local function complete_palette(colors)
     colors.diff_change = colors.warning
     colors.diff_delete = colors.error
     colors.syntax_attribute = colors.accent
-    colors.syntax_constant = colors.accent
+    colors.syntax_constant = colors.syntax_primary
     colors.syntax_function = colors.accent
     colors.syntax_special = colors.accent
     colors.hint = colors.hint or colors.info
@@ -259,6 +281,17 @@ M.mira = complete_palette({
     white = "#cac7d3",
     bright_white = "#d8d4e0",
     dim_white = "#9393a3",
+
+    -- File icons
+    icon_neutral = "#acabb9",
+    icon_red = "#f0afb6",
+    icon_orange = "#ebbd96",
+    icon_yellow = "#ecd7b2",
+    icon_green = "#cadbb8",
+    icon_cyan = "#b3dce0",
+    icon_blue = "#b5cfee",
+    icon_purple = "#d5bfee",
+    icon_pink = "#e3b7d2",
 
     -- Syntax Highlighting
     syntax_boolean = "#e0b3a1",
@@ -342,6 +375,17 @@ M.mesa = complete_palette({
     white = "#58515d",
     bright_white = "#423d47",
     dim_white = "#706976",
+
+    -- File icons
+    icon_neutral = "#5f5964",
+    icon_red = "#a34353",
+    icon_orange = "#a65b2b",
+    icon_yellow = "#8a6d14",
+    icon_green = "#527238",
+    icon_cyan = "#317583",
+    icon_blue = "#3d6d9c",
+    icon_purple = "#79559b",
+    icon_pink = "#9c4b80",
 
     -- Syntax Highlighting
     syntax_boolean = "#8b4940",

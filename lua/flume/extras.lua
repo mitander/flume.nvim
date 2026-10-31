@@ -11,55 +11,9 @@ function M.get_plugin_dir()
     return vim.fs.dirname(vim.fs.dirname(vim.fs.dirname(source)))
 end
 
-M.integrations = {
-    { name = "ghostty", label = "Ghostty", source = "extras/ghostty/flume%s", current = "ghostty" },
-    { name = "kitty", label = "Kitty", source = "extras/kitty/flume%s.conf", current = "kitty.conf" },
-    { name = "tmux", label = "Tmux", source = "extras/tmux/colors%s.conf", current = "tmux.conf" },
-    { name = "lsd", label = "LSD", source = "extras/lsd/colors%s.yaml", current = "lsd.yaml" },
-    { name = "opencode", label = "OpenCode", source = "extras/opencode/flume%s.json", current = "opencode.json" },
-    { name = "lazygit", label = "Lazygit", source = "extras/lazygit/flume%s.yml", current = "lazygit.yml" },
-    { name = "fish", label = "Fish", source = "extras/fish/flume%s.fish", current = "fish.fish" },
-    { name = "fzf", label = "fzf", source = "extras/fzf/flume%s.opts", current = "fzf.opts" },
-    { name = "delta", label = "Delta", source = "extras/delta/flume%s.gitconfig", current = "delta.gitconfig" },
-    { name = "pi", label = "Pi", source = "extras/pi/flume%s.json", current = "pi.json" },
-    { name = "palette", label = "Semantic palette", source = "extras/palette/flume%s.json", current = "palette.json" },
-}
-
-local config_home = vim.env.XDG_CONFIG_HOME
-if not config_home or config_home == "" then
-    config_home = "~/.config"
-end
-
-local apps = {
-    fish = {
-        src = "extras/current/fish.fish",
-        dest = config_home .. "/fish/conf.d/flume.fish",
-    },
-    ghostty = {
-        src = "extras/current/ghostty",
-        dest = "~/.config/ghostty/themes/flume",
-    },
-    kitty = {
-        src = "extras/current/kitty.conf",
-        dest = "~/.config/kitty/themes/flume.conf",
-    },
-    opencode = {
-        src = "extras/current/opencode.json",
-        dest = "~/.config/opencode/themes/flume.json",
-    },
-    tmux = {
-        src = "extras/current/tmux.conf",
-        dest = "~/.tmux/flume-theme.conf",
-    },
-    lsd = {
-        src = "extras/current/lsd.yaml",
-        dest = "~/.config/lsd/colors.yaml",
-    },
-    lazygit = {
-        src = "extras/current/lazygit.yml",
-        dest = "~/.config/lazygit/flume.yml",
-    },
-}
+local inventory = require("flume.integrations")
+M.integrations = inventory.list
+local apps = inventory.apps
 
 function M.get_apps()
     return apps
@@ -77,45 +31,56 @@ end
 local function install_link(name, app)
     local src_path = M.get_source_path(app.src)
     local dest_path = vim.fn.expand(app.dest)
+    local function result(status, message)
+        return { app = name, status = status, source = src_path, destination = dest_path, message = message }
+    end
 
-    -- `extras/current` is runtime state and is intentionally not checked in.
-    -- Materialize it on first install from the editor's selected schema.
-    if app.src:match("^extras/current/") and vim.fn.filereadable(src_path) == 0 then
-        local flume = require("flume")
-        local activated, activate_error = pcall(require("flume.state").activate, flume.config.schema)
+    -- A previously installed static helper may predate the source command's flags.
+    -- Refresh through complete-set publication, never by editing a published file.
+    local needs_activation = app.src:match("^extras/current/") and vim.fn.filereadable(src_path) == 0
+    if app.static and not needs_activation then
+        local canonical_ok, canonical = pcall(vim.fn.readfile, M.get_plugin_dir() .. "/" .. app.source, "b")
+        if not canonical_ok then
+            return result("failed", "Could not read shipped setup: " .. tostring(canonical))
+        end
+        local current_ok, current = pcall(vim.fn.readfile, src_path, "b")
+        needs_activation = not current_ok or not vim.deep_equal(canonical, current)
+    end
+    if needs_activation then
+        local state = require("flume.state")
+        local schema = state.get_schema() or require("flume").config.schema
+        local activated, activate_error = pcall(state.activate, schema)
         if not activated then
-            vim.notify("Could not activate Flume extras: " .. tostring(activate_error), vim.log.levels.ERROR)
-            return
+            return result("failed", "Could not activate Flume extras: " .. tostring(activate_error))
         end
     end
 
     local dest_dir = vim.fn.fnamemodify(dest_path, ":h")
-    vim.fn.mkdir(dest_dir, "p")
+    local created, create_error = pcall(vim.fn.mkdir, dest_dir, "p")
+    if not created then
+        return result("failed", "Could not create " .. dest_dir .. ": " .. tostring(create_error))
+    end
 
     if vim.fn.filereadable(src_path) == 0 then
-        vim.notify("Source file not found: " .. src_path .. "\nHave you compiled the extras?", vim.log.levels.ERROR)
-        return
+        return result("failed", "Source file not found: " .. src_path .. "\nHave you compiled the extras?")
     end
 
     local existing_type = vim.fn.getftype(dest_path)
     if existing_type ~= "" then
         if existing_type ~= "link" then
-            vim.notify(
+            return result(
+                "refused",
                 "Refusing to replace existing file: "
                     .. dest_path
-                    .. "\n"
-                    .. "Move it aside or link "
+                    .. "\nMove it aside or link "
                     .. src_path
-                    .. " manually.",
-                vim.log.levels.ERROR
+                    .. " manually."
             )
-            return
         end
 
         local target = uv.fs_readlink(dest_path)
         if target == src_path or vim.fn.resolve(dest_path) == src_path then
-            vim.notify(name .. " extra is already linked to " .. app.dest, vim.log.levels.INFO)
-            return
+            return result("already_linked", name .. " extra is already linked to " .. dest_path)
         end
     end
 
@@ -124,62 +89,142 @@ local function install_link(name, app)
     local temp_path = dest_path .. ".flume-" .. tostring(uv.hrtime())
     local ok_link, link_err = uv.fs_symlink(src_path, temp_path, { dir = false, junction = false })
     if not ok_link then
-        vim.notify("Failed to link " .. name .. ": " .. tostring(link_err), vim.log.levels.ERROR)
-        return
+        return result("failed", "Failed to link " .. name .. ": " .. tostring(link_err))
     end
 
     local ok_rename, rename_err = uv.fs_rename(temp_path, dest_path)
     if not ok_rename then
         uv.fs_unlink(temp_path)
-        vim.notify("Failed to install " .. name .. ": " .. tostring(rename_err), vim.log.levels.ERROR)
-        return
+        return result("failed", "Failed to install " .. name .. ": " .. tostring(rename_err))
     end
 
-    vim.notify("Successfully linked " .. name .. " extra to " .. app.dest, vim.log.levels.INFO)
+    return result("linked", "Successfully linked " .. name .. " extra to " .. dest_path)
 end
 
-local function fish_source_lines()
-    local source = M.get_source_path(apps.fish.src)
+local function fish_source_command(source, adopt)
     -- Fish single-quoted strings escape backslashes and quotes, unlike POSIX sh.
     source = "'" .. source:gsub("\\", "\\\\"):gsub("'", "\\'") .. "'"
+    return "source " .. source .. (adopt and " --adopt" or "")
+end
+
+local function fish_source_lines(source)
     return {
         "if status is-interactive",
-        "    source " .. source,
+        "    " .. fish_source_command(source or M.get_source_path(apps.fish.src)),
         "end",
     }
 end
 
-function M.install(name)
+-- Completion receives the same result for immediate and consent-based installs.
+-- A link is not proof that the application selected or reloaded the theme.
+function M.install(name, complete)
     local app = apps[name]
-    if not app then
-        vim.notify("Unknown extra: " .. tostring(name), vim.log.levels.ERROR)
-        return
+    local function finish(result)
+        if result.status ~= "cancelled" then
+            local successful = result.status == "linked" or result.status == "already_linked"
+            if successful then
+                result.next_step = app.next_step
+                if name == "fish_tools" then
+                    if result.settings == "adopt" then
+                        result.next_step =
+                            "Linked, not yet applied to your shell. Run this in Fish to use Flume's fzf/Lazygit settings now. Only session exports are replaced."
+                    else
+                        result.next_step =
+                            "Linked with existing fzf/Lazygit choices preserved. Already configured tools have not been taken over. Source this in Fish to configure unset tools and the LS_COLORS directory rule."
+                    end
+                end
+                if result.next_step then
+                    result.message = result.message .. "\n" .. result.next_step
+                end
+                if app.consent then
+                    result.reload_command = fish_source_command(result.source, result.settings == "adopt")
+                    result.message = result.message .. "\n" .. result.reload_command
+                end
+            end
+            local failed = result.status == "failed" or result.status == "refused"
+            vim.notify(result.message, failed and vim.log.levels.ERROR or vim.log.levels.INFO)
+        end
+        if complete then
+            complete(result)
+        end
+        return result
     end
-    if name ~= "fish" then
-        return install_link(name, app)
+
+    if not app then
+        return finish({ app = name, status = "failed", message = "Unknown extra: " .. tostring(name) })
+    end
+    if not app.consent then
+        return finish(install_link(name, app))
+    end
+
+    if name == "fish_tools" then
+        vim.ui.select({ "Use Flume settings", "Keep existing settings", "Do not install" }, {
+            prompt = app.consent
+                .. " via "
+                .. app.dest
+                .. "? Choose the current-shell source command. Both modes set the LS_COLORS directory rule. Existing symlinks may be replaced.",
+        }, function(choice)
+            if choice == "Use Flume settings" or choice == "Keep existing settings" then
+                local result = install_link(name, app)
+                result.settings = choice == "Use Flume settings" and "adopt" or "preserve"
+                finish(result)
+            elseif choice == "Do not install" then
+                finish({
+                    app = name,
+                    status = "declined",
+                    message = "Fish tool setup was not installed. No files changed.",
+                })
+            else
+                finish({ app = name, status = "cancelled" })
+            end
+        end)
+        return
     end
 
     vim.ui.select({ "Yes", "No" }, {
-        prompt = "Auto-load Fish colors via "
+        prompt = app.consent
+            .. " via "
             .. app.dest
-            .. "? config.fish can override them. Existing symlinks may be replaced.",
+            .. "? config.fish can override it. Existing symlinks may be replaced.",
     }, function(choice)
         if choice == "Yes" then
-            install_link(name, app)
+            finish(install_link(name, app))
         elseif choice == "No" then
-            vim.notify(
-                "Fish was not installed. After :FlumeSync, add this after other color settings in your Fish config.fish:\n"
-                    .. table.concat(fish_source_lines(), "\n"),
-                vim.log.levels.INFO
-            )
+            local source = M.get_source_path(app.src)
+            finish({
+                app = name,
+                status = "declined",
+                source = source,
+                destination = vim.fn.expand(app.dest),
+                message = app.label
+                    .. " was not installed. After :FlumeSync, add this after other settings in config.fish:\n"
+                    .. table.concat(fish_source_lines(source), "\n"),
+            })
+        else
+            finish({ app = name, status = "cancelled" })
         end
     end)
 end
 
-function M.install_all()
-    for name in pairs(apps) do
-        M.install(name)
+function M.install_all(complete)
+    local results = {}
+    local function next_install(index)
+        local integration = inventory.list[index]
+        if not integration then
+            if complete then
+                complete(results)
+            end
+            return
+        end
+        if not integration.dest then
+            return next_install(index + 1)
+        end
+        M.install(integration.name, function(result)
+            results[#results + 1] = result
+            next_install(index + 1)
+        end)
     end
+    next_install(1)
 end
 
 local function shell_quote(value)
@@ -209,6 +254,8 @@ function M.get_instruction_lines()
         ":FlumeInstallExtras lsd",
         ":FlumeInstallExtras lazygit",
         ":FlumeInstallExtras fish",
+        ":FlumeInstallExtras fish_tools",
+        ":FlumeInstallExtras pi",
         "```",
         "",
         "## Option 2: Copy-paste terminal commands",
@@ -253,6 +300,22 @@ function M.get_instruction_lines()
         lines,
         "After :FlumeSync, source the active file again in existing shells. New shells load it at startup."
     )
+    table.insert(lines, "")
+    table.insert(lines, "## Fish tool setup")
+    table.insert(
+        lines,
+        "Run :FlumeInstallExtras fish_tools for optional Fish 3.5+ setup of fzf, Lazygit and LS_COLORS."
+    )
+    table.insert(
+        lines,
+        "Choose Use Flume settings for a one-command session takeover, or Keep existing settings to preserve tool exports."
+    )
+    table.insert(lines, "The installer prints the exact source command. Neovim cannot apply it to its parent shell.")
+    table.insert(
+        lines,
+        "Normal startup preserves explicit FZF_DEFAULT_OPTS_FILE and LG_CONFIG_FILE choices. No config.fish edits."
+    )
+    table.insert(lines, "New shells load it automatically. Source the active fish-tools.fish again in existing shells.")
     table.insert(lines, "")
     table.insert(lines, "## LSD filename colors")
     table.insert(lines, "The YAML theme styles metadata. Add this after existing LS_COLORS setup in your shell config")
