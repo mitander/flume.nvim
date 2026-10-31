@@ -8,8 +8,9 @@ the canonical Lua table.
 ## Palette direction
 
 The V1 set contains four palettes: Dusk, Opal, Mira, and Mesa. Dusk keeps its violet canvas, amber
-types, sage strings, dusty rose properties, and teal functions. Muted amber types and softened coral
-literals keep repeated warm accents from dominating, while state colors and ANSI inks stay stronger.
+types, sage strings, clearer rose-red properties, and teal functions. Fields retain enough color to
+balance the amber, teal, and lavender accents. Muted amber types and softened coral literals keep
+repeated warm accents from dominating, while state colors and ANSI inks stay stronger.
 Mira carries Dusk's hue families onto neutral graphite with clear neutral identifiers.
 Pastel teal functions, creamy amber types, lavender keywords, rose-red fields and namespaces, peach
 literals, and sage strings stand out against quiet surfaces. The red family keeps a clearer hue in

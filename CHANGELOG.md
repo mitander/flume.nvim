@@ -2,8 +2,9 @@
 
 ## Unreleased
 
-- Soften Dusk's amber types, rose fields and namespaces, and coral literals. Retain its violet
-  canvas, teal functions, lavender keywords, sage strings, and stronger state and ANSI inks.
+- Refine Dusk's warm syntax with muted amber types, clearer rose-red fields, quiet rose namespaces,
+  and softened coral literals. Retain its violet canvas, teal functions, lavender keywords, sage
+  strings, and stronger state and ANSI inks.
 - Add editor-local `schema_overrides` for per-palette role customization. Resolve global overrides
   first, then the selected palette's overrides, with exact highlight overrides last.
 - Add LSD shell setup to `:FlumeExtras` for pink world-writable directory names without a background.

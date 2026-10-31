@@ -375,12 +375,12 @@ test("comments remain subordinate and shared syntax accents stay related", funct
     end
 end)
 
-test("Dusk softens syntax warmth without dimming state or terminal inks", function()
+test("Dusk balances warm syntax without dimming state or terminal inks", function()
     local dusk = palettes.dusk
 
     equal(dusk.bg, "#232136", "Dusk retains its violet canvas")
     equal(dusk.syntax_type, "#cfb584", "Dusk muted amber types")
-    equal(dusk.syntax_property, "#bd939d", "Dusk dusty rose fields")
+    equal(dusk.syntax_property, "#cc8796", "Dusk clearer rose-red fields")
     equal(dusk.syntax_namespace, "#ba929b", "Dusk related rose namespaces")
     equal(dusk.syntax_boolean, "#d1a393", "Dusk softened coral literals")
     equal(dusk.syntax_punctuation_special, "#b79a95", "Dusk quiet warm punctuation")

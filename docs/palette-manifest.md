@@ -73,7 +73,7 @@ Generated from `lua/flume/palette.lua`; do not edit by hand.
 | `syntax_keyword` | `#b391d6` | `#70558a` | `#c4ace3` | `#695187` |
 | `syntax_namespace` | `#ba929b` | `#9c4260` | `#d49ba6` | `#89455f` |
 | `syntax_primary` | `#c9c5d9` | `#514e57` | `#cac7d3` | `#524f50` |
-| `syntax_property` | `#bd939d` | `#9c4260` | `#d99eaa` | `#89455f` |
+| `syntax_property` | `#cc8796` | `#9c4260` | `#d99eaa` | `#89455f` |
 | `syntax_punctuation` | `#9899b5` | `#615a68` | `#a9a8bc` | `#5f5965` |
 | `syntax_punctuation_bracket` | `#9396ae` | `#615b67` | `#a5a7b8` | `#5f5964` |
 | `syntax_punctuation_special` | `#b79a95` | `#8d513c` | `#c4a7a3` | `#8b4940` |

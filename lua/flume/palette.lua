@@ -61,7 +61,7 @@ M.dusk = {
     bright_white = "#e0dcf0",
     dim_white = "#8a85a6",
 
-    -- Muted amber and rose keep repeated types and fields from competing.
+    -- Muted amber types balance clearer rose-red fields on the violet canvas.
     -- Syntax warmth stays independent of the stronger state and ANSI inks.
     syntax_attribute = "#73a6b6",
     syntax_boolean = "#d1a393",
@@ -73,7 +73,7 @@ M.dusk = {
     syntax_keyword = "#b391d6",
     syntax_namespace = "#ba929b",
     syntax_primary = "#c9c5d9",
-    syntax_property = "#bd939d",
+    syntax_property = "#cc8796",
     syntax_punctuation = "#9899b5",
     syntax_punctuation_bracket = "#9396ae",
     syntax_punctuation_special = "#b79a95",
