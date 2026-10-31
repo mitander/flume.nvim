@@ -4,14 +4,34 @@ Compare Flume's two dark and two light palettes on the same code and editor stat
 
 ## Browse by palette
 
-- [Dusk](themes/dusk.md): dark, with a quiet violet canvas.
-- [Opal](themes/opal.md): light, with purple, red, and sea-glass inks on cool porcelain paper.
-- [Mira](themes/mira.md): dark, with a charcoal canvas and restrained mineral accents.
-- [Mesa](themes/mesa.md): light, with restrained inks on soft rose-gray paper.
+Each preview shows the same Zig source with Tree-sitter. Click a preview or palette name for more
+languages, selections, diffs, diagnostics, completion, Go/Zig LSP hover examples, lualine, Neo-tree,
+and terminal-app snapshots. All maintained images use the same
+[reproducible capture pipeline](showcase.md).
 
-Each palette page includes languages, selections, diffs, diagnostics, completion, Go/Zig LSP hover
-examples, gopls completion, lualine, Neo-tree, and real terminal-app snapshots. All maintained
-images use the same [reproducible capture pipeline](showcase.md).
+### [Dusk](themes/dusk.md)
+
+Dark, with a quiet violet canvas.
+
+[![Dusk palette in Neovim](../assets/screenshots/dusk/zig.png)](themes/dusk.md)
+
+### [Opal](themes/opal.md)
+
+Light, with purple, red, and sea-glass inks on cool porcelain paper.
+
+[![Opal palette in Neovim](../assets/screenshots/opal/zig.png)](themes/opal.md)
+
+### [Mira](themes/mira.md)
+
+Dark, with a charcoal canvas and restrained mineral accents.
+
+[![Mira palette in Neovim](../assets/screenshots/mira/zig.png)](themes/mira.md)
+
+### [Mesa](themes/mesa.md)
+
+Light, with restrained inks on soft rose-gray paper.
+
+[![Mesa palette in Neovim](../assets/screenshots/mesa/zig.png)](themes/mesa.md)
 
 ## Browse by language
 

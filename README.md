@@ -10,42 +10,9 @@ two light palettes, with matching themes for your terminal and developer tools.
 Ordinary identifiers stay neutral. Color distinguishes functions, types, selections, and diagnostics
 against soft backgrounds.
 
-[![Opal, Mesa, Mira, and Dusk in a cascading palette showcase](assets/screenshots/showcase.png)](docs/gallery.md)
+![Opal, Mesa, Mira, and Dusk in a cascading palette showcase](assets/screenshots/showcase.png)
 
-<details>
-<summary>Palette previews</summary>
-
-Each preview shows the same Zig source with Tree-sitter. Click a palette for more languages,
-selections, and diffs.
-
-<table>
-  <tr>
-    <th>Dusk</th>
-    <th>Opal</th>
-  </tr>
-  <tr>
-    <td width="50%">
-      <a href="docs/themes/dusk.md"><img src="assets/screenshots/dusk/zig.png" alt="Dusk palette in Neovim" /></a>
-    </td>
-    <td width="50%">
-      <a href="docs/themes/opal.md"><img src="assets/screenshots/opal/zig.png" alt="Opal palette in Neovim" /></a>
-    </td>
-  </tr>
-  <tr>
-    <th>Mira</th>
-    <th>Mesa</th>
-  </tr>
-  <tr>
-    <td width="50%">
-      <a href="docs/themes/mira.md"><img src="assets/screenshots/mira/zig.png" alt="Mira palette in Neovim" /></a>
-    </td>
-    <td width="50%">
-      <a href="docs/themes/mesa.md"><img src="assets/screenshots/mesa/zig.png" alt="Mesa palette in Neovim" /></a>
-    </td>
-  </tr>
-</table>
-
-</details>
+[Compare palettes and browse language examples](docs/gallery.md).
 
 > [!WARNING]
 > Flume’s palettes are still evolving. Updates may change colors, including backgrounds. Significant
