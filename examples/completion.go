@@ -13,7 +13,7 @@ type Palette struct {
 var palettes = []Palette{
     {Name: "dusk", Background: "#232136"},
     {Name: "opal", Background: "#f2eff7"},
-    {Name: "mira", Background: "#242429"},
+    {Name: "mira", Background: "#26262b"},
     {Name: "mesa", Background: "#f0ebef"},
 }
 

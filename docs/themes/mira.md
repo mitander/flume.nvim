@@ -1,7 +1,8 @@
 # Mira examples
 
-Dark palette with near-neutral charcoal surfaces, mineral blue functions, and sea-glass strings.
-Muted berry properties, sand types, and copper literals add restrained warmth. [All galleries](../gallery.md).
+Dark palette with neutral graphite surfaces and clear identifiers. Pastel teal functions, amber
+types, lavender keywords, rose-red fields, peach literals, and sage strings carry Dusk's hue families.
+[All galleries](../gallery.md).
 
 [Go](#go) · [Rust](#rust) · [Python](#python) · [TypeScript](#typescript) · [Zig](#zig) ·
 [Elixir](#elixir) · [TOML](#toml) ·

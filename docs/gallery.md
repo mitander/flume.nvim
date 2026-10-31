@@ -23,7 +23,7 @@ Light, with purple, red, and sea-glass inks on cool porcelain paper.
 
 ### [Mira](themes/mira.md)
 
-Dark, with a charcoal canvas and restrained mineral accents.
+Dark, with neutral graphite, clear identifiers, and Dusk-derived pastel accents.
 
 [![Mira palette in Neovim](../assets/screenshots/mira/zig.png)](themes/mira.md)
 

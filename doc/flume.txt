@@ -42,7 +42,7 @@ PALETTES                                                      *flume-palettes*
 Schema  Appearance  Character ~
     dusk    dark    quiet violet
     opal    light   purple, red, and sea-glass on cool porcelain
-    mira    dark    mineral blue and sea-glass on neutral charcoal
+    mira    dark    Dusk-derived pastels on neutral graphite
     mesa    light   restrained mineral inks on soft rose-gray paper
 
 The colorscheme names are flume-dusk, flume-opal, flume-mira, and flume-mesa.

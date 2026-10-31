@@ -10,9 +10,11 @@ the canonical Lua table.
 The V1 set contains four palettes: Dusk, Opal, Mira, and Mesa. Dusk keeps its violet canvas, amber
 types, sage strings, dusty rose properties, and teal functions. Muted amber types and softened coral
 literals keep repeated warm accents from dominating, while state colors and ANSI inks stay stronger.
-Mira uses near-neutral charcoal surfaces with mineral blue functions and sea-glass strings.
-Muted berry properties, sand types, and copper literals provide restrained warmth rather than
-competing bright accents.
+Mira carries Dusk's hue families onto neutral graphite with clear neutral identifiers.
+Pastel teal functions, creamy amber types, lavender keywords, rose-red fields and namespaces, peach
+literals, and sage strings stand out against quiet surfaces. The red family keeps a clearer hue in
+syntax, terminal slots, errors, and deletion surfaces while retaining distinct emphasis. Neutral body
+and UI text use softer inks rather than bright white, without dimming the pastel accents.
 Opal pairs cool lilac paper with purple types and keywords, red fields and imports, copper literals,
 sea-glass strings, and softened teal functions. Types stay in the purple family rather than adding
 another warm accent beside red fields. The inks retain contrast on raised and diff surfaces, not
@@ -22,9 +24,8 @@ Mesa's slight mauve undertone avoids a yellow cast without making it a second Op
 carry the stronger violet character, while Mira and Mesa provide more neutral foundations.
 Light palettes use darker foregrounds, not inverted dark-palette RGB values.
 
-Mira and Mesa retain the same function, type, keyword, string, and berry families. Their ink
-mixtures and foundations differ; neither is an inversion of a dark or light sibling. The manifest
-lists the exact colors.
+Mira uses lighter pastel accents while Mesa retains its darker mineral inks. Neither is an
+inversion of a dark or light sibling. The manifest lists the exact colors.
 
 The palettes are still evolving. Color changes should address readability or mapping problems while
 preserving each palette's identity. Record significant visual changes in the

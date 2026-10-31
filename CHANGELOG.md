@@ -7,9 +7,10 @@
 - Add editor-local `schema_overrides` for per-palette role customization. Resolve global overrides
   first, then the selected palette's overrides, with exact highlight overrides last.
 - Add LSD shell setup to `:FlumeExtras` for pink world-writable directory names without a background.
-- Give Mira a near-neutral charcoal foundation distinct from Dusk's violet canvas. Soften its
-  syntax and ANSI inks around mineral blue and sea-glass, with muted berry properties, sand types,
-  and copper literals. Soften neutral foregrounds without dimming structural accents. Retain
+- Give Mira a neutral graphite foundation with Dusk-derived pastel syntax and ANSI inks.
+  Pair clear, softened neutral identifiers with teal functions, creamy amber types, lavender keywords,
+  rose-red fields and namespaces, peach literals, and sage strings. Coordinate the clearer red family
+  across terminal slots, errors, and deletions. Temper bright UI and terminal text while retaining
   readable selections, diagnostics, and diff surfaces.
 - Refine Opal's syntax around purple types, red fields/imports, copper literals, sea-glass strings,
   and softened teal functions on its existing cool paper canvas. Deepen the inks for readable

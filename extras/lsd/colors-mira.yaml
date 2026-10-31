@@ -2,48 +2,48 @@
 # lsd color themes only style metadata; file names continue to use LS_COLORS.
 # Quoted hex colors preserve the selected palette through lsd's crossterm parser.
 
-user: "#bdc0c8"              # syntax_primary (#bdc0c8)
-group: "#b495a7"             # syntax_property (#b495a7)
+user: "#cac7d3"              # syntax_primary (#cac7d3)
+group: "#d99eaa"             # syntax_property (#d99eaa)
 
 permission:
-  read: "#a1a3ad"             # quiet metadata (#a1a3ad)
-  write: "#bba17e"            # quiet metadata (#bba17e)
-  exec: "#90aa9b"             # quiet metadata (#90aa9b)
-  exec-sticky: "#cc91a5"      # error (#cc91a5)
-  no-access: "#a1a3ad"        # muted (#a1a3ad)
-  octal: "#a1a3ad"            # muted (#a1a3ad)
-  acl: "#8caabd"              # accent (#8caabd)
-  context: "#969ca5"          # doc_comment (#969ca5)
+  read: "#acabb9"             # quiet metadata (#acabb9)
+  write: "#ddc59b"            # quiet metadata (#ddc59b)
+  exec: "#b9cba5"             # quiet metadata (#b9cba5)
+  exec-sticky: "#ee9da7"      # error (#ee9da7)
+  no-access: "#acabb9"        # muted (#acabb9)
+  octal: "#acabb9"            # muted (#acabb9)
+  acl: "#98c4d0"              # accent (#98c4d0)
+  context: "#979ba7"          # doc_comment (#979ba7)
 
 date:
-  hour-old: "#969ca5"         # syntax_doc_comment (#969ca5)
-  day-old: "#969ca5"          # syntax_doc_comment (#969ca5)
-  older: "#969ca5"            # syntax_doc_comment (#969ca5)
+  hour-old: "#979ba7"         # syntax_doc_comment (#979ba7)
+  day-old: "#979ba7"          # syntax_doc_comment (#979ba7)
+  older: "#979ba7"            # syntax_doc_comment (#979ba7)
 
 size:
-  none: "#8caabd"             # info (#8caabd)
-  small: "#8caabd"            # info (#8caabd)
-  medium: "#8caabd"           # info (#8caabd)
-  large: "#c5b18d"            # warning (#c5b18d)
+  none: "#98c4d0"             # info (#98c4d0)
+  small: "#98c4d0"            # info (#98c4d0)
+  medium: "#98c4d0"           # info (#98c4d0)
+  large: "#ddc59b"            # warning (#ddc59b)
 
 inode:
-  valid: "#727580"            # placeholder (#727580)
-  invalid: "#cc91a5"          # error (#cc91a5)
+  valid: "#6d7080"            # placeholder (#6d7080)
+  invalid: "#ee9da7"          # error (#ee9da7)
 
 links:
-  valid: "#8caabd"            # accent (#8caabd)
-  invalid: "#cc91a5"          # error (#cc91a5)
+  valid: "#98c4d0"            # accent (#98c4d0)
+  invalid: "#ee9da7"          # error (#ee9da7)
 
-tree-edge: "#363941"          # border_variant (#363941)
+tree-edge: "#3a3b45"          # border_variant (#3a3b45)
 
 git-status:
-  default: "#a1a3ad"          # muted (#a1a3ad)
-  unmodified: "#a1a3ad"       # muted (#a1a3ad)
-  ignored: "#a1a3ad"          # muted (#a1a3ad)
-  new-in-index: "#95b0a2"     # success (#95b0a2)
-  new-in-workdir: "#95b0a2"   # success (#95b0a2)
-  typechange: "#c5b18d"       # warning (#c5b18d)
-  deleted: "#cc91a5"          # error (#cc91a5)
-  renamed: "#8caabd"          # accent (#8caabd)
-  modified: "#c5b18d"          # warning (#c5b18d)
-  conflicted: "#cc91a5"        # error (#cc91a5)
+  default: "#acabb9"          # muted (#acabb9)
+  unmodified: "#acabb9"       # muted (#acabb9)
+  ignored: "#acabb9"          # muted (#acabb9)
+  new-in-index: "#b9cba5"     # success (#b9cba5)
+  new-in-workdir: "#b9cba5"   # success (#b9cba5)
+  typechange: "#ddc59b"       # warning (#ddc59b)
+  deleted: "#ee9da7"          # error (#ee9da7)
+  renamed: "#98c4d0"          # accent (#98c4d0)
+  modified: "#ddc59b"          # warning (#ddc59b)
+  conflicted: "#ee9da7"        # error (#ee9da7)
