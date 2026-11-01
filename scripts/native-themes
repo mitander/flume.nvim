@@ -1,0 +1,245 @@
+#!/usr/bin/env python3
+"""Prepare an isolated, manually observed Ghostty/Kitty/Pi theme trial."""
+
+import argparse
+import hashlib
+import json
+import os
+import shlex
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from pathlib import Path
+
+SCHEMAS = ('dusk', 'opal', 'mira', 'mesa')
+APPS = ('ghostty', 'kitty', 'pi')
+MARKER = 'native-theme-trial.json'
+
+
+def environment(root: Path) -> dict[str, str]:
+    # Do not pass provider credentials, Node hooks, personal Pi configuration or
+    # multiplexer/session routing into a native trial.
+    keep = ('PATH', 'TERM', 'COLORTERM', 'TERM_PROGRAM', 'TERM_PROGRAM_VERSION',
+            'LANG', 'LC_ALL', 'DISPLAY', 'WAYLAND_DISPLAY', 'XDG_RUNTIME_DIR',
+            'DBUS_SESSION_BUS_ADDRESS')
+    env = {key: os.environ[key] for key in keep if key in os.environ}
+    env.update({
+        'HOME': str(root / 'home'),
+        'XDG_CONFIG_HOME': str(root / 'home/.config'),
+        'XDG_DATA_HOME': str(root / 'home/.local/share'),
+        'XDG_STATE_HOME': str(root / 'home/.local/state'),
+        'XDG_CACHE_HOME': str(root / 'home/.cache'),
+        'TMPDIR': str(root / 'tmp'),
+        'SHELL': '/bin/sh',
+        'FLUME_DATA_DIR': str(root / 'data'),
+        'FLUME_NATIVE_ROOT': str(root),
+        'PI_CODING_AGENT_DIR': str(root / 'home/.pi/agent'),
+        'PI_OFFLINE': '1',
+        'PI_SKIP_VERSION_CHECK': '1',
+        'PI_TELEMETRY': '0',
+        'PI_TRUE_COLOR': '1',
+    })
+    return env
+
+
+def tool(name: str) -> str:
+    executable = shutil.which(name)
+    if not executable:
+        raise ValueError(f'{name} is not installed or is not on PATH; install it separately')
+    return executable
+
+
+def workspace() -> Path:
+    root = Path(__file__).resolve().parent
+    marker = root / MARKER
+    if marker.is_symlink() or not marker.is_file():
+        raise ValueError('Run this command through the control file printed by prepare')
+    record = json.loads(marker.read_text())
+    if not isinstance(record, dict) or record.get('format_version') != 1 or record.get('workspace') != str(root):
+        raise ValueError('Invalid or moved native-theme workspace')
+    # Reject redirected state before invoking the real installer or publisher.
+    for relative in ('plugin', 'plugin/extras', 'plugin/extras/current',
+                     'home', 'home/.pi/agent/themes', 'home/.pi/agent/settings.json',
+                     'data', 'data/current', 'project', 'tmp', 'switch.lua', 'session.jsonl',
+                     'ghostty.conf', 'kitty.conf'):
+        path = root / relative
+        if not path.resolve().is_relative_to(root):
+            raise ValueError(f'Workspace path points outside the trial: {relative}')
+    return root
+
+
+def switch(root: Path, schema: str, *, announce: bool = True) -> None:
+    env = environment(root)
+    env['FLUME_NATIVE_SCHEMA'] = schema
+    result = subprocess.run(
+        [tool('nvim'), '--headless', '--clean', '-c', 'lua dofile(vim.env.FLUME_NATIVE_ROOT .. "/switch.lua")'],
+        cwd=root / 'project', env=env, text=True, capture_output=True, timeout=30,
+    )
+    if result.returncode:
+        raise ValueError('Isolated palette switch failed:\n' + result.stderr)
+    if announce:
+        print(f'Published {schema} inside the trial. Pi theme link refreshed. Reload only the trial terminal manually.')
+
+
+def source_filter(path: str, names: list[str]) -> list[str]:
+    ignored = [name for name in names if name == 'current' or name.startswith('.current') or name == '__pycache__']
+    for name in set(names) - set(ignored):
+        if (Path(path) / name).is_symlink():
+            raise ValueError(f'Refusing to copy an unexpected source symlink: {Path(path) / name}')
+    return ignored
+
+
+def prepare(source: Path, schema: str) -> Path:
+    tool('nvim')
+    root = Path(tempfile.mkdtemp(prefix='flume-native-')).resolve()
+    # A failed preparation is retained for diagnosis, never cleaned by a broad
+    # recursive command that could follow an altered workspace path.
+    print(f'Preparing {root}', file=sys.stderr)
+    for relative in ('home/.pi/agent/themes', 'home/.config', 'data', 'project', 'tmp'):
+        (root / relative).mkdir(parents=True, exist_ok=True)
+    for directory in ('lua', 'colors', 'plugin', 'extras'):
+        shutil.copytree(source / directory, root / 'plugin' / directory, ignore=source_filter)
+    shutil.copyfile(source / 'scripts/native-themes', root / 'control')
+    (root / 'control').chmod(0o700)
+    shutil.copyfile(source / 'tests/native-themes.lua', root / 'switch.lua')
+    session = [json.loads(line) for line in (source / 'tests/snapshots/fixtures/pi-session.jsonl').read_text().splitlines()]
+    session[0]['cwd'] = str(root / 'project')
+    (root / 'session.jsonl').write_text(''.join(json.dumps(entry) + '\n' for entry in session))
+    (root / 'home/.pi/agent/settings.json').write_text(json.dumps({
+        'quietStartup': True, 'showThinkingBlock': True, 'theme': 'flume',
+    }) + '\n')
+    (root / 'ghostty.conf').write_text(
+        f'theme = {root}/data/current/ghostty\n'
+        'window-save-state = never\nshell-integration = none\n'
+        'confirm-close-surface = false\ncursor-style-blink = false\n'
+    )
+    (root / 'kitty.conf').write_text(
+        f'include {root}/data/current/kitty.conf\n'
+        'shell_integration disabled\nconfirm_os_window_close 0\n'
+    )
+    inputs = {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+              for path in sorted(root.rglob('*')) if path.is_file()}
+    (root / MARKER).write_text(json.dumps({
+        'format_version': 1, 'workspace': str(root), 'source': str(source), 'source_inputs': inputs,
+    }, indent=2) + '\n')
+    switch(root, schema, announce=False)
+    return root
+
+
+def instructions(root: Path, schema: str) -> None:
+    available = [app for app in APPS if shutil.which(app)]
+    missing = [app for app in APPS if app not in available]
+    print('\nTrial ready. No applications launched.')
+    print('Available apps: ' + (', '.join(available) or 'none'))
+    if missing:
+        print('Not on PATH: ' + ', '.join(missing))
+    print('\nNext, in a separate terminal:')
+    print('  cd ' + shlex.quote(str(root)))
+    print('  ./control launch ' + available[0] if available else '  ./control show')
+    if available:
+        if len(available) > 1:
+            print('Other available apps: ' + ', '.join('./control launch ' + app for app in available[1:]))
+        print('\nKeep the trial app open. In another terminal, cd to the same directory and run:')
+        target = 'dusk' if schema == 'opal' else 'opal'
+        print('  ./control switch ' + target)
+        if 'pi' in available:
+            print('Pi should repaint without restarting.')
+        if any(app in available for app in ('ghostty', 'kitty')):
+            print('Reload only the trial terminal window, then inspect its colors and selection.')
+    print('Close trial windows before deleting this temporary directory. Nothing was installed.')
+
+
+def launch_command(root: Path, app: str) -> list[str]:
+    executable = tool(app)
+    fixture = [sys.executable, str(root / 'control'), 'fixture']
+    if app == 'pi':
+        return [executable, '--offline', '--no-extensions', '--no-mcp', '--no-skills',
+                '--no-prompt-templates', '--no-context-files', '--no-approve', '--no-tools',
+                '--no-themes', '--use-theme', 'flume', '--provider', 'google',
+                '--model', 'gemini-3.1-pro-preview', '--session', str(root / 'session.jsonl'),
+                '--tui-mode', 'regular']
+    if app == 'kitty':
+        return [executable, '--config', str(root / 'kitty.conf'), '--directory', str(root / 'project'),
+                '--title', 'Flume native trial', *fixture]
+    options = ['--config-default-files=false', '--config-file=' + str(root / 'ghostty.conf'),
+               '--working-directory=' + str(root / 'project'), '-e', *fixture]
+    if sys.platform == 'darwin':
+        bundle = next((path for path in Path(executable).resolve().parents if path.suffix == '.app'), None)
+        if bundle is None:
+            raise ValueError('macOS Ghostty must be installed as an application bundle')
+        # LaunchServices does not reliably inherit the caller's environment.
+        command = ['/usr/bin/open', '-n', '-a', str(bundle)]
+        for key, value in environment(root).items():
+            command.extend(['--env', key + '=' + value])
+        return [*command, '--args', *options]
+    return [executable, '--gtk-single-instance=false', *options]
+
+
+def show(root: Path) -> None:
+    palette = json.loads((root / 'data/current/palette.json').read_text())
+    colors = palette['colors']
+    print(f'Workspace: {root}\nExpected palette: {palette["schema"]}')
+    for name in ('bg', 'fg', 'selection_bg', 'selection_fg', 'surface', 'diff_delete_bg'):
+        print(f'  {name}: {colors[name]}')
+    print('No visual result has been recorded. Compare the live UI manually; file state is not repaint evidence.')
+
+
+def fixture(root: Path) -> None:
+    previous = None
+    try:
+        while True:
+            palette = json.loads((root / 'data/current/palette.json').read_text())
+            if palette['schema'] != previous:
+                previous = palette['schema']
+                print('\033[2J\033[HFlume native trial', flush=True)
+                print(f'Expected palette: {previous} | fixture PID: {os.getpid()}')
+                print('This label changing is NOT proof that the terminal reloaded its theme.')
+                print('Check its background, ANSI colors, cursor, selection and active/inactive tabs.\n')
+                print('Default text   \033[1mBold\033[0m   \033[3mItalic\033[0m   \033[4mUnderline\033[0m')
+                for start in (0, 8):
+                    print(' '.join(f'\033[48;5;{slot}m  {slot:02}  \033[0m' for slot in range(start, start + 8)))
+                print('\nSelect this text with the mouse. Open a second trial tab to inspect tab colors.')
+                print('Reload only this trial window after switching palettes. Ctrl-C exits the fixture.', flush=True)
+            time.sleep(0.25)
+    except KeyboardInterrupt:
+        print('\033[0m')
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    commands = parser.add_subparsers(dest='command', required=True)
+    prepare_parser = commands.add_parser('prepare', help='copy Flume into a new private temporary workspace')
+    prepare_parser.add_argument('--schema', choices=SCHEMAS, default='dusk')
+    switch_parser = commands.add_parser('switch', help='publish another palette only inside a prepared trial')
+    switch_parser.add_argument('schema', choices=SCHEMAS)
+    launch_parser = commands.add_parser('launch', help='explicitly launch an installed app with private configuration')
+    launch_parser.add_argument('app', choices=APPS)
+    commands.add_parser('show', help='show expected colors, not a visual pass/fail result')
+    commands.add_parser('fixture', help='terminal color fixture used by trial launchers')
+    args = parser.parse_args()
+    try:
+        if args.command == 'prepare':
+            if Path(__file__).name != 'native-themes':
+                raise ValueError('Prepare from the checkout, not from an existing trial')
+            root = prepare(Path(__file__).resolve().parent.parent, args.schema)
+            instructions(root, args.schema)
+        else:
+            root = workspace()
+            if args.command == 'switch':
+                switch(root, args.schema)
+            elif args.command == 'show':
+                show(root)
+            elif args.command == 'fixture':
+                fixture(root)
+            else:
+                return subprocess.run(launch_command(root, args.app), cwd=root / 'project', env=environment(root)).returncode
+    except (ValueError, OSError, subprocess.SubprocessError) as error:
+        print(f'Native trial error: {error}', file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

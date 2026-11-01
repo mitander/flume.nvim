@@ -6,15 +6,15 @@ a parser emits. Exact pixels preserve a captured result, but do not decide wheth
 
 ## Required checks for a change
 
-| Change | Checks and observations |
-| - | - |
-| Ordinary source or documentation | `./scripts/check` and inspection of the finished diff |
-| Palette roles or exporters | Ordinary gate, artifact regeneration and validation of generated outputs |
-| Language-provider mapping | Ordinary gate and the affected real parser/LSP observation |
-| Named lualine integration | Ordinary gate and installed-plugin check |
-| Capture pipeline, scene, visual baseline or changed visual claims | Applicable checks and the affected snapshot lane, followed by visual review |
-| External application reload behavior | Applicable checks and observation in the actual application |
-| Authorization, durable ordering, recovery, hostile input or frozen external contract | Applicable checks plus independent read-only review |
+| Change                                                                               | Checks and observations                                                     |
+| ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| Ordinary source or documentation                                                     | `./scripts/check` and inspection of the finished diff                       |
+| Palette roles or exporters                                                           | Ordinary gate, artifact regeneration and validation of generated outputs    |
+| Language-provider mapping                                                            | Ordinary gate and the affected real parser/LSP observation                  |
+| Named lualine integration                                                            | Ordinary gate and installed-plugin check                                    |
+| Capture pipeline, scene, visual baseline or changed visual claims                    | Applicable checks and the affected snapshot lane, followed by visual review |
+| External application reload behavior                                                 | Applicable checks and observation in the actual application                 |
+| Authorization, durable ordering, recovery, hostile input or frozen external contract | Applicable checks plus independent read-only review                         |
 
 Missing required evidence leaves the change incomplete. Do not activate shared themes or update a
 baseline just to make a check pass. Editorial-only changes with unchanged capture inputs and visual
@@ -51,21 +51,88 @@ bash tests/fish-tools.sh
 This copies the plugin into a disposable home before using the public installer. It checks Fish
 startup, the installer's exact one-command adoption of stale session exports, real Lazygit
 config-directory discovery, fzf's active options file, LSD filename colors and stable Git/Tmux/Pi
-file paths. It does not target a live shell, select a shared theme or prove that
-running Tmux/Pi instances reloaded. The ordinary gate syntax-checks the script and runs focused Fish
-setup tests when Fish is available, without requiring the other applications. Those tests also
-check preservation mode, persistent-variable isolation, quoted paths and stale-helper refresh with
-an independent editor palette.
+file paths. It does not target a live shell, select a shared theme or prove that running Tmux/Pi
+instances reloaded. The ordinary gate syntax-checks the script and runs focused Fish setup tests
+when Fish is available, without requiring the other applications. Those tests also check
+preservation mode, persistent-variable isolation, quoted paths and stale-helper refresh with an
+independent editor palette.
 
 Application configuration repositories should test only their own composition, such as retaining
 inherited colors and tool settings. Product installation and native tool checks belong here rather
 than requiring a particular dotfiles checkout.
 
+## Native theme qualification
+
+Use an isolated trial to inspect Ghostty or Kitty rendering and Pi's live theme reload. Have Neovim,
+Python 3.11+ and the application you want to check installed first. The harness installs nothing
+and does not activate your normal shared themes.
+
+```sh
+./scripts/native-themes prepare
+```
+
+The command copies Flume into a new temporary directory, prepares private configuration and prints
+the available applications and one launch command. It does not launch applications. Follow the
+printed `cd` command, then launch an available app:
+
+```sh
+cd /absolute/path/to/flume-native-...
+./control launch ghostty
+# Or: ./control launch kitty
+# Or: ./control launch pi
+```
+
+These commands work in Fish, Bash and Zsh without a shell-specific variable assignment. Preparation
+only offers launch commands for applications on `PATH`.
+
+The terminal launch opens a new app instance with an ANSI color fixture. Pi opens a fixed synthetic
+transcript with no extensions, tools, context files or inherited provider credentials. It disables
+automatic network activity. This is not an OS network sandbox: do not sign in or submit prompts.
+The transcript's text is fixed, not a report of the current shared state.
+
+In a second terminal, change to the same trial directory and switch palettes:
+
+```sh
+cd /absolute/path/to/flume-native-...
+./control switch opal
+./control show
+```
+
+- **Ghostty/Kitty:** while the trial window is focused, use the application's native configuration
+  reload action. Inspect background, ANSI colors, cursor and mouse selection. Open a second trial
+  tab to inspect active/inactive tab colors. Switch back to a dark palette and repeat. The fixture's
+  changing palette label is not repaint evidence. In Kitty, also compare `tab_bar_style powerline`
+  with `tab_powerline_style slanted` in the private `kitty.conf`, then reload that trial instance.
+  Check active-tab recognition as well as inactive-label readability. Text contrast alone does not
+  establish that adjacent tab backgrounds communicate the active state.
+- **Pi:** keep the same process open and check that message/tool panels and text change without a
+  restart. Leave the host terminal's theme unchanged, so its background cannot account for the result.
+
+Switching publishes only into the copied trial and runs Pi's filesystem notification adapter.
+Ghostty and Tmux reload commands are disabled. Do not use your normal `:FlumeSync` for this test:
+its Ghostty adapter addresses running terminals globally. This trial does not qualify that adapter.
+
+`native-theme-trial.json` records the prepared source hashes. Keep the workspace with application
+versions, platform and before/after observations or captures when retaining evidence. `show` prints
+expected colors, not a visual pass/fail result. Close trial apps before deleting the printed
+workspace. There is no automatic cleanup of running apps or user configuration.
+
+For a deterministic check of installed Pi's live output without opening a desktop window:
+
+```sh
+FLUME_NATIVE_PI=1 python3 -m unittest discover -s tests -p native_themes.py
+```
+
+This starts the private Pi fixture in a PTY and requires Dusk then Opal panel RGB output from the
+same running trial. It sends no model prompt. It proves Pi's theme watcher emitted new colors,
+not that a particular terminal painted them correctly. The ordinary gate runs only the fast
+isolation/command checks and skips this installed-application lane.
+
 ## Native tweak preview
 
 The ordinary Lua gate exercises namespace isolation, draft editing/export, late callbacks, foreign
-theme takeover, reload and scratch-buffer cleanup, including modified work without its old tab.
-It checks the complete global highlight map with parsers unavailable and compares rendered normal
+theme takeover, reload and scratch-buffer cleanup, including modified work without its old tab. It
+checks the complete global highlight map with parsers unavailable and compares rendered normal
 colors after last-window reuse. Plain-text fallback does not establish real language captures.
 
 With the seven sample parsers and their highlight queries already installed, run:
@@ -80,9 +147,9 @@ attributes with independently checked role-color swatches in all four palettes. 
 role live and keeps a contrasting global ink as a negative control. Merely reading highlight
 configuration would not establish namespace resolution in actual parser output.
 
-`FLUME_TWEAK_LANGUAGES=lua,rust,python,tsx,zig,go` selects an explicit subset when native parsers are
-split across prepared runtimes. Unselected samples are not qualified. Requested missing parsers or
-queries fail rather than being silently skipped. TypeScript can be checked separately with
+`FLUME_TWEAK_LANGUAGES=lua,rust,python,tsx,zig,go` selects an explicit subset when native parsers
+are split across prepared runtimes. Unselected samples are not qualified. Requested missing parsers
+or queries fail rather than being silently skipped. TypeScript can be checked separately with
 `FLUME_TWEAK_LANGUAGES=typescript`. No tools or grammars are installed by this command.
 
 ## Snapshot and color evidence

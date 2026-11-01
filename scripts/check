@@ -22,7 +22,7 @@ sh -n scripts/check
 bash -n tests/fish-tools.sh
 python3 -m py_compile \
   scripts/check-links.py scripts/preflight-screenshots.py \
-  scripts/review-integrations.py scripts/snapshots tests/snapshots/*.py
+  scripts/review-integrations.py scripts/snapshots scripts/native-themes tests/snapshots/*.py
 for fixture_script in tests/snapshots/fixtures/*.sh; do
   sh -n "$fixture_script"
 done
@@ -38,3 +38,4 @@ python3 -m unittest discover -s tests -p 'examples.py'
 python3 -m unittest discover -s tests -p 'screenshots.py'
 python3 -m unittest discover -s tests -p 'integration_review.py'
 python3 -m unittest discover -b -s tests -p 'snapshot_commands.py'
+python3 -m unittest discover -b -s tests -p 'native_themes.py'

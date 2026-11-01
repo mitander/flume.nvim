@@ -1,33 +1,20 @@
 # Showcase production
 
-To compare palettes, browse the [gallery](gallery.md). Maintained gallery, integration, and README
-images use one reproducible snapshot pipeline:
+Use this guide to capture, compare and update the gallery, integration and README images. To browse
+existing images, open the [gallery](gallery.md).
+
+Run commands from the repository root on macOS or Linux with Python 3.11+ and a running local
+Docker-compatible runtime. The first run downloads and builds the pinned environment. Later runs
+reuse it. Captures use isolated state and open no desktop windows. They need no Screen Recording or
+Accessibility permissions. The complete portfolio can take several minutes.
+
+## Reproducible integration snapshots
+
+Compare fresh captures with the committed images:
 
 ```sh
 ./scripts/snapshots test
-./scripts/snapshots update
 ```
-
-Run from the repository root on macOS or Linux with Python 3.11+ and a running local
-Docker-compatible runtime. The first run downloads and builds the pinned capture environment.
-Subsequent runs reuse it. No desktop windows open, and no Screen Recording or Accessibility
-permissions are needed.
-
-Capture runs offline with an isolated home, read-only source, fixed fixtures, locale, fonts,
-dimensions, and Linux amd64 tools. Ghostty 1.3.1 renders on a private Xvfb display with Mesa
-software OpenGL. Capture converts X11 pixels directly to RGB PNG, without intermediate YUV
-conversion, and composes them through pinned Pillow. Regression tests require exact RGB preservation
-as well as exact pixel comparison. ARM Macs use the same binaries as CI. The checksum-locked Linux
-Ghostty package comes from the community-maintained `mkasberg/ghostty-ubuntu` release; it is not an
-official Ghostty binary. The complete portfolio can take several minutes to capture. Two isolated
-capture containers run at a time. Pi and OpenCode restore synthetic sessions: they do not call
-models or use credentials, extensions, plugins, or personal configuration. OpenCode's code fence is
-plain code. The fixture covers basic Markdown layout, emphasis, inline code, core UI colors and a
-completed text-file edit through the real diff component. Its add/delete fills, signs and line numbers
-are native output, not a recolored Markdown fence. It does not qualify OpenCode's asynchronous syntax
-parser or heading/link styles. Real language-parser coverage belongs to the Neovim scenes.
-
-## Reproducible integration snapshots
 
 `test` freezes its inputs, captures the selected scenes, generates their derived images, and
 compares exact pixels against the published images. It never changes those images or the baseline
@@ -38,9 +25,15 @@ The command prints a temporary HTML report with expected, actual, and visible di
 Capture failures retain partial captures and logs instead. CI runs the same command in a separate
 job and retains its report.
 
-`update` uses the same capture and composition path. It publishes images only after all requested
-captures and compositions succeed. Review its before/after report and Git diff before committing;
-updating is not visual approval.
+When the source change intentionally requires new captures, update the published images:
+
+```sh
+./scripts/snapshots update
+```
+
+`update` uses the same capture and composition path and publishes only after all requested captures
+and compositions succeed. Review its before/after report and Git diff before committing. An update
+is a candidate for review, not automatic visual approval.
 
 Published images under `assets/screenshots/` are the baselines, not copies of a second image set.
 `tests/snapshots/baselines/manifest.json` records their hashes, input fingerprints, dimensions,
@@ -73,6 +66,18 @@ Palette/exporter changes still need the generated-extra refresh described in the
 [development commands](DEVELOPMENT.md#regenerate-palette-artifacts). App fixtures consume the
 shipped exports, not editor-local overrides.
 
+## Capture environment
+
+Capture runs offline with an isolated home, read-only source, fixed fixtures, locale, fonts and
+Linux amd64 tools. ARM Macs use the same binaries as CI. Two isolated capture containers run at a
+time. Ghostty 1.3.1 renders on a private Xvfb display with Mesa software OpenGL. X11 pixels convert
+directly to RGB PNG and compose through pinned Pillow, without intermediate YUV conversion. Tests
+check exact RGB preservation and pixel equality.
+
+The checksum-locked Linux Ghostty package comes from the community-maintained
+`mkasberg/ghostty-ubuntu` release, not an official Ghostty binary. Linux captures do not qualify
+macOS Ghostty or Kitty rendering, selection, tabs or live reload.
+
 Tapes, fixtures, inventory, and composition live in `tests/snapshots/`. Its `Dockerfile` pins the
 base image and Debian archive; `tools.json` locks release and grammar archives by checksum. Change
 versions deliberately and refresh all affected baselines. `scripts/snapshots` is the only maintained
@@ -89,19 +94,21 @@ The environment compiles grammars pinned by nvim-treesitter revision
 `4916d6592ede8c07973490d9322f187e07dfefac`, with its matching queries and inherited queries. These
 are capture dependencies, not requirements for using Flume. Each capture records parser
 revision/checksum, query fingerprints, fixture and theme inputs, image checksum, and renderer
-identity. Rendering inputs include `init.lua`, the canonical palette and language mappings.
-Command registration, reload and sync orchestration live separately in `commands.lua`, so changes
-to that plumbing do not invalidate editor capture provenance. Changes to palette application or
-highlight mapping still require new captures. Neovim itself reports readiness before Ghostty captures
-the painted terminal state. The capture fixture reveals the real statusline location field only after
+identity. Rendering inputs include `init.lua`, the canonical palette and language mappings. Command
+registration, reload and sync orchestration live separately in `commands.lua`, so changes to that
+plumbing do not invalidate editor capture provenance. Changes to palette application or highlight
+mapping still require new captures. Neovim itself reports readiness before Ghostty captures the
+painted terminal state. The capture fixture reveals the real statusline location field only after
 readiness. No preview label is added to the image.
 
-| Palette | Appearance | Gallery |
-| - | - | - |
-| Dusk | Dark | [Languages, states, and integrations](themes/dusk.md) |
-| Opal | Light | [Languages, states, and integrations](themes/opal.md) |
-| Mira | Dark | [Languages, states, and integrations](themes/mira.md) |
-| Mesa | Light | [Languages, states, and integrations](themes/mesa.md) |
+| Palette | Appearance | Gallery                                               |
+| ------- | ---------- | ----------------------------------------------------- |
+| Dusk    | Dark       | [Languages, states, and integrations](themes/dusk.md) |
+| Opal    | Light      | [Languages, states, and integrations](themes/opal.md) |
+| Mira    | Dark       | [Languages, states, and integrations](themes/mira.md) |
+| Mesa    | Light      | [Languages, states, and integrations](themes/mesa.md) |
+
+### Typography and framing
 
 Raw images live at `assets/screenshots/<schema>/<language>.png`. Geometry is 112 columns × 32 rows
 for the Zig hero and 100 × 48 for other language and LSP scenes. The Neo-tree scene uses 132 × 44.
@@ -172,32 +179,32 @@ isolated project contains staged additions, modified files, and an untracked fil
 exercises file icons, directory colors, selection, indent guides, Git indicators, and
 inactive-window surfaces. No host repository or personal file names appear.
 
-| Palette | Selection and diagnostics | Completion | Tree-sitter + LSP |
-| - | - | - | - |
-| Dusk | [States](themes/dusk.md#diagnostics-and-working-states) | [Menu](themes/dusk.md#completion) | [Go](themes/dusk.md#go-with-gopls) · [Zig](themes/dusk.md#zig-with-zls) |
-| Opal | [States](themes/opal.md#diagnostics-and-working-states) | [Menu](themes/opal.md#completion) | [Go](themes/opal.md#go-with-gopls) · [Zig](themes/opal.md#zig-with-zls) |
-| Mira | [States](themes/mira.md#diagnostics-and-working-states) | [Menu](themes/mira.md#completion) | [Go](themes/mira.md#go-with-gopls) · [Zig](themes/mira.md#zig-with-zls) |
-| Mesa | [States](themes/mesa.md#diagnostics-and-working-states) | [Menu](themes/mesa.md#completion) | [Go](themes/mesa.md#go-with-gopls) · [Zig](themes/mesa.md#zig-with-zls) |
+| Palette | Selection and diagnostics                               | Completion                        | Tree-sitter + LSP                                                       |
+| ------- | ------------------------------------------------------- | --------------------------------- | ----------------------------------------------------------------------- |
+| Dusk    | [States](themes/dusk.md#diagnostics-and-working-states) | [Menu](themes/dusk.md#completion) | [Go](themes/dusk.md#go-with-gopls) · [Zig](themes/dusk.md#zig-with-zls) |
+| Opal    | [States](themes/opal.md#diagnostics-and-working-states) | [Menu](themes/opal.md#completion) | [Go](themes/opal.md#go-with-gopls) · [Zig](themes/opal.md#zig-with-zls) |
+| Mira    | [States](themes/mira.md#diagnostics-and-working-states) | [Menu](themes/mira.md#completion) | [Go](themes/mira.md#go-with-gopls) · [Zig](themes/mira.md#zig-with-zls) |
+| Mesa    | [States](themes/mesa.md#diagnostics-and-working-states) | [Menu](themes/mesa.md#completion) | [Go](themes/mesa.md#go-with-gopls) · [Zig](themes/mesa.md#zig-with-zls) |
 
 ## Code examples
 
 Sources live in `examples/`. They use each language's conventions rather than translating the same
 exercise. Role coverage spans the examples; no single file demonstrates every highlight group.
 
-| Source | Mechanism |
-| - | - |
-| [Go](../examples/flume.go) | A channel producer stops on cancellation; its caller waits for cleanup. |
-| [Rust](../examples/flume.rs) | Typestate permits opening only after unlocking. |
-| [Python](../examples/flume.py) | A JSON-lines event counter reports frequencies and percentages. |
-| [TSX](../examples/flume.tsx) | A React counter records undo history through functional updates. |
-| [Zig](../examples/flume.zig) | Recursive constant folding over a tagged expression union. |
-| [Elixir](../examples/flume.ex) | A regex parser feeds a frequency-counting pipeline. |
-| [TOML](../examples/flume.toml) | Illustrative preview-server configuration, not Flume configuration. |
+| Source                         | Mechanism                                                               |
+| ------------------------------ | ----------------------------------------------------------------------- |
+| [Go](../examples/flume.go)     | A channel producer stops on cancellation; its caller waits for cleanup. |
+| [Rust](../examples/flume.rs)   | Typestate permits opening only after unlocking.                         |
+| [Python](../examples/flume.py) | A JSON-lines event counter reports frequencies and percentages.         |
+| [TSX](../examples/flume.tsx)   | A React counter records undo history through functional updates.        |
+| [Zig](../examples/flume.zig)   | Recursive constant folding over a tagged expression union.              |
+| [Elixir](../examples/flume.ex) | A regex parser feeds a frequency-counting pipeline.                     |
+| [TOML](../examples/flume.toml) | Illustrative preview-server configuration, not Flume configuration.     |
 
-Go requires 1.22+, Python 3.10+, and Elixir 1.10+. TSX requires React and its TypeScript types.
-`zig run examples/flume.zig` prints `add folded = 42` with Zig 0.16.0. Run
-`python3 examples/flume.py events.jsonl --limit 3` with records such as `{"event":"play"}`, or
-`elixir tests/examples.exs` to check its parser.
+Go requires 1.22+, Python 3.10+, and Elixir 1.10+. TSX requires React and its TypeScript types. `zig
+run examples/flume.zig` prints `add folded = 42` with Zig 0.16.0. Run `python3 examples/flume.py
+events.jsonl --limit 3` with records such as `{"event":"play"}`, or `elixir tests/examples.exs` to
+check its parser.
 
 ## README composite
 
@@ -209,28 +216,34 @@ statusline stays inside the canvas. There is no manual screenshot or separate Im
 
 ## Integration contact sheets
 
-These contact sheets show real applications through Linux Ghostty, not Kitty or macOS Ghostty
-rendering. Each uses the same app fixture and geometry across all four palettes. The short fzf, LSD,
-and Tmux fixtures use 16-row viewports instead of mostly empty windows. Pi/OpenCode content is
-synthetic, but their UI is real.
+Each contact sheet shows the same real application fixture and geometry across all four palettes.
+The short fzf, LSD and Tmux fixtures use 16-row viewports instead of mostly empty windows. Pi and
+OpenCode restore synthetic offline sessions without model calls, credentials, extensions, plugins or
+personal configuration. Their UI is real.
 
-| Integration | Exercised surface |
-| - | - |
-| Tmux | Exported status variables and active window |
-| LSD | File types, permissions, sizes, dates, symlinks, and Git state |
-| OpenCode | Core UI colors, Markdown emphasis, inline code, plain code and a real text-file edit diff from an offline session |
-| Lazygit | Repository files and add/change/delete diff state |
-| fzf | Search, current item, and multi-selection |
-| Delta | Added/changed/deleted diff lines and line numbers |
-| Pi | Markdown, code, thinking, and successful/failed tool results |
+OpenCode's fixture covers basic Markdown layout, emphasis, inline code, core UI colors and a
+completed text-file edit through its real diff component. The code fence is plain code. It does not
+qualify OpenCode's asynchronous syntax parser or heading/link styles. Real language-parser coverage
+belongs to the Neovim scenes.
+
+| Integration | Exercised surface                                                                                                 |
+| ----------- | ----------------------------------------------------------------------------------------------------------------- |
+| Tmux        | Exported status variables and active window                                                                       |
+| LSD         | File types, permissions, sizes, dates, symlinks, and Git state                                                    |
+| OpenCode    | Core UI colors, Markdown emphasis, inline code, plain code and a real text-file edit diff from an offline session |
+| Lazygit     | Repository files and add/change/delete diff state                                                                 |
+| fzf         | Search, current item, and multi-selection                                                                         |
+| Delta       | Added/changed/deleted diff lines and line numbers                                                                 |
+| Pi          | Markdown, code, thinking, and successful/failed tool results                                                      |
 
 The palette galleries embed each app's snapshot. Each integration directory also contains
 `contact-sheet.png`, generated and tested from its four raw captures.
 
 Ghostty and Kitty exports retain configuration-contract checks for syntax, settings, ANSI slots, and
 exact canonical colors. Captures also exercise Ghostty's Linux renderer, but not its selection,
-tabs, or live reload. Those behaviors and native Kitty rendering remain separate qualification
-checks.
+tabs, or live reload. Use the [native-theme trial](TESTING.md#native-theme-qualification) for an
+isolated manual check of those behaviors, native Kitty rendering and Pi's live theme reload. It does
+not update screenshot baselines or exercise Ghostty's global reload adapter.
 
 Historical hierarchy comparisons retain their inputs in
 [capture metadata](../assets/screenshots/hierarchy/metadata.json). They are archived evidence, not

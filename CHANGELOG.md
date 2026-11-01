@@ -5,13 +5,17 @@
 ### Upgrade notes
 
 - Active integration sets now live in `stdpath("data")/flume`, outside the plugin checkout. Run
-  `:FlumeSync`, then `:FlumeInstallExtras` to relink installable integrations. Update manual includes
-  to the shared data directory. Recognized checkout links are forwarded when writable, but do not
-  survive checkout replacement. See the
+  `:FlumeSync`, then `:FlumeInstallExtras` to relink installable integrations. Update manual
+  includes to the shared data directory. Recognized checkout links are forwarded when writable, but
+  do not survive checkout replacement. See the
   [migration procedure](docs/semantic-export.md#migration-from-checkout-owned-state).
 - Running Flume editors follow `:FlumeSync` switches by default. Startup following remains opt-in
   through `follow_sync = true`. To keep an editor independent at startup and while running, set both
   `follow_sync = false` and `watch_sync = false`.
+- Restore `colorscheme flume` as a compatibility entry that keeps the selected editor palette, or
+  Dusk before setup. Accept `style` and `variant` as compatibility spellings of `schema` for the
+  four named palettes. Warn once per session with migration guidance, without dropping local
+  options or activating external themes. Reject conflicting selectors before changing the editor.
 - All four palettes have visual changes. Pin a release tag or commit if you need a fixed appearance.
 - Remove Tuxedo themes and integration support.
 
@@ -28,13 +32,13 @@
   raised, selection and diff surfaces while retaining its restrained syntax and ANSI inks.
 - Use restrained cool-gray comments in all four palettes. Keep ordinary and documentation comments
   subordinate to code, with readable muted text for inactive labels, hidden files and metadata.
-- Render named constants in neutral identifier ink. Keep numbers, booleans, built-in constants,
-  tags and symbol literals accented. Keep readonly/static bindings and fields in their normal
-  syntax roles, and use the namespace color for ZLS namespace tokens.
+- Render named constants in neutral identifier ink. Keep numbers, booleans, built-in constants, tags
+  and symbol literals accented. Keep readonly/static bindings and fields in their normal syntax
+  roles, and use the namespace color for ZLS namespace tokens.
 - Add explicit selection foreground/background roles for Visual, completion, command-line menus,
-  Ghostty and Kitty. Give changed words a semantic `diff_text_bg` surface that retains syntax colors.
-  Strengthen text contrast on cursor-line, selection and diff surfaces. Preserve search underlines
-  through Visual selection and distinguish current matches with bold, underlined text.
+  Ghostty and Kitty. Give changed words a semantic `diff_text_bg` surface that retains syntax
+  colors. Strengthen text contrast on cursor-line, selection and diff surfaces. Preserve search
+  underlines through Visual selection and distinguish current matches with bold, underlined text.
 - Align legacy, Tree-sitter and LSP macro roles. Align imports, directives and string escapes across
   providers.
 - Add dedicated `icon_*` roles for file-icon hue families across all four schemas. Keep muted copper
@@ -53,7 +57,8 @@
   `:FlumeSync` reloads source and regenerates canonical extras before synchronizing. Failed source
   reloads restore the previous modules and theme. Normal users sync bundled artifacts without
   regeneration.
-- Supply a palette-aware named lualine theme and the tree statusline highlight.
+- Supply a palette-aware named lualine theme and the tree statusline highlight. Define indentmini's
+  ordinary and current-scope guide groups with palette roles.
 - Stop shared-palette watching when another colorscheme takes over, including already queued
   changes. Reloading preserves the editor's current palette rather than rereading the startup
   preference.
@@ -74,6 +79,8 @@
   world-writable-directory `LS_COLORS` rule. Ask whether to install, then print separate source
   commands to preserve configured tools or replace current-session exports. Neither command changes
   persistent variables. Refresh stale setup fragments without switching the shared palette.
+- Document editor-local fzf.vim/Fzfx highlight mapping separately from shared shell FZF options.
+  Explain option precedence and how local role overrides differ from exact highlight overrides.
 - Publish portable fzf, Lazygit and Delta activation recipes and manual LSD filename-color setup.
   Give artifact names, install destinations and setup hints one integration inventory. Separate
   palette renderers from file writes while preserving compiler entry points and output.
@@ -81,9 +88,9 @@
   configuration when attached, and notify a linked Pi theme. Keep sync feedback brief, with manual
   reload hints only for installed adapter links whose refresh failed. Other applications still need
   their own reload action or a new invocation.
-- Add Tmux UI variables `thm_surface`, `thm_muted` and `thm_on_accent` for raised panels,
-  secondary labels and text on filled accents. Keep the existing ANSI and placeholder variables'
-  meanings unchanged.
+- Add Tmux UI variables `thm_surface`, `thm_muted` and `thm_on_accent` for raised panels, secondary
+  labels and text on filled accents. Keep the existing ANSI and placeholder variables' meanings
+  unchanged.
 - Keep Delta and Lazygit diff syntax readable with quieter emphasis fills and underlined changed
   words. Use neutral raised panels for successful Pi tool results and tinted panels for failures.
   Measure OpenCode labels and signs on their actual surfaces and capture its real edit diff.
@@ -106,6 +113,10 @@
 - Add native parser fixtures and role checks for Zig, Rust, Python, TypeScript/TSX, Go and Elixir.
   Qualify native Delta output alongside snapshots and add four-palette integration contrast reports.
   Keep activation tests isolated from user state and the working checkout.
+
+- Add a disposable native-theme trial for manual Ghostty/Kitty rendering and Pi reload checks,
+  plus an opt-in installed-Pi output check. Keep trial configuration and palette state separate from
+  live user settings. Terminal reloads remain manual.
 
 ## v0.2.0 — 2026-07-27
 

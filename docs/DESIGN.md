@@ -10,25 +10,32 @@ obligations. The [semantic export](semantic-export.md) owns the versioned consum
 
 ## Ownership
 
-| Owner | Responsibility |
-| - | - |
-| `lua/flume/palette.lua` | Canonical palettes, role values and schema metadata |
-| `lua/flume/init.lua` | Editor options, palette application and resolved highlights |
-| `lua/flume/commands.lua` | User commands, source reload/rollback and sync orchestration |
-| `lua/flume/languages/` | Narrow language-provider corrections |
-| `lua/flume/integrations.lua` | Ordered integration inventory, artifact names, install destinations and setup hints |
-| `lua/flume/compiler.lua` | Palette-to-text renderers and canonical artifact writes |
-| `lua/flume/extras.lua` | Consent, safe installation and setup instructions |
-| `lua/flume/state.lua` | Shared data directory, complete active sets and legacy forwarding |
-| `lua/flume/sync.lua` | Shared activation and application reload requests |
-| `lua/flume/watch.lua` and `dev.lua` | Shared-palette following and local development reload |
-| `lua/flume/tweak.lua` and `tweak_samples.lua` | Opt-in, window-local role exploration and reading fixtures |
+| Owner                                         | Responsibility                                                                      |
+| --------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `lua/flume/palette.lua`                       | Canonical palettes, role values and schema metadata                                 |
+| `lua/flume/init.lua`                          | Editor options, palette application and resolved highlights                         |
+| `lua/flume/commands.lua`                      | User commands, source reload/rollback and sync orchestration                        |
+| `lua/flume/languages/`                        | Narrow language-provider corrections                                                |
+| `lua/flume/integrations.lua`                  | Ordered integration inventory, artifact names, install destinations and setup hints |
+| `lua/flume/compiler.lua`                      | Palette-to-text renderers and canonical artifact writes                             |
+| `lua/flume/extras.lua`                        | Consent, safe installation and setup instructions                                   |
+| `lua/flume/state.lua`                         | Shared data directory, complete active sets and legacy forwarding                   |
+| `lua/flume/sync.lua`                          | Shared activation and application reload requests                                   |
+| `lua/flume/watch.lua` and `dev.lua`           | Shared-palette following and local development reload                               |
+| `lua/flume/tweak.lua` and `tweak_samples.lua` | Opt-in, window-local role exploration and reading fixtures                          |
 
 ## Resolve an editor palette
 
 The editor starts from a canonical schema. Global role overrides apply first, selected-schema
 overrides next and exact highlight overrides last. Generated extras use canonical palettes instead
 of editor-local options. [The color system](color-system.md#invariants) owns that ordering.
+
+Editor compatibility is normalized at setup and colorscheme entry points, not in the canonical
+palette registry or exporters. The legacy `flume` entry keeps the selected palette and canonical
+editor identity. Compatibility selectors warn once and normalize to `schema` before applying any
+state. Conflicts and unknown names fail rather than guessing. This keeps old editor configurations
+usable without creating alternate semantic-export identities or silently publishing shared themes.
+The [help reference](../doc/flume.txt) owns migration instructions.
 
 Startup following is opt-in. Running Flume editors watch shared palette changes by default. An
 independent editor disables both `follow_sync` and `watch_sync`. The help reference
@@ -52,15 +59,17 @@ callbacks.
 The preview snapshots resolved role values and syntax styles. It uses opaque surfaces and omits
 exact group overrides so role changes remain visible. Drafts stay in memory and can be copied as
 `schema_overrides`; they are never applied or persisted automatically. Actual parsers color the
-samples, with explicit plain-text fallback status. Vim syntax files are not sourced because they
-can write global highlight definitions. FileType hooks are suppressed for the scratch buffers. Labelled UI swatches and example diagnostics are not evidence of live plugin menus
-or language-server behavior.
+samples, with explicit plain-text fallback status. Vim syntax files are not sourced because they can
+write global highlight definitions. FileType hooks are suppressed for the scratch buffers. Labelled
+UI swatches and example diagnostics are not evidence of live plugin menus or language-server
+behavior.
 
 The session owns only its scratch buffers, windows and autocommands. Closing it, deleting a sample,
 changing the global colorscheme or reloading Flume releases those resources without rolling back a
 theme: the original theme was never changed. A surviving final window must leave the preview
 namespace and restore the invoking window's options before showing ordinary work. Deferred input
-callbacks must match the current live session before editing it. [The preview guide](tweak.md) owns controls and user-visible limits.
+callbacks must match the current live session before editing it. [The preview guide](tweak.md) owns
+controls and user-visible limits.
 
 ## Add an integration
 
@@ -72,15 +81,15 @@ than inventing a configuration language for them.
 
 Static setup fragments can join the inventory without a palette renderer. The optional Fish tool
 fragment is shipped once, copied into each complete active set and installed separately from Fish
-syntax colors. It derives the stable shared path through its installation symlink. It normally configures
-fzf and Lazygit only when unset, and replaces only the world-writable-directory rule in `LS_COLORS`.
-An explicit `source ... --adopt` replaces session tool exports without changing persistent universal
-variables. Personal prompts, application layouts and custom consumer mappings remain with the
-consumer.
+syntax colors. It derives the stable shared path through its installation symlink. It normally
+configures fzf and Lazygit only when unset, and replaces only the world-writable-directory rule in
+`LS_COLORS`. An explicit `source ... --adopt` replaces session tool exports without changing
+persistent universal variables. Personal prompts, application layouts and custom consumer mappings
+remain with the consumer.
 
 A stale static setup fragment is refreshed through complete-set publication, preserving the active
-shared schema rather than selecting the installing editor's local palette. Published files are
-never edited in place.
+shared schema rather than selecting the installing editor's local palette. Published files are never
+edited in place.
 
 Installation reports linking separately from application selection and reload. The Fish tool
 installer asks only whether to install the startup fragment. After installation it prints separate
@@ -88,8 +97,7 @@ source commands for preserving configured tools or adopting Flume's session expo
 argument controls the current-shell handoff, not a persistent override policy. Neovim cannot mutate
 its parent shell's environment. Consent-based installs report completion through the same result
 callback as immediate installs. The all-app installer processes the inventory in order so consent
-dialogs cannot overlap. No installer edits
-`config.fish` or application configuration files.
+dialogs cannot overlap. No installer edits `config.fish` or application configuration files.
 
 ## Publish shared themes
 
@@ -110,6 +118,12 @@ selection is not proof that every external application reloaded. Sync requests r
 supported, while each consumer owns how and when it reads the selected file.
 
 ## Observe the result at its boundary
+
+The optional `scripts/native-themes` trial copies the checkout and creates private application
+configuration and shared state. Its switch driver disables external Ghostty/Tmux reload commands
+while exercising Pi's filesystem notification. Native terminal reloads and visual observations stay
+manual. Preparation does not launch apps, install tools, change live configuration or approve a
+baseline. The trial is configuration isolation, not an OS sandbox.
 
 Defined roles, generated configuration, real parser captures, exact pixels and live application
 reloads answer different questions. [Testing](TESTING.md) selects their owners and limits.
