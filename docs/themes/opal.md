@@ -1,14 +1,14 @@
 # Opal examples
 
-Light palette with cool porcelain paper, gold types, purple keywords, red fields, copper literals,
-sea-glass strings, and softened teal functions. [All galleries](../gallery.md).
+Light palette with a lilac-tinted background, gold types, purple keywords and teal functions.
+[Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·
 [LSP](#lsp) · [Integrations](#integrations) · [More languages](#more-languages)
 
 ## Go
 
-[Compare all themes](../languages/go.md#opal)
+[Compare palettes](../languages/go.md#opal)
 
 ![Opal Go syntax](../../assets/screenshots/opal/go.png)
 
@@ -19,37 +19,37 @@ sea-glass strings, and softened teal functions. [All galleries](../gallery.md).
 
 ## Rust
 
-[Compare all themes](../languages/rust.md#opal)
+[Compare palettes](../languages/rust.md#opal)
 
 ![Opal Rust syntax](../../assets/screenshots/opal/rust.png)
 
 ## Python
 
-[Compare all themes](../languages/python.md#opal)
+[Compare palettes](../languages/python.md#opal)
 
 ![Opal Python syntax](../../assets/screenshots/opal/python.png)
 
 ## TypeScript
 
-[Compare all themes](../languages/tsx.md#opal)
+[Compare palettes](../languages/tsx.md#opal)
 
 ![Opal TypeScript and TSX syntax](../../assets/screenshots/opal/tsx.png)
 
 ## Zig
 
-[Compare all themes](../languages/zig.md#opal)
+[Compare palettes](../languages/zig.md#opal)
 
 ![Opal Zig syntax](../../assets/screenshots/opal/zig.png)
 
 ## Elixir
 
-[Compare all themes](../languages/elixir.md#opal)
+[Compare palettes](../languages/elixir.md#opal)
 
 ![Opal Elixir syntax](../../assets/screenshots/opal/elixir.png)
 
 ## TOML
 
-[Compare all themes](../languages/toml.md#opal)
+[Compare palettes](../languages/toml.md#opal)
 
 ![Opal TOML syntax](../../assets/screenshots/opal/toml.png)
 

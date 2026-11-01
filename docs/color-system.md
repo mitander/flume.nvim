@@ -1,33 +1,72 @@
 # Flume color system
 
-Flume uses the same semantic roles across all four palettes. This guide explains those roles and the
-mapping rules for contributors and custom consumers. The
-[generated palette manifest](palette-manifest.md) lists exact values and tested contrast pairs from
-the canonical Lua table.
+A line of code can contain a function, a type, several variables and a field access. Giving every
+name a different color adds activity, but does not necessarily explain the line. Flume reserves
+color for a few recurring distinctions and leaves ordinary identifiers neutral.
+
+Consider this Go fragment:
+
+```go
+func findUser(id int) User {
+    return users[id]
+}
+```
+
+The function name and types use different color families. Keywords mark the control structure. `id`
+and `users` stay in the ordinary text color. You can follow the names without every repeated
+variable adding another accent. The [Go gallery](languages/go.md) shows the same idea in context.
+
+The same restraint applies outside code. A diagnostic or selection needs to be noticeable without
+requiring the rest of the editor to become brighter. Backgrounds, ordinary text and state colors
+therefore have different jobs.
+
+## Palettes, roles and themes
+
+A **palette** is a complete named set of colors: Dusk, Opal, Mira or Mesa. The Lua option `schema`
+selects that name. It is not a separate kind of theme.
+
+A **role** names a color's job, such as `syntax_function`, `selection_bg` or `error`. A Neovim
+highlight group uses those roles to color part of the editor. For example, `Function` uses the
+function role. External **themes** map the same palette roles to another application's settings.
+
+Changing a role is different from changing a terminal color slot. An error may share a red hue with
+ANSI red, but its meaning and override remain independent. This is what lets a light palette change
+its UI without treating every red item as an error or every green panel as a successful operation.
+
+The [generated palette manifest](palette-manifest.md) lists exact role values and tested contrast
+pairs. The sections below explain the design and the mapping rules behind them.
 
 ## Palette direction
 
-The V1 set contains four palettes: Dusk, Opal, Mira, and Mesa. Dusk keeps its violet canvas, amber
-types, sage strings, clearer rose-red properties, and teal functions. Fields retain enough color to
-balance the amber, teal, and lavender accents. Muted amber types and softened coral literals keep
-repeated warm accents from dominating, while state colors and ANSI inks stay stronger.
-Mira carries Dusk's hue families onto neutral graphite with clear neutral identifiers.
-Pastel teal functions, creamy amber types, lavender keywords, rose-red fields and namespaces, peach
-literals, and sage strings stand out against quiet surfaces. The red family keeps a clearer hue in
-syntax, terminal slots, errors, and deletion surfaces while retaining distinct emphasis. Neutral body
-and UI text use softer inks rather than bright white, without dimming the pastel accents.
-Opal pairs cool lilac paper with gold types, purple keywords, red fields and imports, copper
-literals, sea-glass strings, and softened teal functions. Like the other palettes, it separates warm
-types from purple control flow. Light lilac raised surfaces and pale green, gold, rose and blue diff
-fills keep the gold readable without darkening the ink into brown. The canvas remains unchanged.
-Amber warning ink sits on a clearer yellow fill, independent of syntax colors.
-Mesa pairs softer rose-gray paper with restrained mineral inks.
-Mesa's slight mauve undertone avoids a yellow cast without making it a second Opal. Dusk and Opal
-carry the stronger violet character, while Mira and Mesa provide more neutral foundations.
-Light palettes use darker foregrounds, not inverted dark-palette RGB values.
+Dusk, Opal, Mira and Mesa share semantic roles but differ in background hue, saturation and
+foreground lightness. Dusk and Opal use violet-tinted backgrounds. Mira and Mesa are more neutral.
 
-Mira uses lighter pastel accents while Mesa retains its darker mineral inks. Neither is an
-inversion of a dark or light sibling. The manifest lists the exact colors.
+**Dusk** uses a violet dark canvas with amber types, teal functions, lavender keywords, sage
+strings, rose-red properties and coral literals. Fields balance the warm type and literal accents.
+State colors and ANSI inks carry stronger emphasis than ordinary syntax.
+
+**Mira** carries those hue families onto neutral graphite. Pastel teal functions, amber types,
+lavender keywords, rose-red fields and namespaces, peach literals and sage strings sit alongside
+neutral identifiers. Body and UI text avoid bright white so they do not overpower the pastel
+accents. Syntax, terminal, error and deletion reds share a hue family with distinct emphasis.
+
+**Opal** pairs a light, lilac-tinted background with gold types, purple keywords, red fields and
+imports, copper literals, blue-green strings and teal functions. Light lilac raised surfaces and
+pale green, gold, rose and blue diff fills retain readable gold ink. Amber warnings use a yellow
+fill independent of syntax colors.
+
+**Mesa** uses a light rose-gray background with a slight mauve undertone and dark, low-saturation
+syntax colors. Raised surfaces stay close to the canvas. The less violet background distinguishes it
+from Opal.
+
+Choose between violet-tinted and more neutral backgrounds, then between dark and light. There is no
+language-specific palette: a function has the same role whether you are reading Go or Rust. The
+[gallery](gallery.md) compares all four on the same fixtures.
+
+Light palettes are not inverted dark palettes. Pale backgrounds leave less room for a lighter
+selection or diff fill, so they need dark text and deliberately chosen foreground/background pairs.
+Dark palettes have more room for pastel syntax, but their ordinary text still does not need to be
+white. The roles stay consistent while the RGB values and contrast relationships change.
 
 The palettes are still evolving. Color changes should address readability or mapping problems while
 preserving each palette's identity. Record significant visual changes in the
@@ -73,11 +112,11 @@ while retaining syntax foregrounds. It is distinct from `diff_change_bg` and doe
 ANSI ink.
 
 Delta and Lazygit's Delta pager retain ANSI syntax inks on `diff_add_bg`, `diff_delete_bg`,
-`diff_add_emphasis`, and `diff_delete_emphasis`. These fills target 4.5:1 with ordinary terminal text
-and ANSI slots 1–7 and 9–15. Slots 0 and 8 remain specialized black/decorative inks, not the syntax
-foreground contract. Changed words are also underlined because light palettes leave little luminance
-room for a stronger fill. OpenCode's add/delete labels appear on the canvas. Its brighter diff signs,
-body text and retained syntax inks are checked on the actual diff fills.
+`diff_add_emphasis`, and `diff_delete_emphasis`. These fills target 4.5:1 with ordinary terminal
+text and ANSI slots 1–7 and 9–15. Slots 0 and 8 remain specialized black/decorative inks, not the
+syntax foreground contract. Changed words are also underlined because light palettes leave little
+luminance room for a stronger fill. OpenCode's add/delete labels appear on the canvas. Its brighter
+diff signs, body text and retained syntax inks are checked on the actual diff fills.
 
 Search uses `match` text on `warn_bg`, with an underline. Current matches use bold, underlined
 `text` on `diff_text_bg`. Visual selection replaces both the foreground and background while
@@ -149,30 +188,29 @@ green blocks or borrow version-control addition fills.
 
 ### File icon colors
 
-`icon_neutral`, `icon_red`, `icon_copper`, `icon_orange`, `icon_yellow`, `icon_green`,
-`icon_cyan`, `icon_blue`, `icon_purple`, and `icon_pink` provide stable file-icon hue families.
-Every palette defines these roles explicitly, independently of syntax and ANSI slots. Light
-palettes keep gold, orange and copper separate. Copper is redder and darker than orange, giving
-an earthy rust ink its own family without changing brighter orange icons. Dusk and Mira retain
-softer shades of those same families.
+`icon_neutral`, `icon_red`, `icon_copper`, `icon_orange`, `icon_yellow`, `icon_green`, `icon_cyan`,
+`icon_blue`, `icon_purple`, and `icon_pink` provide stable file-icon hue families. Every palette
+defines these roles explicitly, independently of syntax and ANSI slots. Light palettes keep gold,
+orange and copper separate. Copper is redder and darker than orange, giving an earthy rust ink its
+own family without changing brighter orange icons. Dusk and Mira retain softer shades of those same
+families.
 
-Consumers assign file types to families once, then resolve the selected palette's `icon_*` role.
-For example, a consumer can use blue for Python, copper for Rust, purple for Lua, gold for
-JavaScript, cyan for Go, and pink for Gleam. Brand colors are not mandatory. Review source,
-declaration, compiled and configuration companions together so an alias does not gain an unrelated
-color. Assign aliases sharing an icon highlight identity to the same family. Keep unreviewed
-formats quiet rather than inferring their meaning from upstream RGB. File-type inventories belong
-to the consumer, not Flume.
+Consumers assign file types to families once, then resolve the selected palette's `icon_*` role. For
+example, a consumer can use blue for Python, copper for Rust, purple for Lua, gold for JavaScript,
+cyan for Go, and pink for Gleam. Brand colors are not mandatory. Review source, declaration,
+compiled and configuration companions together so an alias does not gain an unrelated color. Assign
+aliases sharing an icon highlight identity to the same family. Keep unreviewed formats quiet rather
+than inferring their meaning from upstream RGB. File-type inventories belong to the consumer, not
+Flume.
 
-Icon inks target 3:1 on the canvas, raised surfaces, cursor line, and retained-ink active rows.
-Keep a filename or distinct glyph alongside color. Strong selections that replace foregrounds
-should use `selection_fg` instead. The manifest records canvas and active-row contrast pairs.
-Tests also preserve hue ranges, copper/orange hue and luminance separation, and separation between
-gold/orange and blue/cyan. These checks
-prevent family collapse, but do not establish perceptual distinction for every viewer or renderer.
-Review glyphs at actual picker size, together with filenames and selected rows, across all palettes.
-Hundreds of file types cannot each have a unique hue. Distinct glyphs and coherent identity families
-matter more than making every icon colorful.
+Icon inks target 3:1 on the canvas, raised surfaces, cursor line, and retained-ink active rows. Keep
+a filename or distinct glyph alongside color. Strong selections that replace foregrounds should use
+`selection_fg` instead. The manifest records canvas and active-row contrast pairs. Tests also
+preserve hue ranges, copper/orange hue and luminance separation, and separation between gold/orange
+and blue/cyan. These checks prevent family collapse, but do not establish perceptual distinction for
+every viewer or renderer. Review glyphs at actual picker size, together with filenames and selected
+rows, across all palettes. Hundreds of file types cannot each have a unique hue. Distinct glyphs and
+coherent identity families matter more than making every icon colorful.
 
 ### Terminal colors
 

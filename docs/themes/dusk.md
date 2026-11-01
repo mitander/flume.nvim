@@ -1,13 +1,14 @@
 # Dusk examples
 
-Dark palette with a violet canvas. [All galleries](../gallery.md).
+Dark palette with a violet background, amber types, teal functions and lavender keywords.
+[Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·
 [LSP](#lsp) · [Integrations](#integrations) · [More languages](#more-languages)
 
 ## Go
 
-[Compare all themes](../languages/go.md#dusk)
+[Compare palettes](../languages/go.md#dusk)
 
 ![Dusk Go syntax](../../assets/screenshots/dusk/go.png)
 
@@ -18,37 +19,37 @@ Dark palette with a violet canvas. [All galleries](../gallery.md).
 
 ## Rust
 
-[Compare all themes](../languages/rust.md#dusk)
+[Compare palettes](../languages/rust.md#dusk)
 
 ![Dusk Rust syntax](../../assets/screenshots/dusk/rust.png)
 
 ## Python
 
-[Compare all themes](../languages/python.md#dusk)
+[Compare palettes](../languages/python.md#dusk)
 
 ![Dusk Python syntax](../../assets/screenshots/dusk/python.png)
 
 ## TypeScript
 
-[Compare all themes](../languages/tsx.md#dusk)
+[Compare palettes](../languages/tsx.md#dusk)
 
 ![Dusk TypeScript and TSX syntax](../../assets/screenshots/dusk/tsx.png)
 
 ## Zig
 
-[Compare all themes](../languages/zig.md#dusk)
+[Compare palettes](../languages/zig.md#dusk)
 
 ![Dusk Zig syntax](../../assets/screenshots/dusk/zig.png)
 
 ## Elixir
 
-[Compare all themes](../languages/elixir.md#dusk)
+[Compare palettes](../languages/elixir.md#dusk)
 
 ![Dusk Elixir syntax](../../assets/screenshots/dusk/elixir.png)
 
 ## TOML
 
-[Compare all themes](../languages/toml.md#dusk)
+[Compare palettes](../languages/toml.md#dusk)
 
 ![Dusk TOML syntax](../../assets/screenshots/dusk/toml.png)
 

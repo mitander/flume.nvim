@@ -1,13 +1,14 @@
 # Mesa examples
 
-Light palette with soft rose-gray paper and restrained mineral inks. [All galleries](../gallery.md).
+Light palette with a rose-gray background and dark, low-saturation syntax colors.
+[Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·
 [LSP](#lsp) · [Integrations](#integrations) · [More languages](#more-languages)
 
 ## Go
 
-[Compare all themes](../languages/go.md#mesa)
+[Compare palettes](../languages/go.md#mesa)
 
 ![Mesa Go syntax](../../assets/screenshots/mesa/go.png)
 
@@ -18,37 +19,37 @@ Light palette with soft rose-gray paper and restrained mineral inks. [All galler
 
 ## Rust
 
-[Compare all themes](../languages/rust.md#mesa)
+[Compare palettes](../languages/rust.md#mesa)
 
 ![Mesa Rust syntax](../../assets/screenshots/mesa/rust.png)
 
 ## Python
 
-[Compare all themes](../languages/python.md#mesa)
+[Compare palettes](../languages/python.md#mesa)
 
 ![Mesa Python syntax](../../assets/screenshots/mesa/python.png)
 
 ## TypeScript
 
-[Compare all themes](../languages/tsx.md#mesa)
+[Compare palettes](../languages/tsx.md#mesa)
 
 ![Mesa TypeScript and TSX syntax](../../assets/screenshots/mesa/tsx.png)
 
 ## Zig
 
-[Compare all themes](../languages/zig.md#mesa)
+[Compare palettes](../languages/zig.md#mesa)
 
 ![Mesa Zig syntax](../../assets/screenshots/mesa/zig.png)
 
 ## Elixir
 
-[Compare all themes](../languages/elixir.md#mesa)
+[Compare palettes](../languages/elixir.md#mesa)
 
 ![Mesa Elixir syntax](../../assets/screenshots/mesa/elixir.png)
 
 ## TOML
 
-[Compare all themes](../languages/toml.md#mesa)
+[Compare palettes](../languages/toml.md#mesa)
 
 ![Mesa TOML syntax](../../assets/screenshots/mesa/toml.png)
 

@@ -1,15 +1,14 @@
 # Mira examples
 
-Dark palette with neutral graphite surfaces and clear identifiers. Pastel teal functions, amber
-types, lavender keywords, rose-red fields, peach literals, and sage strings carry Dusk's hue families.
-[All galleries](../gallery.md).
+Dark palette with a graphite background and Dusk's hue families in pastel accents.
+[Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·
 [LSP](#lsp) · [Integrations](#integrations) · [More languages](#more-languages)
 
 ## Go
 
-[Compare all themes](../languages/go.md#mira)
+[Compare palettes](../languages/go.md#mira)
 
 ![Mira Go syntax](../../assets/screenshots/mira/go.png)
 
@@ -20,37 +19,37 @@ types, lavender keywords, rose-red fields, peach literals, and sage strings carr
 
 ## Rust
 
-[Compare all themes](../languages/rust.md#mira)
+[Compare palettes](../languages/rust.md#mira)
 
 ![Mira Rust syntax](../../assets/screenshots/mira/rust.png)
 
 ## Python
 
-[Compare all themes](../languages/python.md#mira)
+[Compare palettes](../languages/python.md#mira)
 
 ![Mira Python syntax](../../assets/screenshots/mira/python.png)
 
 ## TypeScript
 
-[Compare all themes](../languages/tsx.md#mira)
+[Compare palettes](../languages/tsx.md#mira)
 
 ![Mira TypeScript and TSX syntax](../../assets/screenshots/mira/tsx.png)
 
 ## Zig
 
-[Compare all themes](../languages/zig.md#mira)
+[Compare palettes](../languages/zig.md#mira)
 
 ![Mira Zig syntax](../../assets/screenshots/mira/zig.png)
 
 ## Elixir
 
-[Compare all themes](../languages/elixir.md#mira)
+[Compare palettes](../languages/elixir.md#mira)
 
 ![Mira Elixir syntax](../../assets/screenshots/mira/elixir.png)
 
 ## TOML
 
-[Compare all themes](../languages/toml.md#mira)
+[Compare palettes](../languages/toml.md#mira)
 
 ![Mira TOML syntax](../../assets/screenshots/mira/toml.png)
 

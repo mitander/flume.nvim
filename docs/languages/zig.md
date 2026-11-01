@@ -1,6 +1,6 @@
 # Zig examples
 
-The same Zig source and Tree-sitter runtime in all four themes.
+The same Zig source and Tree-sitter runtime in all four palettes.
 [Source and capture details](../showcase.md#code-examples).
 
 [Dusk](#dusk) · [Opal](#opal) · [Mira](#mira) · [Mesa](#mesa) · [All galleries](../gallery.md)

@@ -1,6 +1,8 @@
 # Palette gallery
 
-Compare Flume's two dark and two light palettes on the same code and editor states.
+Choose a palette by comparing the same code on different backgrounds. All four use the same color
+roles, so switching palettes does not change what a function, type or diagnostic means. Read
+[the design explanation](color-system.md) for the reasoning.
 
 ## Browse by palette
 
@@ -11,25 +13,25 @@ and terminal-app snapshots. All maintained images use the same
 
 ### [Dusk](themes/dusk.md)
 
-Dark, with a quiet violet canvas.
+Violet dark background with amber types, teal functions and lavender keywords.
 
 [![Dusk palette in Neovim](../assets/screenshots/dusk/zig.png)](themes/dusk.md)
 
 ### [Opal](themes/opal.md)
 
-Light, with purple, red, and sea-glass inks on cool porcelain paper.
+Lilac-tinted light background with gold types, purple keywords and blue-green strings.
 
 [![Opal palette in Neovim](../assets/screenshots/opal/zig.png)](themes/opal.md)
 
 ### [Mira](themes/mira.md)
 
-Dark, with neutral graphite, clear identifiers, and Dusk-derived pastel accents.
+Graphite dark background with Dusk's hue families and pastel accents.
 
 [![Mira palette in Neovim](../assets/screenshots/mira/zig.png)](themes/mira.md)
 
 ### [Mesa](themes/mesa.md)
 
-Light, with restrained inks on soft rose-gray paper.
+Rose-gray light background with dark, low-saturation syntax colors.
 
 [![Mesa palette in Neovim](../assets/screenshots/mesa/zig.png)](themes/mesa.md)
 

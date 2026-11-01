@@ -4,20 +4,16 @@
 </p>
 
 Flume is a Neovim colorscheme inspired by
-[Jonathan Zawada's artwork for Flume](https://zawada.art/work/flume-skin/). It offers two dark and
-two light palettes, with matching themes for your terminal and developer tools.
+[Jonathan Zawada's artwork for Flume](https://zawada.art/work/flume-skin/). It has two dark and two
+light palettes, with optional matching themes for your terminal and developer tools.
 
-Ordinary identifiers stay neutral. Color distinguishes functions, types, selections, and diagnostics
-against soft backgrounds.
+The idea is to make code structure visible without coloring every identifier. Functions, types and
+fields have distinct roles. Ordinary variables stay neutral, leaving room for selections, diffs and
+diagnostics to stand out.
 
 ![Opal, Mesa, Mira, and Dusk in a cascading palette showcase](assets/screenshots/showcase.png)
 
-[Compare palettes and browse language examples](docs/gallery.md).
-
-> [!WARNING]
-> Flume’s palettes are still evolving. Updates may change colors, including backgrounds. Significant
-> visual changes are noted in the changelog. Pin the plugin to a release tag or commit if you want a
-> fixed appearance.
+[Compare the palettes](docs/gallery.md) · [Why these colors?](docs/color-system.md)
 
 ## Install
 
@@ -31,21 +27,35 @@ Requires Neovim 0.9+ and a true-color terminal. Add this to your
     priority = 1000,
     config = function()
         vim.opt.termguicolors = true
-        require("flume").setup({
-            schema = "dusk",
-        })
+        require("flume").setup({ schema = "dusk" })
     end,
 }
 ```
 
-Install the plugin and restart Neovim to load Dusk. Run `:echo g:colors_name` to confirm
-`flume-dusk`. The `setup()` call applies the theme; you don't need an extra `:colorscheme` call.
+Install the plugin and restart Neovim. Run `:echo g:colors_name` to confirm `flume-dusk`. `setup()`
+applies the theme, so you don't need a separate `:colorscheme` call.
 
-With another plugin manager, install `mitander/flume.nvim`, then add the contents of the `config`
-function above to your `init.lua` after the plugin loads.
+With another plugin manager, install the plugin and put the two lines inside `config` in your
+`init.lua` after the plugin loads. Tree-sitter parsers and language servers are optional. Flume
+colors their output but does not install them.
 
-Flume includes Tree-sitter, LSP, and plugin highlights. You'll need to install parsers and language
-servers separately if you use them.
+## Palettes
+
+A **palette** is a complete set of colors for code and editor UI. The `schema` option selects its
+name. Each palette has a matching Neovim colorscheme name, such as `flume-dusk`.
+
+| Palette                     | Background         | Color direction                                         |
+| --------------------------- | ------------------ | ------------------------------------------------------- |
+| [Dusk](docs/themes/dusk.md) | Violet dark        | Amber types, teal functions and lavender keywords       |
+| [Opal](docs/themes/opal.md) | Lilac-tinted light | Gold types, teal functions and purple keywords          |
+| [Mira](docs/themes/mira.md) | Graphite dark      | Dusk's hue families with pastel accents on neutral gray |
+| [Mesa](docs/themes/mesa.md) | Rose-gray light    | Dark, low-saturation syntax colors    |
+
+They share the same role assignments. Choose by background and accent intensity, not by programming
+language. See the [design explanation](docs/color-system.md#palette-direction) for the reasoning.
+
+Palettes are still evolving. Pin a release tag or commit for a fixed appearance. Significant color
+changes are recorded in the [changelog](CHANGELOG.md).
 
 ## Usage
 
@@ -55,98 +65,97 @@ Try another palette in the current editor:
 :colorscheme flume-opal
 ```
 
-The colorscheme names are `flume-dusk`, `flume-opal`, `flume-mira`, and `flume-mesa`. Change
-`schema` in your setup to use that palette at startup.
+Use `flume-dusk`, `flume-opal`, `flume-mira` or `flume-mesa`. To keep the choice at startup, change
+`schema` in your setup. This switches the editor only, not external applications.
 
-## Tweak a palette locally
-
-```vim
-:FlumeTweak
-```
-
-Compare role colors in isolated preview windows without changing your editor theme or shared
-integrations. Use `h`/`l` for darker/lighter candidates, `c` for another palette ink, and Enter for a
-hex color. Cycle palettes with `p` and language samples with `s`. Press `y` to copy draft
-`schema_overrides`, or `q` to discard the preview. See the [preview guide](docs/tweak.md) for controls,
-parser requirements and limits.
+Upgrading an older configuration? `:help flume-migration` explains the compatibility entry
+`colorscheme flume`, one-time option warnings and old extra paths
+([online](doc/flume.txt)).
 
 ## Configuration
 
-For italic comments and a custom current line number, replace your setup call with:
+Keep your options in one `setup()` call. For example, use italic comments and make the current line
+number follow the palette's accent:
 
 ```lua
 require("flume").setup({
-    schema = "opal",
-    styles = {
-        comments = { italic = true },
-    },
+    schema = "dusk",
+    styles = { comments = { italic = true } },
     highlights = {
-        CursorLineNr = {
-            bold = true,
-            fg = "#413b49",
-        },
+        CursorLineNr = function(colors)
+            return { fg = colors.accent, bold = true }
+        end,
     },
 })
 ```
 
-Run `:set cursorline number` to see the line-number change. For all options, including palette-role
-overrides, see `:help flume-options` ([online](doc/flume.txt)).
+Run `:set cursorline number` to see the line number. For transparency, role-color overrides and
+other options, see `:help flume-options` ([online](doc/flume.txt)).
+
+## Tweak a palette locally
+
+Run `:FlumeTweak` to compare role-color edits in a scratch tab without changing your editor theme.
+Use `h`/`l` for darker/lighter candidates, Enter for a hex color, `y` to copy edited
+`schema_overrides`, and `q` to discard the draft. The [preview guide](docs/tweak.md) explains how to
+keep an edit and what the samples show. Local overrides do not change external themes.
 
 ## Integrations
 
-Follow the [external-tool recipes](docs/workflows.md#external-tools) to install and select a
-matching theme.
+### Neovim plugins
 
-For **lualine**, set `options = { theme = "flume" }` in your existing setup. The named theme follows
-palette changes; see `:help flume-lualine`.
+Flume defines highlight groups for supported plugins, including pickers, file trees, completion and
+Git signs. Configure those plugins normally. They are not dependencies, and there is no extra
+installation step for their highlights. See `:help flume-highlights` for the list.
+For fzf.vim, use the [editor-local color recipe](docs/workflows.md#fzf-inside-neovim) to follow
+colorscheme changes without copying hex values.
 
-Matching themes are available for **Ghostty, Kitty, Tmux, LSD, OpenCode, Lazygit, Fish, fzf, Delta,
-and Pi**. See `:help flume-extras` for supported installation paths and reload behavior.
+Lualine also has a named theme. Set `options = { theme = "flume" }` in your existing lualine
+configuration. The theme follows palette changes. See `:help flume-lualine` for an example.
 
-Once they're configured, switch the editor and shared themes together:
+### External themes
+
+Optional **extras** are theme files for Ghostty, Kitty, Tmux, LSD, OpenCode, Lazygit, Fish, fzf,
+Delta and Pi. You can use a fixed palette or make configured applications follow a shared choice.
+They are not required for the Neovim colorscheme.
+
+Most extras use `:FlumeInstallExtras` with an application name. fzf and Delta use manual
+configuration. The [setup and reload table](docs/workflows.md#external-tools) covers installation,
+theme selection and reload behavior for every extra. Installing a file does not select its theme or
+make the application reload. If you already use v0.2 extras, follow the
+[migration guide](docs/semantic-export.md#migration-from-checkout-owned-state) to relink them.
+
+Once the applications are configured, switch the editor and shared themes together:
 
 ```vim
 :FlumeSync mira
 ```
 
-Other running Flume editors follow the switch by default. External apps may need a reload or a new
-invocation. Sync reports which reloads it requested. It does not restart applications.
-
-Editing a local checkout? Enable `dev = true` in `setup()` and use the same `:FlumeSync` command
-after editing. It reloads source and regenerates extras before syncing. Without dev mode, sync uses
-the bundled artifacts. See [Development](docs/DEVELOPMENT.md) for editor-only reloads and checks.
-
-To remember the shared palette at startup, see `:help flume-follow_sync`. To keep an editor
-independent, set both `follow_sync = false` and `watch_sync = false`.
+Other running Flume editors follow the switch by default. Startup following is opt-in. To keep an
+editor independent, set both `follow_sync = false` and `watch_sync = false`.
+See `:help flume-follow_sync`. External themes use default palette colors, not editor-local overrides.
 
 ## Troubleshooting
 
-- `:help flume` for the full manual ([online](doc/flume.txt)).
-- `:help flume-troubleshooting` to identify unexpected colors or palette switches.
-- `:checkhealth flume` to verify your setup and integration files are correct.
-- [Palette manifest](docs/palette-manifest.md) for color roles and values for overrides.
+Start with `:checkhealth flume`. For unexpected colors, startup issues or an application that keeps
+the old palette, see `:help flume-troubleshooting` ([online](doc/flume.txt)).
+
+## Documentation
+
+- [Gallery](docs/gallery.md): compare palettes on code, editor states and external tools.
+- [Color system](docs/color-system.md): design ideas, role meanings and contrast targets.
+- [Preview guide](docs/tweak.md): explore and copy palette edits.
+- [External-tool recipes](docs/workflows.md): install, select and reload matching themes.
+- [Help reference](doc/flume.txt): all options and commands.
+- [Semantic export](docs/semantic-export.md): use Flume colors in another application.
 
 <a id="contributing"></a>
 
 ## Development
 
-Start with [Contributing](CONTRIBUTING.md) for setup and the edit/check loop.
-[Testing](docs/TESTING.md) selects parser, integration and screenshot evidence. Source checks do not
-activate shared themes or change live user configuration.
-
-## Documentation
-
-- [Contributing](CONTRIBUTING.md): change workflow, review and user-state safety.
-- [Development](docs/DEVELOPMENT.md): prerequisites, local commands and artifact regeneration.
-- [Testing](docs/TESTING.md): check selection, native boundaries and hosted CI.
-- [Style](STYLE.md): code, fixture and documentation conventions.
-- [Design](docs/DESIGN.md): palette resolution, compilation and shared activation.
-- [Color system](docs/color-system.md): role meanings, mappings and contrast targets.
-- [Semantic export](docs/semantic-export.md): versioned consumer format and migration.
-- [Gallery](docs/gallery.md): palette and language comparisons.
-- [External-tool recipes](docs/workflows.md): includes, installation and reload behavior.
-- [Showcase](docs/showcase.md): capture procedures and evidence limits.
-- [Changelog](CHANGELOG.md): releases and significant visual changes.
+Start with [Contributing](CONTRIBUTING.md). [Development](docs/DEVELOPMENT.md) covers local loading,
+reloads and artifact generation. [Testing](docs/TESTING.md) selects checks, and
+[Showcase](docs/showcase.md) covers capture production. [Design](docs/DESIGN.md) and
+[Style](STYLE.md) explain implementation responsibilities and conventions.
 
 ## License
 
