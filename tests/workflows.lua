@@ -231,6 +231,105 @@ function M.register(test, equal, truthy)
         end
     end)
 
+    test("sync refreshes source and exports only in development mode", function()
+        local root = require("flume.extras").get_plugin_dir()
+        local palette_path = root .. "/lua/flume/palette.lua"
+        local compiler_path = root .. "/lua/flume/compiler.lua"
+        local palette_source = vim.fn.readfile(palette_path)
+        local compiler_source = vim.fn.readfile(compiler_path)
+        local original_data, original_home = vim.env.FLUME_DATA_DIR, vim.env.HOME
+        local original_executable, original_notify = vim.fn.executable, vim.notify
+        local data = vim.fn.tempname()
+        vim.env.FLUME_DATA_DIR, vim.env.HOME = data, data
+        vim.fn.executable = function()
+            return 0
+        end
+        local notices = {}
+        vim.notify = function(message)
+            notices[#notices + 1] = message
+        end
+        local function read(path)
+            return table.concat(vim.fn.readfile(path), "\n")
+        end
+
+        local ok, err = xpcall(function()
+            local flume = require("flume")
+            flume.setup({ schema = "dusk", watch_sync = false })
+            require("flume.compiler") -- Cache both modules before the source edits.
+            local changed_palette =
+                table.concat(palette_source, "\n"):gsub('accent = "#7dacbb"', 'accent = "#abcdef"', 1)
+            vim.fn.writefile(vim.split(changed_palette, "\n", { plain = true }), palette_path)
+            local changed_compiler =
+                table.concat(compiler_source, "\n"):gsub("# Flume Theme for Ghostty", "# Edited Ghostty exporter", 1)
+            vim.fn.writefile(vim.split(changed_compiler, "\n", { plain = true }), compiler_path)
+            local artifact = read(root .. "/extras/ghostty/flume-dusk")
+
+            vim.cmd("FlumeSync")
+            equal(require("flume"), flume, "normal sync reloaded source")
+            equal(read(root .. "/extras/ghostty/flume-dusk"), artifact, "normal sync compiled artifacts")
+            truthy(flume.colors.accent ~= "#abcdef", "normal sync adopted source edit")
+
+            flume.setup({ schema = "dusk", dev = true, watch_sync = false, overrides = { text = "#123456" } })
+            vim.cmd("FlumeSync")
+            flume = require("flume")
+            equal(flume.colors.accent, "#abcdef", "dev sync missed fresh palette")
+            equal(flume.colors.text, "#123456", "dev sync lost editor options")
+            local export = vim.json.decode(read(data .. "/current/palette.json"))
+            equal(export.colors.accent, "#abcdef", "dev sync published stale palette")
+            truthy(export.colors.text ~= "#123456", "editor override leaked into export")
+            truthy(
+                read(data .. "/current/ghostty"):find("# Edited Ghostty exporter", 1, true),
+                "dev sync used cached exporter"
+            )
+            equal(flume.config.dev, true, "dev sync lost development mode")
+            truthy(notices[#notices]:find("Ghostty: reload manually", 1, true), "missing reload guidance")
+
+            vim.cmd("FlumeSync mira")
+            equal(require("flume").config.schema, "mira", "explicit dev switch ignored")
+            equal(require("flume.state").get_schema(), "mira", "explicit dev switch not published")
+
+            -- Model a schema added in source but absent from the old module cache.
+            require("flume.palette").schemas.mesa = nil
+            vim.cmd("FlumeSync mesa")
+            equal(require("flume.state").get_schema(), "mesa", "dev sync validated against stale schemas")
+
+            -- Reload failure must not compile, publish, or request app reloads.
+            local active = (vim.uv or vim.loop).fs_readlink(data .. "/current")
+            vim.fn.writefile({ "local = syntax error" }, palette_path)
+            vim.cmd("FlumeSync")
+            equal((vim.uv or vim.loop).fs_readlink(data .. "/current"), active, "failed reload published state")
+            truthy(notices[#notices]:find("reload failed", 1, true), "reload failure not reported")
+            equal(require("flume").config.schema, "mesa", "failed reload changed choice")
+
+            vim.fn.writefile(palette_source, palette_path)
+            package.preload["flume.compiler"] = function()
+                return {
+                    compile_all = function()
+                        error("injected compile failure")
+                    end,
+                }
+            end
+            equal(pcall(vim.cmd, "FlumeSync dusk"), false, "failed compilation reported success")
+            equal((vim.uv or vim.loop).fs_readlink(data .. "/current"), active, "failed compilation published state")
+            package.preload["flume.compiler"] = nil
+            vim.cmd("FlumeSync dusk")
+            equal(require("flume.state").get_schema(), "dusk", "sync did not recover")
+        end, debug.traceback)
+
+        package.preload["flume.compiler"] = nil
+        vim.fn.writefile(palette_source, palette_path)
+        vim.fn.writefile(compiler_source, compiler_path)
+        require("flume").reload({ quiet = true })
+        require("flume.compiler").compile_all({ activate = false })
+        vim.fn.executable, vim.notify = original_executable, original_notify
+        vim.env.FLUME_DATA_DIR, vim.env.HOME = original_data, original_home
+        vim.fn.delete(data, "rf")
+        require("flume").setup({ watch_sync = false })
+        if not ok then
+            error(err)
+        end
+    end)
+
     test("development reload clears source caches and preserves the editor choice", function()
         local extras = require("flume.extras")
         local original_dir = extras.get_plugin_dir

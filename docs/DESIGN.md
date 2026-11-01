@@ -91,6 +91,11 @@ installer processes the inventory in order so consent dialogs cannot overlap. No
 
 ## Publish shared themes
 
+The editor's `FlumeSync` command normally publishes bundled artifacts. With `dev = true`, it first
+reloads source and compiles canonical extras without activation, then performs the same sync. Source
+reload or compilation failure stops before publication and reload requests. Save-time reload and
+`FlumeReload` remain editor-local. Release selection belongs to the plugin manager, not dev mode.
+
 Synchronization stages a complete set in the shared data directory, promotes it and atomically
 replaces the `current` symlink. Published sets are retained so readers of an earlier set are not
 invalidated by another activation. Consumers reopen the stable path after a switch and read schema

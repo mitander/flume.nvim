@@ -16,9 +16,13 @@ enable development mode in that editor:
 require("flume").setup({ schema = "dusk", dev = true })
 ```
 
-See `:help flume-dev` ([online](../doc/flume.txt)) for reload scope and recovery. Use `:FlumeReload`
-for a manual reload. Development mode is local editor configuration, not a source-check
-prerequisite.
+After editing source, run `:FlumeSync` to reload source, regenerate extras and synchronize the
+current palette. Add a palette name to switch at the same time. Development mode enables this
+source refresh. Normal users sync bundled artifacts without regeneration.
+
+Save-time reload and `:FlumeReload` update only the editor. Use them when checking a change without
+publishing it to external tools. See `:help flume-dev` ([online](../doc/flume.txt)) for scope and
+recovery. Development mode is local editor configuration, not a source-check prerequisite.
 
 ## Edit and check
 

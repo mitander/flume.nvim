@@ -98,6 +98,14 @@ function M.run(opts)
         if result.any then
             message = message .. string.format(" (%d files updated)", result.count)
         end
+        local refresh = {
+            result.ghostty_reloaded and "Ghostty reload requested" or "Ghostty: reload manually if needed",
+            result.tmux_reloaded and "Tmux reloaded" or "Tmux: not reloaded",
+            result.pi_notified and "Pi notified" or "Pi: not notified",
+        }
+        message = message .. "\n" .. table.concat(refresh, ". ") .. "."
+        message = message .. "\nOther apps read themes on launch. Reopen them if needed."
+        message = message .. "\nExisting Fish shells: source the installed conf.d/flume.fish fragment again."
         vim.notify(message, vim.log.levels.INFO)
     end
 

@@ -110,7 +110,11 @@ Once they're configured, switch the editor and shared themes together:
 ```
 
 Other running Flume editors follow the switch by default. External apps may need a reload or a new
-invocation.
+invocation. Sync reports which reloads it requested. It does not restart applications.
+
+Editing a local checkout? Enable `dev = true` in `setup()` and use the same `:FlumeSync` command
+after editing. It reloads source and regenerates extras before syncing. Without dev mode, sync uses
+the bundled artifacts. See [Development](docs/DEVELOPMENT.md) for editor-only reloads and checks.
 
 To remember the shared palette at startup, see `:help flume-follow_sync`. To keep an editor
 independent, set both `follow_sync = false` and `watch_sync = false`.

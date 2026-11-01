@@ -126,10 +126,13 @@ follow_sync ~                                              *flume-follow_sync*
 
 dev ~                                                              *flume-dev*
     Reloads Flume when Lua files in the checkout's lua/ directory are saved.
-    Includes language modules and the lualine theme. Preserves the current
-    schema and options; does not synchronize extras or replace another theme.
-    A failed reload restores the previous modules and theme. Fix and save the
-    source to retry. See docs/DEVELOPMENT.md for development commands.
+    Includes language modules and the lualine theme. Save-time reload preserves
+    the current schema and options, without synchronizing extras or replacing
+    another theme. With dev enabled, |:FlumeSync| also reloads source and
+    regenerates canonical extras before synchronizing. No separate compile is
+    needed. A failed reload restores the previous modules and theme. Failed
+    reload or compilation stops sync before publication and app reload requests.
+    Fix the source and retry. See docs/DEVELOPMENT.md for development commands.
 
 overrides ~                                                  *flume-overrides*
     Changes palette colors by role before highlights are built. Exact roles
@@ -216,7 +219,11 @@ Commands become available when Flume is loaded.
 :FlumeSync [schema]                                               *:FlumeSync*
     Apply a palette and activate its shared integration set. With no argument,
     use the editor's current palette. |flume-watch_sync| editors follow it.
-    External reload behavior is described in |flume-extras|.
+    With |flume-dev| enabled, reload source and regenerate extras first. With
+    dev disabled (the default), use bundled artifacts without compilation or
+    source reload. Plugin-manager version pins select the installed release.
+    Reports reload requests separately from file synchronization. External apps
+    may still need restarting. See |flume-extras| for per-app behavior.
 
 :FlumeInstallExtras [app]                                *:FlumeInstallExtras*
     Link an external theme at a standard destination. With no argument, link

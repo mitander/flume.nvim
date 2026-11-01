@@ -59,7 +59,8 @@ local function clear_flume_modules()
     end
 end
 
-function M.reload()
+function M.reload(opts)
+    opts = opts or {}
     local config = vim.deepcopy(M.config)
     local colors_name = editor_name(config)
     local colorscheme_emitted = false
@@ -107,8 +108,31 @@ function M.reload()
     if not colorscheme_emitted then
         vim.api.nvim_exec_autocmds("ColorScheme", { pattern = colors_name, modeline = false })
     end
-    vim.notify("Flume theme reloaded", vim.log.levels.INFO)
+    if not opts.quiet then
+        vim.notify("Flume theme reloaded", vim.log.levels.INFO)
+    end
     return true
+end
+
+function M.sync(schema)
+    local flume = M
+    if M.config.dev then
+        -- Use fresh editor and exporter code, but never publish after a failed reload.
+        if not M.reload({ quiet = true }) then
+            return false
+        end
+        flume = require("flume")
+    end
+
+    local colorscheme = schema == nil and flume.config.colorscheme or nil
+    schema = schema or flume.config.schema
+    require("flume.palette").get(schema)
+    if flume.config.dev then
+        require("flume.compiler").compile_all({ activate = false })
+    end
+    local result = require("flume.sync").run({ schema = schema })
+    flume.apply(schema, colorscheme)
+    return result
 end
 
 function M.setup(opts)
@@ -585,15 +609,7 @@ function M.load(schema, colorscheme)
         require("flume.compiler").compile_all({ activate = false })
     end, {})
     vim.api.nvim_create_user_command("FlumeSync", function(opts)
-        local explicit = opts.args ~= ""
-        local schema = explicit and opts.args or M.config.schema
-        local colorscheme = nil
-        if not explicit then
-            colorscheme = M.config.colorscheme
-        end
-        require("flume.palette").get(schema)
-        require("flume.sync").run({ schema = schema })
-        M.apply(schema, colorscheme)
+        M.sync(opts.args ~= "" and opts.args or nil)
     end, {
         nargs = "?",
         complete = function()
