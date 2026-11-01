@@ -107,6 +107,71 @@ function M.register(test, equal, truthy)
         end
     end)
 
+    test("sync feedback names only installed integrations needing a reload", function()
+        local state = require("flume.state")
+        local apps = require("flume.integrations").apps
+        local original_activate, original_current = state.activate, state.get_current
+        local original_executable, original_notify = vim.fn.executable, vim.notify
+        local original_home, original_tmux = vim.env.HOME, vim.env.TMUX
+        local root = vim.fn.tempname()
+        local destinations = {}
+        local message
+        vim.fn.mkdir(root .. "/current", "p")
+        state.activate = function()
+            return {}
+        end
+        state.get_current = function()
+            return root .. "/current"
+        end
+        vim.fn.executable = function()
+            return 0
+        end
+        vim.notify = function(value)
+            message = value
+        end
+        vim.env.HOME, vim.env.TMUX = root, nil
+        for _, name in ipairs({ "ghostty", "tmux", "pi" }) do
+            destinations[name] = apps[name].dest
+            apps[name].dest = root .. "/" .. name
+        end
+
+        local ok, err = xpcall(function()
+            local sync = require("flume.sync")
+            sync.run({ schema = "opal" })
+            equal(message, "Flume schema opal synchronized", "unconfigured apps produce no reload noise")
+
+            local uv = vim.uv or vim.loop
+            vim.fn.writefile({ "unrelated theme" }, root .. "/personal")
+            assert(uv.fs_symlink(root .. "/personal", apps.ghostty.dest))
+            sync.run({ schema = "opal" })
+            equal(message, "Flume schema opal synchronized", "foreign theme links produce no reload noise")
+            assert(uv.fs_unlink(apps.ghostty.dest))
+
+            vim.fn.writefile({ "theme" }, root .. "/current/ghostty")
+            assert(uv.fs_symlink(root .. "/current/ghostty", apps.ghostty.dest))
+            sync.run({ schema = "opal" })
+            equal(
+                message,
+                "Flume schema opal synchronized\nGhostty: reload configuration manually.",
+                "installed adapter failure retains an actionable hint"
+            )
+            message = nil
+            sync.run({ schema = "opal", quiet = true })
+            equal(message, nil, "quiet sync stays silent")
+        end, debug.traceback)
+
+        for name, destination in pairs(destinations) do
+            apps[name].dest = destination
+        end
+        state.activate, state.get_current = original_activate, original_current
+        vim.fn.executable, vim.notify = original_executable, original_notify
+        vim.env.HOME, vim.env.TMUX = original_home, original_tmux
+        vim.fn.delete(root, "rf")
+        if not ok then
+            error(err)
+        end
+    end)
+
     test("real sync command publishes before reload adapters and editor notification", function()
         local flume = require("flume")
         local state = require("flume.state")
@@ -282,7 +347,8 @@ function M.register(test, equal, truthy)
                 "dev sync used cached exporter"
             )
             equal(flume.config.dev, true, "dev sync lost development mode")
-            truthy(notices[#notices]:find("Ghostty: reload manually", 1, true), "missing reload guidance")
+            truthy(notices[#notices]:find("synchronized", 1, true), "missing sync confirmation")
+            truthy(not notices[#notices]:find("Ghostty", 1, true), "uninstalled app produced reload noise")
 
             vim.cmd("FlumeSync mira")
             equal(require("flume").config.schema, "mira", "explicit dev switch ignored")
@@ -398,7 +464,7 @@ function M.register(test, equal, truthy)
         end
 
         local ok, err = xpcall(function()
-            for _, module in ipairs({ "flume", "flume.palette", "flume.dev" }) do
+            for _, module in ipairs({ "flume", "flume.palette", "flume.dev", "flume.commands" }) do
                 local flume = require("flume")
                 flume.setup({ schema = "mira", dev = true, watch_sync = false, overrides = { accent = "#abcdef" } })
                 local path = require("flume.extras").get_plugin_dir() .. "/lua/flume/palette.lua"
@@ -428,12 +494,13 @@ function M.register(test, equal, truthy)
                 truthy(require("flume") ~= flume, "corrected source did not reload")
                 equal(require("flume").config.schema, "mira", "recovered reload lost schema")
             end
-            equal(reload_error_count, 3, "reload failures were not reported")
+            equal(reload_error_count, 4, "reload failures were not reported")
         end, debug.traceback)
 
         package.preload["flume"] = nil
         package.preload["flume.palette"] = nil
         package.preload["flume.dev"] = nil
+        package.preload["flume.commands"] = nil
         vim.notify = original_notify
         require("flume").setup({ watch_sync = false })
         if not ok then

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Keep sync feedback brief, with manual reload hints only for installed integrations whose reload
+  request failed. Ask only whether to install Fish tool setup, then print separate commands for
+  preserving configured tools or adopting Flume's current-session settings.
+- Separate command and reload plumbing from rendering inputs so nonvisual command changes do not
+  invalidate editor captures. Collapse extra language examples in each palette gallery.
+
 - Use neutral raised panels for successful Pi tool results instead of green diff-addition fills.
   Keep failed tool results visibly tinted.
 

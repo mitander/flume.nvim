@@ -98,14 +98,22 @@ function M.run(opts)
         if result.any then
             message = message .. string.format(" (%d files updated)", result.count)
         end
-        local refresh = {
-            result.ghostty_reloaded and "Ghostty reload requested" or "Ghostty: reload manually if needed",
-            result.tmux_reloaded and "Tmux reloaded" or "Tmux: not reloaded",
-            result.pi_notified and "Pi notified" or "Pi: not notified",
-        }
-        message = message .. "\n" .. table.concat(refresh, ". ") .. "."
-        message = message .. "\nOther apps read themes on launch. Reopen them if needed."
-        message = message .. "\nExisting Fish shells: source the installed conf.d/flume.fish fragment again."
+        local apps = require("flume.integrations").apps
+        local current = require("flume.state").get_current()
+        for _, adapter in ipairs({
+            { name = "ghostty", reloaded = result.ghostty_reloaded, hint = "Ghostty: reload configuration manually." },
+            { name = "tmux", reloaded = result.tmux_reloaded, hint = "Tmux: source ~/.tmux.conf manually." },
+            { name = "pi", reloaded = result.pi_notified, hint = "Pi: reselect the flume theme or restart." },
+        }) do
+            local app = apps[adapter.name]
+            local destination = vim.fn.expand(app.dest)
+            -- A missing app or an unrelated theme link is not a reload failure.
+            local installed = vim.fn.getftype(destination) == "link"
+                and vim.fn.resolve(destination) == vim.fn.resolve(current .. "/" .. app.current)
+            if installed and not adapter.reloaded then
+                message = message .. "\n" .. adapter.hint
+            end
+        end
         vim.notify(message, vim.log.levels.INFO)
     end
 

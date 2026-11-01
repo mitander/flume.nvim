@@ -29,7 +29,7 @@ printf 'gui: {}\n' >"$XDG_CONFIG_HOME/lazygit/config.yml"
   -c 'lua vim.opt.runtimepath:prepend(vim.env.FLUME_TEST_RUNTIME)' \
   -c 'lua require("flume").setup({ schema = "dusk", watch_sync = false })' \
   -c 'lua require("flume.state").activate("dusk")' \
-  -c 'lua vim.ui.select = function(items, _, done) done(items[1]) end; local extras = require("flume.extras"); for _, name in ipairs({ "fish", "fish_tools", "tmux", "pi" }) do extras.install(name, function(result) assert(result.status == "linked", result.message); if name == "fish_tools" then assert(result.settings == "adopt"); vim.fn.writefile({ result.reload_command }, vim.env.FLUME_TEST_COMMAND) end end) end' \
+  -c 'lua vim.ui.select = function(items, _, done) done(items[1]) end; local extras = require("flume.extras"); for _, name in ipairs({ "fish", "fish_tools", "tmux", "pi" }) do extras.install(name, function(result) assert(result.status == "linked", result.message); if name == "fish_tools" then assert(result.settings == "preserve"); vim.fn.writefile({ result.adopt_command }, vim.env.FLUME_TEST_COMMAND) end end) end' \
   -c 'qa!' >"$TEST_ROOT/install.log" 2>&1
 
 "$FISH" --private -c 'printf "%s\n" $FZF_DEFAULT_OPTS_FILE $LG_CONFIG_FILE $LS_COLORS $fish_color_error' >"$TEST_ROOT/settings"

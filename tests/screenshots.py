@@ -35,6 +35,7 @@ class CaptureProvenance(unittest.TestCase):
             "tests/snapshots/fixtures/neovim.lua",
             "tests/snapshots/fixtures/neovim.sh",
             "tests/snapshots/neovim.tape",
+            "lua/flume/commands.lua",
             "lua/flume/init.lua",
             "lua/flume/palette.lua",
             "tests/snapshots/capture.py", "tests/snapshots/ghostty.py", "tests/snapshots/render.py", "tests/snapshots/Dockerfile",
@@ -255,6 +256,12 @@ class CaptureProvenance(unittest.TestCase):
                 with self.assertRaisesRegex(SystemExit, "stale theme inputs"):
                     preflight.main()
                 path.write_bytes(original)
+
+    def test_command_changes_do_not_invalidate_theme_provenance(self):
+        before = preflight.theme_inputs("dusk")
+        commands = self.root / "lua/flume/commands.lua"
+        commands.write_text(commands.read_text() + "\n-- command plumbing changed\n")
+        self.assertEqual(before, preflight.theme_inputs("dusk"))
 
     def test_mixed_runtimes_are_rejected(self):
         sidecar = self.root / "assets/screenshots/opal/zig.json"

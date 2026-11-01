@@ -2,16 +2,19 @@
 
 Light palette with soft rose-gray paper and restrained mineral inks. [All galleries](../gallery.md).
 
-[Go](#go) · [Rust](#rust) · [Python](#python) · [TypeScript](#typescript) · [Zig](#zig) ·
-[Elixir](#elixir) · [TOML](#toml) ·
-[Diagnostics and working states](#diagnostics-and-working-states) · [Completion](#completion) ·
-[LSP](#lsp) · [Integrations](#integrations)
+[Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·
+[LSP](#lsp) · [Integrations](#integrations) · [More languages](#more-languages)
 
 ## Go
 
 [Compare all themes](../languages/go.md#mesa)
 
 ![Mesa Go syntax](../../assets/screenshots/mesa/go.png)
+
+## More languages
+
+<details>
+<summary>Rust, Python, TypeScript/TSX, Zig, Elixir and TOML</summary>
 
 ## Rust
 
@@ -48,6 +51,8 @@ Light palette with soft rose-gray paper and restrained mineral inks. [All galler
 [Compare all themes](../languages/toml.md#mesa)
 
 ![Mesa TOML syntax](../../assets/screenshots/mesa/toml.png)
+
+</details>
 
 ## Diagnostics and working states
 

@@ -17,7 +17,7 @@
   "renderer_sha256": "91bd2fb1cc5d55f5a510a5649b7cfb9e179f1e59f46ba9bf8e8bea9f40c65160",
   "image_sha256": "6c8c8d536d54a5950ab1dc83e5201605f3322c7b8f31c5a47c156f3f5a56bab5",
   "theme_inputs": {
-    "lua/flume/init.lua": "aaf910609e166dd790af165fb7835e25d6f2b4fc4e5cbf5cf55a9669134f188b",
+    "lua/flume/init.lua": "06e238c529736510165dd45c028edd6e1632739b5632a782359b3b48087db6c3",
     "lua/flume/palette.lua": "78c7ebfe1918eba46ac6ee38252b36b9898efed2c156c5a07fcfe72330885967",
     "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
     "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
@@ -54,8 +54,8 @@
     ],
     "documentation": "func(s string) string\n\nTrimSpace returns a slice of the string s, with all leading and trailing white space removed, as defined by Unicode.",
     "frontend": {
-      "name": "blink.cmp",
       "border": "single",
+      "name": "blink.cmp",
       "treesitter_highlighting": true
     },
     "documentation_highlights": 9

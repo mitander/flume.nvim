@@ -3,16 +3,19 @@
 Light palette with cool porcelain paper, gold types, purple keywords, red fields, copper literals,
 sea-glass strings, and softened teal functions. [All galleries](../gallery.md).
 
-[Go](#go) · [Rust](#rust) · [Python](#python) · [TypeScript](#typescript) · [Zig](#zig) ·
-[Elixir](#elixir) · [TOML](#toml) ·
-[Diagnostics and working states](#diagnostics-and-working-states) · [Completion](#completion) ·
-[LSP](#lsp) · [Integrations](#integrations)
+[Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·
+[LSP](#lsp) · [Integrations](#integrations) · [More languages](#more-languages)
 
 ## Go
 
 [Compare all themes](../languages/go.md#opal)
 
 ![Opal Go syntax](../../assets/screenshots/opal/go.png)
+
+## More languages
+
+<details>
+<summary>Rust, Python, TypeScript/TSX, Zig, Elixir and TOML</summary>
 
 ## Rust
 
@@ -49,6 +52,8 @@ sea-glass strings, and softened teal functions. [All galleries](../gallery.md).
 [Compare all themes](../languages/toml.md#opal)
 
 ![Opal TOML syntax](../../assets/screenshots/opal/toml.png)
+
+</details>
 
 ## Diagnostics and working states
 

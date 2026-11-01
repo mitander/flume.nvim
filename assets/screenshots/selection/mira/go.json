@@ -17,7 +17,7 @@
   "renderer_sha256": "90cc199d2adfcdcdfd608397e88da989fe7e66725b836ed78accfcff43ea22d8",
   "image_sha256": "73637bd2127a2291baaf828024f968b0f23814fbce776270f6dbe7fade028ce4",
   "theme_inputs": {
-    "lua/flume/init.lua": "aaf910609e166dd790af165fb7835e25d6f2b4fc4e5cbf5cf55a9669134f188b",
+    "lua/flume/init.lua": "06e238c529736510165dd45c028edd6e1632739b5632a782359b3b48087db6c3",
     "lua/flume/palette.lua": "78c7ebfe1918eba46ac6ee38252b36b9898efed2c156c5a07fcfe72330885967",
     "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
     "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",

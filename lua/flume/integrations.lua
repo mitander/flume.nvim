@@ -73,7 +73,7 @@ M.list = {
         static = true,
         dest = config_home .. "/fish/conf.d/flume-tools.fish",
         consent = "Configure fzf, Lazygit and LS_COLORS in Fish 3.5+",
-        next_step = "Normal startup respects tool exports. Run the printed source command to apply your chosen mode now.",
+        next_step = "Normal startup respects tool exports. Choose a printed source command to refresh this Fish shell.",
     },
     { name = "fzf", label = "fzf", source = "extras/fzf/flume%s.opts", current = "fzf.opts" },
     { name = "delta", label = "Delta", source = "extras/delta/flume%s.gitconfig", current = "delta.gitconfig" },

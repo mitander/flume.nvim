@@ -13,7 +13,8 @@ obligations. The [semantic export](semantic-export.md) owns the versioned consum
 | Owner | Responsibility |
 | - | - |
 | `lua/flume/palette.lua` | Canonical palettes, role values and schema metadata |
-| `lua/flume/init.lua` | Editor options, resolved highlights and user commands |
+| `lua/flume/init.lua` | Editor options, palette application and resolved highlights |
+| `lua/flume/commands.lua` | User commands, source reload/rollback and sync orchestration |
 | `lua/flume/languages/` | Narrow language-provider corrections |
 | `lua/flume/integrations.lua` | Ordered integration inventory, artifact names, install destinations and setup hints |
 | `lua/flume/compiler.lua` | Palette-to-text renderers and canonical artifact writes |
@@ -82,11 +83,12 @@ shared schema rather than selecting the installing editor's local palette. Publi
 never edited in place.
 
 Installation reports linking separately from application selection and reload. The Fish tool
-installer offers adoption or preservation and prints the corresponding one-line source command.
-Both choices install the same startup fragment. The choice controls the current-shell handoff,
-not a persistent override policy. Neovim cannot mutate its parent shell's environment. Consent-based
-installs report completion through the same result callback as immediate installs. The all-app
-installer processes the inventory in order so consent dialogs cannot overlap. No installer edits
+installer asks only whether to install the startup fragment. After installation it prints separate
+source commands for preserving configured tools or adopting Flume's session exports. The source
+argument controls the current-shell handoff, not a persistent override policy. Neovim cannot mutate
+its parent shell's environment. Consent-based installs report completion through the same result
+callback as immediate installs. The all-app installer processes the inventory in order so consent
+dialogs cannot overlap. No installer edits
 `config.fish` or application configuration files.
 
 ## Publish shared themes

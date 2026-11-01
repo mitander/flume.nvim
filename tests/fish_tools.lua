@@ -31,13 +31,9 @@ function M.register(test, equal, truthy)
         vim.fn.writefile({ "gui: {}" }, config .. "/lazygit/config.yml")
         vim.env.FLUME_DATA_DIR = root .. "/shared"
         app.dest = config .. "/fish/conf.d/flume-tools.fish"
-        local choice = "Use Flume settings"
+        local choice = "Install"
         vim.ui.select = function(items, _, callback)
-            equal(
-                table.concat(items, ","),
-                "Use Flume settings,Keep existing settings,Do not install",
-                "adoption choices"
-            )
+            equal(table.concat(items, ","), "Install,Do not install", "installation choices")
             callback(choice)
         end
         vim.notify = function() end
@@ -67,8 +63,9 @@ function M.register(test, equal, truthy)
                 result = completed
             end)
             equal(result.status, "linked", "tool setup installation")
-            equal(result.settings, "adopt", "explicit adoption selection")
-            truthy(result.reload_command:match(" %-%-adopt$"), "one-command session adoption")
+            equal(result.settings, "preserve", "installation preserves configured tools")
+            truthy(result.adopt_command:match(" %-%-adopt$"), "separate one-command session adoption")
+            truthy(not result.reload_command:find("--adopt", 1, true), "default source command preserves settings")
             truthy(vim.fn.filereadable(app.dest) == 1, "installed tool fragment readable")
             equal(
                 run("printf '%s\\n' $FZF_DEFAULT_OPTS_FILE $LG_CONFIG_FILE $LS_COLORS"),
@@ -98,7 +95,7 @@ function M.register(test, equal, truthy)
                 "caller tool choices preserved"
             )
             equal(
-                run(result.reload_command .. "; printf '%s\\n' $FZF_DEFAULT_OPTS_FILE $LG_CONFIG_FILE", {
+                run(result.adopt_command .. "; printf '%s\\n' $FZF_DEFAULT_OPTS_FILE $LG_CONFIG_FILE", {
                     "FZF_DEFAULT_OPTS_FILE=/old/fzf",
                     "LG_CONFIG_FILE=/old/lazygit",
                 }),
@@ -108,7 +105,7 @@ function M.register(test, equal, truthy)
             equal(
                 run(
                     "set -U FZF_DEFAULT_OPTS_FILE /persistent/fzf; set -U LG_CONFIG_FILE /persistent/lazygit; "
-                        .. result.reload_command
+                        .. result.adopt_command
                         .. "; printf '%s\\n' $FZF_DEFAULT_OPTS_FILE $LG_CONFIG_FILE; "
                         .. "set -e -g FZF_DEFAULT_OPTS_FILE; set -e -g LG_CONFIG_FILE; "
                         .. "printf '%s\\n' $FZF_DEFAULT_OPTS_FILE $LG_CONFIG_FILE; "
@@ -123,14 +120,14 @@ function M.register(test, equal, truthy)
                     .. "/persistent/fzf\n/persistent/lazygit\n",
                 "adoption shadows but does not erase persistent universal choices"
             )
-            choice = "Keep existing settings"
+            choice = "Install"
             extras.install("fish_tools", function(completed)
                 result = completed
             end)
             equal(result.status, "already_linked", "preserving selection is idempotent")
             equal(result.settings, "preserve", "explicit preservation selection")
             truthy(not result.reload_command:find("--adopt", 1, true), "preservation command has no takeover flag")
-            truthy(result.next_step:find("not been taken over", 1, true), "preservation is not reported as takeover")
+            truthy(result.next_step:find("preserve existing", 1, true), "startup preservation is explicit")
             equal(
                 run(result.reload_command .. "; printf '%s\\n' $FZF_DEFAULT_OPTS_FILE $LG_CONFIG_FILE", {
                     "FZF_DEFAULT_OPTS_FILE=/custom/fzf",

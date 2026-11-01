@@ -169,22 +169,21 @@ fragment:
 :FlumeInstallExtras fish_tools
 ```
 
-Choose how to adopt the tool settings:
+Choose **Install** to link `conf.d/flume-tools.fish`. **Do not install** or cancel leaves files
+unchanged. Installation does not change an existing shell.
 
-- **Use Flume settings** links `conf.d/flume-tools.fish` and prints a quoted `source` command with
-  `--adopt`. Run that command in Fish to replace the current session's fzf/Lazygit exports.
-- **Keep existing settings** installs the same fragment but prints a source command without
-  `--adopt`. Configured tools retain their exports. Unset tools receive Flume defaults.
-- **Do not install** or cancel leaves files unchanged.
+The installer then prints two quoted `source` commands. Run one in Fish:
 
-Both source modes apply the filename-color rule described below. Neovim cannot change the parent
-shell's environment. Linking alone has not applied the settings to an existing shell. There is no
-need to clear variables or restart Fish: run the exact command printed by the installer.
+- The first preserves configured tools' exports and supplies Flume defaults for unset tools.
+- The second adds `--adopt` to replace the current session's fzf/Lazygit exports instead.
+
+Both commands apply the filename-color rule described below. Neovim cannot change the parent
+shell's environment. There is no need to clear variables or restart Fish.
 
 This is separate from `:FlumeInstallExtras fish`, which only installs command-line syntax and pager
-colors. Neither command edits `config.fish`. Normal startup respects explicit tool exports in both
-modes. `--adopt` is a one-time source argument, not a persistent preference, and it does not modify
-Fish's persistent universal variables. Reinstalling a stale tool fragment refreshes the complete
+colors. Neither command edits `config.fish`. Normal startup respects explicit tool exports.
+`--adopt` is a one-time source argument, not a persistent preference, and it does not modify Fish's
+persistent universal variables. Reinstalling a stale tool fragment refreshes the complete
 shared set without changing its selected palette.
 
 The tool fragment keeps fzf on the stable shared `current/fzf.opts` path. It asks installed Lazygit

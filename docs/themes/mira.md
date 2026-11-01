@@ -4,16 +4,19 @@ Dark palette with neutral graphite surfaces and clear identifiers. Pastel teal f
 types, lavender keywords, rose-red fields, peach literals, and sage strings carry Dusk's hue families.
 [All galleries](../gallery.md).
 
-[Go](#go) · [Rust](#rust) · [Python](#python) · [TypeScript](#typescript) · [Zig](#zig) ·
-[Elixir](#elixir) · [TOML](#toml) ·
-[Diagnostics and working states](#diagnostics-and-working-states) · [Completion](#completion) ·
-[LSP](#lsp) · [Integrations](#integrations)
+[Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·
+[LSP](#lsp) · [Integrations](#integrations) · [More languages](#more-languages)
 
 ## Go
 
 [Compare all themes](../languages/go.md#mira)
 
 ![Mira Go syntax](../../assets/screenshots/mira/go.png)
+
+## More languages
+
+<details>
+<summary>Rust, Python, TypeScript/TSX, Zig, Elixir and TOML</summary>
 
 ## Rust
 
@@ -50,6 +53,8 @@ types, lavender keywords, rose-red fields, peach literals, and sage strings carr
 [Compare all themes](../languages/toml.md#mira)
 
 ![Mira TOML syntax](../../assets/screenshots/mira/toml.png)
+
+</details>
 
 ## Diagnostics and working states
 

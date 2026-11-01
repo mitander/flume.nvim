@@ -641,7 +641,7 @@ function M.register(test, equal, truthy)
         end
     end)
 
-    test("Fish tool adoption asks before writing and reports cancellation and refusal", function()
+    test("Fish tool installation asks before writing and reports cancellation and refusal", function()
         local extras = require("flume.extras")
         local app = extras.get_apps().fish_tools
         local original_dest, original_data = app.dest, vim.env.FLUME_DATA_DIR
@@ -650,8 +650,9 @@ function M.register(test, equal, truthy)
         local callback, result
         app.dest = root .. "/fish/conf.d/flume-tools.fish"
         vim.env.FLUME_DATA_DIR = root .. "/shared"
-        vim.ui.select = function(items, _, done)
-            equal(table.concat(items, ","), "Use Flume settings,Keep existing settings,Do not install", "tool choices")
+        vim.ui.select = function(items, opts, done)
+            equal(table.concat(items, ","), "Install,Do not install", "installation choices")
+            truthy(opts.prompt:find("Existing symlinks may be replaced", 1, true), "replacement warning")
             callback = done
         end
         vim.notify = function() end
@@ -676,7 +677,7 @@ function M.register(test, equal, truthy)
             vim.fn.mkdir(vim.fn.fnamemodify(app.dest, ":h"), "p")
             vim.fn.writefile({ "# personal file" }, app.dest)
             install()
-            callback("Use Flume settings")
+            callback("Install")
             equal(result.status, "refused", "adoption cannot overwrite a personal regular file")
             equal(result.reload_command, nil, "failed installation has no reload command")
             equal(vim.fn.readfile(app.dest)[1], "# personal file", "personal fragment preserved")

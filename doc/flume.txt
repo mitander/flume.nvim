@@ -307,20 +307,19 @@ Optional Fish 3.5+ tool setup:
 >
     :FlumeInstallExtras fish_tools
 <
-Choose Use Flume settings or Keep existing settings to link
-conf.d/flume-tools.fish. Do not install or cancel makes no changes. Both modes
-configure fzf's active options file, Lazygit's layered config and the non-sticky
-world-writable-directory LS_COLORS rule when the fragment is sourced.
+Choose Install to link conf.d/flume-tools.fish. Do not install or cancel makes
+no changes. The helper configures fzf's active options file, Lazygit's layered
+config and the non-sticky world-writable-directory LS_COLORS rule.
 
-Use Flume settings prints a source command with --adopt. Run that exact command
-in Fish to replace session FZF_DEFAULT_OPTS_FILE and LG_CONFIG_FILE exports.
-Keep existing settings prints a command without --adopt, preserving exports
-for already configured tools. Linking alone has not taken over an existing
-shell. Neovim cannot change its parent shell's environment. No variable clearing
-or shell restart is needed.
+After installation, two quoted source commands are printed. The first preserves
+exports for already configured tools. The second adds --adopt to replace this
+session's FZF_DEFAULT_OPTS_FILE and LG_CONFIG_FILE exports instead. Run the
+command you want in Fish. Both update the LS_COLORS directory rule. Linking
+alone does not change an existing shell. Neovim cannot change its parent shell's
+environment. No variable clearing or shell restart is needed.
 
-Normal startup respects explicit tool exports in either mode. --adopt is a
-one-time source argument, not a saved preference. It does not modify persistent
+Normal startup respects explicit tool exports. --adopt is a one-time source
+argument, not a saved preference. It does not modify persistent
 universal variables. Later config.fish settings can override the defaults.
 Reinstalling refreshes a stale tool fragment while retaining the shared palette.
 Lazygit owns config-directory discovery. Repeated sourcing does not grow
@@ -351,8 +350,10 @@ RELOAD BEHAVIOR ~
 
 :FlumeSync requests Ghostty reloads through AppleScript on macOS, or SIGUSR2
 on Linux when pkill is available. It sources ~/.tmux.conf when inside Tmux and
-notifies a linked ~/.pi/agent/themes/flume.json theme. Apps must already select
-or include Flume. A reload request is not proof that the application applied it.
+notifies a linked ~/.pi/agent/themes/flume.json theme. Sync prints one success
+line, with manual reload hints only for installed adapter links that could not
+be refreshed. Apps must already select or include Flume. A reload request is
+not proof that the application applied it.
 Other apps need their own reload action or a new invocation; publishing an
 active set does not make them reload.
 

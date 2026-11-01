@@ -89,9 +89,12 @@ The environment compiles grammars pinned by nvim-treesitter revision
 `4916d6592ede8c07973490d9322f187e07dfefac`, with its matching queries and inherited queries. These
 are capture dependencies, not requirements for using Flume. Each capture records parser
 revision/checksum, query fingerprints, fixture and theme inputs, image checksum, and renderer
-identity. Neovim itself reports readiness before Ghostty captures the painted terminal state. The
-capture fixture reveals the real statusline location field only after readiness; no preview label is
-added to the image.
+identity. Rendering inputs include `init.lua`, the canonical palette and language mappings.
+Command registration, reload and sync orchestration live separately in `commands.lua`, so changes
+to that plumbing do not invalidate editor capture provenance. Changes to palette application or
+highlight mapping still require new captures. Neovim itself reports readiness before Ghostty captures
+the painted terminal state. The capture fixture reveals the real statusline location field only after
+readiness. No preview label is added to the image.
 
 | Palette | Appearance | Gallery |
 | - | - | - |

@@ -125,20 +125,25 @@ function M.install(name, complete)
             if successful then
                 result.next_step = app.next_step
                 if name == "fish_tools" then
-                    if result.settings == "adopt" then
-                        result.next_step =
-                            "Linked, not yet applied to your shell. Run this in Fish to use Flume's fzf/Lazygit settings now. Only session exports are replaced."
-                    else
-                        result.next_step =
-                            "Linked with existing fzf/Lazygit choices preserved. Already configured tools have not been taken over. Source this in Fish to configure unset tools and the LS_COLORS directory rule."
-                    end
+                    result.next_step =
+                        "New shells preserve existing fzf/Lazygit settings and update the LS_COLORS directory rule. config.fish can override them."
                 end
                 if result.next_step then
                     result.message = result.message .. "\n" .. result.next_step
                 end
                 if app.consent then
-                    result.reload_command = fish_source_command(result.source, result.settings == "adopt")
-                    result.message = result.message .. "\n" .. result.reload_command
+                    result.reload_command = fish_source_command(result.source)
+                    if name == "fish_tools" then
+                        result.adopt_command = fish_source_command(result.source, true)
+                        result.message = result.message
+                            .. "\nExisting Fish shell (preserve configured tools):\n"
+                            .. result.reload_command
+                            .. "\nTo replace this session's fzf/Lazygit settings instead:\n"
+                            .. result.adopt_command
+                            .. "\nNeither command changes persistent variables."
+                    else
+                        result.message = result.message .. "\n" .. result.reload_command
+                    end
                 end
             end
             local failed = result.status == "failed" or result.status == "refused"
@@ -158,15 +163,12 @@ function M.install(name, complete)
     end
 
     if name == "fish_tools" then
-        vim.ui.select({ "Use Flume settings", "Keep existing settings", "Do not install" }, {
-            prompt = app.consent
-                .. " via "
-                .. app.dest
-                .. "? Choose the current-shell source command. Both modes set the LS_COLORS directory rule. Existing symlinks may be replaced.",
+        vim.ui.select({ "Install", "Do not install" }, {
+            prompt = app.consent .. " via " .. app.dest .. "? Existing symlinks may be replaced.",
         }, function(choice)
-            if choice == "Use Flume settings" or choice == "Keep existing settings" then
+            if choice == "Install" then
                 local result = install_link(name, app)
-                result.settings = choice == "Use Flume settings" and "adopt" or "preserve"
+                result.settings = "preserve"
                 finish(result)
             elseif choice == "Do not install" then
                 finish({
@@ -308,9 +310,9 @@ function M.get_instruction_lines()
     )
     table.insert(
         lines,
-        "Choose Use Flume settings for a one-command session takeover, or Keep existing settings to preserve tool exports."
+        "Confirm installation, then choose a printed source command to preserve or replace current-session tool exports."
     )
-    table.insert(lines, "The installer prints the exact source command. Neovim cannot apply it to its parent shell.")
+    table.insert(lines, "The installer prints both commands. Neovim cannot apply them to its parent shell.")
     table.insert(
         lines,
         "Normal startup preserves explicit FZF_DEFAULT_OPTS_FILE and LG_CONFIG_FILE choices. No config.fish edits."
