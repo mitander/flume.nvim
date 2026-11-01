@@ -375,6 +375,12 @@ class SnapshotCommands(unittest.TestCase):
         destination = self.directory / 'source'
         commands.stage_source(destination, ['fzf'])
         self.assertFalse((destination / 'tests/snapshots/baselines').exists())
+        self.assertEqual(
+            (destination / 'extras/palette/flume-dusk.json').read_bytes(),
+            (ROOT / 'extras/palette/flume-dusk.json').read_bytes())
+        self.assertEqual(
+            (destination / 'tests/snapshots/check_delta.py').read_bytes(),
+            (ROOT / 'tests/snapshots/check_delta.py').read_bytes())
         staged = destination / 'extras/fzf/flume-dusk.opts'
         original = staged.read_bytes()
         self.assertEqual(original, (ROOT / 'extras/fzf/flume-dusk.opts').read_bytes())
@@ -397,6 +403,18 @@ class SnapshotCommands(unittest.TestCase):
         self.assertIn(['docker', 'rm', '-f', 'owned-container'], [call.args[0] for call in run.call_args_list])
         self.assertFalse(cidfile.exists())
         self.assertNotEqual(cidfile.parent, output)
+
+    def test_opencode_readiness_requires_a_real_edit_diff(self):
+        session = json.loads((DIRECTORY / 'fixtures/opencode-session.json').read_text())
+        parts = session['messages'][1]['parts']
+        edits = [part for part in parts if part['type'] == 'tool' and part['tool'] == 'edit']
+        self.assertEqual(len(edits), 1)
+        state = edits[0]['state']
+        self.assertEqual(state['status'], 'completed')
+        self.assertTrue(state['input']['filePath'].endswith('.txt'))
+        self.assertIn('-schema=dusk\n+schema=opal\n appearance=light', state['metadata']['diff'])
+        self.assertNotIn('appearance=light', ''.join(part.get('text', '') for part in parts))
+        self.assertIn('Wait+Screen /appearance=light/', (DIRECTORY / 'opencode.tape').read_text())
 
     def test_neovim_cursor_preserves_mode_shapes_and_disables_blinking(self):
         fixture = (ROOT / 'tests/snapshots/fixtures/neovim.lua').read_text()

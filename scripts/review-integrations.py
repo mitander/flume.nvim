@@ -7,6 +7,7 @@ import argparse
 import html
 import json
 import re
+import shlex
 import subprocess
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -115,6 +116,19 @@ def alias_colors(data: dict, definitions: str, mapping: str) -> dict[str, str]:
     return {key: resolve(value) for key, value in data[mapping].items()}
 
 
+def delta_diff_pairs(
+    backgrounds: dict[str, str], ansi: dict[int, str], default_foreground: str
+) -> list[Pair]:
+    pairs = []
+    for style, background in backgrounds.items():
+        pairs.append(
+            Pair(f"Default text on {style} (Ghostty host)", default_foreground, background)
+        )
+        for index, color in ansi.items():
+            pairs.append(Pair(f"ANSI {index} on {style} (Ghostty host)", color, background))
+    return pairs
+
+
 def integration_pairs(
     root: Path, app: str, schema: str, ref: str | None = None
 ) -> list[Pair]:
@@ -175,7 +189,16 @@ def integration_pairs(
         add("Text on element", values["text"], values["backgroundElement"])
         add("Muted text on panel", values["textMuted"], values["backgroundPanel"])
         for side in ("Added", "Removed"):
-            add(f"Diff {side.lower()}", values[f"diff{side}"], values[f"diff{side}Bg"])
+            add(f"Diff {side.lower()} label", values[f"diff{side}"], values["background"])
+            add(
+                f"Diff {side.lower()} sign",
+                values[f"diffHighlight{side}"],
+                values[f"diff{side}Bg"],
+            )
+            add(f"Diff {side.lower()} text", values["text"], values[f"diff{side}Bg"])
+            for role, color in values.items():
+                if role.startswith("syntax"):
+                    add(f"{role} on diff {side.lower()}", color, values[f"diff{side}Bg"])
             add(
                 f"Diff {side.lower()} number",
                 values["diffLineNumber"],
@@ -225,6 +248,17 @@ def integration_pairs(
         )
         add("Active border", values["activeBorderColor"], terminal_bg, 3)
         add("Searching border", values["searchingActiveBorderColor"], terminal_bg, 3)
+        command = re.search(r"^\s+pager: '(.*)'$", text, re.MULTILINE).group(1)
+        options = dict(
+            option[2:].split("=", 1)
+            for option in shlex.split(command)
+            if option.startswith("--") and "=" in option
+        )
+        backgrounds = {
+            style: shlex.split(options[style])[-1]
+            for style in ("minus-style", "minus-emph-style", "plus-style", "plus-emph-style")
+        }
+        pairs.extend(delta_diff_pairs(backgrounds, ansi, terminal["foreground"]))
     elif app == "tmux":
         values = dict(re.findall(r'%hidden (\w+)="(#[\da-fA-F]{6})"', text))
         for role in ("thm_fg", "thm_lgray", "thm_accent", "thm_red", "thm_green"):
@@ -257,14 +291,11 @@ def integration_pairs(
             "line-numbers-plus-style",
         ):
             add(role + " on terminal", values[role], terminal_bg)
-        for style in (
-            "minus-style",
-            "minus-emph-style",
-            "plus-style",
-            "plus-emph-style",
-        ):
-            for index, color in ansi.items():
-                add(f"ANSI {index} on {style} (Ghostty host)", color, values[style])
+        backgrounds = {
+            style: values[style]
+            for style in ("minus-style", "minus-emph-style", "plus-style", "plus-emph-style")
+        }
+        pairs.extend(delta_diff_pairs(backgrounds, ansi, terminal["foreground"]))
     else:
         raise ValueError(f"Unsupported integration: {app}")
     return pairs

@@ -64,6 +64,9 @@ def capture(case):
 
     scene, schema = case.rsplit('-', 1)
     spec = SCENES[scene]
+    if spec['app'] in ('delta', 'lazygit'):
+        from check_delta import check
+        check(ROOT, spec['app'], schema)
     fonts = font_evidence()
     geometry = scene_geometry(spec)
     runtime = OUTPUT / f'{case}-runtime.json'
@@ -88,6 +91,8 @@ def capture(case):
     terminal.unlink()
     inputs = [ROOT / 'tests/snapshots/capture.py', ROOT / 'tests/snapshots/ghostty.py', ROOT / 'tests/snapshots/render.py', ROOT / 'tests/snapshots/common.py', ROOT / f'tests/snapshots/{spec["app"]}.tape', ROOT / f'extras/ghostty/flume-{schema}']
     inputs += sorted((ROOT / 'tests/snapshots/fixtures').glob('*'))
+    if spec['app'] in ('delta', 'lazygit'):
+        inputs += [ROOT / 'tests/snapshots/check_delta.py', ROOT / f'extras/palette/flume-{schema}.json']
     if spec['app'] == 'neovim':
         inputs += [ROOT / 'scripts/preflight-screenshots.py']
         inputs += sorted((ROOT / 'lua').rglob('*.lua')) + sorted((ROOT / 'examples').glob('*.*'))

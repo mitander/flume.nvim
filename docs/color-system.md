@@ -72,6 +72,13 @@ with ANSI colors, but users can override them independently. `diff_text_bg` mark
 while retaining syntax foregrounds. It is distinct from `diff_change_bg` and does not consume an
 ANSI ink.
 
+Delta and Lazygit's Delta pager retain ANSI syntax inks on `diff_add_bg`, `diff_delete_bg`,
+`diff_add_emphasis`, and `diff_delete_emphasis`. These fills target 4.5:1 with ordinary terminal text
+and ANSI slots 1–7 and 9–15. Slots 0 and 8 remain specialized black/decorative inks, not the syntax
+foreground contract. Changed words are also underlined because light palettes leave little luminance
+room for a stronger fill. OpenCode's add/delete labels appear on the canvas. Its brighter diff signs,
+body text and retained syntax inks are checked on the actual diff fills.
+
 Search uses `match` text on `warn_bg`, with an underline. Current matches use bold, underlined
 `text` on `diff_text_bg`. Visual selection replaces both the foreground and background while
 retaining the search underline.

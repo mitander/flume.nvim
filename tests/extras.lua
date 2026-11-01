@@ -504,9 +504,9 @@ function M.register(test, equal, truthy)
             )
             for _, mapping in ipairs({
                 '--minus-style="syntax ' .. colors.diff_delete_bg .. '"',
-                '--minus-emph-style="syntax ' .. colors.diff_delete_emphasis .. '"',
+                '--minus-emph-style="syntax ul ' .. colors.diff_delete_emphasis .. '"',
                 '--plus-style="syntax ' .. colors.diff_add_bg .. '"',
-                '--plus-emph-style="syntax ' .. colors.diff_add_emphasis .. '"',
+                '--plus-emph-style="syntax ul ' .. colors.diff_add_emphasis .. '"',
             }) do
                 truthy(lazygit_content:find(mapping, 1, true), schema .. " Lazygit pager missing " .. mapping)
             end
@@ -524,9 +524,9 @@ function M.register(test, equal, truthy)
             local delta_content = read_all(delta_path)
             for _, mapping in ipairs({
                 'minus-style = syntax "' .. colors.diff_delete_bg .. '"',
-                'minus-emph-style = syntax "' .. colors.diff_delete_emphasis .. '"',
+                'minus-emph-style = syntax ul "' .. colors.diff_delete_emphasis .. '"',
                 'plus-style = syntax "' .. colors.diff_add_bg .. '"',
-                'plus-emph-style = syntax "' .. colors.diff_add_emphasis .. '"',
+                'plus-emph-style = syntax ul "' .. colors.diff_add_emphasis .. '"',
                 'line-numbers-minus-style = "' .. colors.diff_delete .. '"',
                 'line-numbers-plus-style = "' .. colors.diff_add .. '"',
             }) do

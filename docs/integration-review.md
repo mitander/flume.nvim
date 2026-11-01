@@ -39,17 +39,25 @@ quantization.
 - Ghostty and Kitty: text, selection, cursor, ANSI slots, and Kitty tabs.
 - fzf: selected rows, matches inside selected rows, headers, prompts, and boundaries.
 - Pi: selected text, messages, tool states, and syntax/comment text on the palette canvas.
-- OpenCode: text on panels/elements, diffs, line numbers, syntax comments, and focused boundaries.
-- Lazygit: selections, cherry-picked commits, state text, and active/search boundaries.
+- OpenCode: text on panels/elements, diff labels on the canvas, signs and syntax inks on diff fills,
+  line numbers, syntax comments, and focused boundaries.
+- Lazygit: selections, cherry-picked commits, state text, active/search boundaries, and its actual
+  embedded Delta pager's retained-ink diff pairs.
 - LSD: actual xterm-256 metadata colors, including customized ANSI slots 0–15.
-- Delta: syntax ANSI slots on added/deleted and emphasized diff backgrounds.
+- Delta: default terminal text and syntax ANSI slots on added/deleted and emphasized diff backgrounds.
 - Tmux: illustrative variable pairs. The user's statusline owns the actual foreground/background
   combinations.
 
 Ordinary text targets 4.5:1. State-bearing boundaries target 3:1. Ratios use sRGB relative luminance
 and are compared before rounding. Decorative separators can be quieter; assess their purpose rather
 than treating every red marker as a release veto. Review ANSI black and other intentionally
-specialized slots in their real use cases.
+specialized slots in their real use cases. Regression tests require ordinary Delta text and ANSI
+slots 1–7 and 9–15 to meet 4.5:1 on all four diff fills, for both standalone Delta and Lazygit's pager.
+OpenCode's diff labels, signs, body text and retained syntax inks have the same text target.
+In the pinned [OpenCode renderer](https://github.com/anomalyco/opencode/blob/v1.18.35/packages/tui/src/routes/session/index.tsx),
+`diffAdded` and `diffRemoved` color labels on the canvas. `diffHighlightAdded` and
+`diffHighlightRemoved` are sign foregrounds on the diff fills, not emphasis backgrounds. Measuring
+label inks on diff fills would report pairs the renderer does not use.
 
 ## Limits and native review
 

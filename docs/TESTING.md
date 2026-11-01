@@ -95,6 +95,20 @@ rendering. Selection, tabs and live reload remain separate native observations.
 contrast targets. HTML color previews are not native screenshots or automatic aesthetic approval.
 Review selected/matched text, inactive controls, diffs and light palettes in context.
 
+Delta and Lazygit snapshot captures also run `tests/snapshots/check_delta.py` against native Delta
+output before taking the image. The checker resolves emitted SGR foregrounds, backgrounds and
+underlines independently of exporter style parsing. It checks normal and emphasized additions and
+deletions, including colored strings and default-foreground identifiers. Run it separately with an
+installed Delta:
+
+```sh
+python3 tests/snapshots/check_delta.py
+```
+
+`--app delta --schema dusk` selects one adapter/palette pair. The checker isolates Git configuration
+and does not open a live application. Its fixture probes supplement the export-wide contrast tests,
+not every possible syntax theme or terminal configuration.
+
 The generated [palette manifest](palette-manifest.md) owns exact canonical roles and tested contrast
 pairs. Preserve it as generated output rather than reformatting or hand-editing it.
 

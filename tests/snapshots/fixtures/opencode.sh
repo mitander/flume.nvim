@@ -7,7 +7,7 @@ printf '{"theme":"flume","cursor":{"style":"block","blinking":false}}\n' > "$XDG
 mkdir -p "$XDG_STATE_HOME/opencode"
 printf '{"animations_enabled":false}\n' > "$XDG_STATE_HOME/opencode/kv.json"
 cd /tmp/fixture
-# Keep this app fixture's code plain: syntax parsers have separate editor coverage.
+# Plain Markdown code and a real text-file edit keep this fixture parser-independent.
 sed "s/\`opal\`/\`$FLUME_SCHEMA\`/g" /repo/tests/snapshots/fixtures/opencode-session.json > /tmp/opencode-session.json
 opencode --pure import /tmp/opencode-session.json > /tmp/opencode-import.log 2>&1
 exec opencode --pure --session ses_flumequalifiedfixture /tmp/fixture

@@ -18,7 +18,7 @@
   "image_sha256": "f834576f24dae506cc96238acf9cfc4a2cd3b1a3335d068b5515a9751fbd6fea",
   "theme_inputs": {
     "lua/flume/init.lua": "b7c5fa1bc08c9a3217da67a0edab00cb17c904c692c8c70941aab038bdeef93d",
-    "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
+    "lua/flume/palette.lua": "78c7ebfe1918eba46ac6ee38252b36b9898efed2c156c5a07fcfe72330885967",
     "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
     "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
     "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",
@@ -29,7 +29,7 @@
   },
   "capture_renderer": {
     "name": "Ghostty",
-    "script_sha256": "d775a84df727b72ad47604805a20c55782e3b5af477619d8712053c231fe735a",
+    "script_sha256": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
     "backend_sha256": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
     "compositor_sha256": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1",
     "environment_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c"

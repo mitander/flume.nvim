@@ -28,8 +28,8 @@
     "syntax_boolean":        "#8b4940",
     "syntax_type":           "#7d521e",
     "syntax_punctuation":    "#5f5965",
-    "diff_add_bg":           "#dce5e0",
-    "diff_delete_bg":        "#ead9e2"
+    "diff_add_bg":           "#e9eee9",
+    "diff_delete_bg":        "#f7ebf1"
   },
   "theme": {
     "primary":                    "accent",

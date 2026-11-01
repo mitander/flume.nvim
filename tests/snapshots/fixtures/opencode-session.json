@@ -72,7 +72,33 @@
           "sessionID": "ses_flumequalifiedfixture",
           "messageID": "msg_flume0002",
           "type": "text",
-          "text": "Palette review\n\nThe **shared export** selects `opal`.\n\n- Text hierarchy uses semantic roles.\n- Missing optional config is reported.\n\n```\nfunction select_palette(name: string): string {\n  return name.toUpperCase()\n}\n```\n\nFlume workflows: github.com/mitander/flume.nvim\n\n```diff\n- return name\n+ return name.upper()\n```"
+          "text": "Palette review\n\nThe **shared export** selects `opal`.\n\n- Text hierarchy uses semantic roles.\n- Missing optional config is reported.\n\n```\nfunction select_palette(name: string): string {\n  return name.toUpperCase()\n}\n```\n\nFlume workflows: github.com/mitander/flume.nvim"
+        },
+        {
+          "id": "prt_flume0003",
+          "sessionID": "ses_flumequalifiedfixture",
+          "messageID": "msg_flume0002",
+          "type": "tool",
+          "callID": "call_flume0001",
+          "tool": "edit",
+          "state": {
+            "status": "completed",
+            "input": {
+              "filePath": "/tmp/fixture/palette.txt",
+              "oldString": "schema=dusk",
+              "newString": "schema=opal"
+            },
+            "output": "Edit applied.",
+            "title": "palette.txt",
+            "metadata": {
+              "diff": "--- a/palette.txt\n+++ b/palette.txt\n@@ -1,2 +1,2 @@\n-schema=dusk\n+schema=opal\n appearance=light\n",
+              "diagnostics": {}
+            },
+            "time": {
+              "start": 1785153600000,
+              "end": 1785153600001
+            }
+          }
         }
       ]
     }

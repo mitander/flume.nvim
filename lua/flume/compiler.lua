@@ -584,7 +584,7 @@ gui:
 git:
   pagers:
     - colorArg: always
-      pager: 'delta --%s --features="" --paging=never --syntax-theme=ansi --minus-style="syntax %s" --minus-emph-style="syntax %s" --plus-style="syntax %s" --plus-emph-style="syntax %s" --line-numbers --line-numbers-minus-style=%s --line-numbers-plus-style=%s --line-numbers-left-style=%s --line-numbers-right-style=%s'
+      pager: 'delta --%s --features="" --paging=never --syntax-theme=ansi --minus-style="syntax %s" --minus-emph-style="syntax ul %s" --plus-style="syntax %s" --plus-emph-style="syntax ul %s" --line-numbers --line-numbers-minus-style=%s --line-numbers-plus-style=%s --line-numbers-left-style=%s --line-numbers-right-style=%s'
 ]]
     local content = string.format(
         template,
@@ -696,9 +696,9 @@ function renderers.delta(schema)
 
 [delta "flume"]
     minus-style = syntax "%s"
-    minus-emph-style = syntax "%s"
+    minus-emph-style = syntax ul "%s"
     plus-style = syntax "%s"
-    plus-emph-style = syntax "%s"
+    plus-emph-style = syntax ul "%s"
     line-numbers = true
     line-numbers-minus-style = "%s"
     line-numbers-plus-style = "%s"

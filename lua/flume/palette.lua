@@ -95,11 +95,11 @@ M.dusk = {
 
     -- Git Diff / Diagnostics
     diff_add_bg = "#293028",
-    diff_add_emphasis = "#71885f",
+    diff_add_emphasis = "#2d3429",
     diff_change_bg = "#292e3d",
     diff_text_bg = "#302c43",
     diff_delete_bg = "#392831",
-    diff_delete_emphasis = "#b65360",
+    diff_delete_emphasis = "#3c2a33",
     hint = "#8fc9d2",
     hint_bg = "#273343",
     warn_bg = "#3b3429",
@@ -203,11 +203,11 @@ M.opal = {
 
     -- Git Diff / Diagnostics
     diff_add_bg = "#eaf0e6",
-    diff_add_emphasis = "#cadbc3",
+    diff_add_emphasis = "#e8eee4",
     diff_change_bg = "#f6eedc",
     diff_text_bg = "#ebeef8",
     diff_delete_bg = "#fbeaed",
-    diff_delete_emphasis = "#dfc4ca",
+    diff_delete_emphasis = "#fae8ed",
     hint = "#00667e",
     hint_bg = "#dce7e9",
     warn_bg = "#f3e3a6",
@@ -313,11 +313,11 @@ M.mira = complete_palette({
 
     -- Git Diff / Diagnostics
     diff_add_bg = "#29342c",
-    diff_add_emphasis = "#455f4a",
+    diff_add_emphasis = "#324132",
     diff_change_bg = "#2b303d",
     diff_text_bg = "#343041",
     diff_delete_bg = "#3b292d",
-    diff_delete_emphasis = "#70434b",
+    diff_delete_emphasis = "#53343d",
     hint = "#9dcdd3",
     hint_bg = "#293640",
     warn_bg = "#3c3428",
@@ -407,12 +407,12 @@ M.mesa = complete_palette({
     predictive = "#817988",
 
     -- Git Diff / Diagnostics
-    diff_add_bg = "#dce5e0",
-    diff_add_emphasis = "#c4d5ce",
+    diff_add_bg = "#e9eee9",
+    diff_add_emphasis = "#e4e9e5",
     diff_change_bg = "#e6dfe4",
     diff_text_bg = "#dadce7",
-    diff_delete_bg = "#ead9e2",
-    diff_delete_emphasis = "#d9c0cc",
+    diff_delete_bg = "#f7ebf1",
+    diff_delete_emphasis = "#f1e5eb",
     hint_bg = "#d9e4e7",
     warn_bg = "#e9ded1",
 })

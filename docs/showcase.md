@@ -22,9 +22,10 @@ Ghostty package comes from the community-maintained `mkasberg/ghostty-ubuntu` re
 official Ghostty binary. The complete portfolio can take several minutes to capture. Two isolated
 capture containers run at a time. Pi and OpenCode restore synthetic sessions: they do not call
 models or use credentials, extensions, plugins, or personal configuration. OpenCode's code fence is
-plain code: this fixture covers basic Markdown layout, emphasis, inline code, and core UI colors,
-not its asynchronous syntax parser, heading/link styles, or colored-diff roles. Real language-parser
-coverage belongs to the Neovim scenes.
+plain code. The fixture covers basic Markdown layout, emphasis, inline code, core UI colors and a
+completed text-file edit through the real diff component. Its add/delete fills, signs and line numbers
+are native output, not a recolored Markdown fence. It does not qualify OpenCode's asynchronous syntax
+parser or heading/link styles. Real language-parser coverage belongs to the Neovim scenes.
 
 ## Reproducible integration snapshots
 
@@ -214,7 +215,7 @@ synthetic, but their UI is real.
 | - | - |
 | Tmux | Exported status variables and active window |
 | LSD | File types, permissions, sizes, dates, symlinks, and Git state |
-| OpenCode | Core UI colors, Markdown emphasis, inline code, and plain code/diff text from an offline session |
+| OpenCode | Core UI colors, Markdown emphasis, inline code, plain code and a real text-file edit diff from an offline session |
 | Lazygit | Repository files and add/change/delete diff state |
 | fzf | Search, current item, and multi-selection |
 | Delta | Added/changed/deleted diff lines and line numbers |

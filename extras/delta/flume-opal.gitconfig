@@ -6,9 +6,9 @@
 
 [delta "flume"]
     minus-style = syntax "#fbeaed"
-    minus-emph-style = syntax "#dfc4ca"
+    minus-emph-style = syntax ul "#fae8ed"
     plus-style = syntax "#eaf0e6"
-    plus-emph-style = syntax "#cadbc3"
+    plus-emph-style = syntax ul "#e8eee4"
     line-numbers = true
     line-numbers-minus-style = "#9d395e"
     line-numbers-plus-style = "#246b23"

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Keep Delta and Lazygit diff syntax readable with quieter emphasis fills and underlined changed
+  words. Lighten Mesa's add/delete surfaces without changing its canvas or ANSI inks. Measure
+  OpenCode labels and signs on their actual surfaces and capture a real edit diff. Qualify native
+  Delta output alongside snapshots.
+
 - Add `:FlumeTweak [schema]` for isolated role-color exploration, shade/ink candidates, custom RGB
   input and copyable per-palette overrides. Include realistic code samples with actual parser or
   explicit plain-text fallback status, example diagnostics and labelled UI swatches. Keep editor configuration,

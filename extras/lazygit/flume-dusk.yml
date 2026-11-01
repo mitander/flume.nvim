@@ -21,4 +21,4 @@ gui:
 git:
   pagers:
     - colorArg: always
-      pager: 'delta --dark --features="" --paging=never --syntax-theme=ansi --minus-style="syntax #392831" --minus-emph-style="syntax #b65360" --plus-style="syntax #293028" --plus-emph-style="syntax #71885f" --line-numbers --line-numbers-minus-style=#f08692 --line-numbers-plus-style=#a4b78a --line-numbers-left-style=#464c5e --line-numbers-right-style=#464c5e'
+      pager: 'delta --dark --features="" --paging=never --syntax-theme=ansi --minus-style="syntax #392831" --minus-emph-style="syntax ul #3c2a33" --plus-style="syntax #293028" --plus-emph-style="syntax ul #2d3429" --line-numbers --line-numbers-minus-style=#f08692 --line-numbers-plus-style=#a4b78a --line-numbers-left-style=#464c5e --line-numbers-right-style=#464c5e'

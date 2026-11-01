@@ -5,10 +5,10 @@
     syntax-theme = ansi
 
 [delta "flume"]
-    minus-style = syntax "#ead9e2"
-    minus-emph-style = syntax "#d9c0cc"
-    plus-style = syntax "#dce5e0"
-    plus-emph-style = syntax "#c4d5ce"
+    minus-style = syntax "#f7ebf1"
+    minus-emph-style = syntax ul "#f1e5eb"
+    plus-style = syntax "#e9eee9"
+    plus-emph-style = syntax ul "#e4e9e5"
     line-numbers = true
     line-numbers-minus-style = "#89455f"
     line-numbers-plus-style = "#43615a"

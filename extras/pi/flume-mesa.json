@@ -27,9 +27,9 @@
     "property": "#89455f",
     "punctuation": "#5f5965",
     "punctuationMuted": "#5f5964",
-    "diffAddBg": "#dce5e0",
+    "diffAddBg": "#e9eee9",
     "diffChangeBg": "#e6dfe4",
-    "diffDeleteBg": "#ead9e2",
+    "diffDeleteBg": "#f7ebf1",
     "warnBg": "#e9ded1"
   },
   "colors": {
