@@ -101,6 +101,13 @@
     "revision": "75b3874edb2dc714fb1fd77a32013d0f8699989f",
     "location": "tsx"
   },
+  "parser-typescript": {
+    "url": "https://codeload.github.com/tree-sitter/tree-sitter-typescript/tar.gz/75b3874edb2dc714fb1fd77a32013d0f8699989f",
+    "sha256": "96ce4d1b513767d414bcca408efd9b49879162cceecdbed79a88e8ad2184f385",
+    "strip": 1,
+    "revision": "75b3874edb2dc714fb1fd77a32013d0f8699989f",
+    "location": "typescript"
+  },
   "parser-python": {
     "url": "https://codeload.github.com/tree-sitter/tree-sitter-python/tar.gz/v0.25.0",
     "sha256": "4609a3665a620e117acf795ff01b9e965880f81745f287a16336f4ca86cf270c",

@@ -7,7 +7,7 @@
         4868
       ],
       "environment": {
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
@@ -26,7 +26,7 @@
         2180
       ],
       "environment": {
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
@@ -45,7 +45,7 @@
         4868
       ],
       "environment": {
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
@@ -64,7 +64,7 @@
         2180
       ],
       "environment": {
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
@@ -83,7 +83,7 @@
         4868
       ],
       "environment": {
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
@@ -102,7 +102,7 @@
         4868
       ],
       "environment": {
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
@@ -121,7 +121,7 @@
         2180
       ],
       "environment": {
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
@@ -175,7 +175,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -208,7 +208,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
@@ -256,7 +256,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -289,7 +289,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
@@ -337,7 +337,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -370,7 +370,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
@@ -418,7 +418,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -451,7 +451,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
@@ -499,7 +499,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -529,7 +529,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/fzf.tape": "53f72757c8f1860f35c41c786c36b3a857800f789ed03e2ea3e010af6117cde0",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -578,7 +578,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -608,7 +608,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/fzf.tape": "53f72757c8f1860f35c41c786c36b3a857800f789ed03e2ea3e010af6117cde0",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -657,7 +657,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -687,7 +687,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/fzf.tape": "53f72757c8f1860f35c41c786c36b3a857800f789ed03e2ea3e010af6117cde0",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -736,7 +736,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -766,7 +766,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/fzf.tape": "53f72757c8f1860f35c41c786c36b3a857800f789ed03e2ea3e010af6117cde0",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -815,7 +815,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -847,7 +847,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/lazygit.tape": "43b400ccf952b69cece9b34745e16c4ab81cdf218d4e22764276a23db64debea",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -896,7 +896,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -928,7 +928,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/lazygit.tape": "43b400ccf952b69cece9b34745e16c4ab81cdf218d4e22764276a23db64debea",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -977,7 +977,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1009,7 +1009,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/lazygit.tape": "43b400ccf952b69cece9b34745e16c4ab81cdf218d4e22764276a23db64debea",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -1058,7 +1058,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1090,7 +1090,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/lazygit.tape": "43b400ccf952b69cece9b34745e16c4ab81cdf218d4e22764276a23db64debea",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -1139,7 +1139,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1169,7 +1169,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/lsd.tape": "a1143f8f7930e3a167e8b7e076ade36d9dc2307b1f50dc8cdf3f3f4ea081950b",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -1218,7 +1218,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1248,7 +1248,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/lsd.tape": "a1143f8f7930e3a167e8b7e076ade36d9dc2307b1f50dc8cdf3f3f4ea081950b",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -1297,7 +1297,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1327,7 +1327,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/lsd.tape": "a1143f8f7930e3a167e8b7e076ade36d9dc2307b1f50dc8cdf3f3f4ea081950b",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -1376,7 +1376,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1406,7 +1406,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/lsd.tape": "a1143f8f7930e3a167e8b7e076ade36d9dc2307b1f50dc8cdf3f3f4ea081950b",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -1455,7 +1455,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1527,7 +1527,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "b3951174cb6882add383b82f18b828d23680e692c998be20bdaafa00d7ea660b",
-      "sidecar_sha256": "2b6804d379a1eae069fa42b617894891040db6d291480fb84d9bbc0d7fc0d06d"
+      "sidecar_sha256": "2ac1597d626424dba829df1e9a824a4ef5571f76f753e3d7b21f1992a2f298e7"
     },
     "neovim-completion-go-mesa": {
       "destination": "assets/screenshots/completion/mesa/go.png",
@@ -1571,7 +1571,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1643,7 +1643,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "d35d2ed326b7a4ef76953eb06e0a406026e26109beae2841b16bbbbbf9b1c6bc",
-      "sidecar_sha256": "b686d418170f33d0f4804af2b17265174a567a0705a500ac1d4672d33941e3b8"
+      "sidecar_sha256": "2f834b694e8be7cfdc76a8a84c23c2a823c8503a91f7f6959eeabd4499359f46"
     },
     "neovim-completion-go-mira": {
       "destination": "assets/screenshots/completion/mira/go.png",
@@ -1687,7 +1687,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1759,7 +1759,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "6c8c8d536d54a5950ab1dc83e5201605f3322c7b8f31c5a47c156f3f5a56bab5",
-      "sidecar_sha256": "2a98c88c92ad02b8ca26bb4b81ba0d1a004bdd357fef7e8ebdb809ede0522a43"
+      "sidecar_sha256": "701849721e0676654210446ace757b4df6912d042c59d367bc8928a13fc6cdf5"
     },
     "neovim-completion-go-opal": {
       "destination": "assets/screenshots/completion/opal/go.png",
@@ -1803,7 +1803,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1875,7 +1875,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "d78f82511ee191ad7e49ef5b117714a1ce7c655ae58764f21cfa49a7ed316c2d",
-      "sidecar_sha256": "22c2388502d6a8d9a5deab66c5e73bda64a51bf45ba9f3b08a1232bce950692a"
+      "sidecar_sha256": "719fcb02b668be2a5438a8d6db8cd5ebd2f878e9ba9e0438cd3bb2913e1309b0"
     },
     "neovim-elixir-dusk": {
       "destination": "assets/screenshots/dusk/elixir.png",
@@ -1919,7 +1919,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -1991,7 +1991,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8c4ffaa7ed44a79e6b063c8f91d6e4cbfeddec40aba11ea37c1fbea8d6d0e8e9",
-      "sidecar_sha256": "b78bb334d1940ca88bad1b47e613e51b6a9638fa6ddc660495746ef096ca1fe0"
+      "sidecar_sha256": "88ce55dbef58b33e696cfd21fcf0865223ae58a2ff223c111be2d4473ab5d751"
     },
     "neovim-elixir-mesa": {
       "destination": "assets/screenshots/mesa/elixir.png",
@@ -2035,7 +2035,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -2107,7 +2107,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "88888c4d996162bc9e741b11ca594de350b42fda3a3257f14e4d073187673dcf",
-      "sidecar_sha256": "17a706d53fe06413cd72cf90b3d82f73afbd83f6d58c9ed7ff6a484eff73bf8e"
+      "sidecar_sha256": "91ef83a309a5dad7234a1c0eac3d1a1972bb065923050fd5317760a0b82ba3ed"
     },
     "neovim-elixir-mira": {
       "destination": "assets/screenshots/mira/elixir.png",
@@ -2151,7 +2151,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -2223,7 +2223,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "9967a2e7b5ee9f17b816d92a333435a7fb7ed66f07ecfccc82b4dc5348dbd85e",
-      "sidecar_sha256": "087878b9a010bd6a412256b1d761c7f8ebbf1f84ae4e32b0d8e0b2f16d2c5344"
+      "sidecar_sha256": "de32bbf0ca0e2adcfc4c8652455b716bfa9dcf73445d3ae20c86fcf29641d4fb"
     },
     "neovim-elixir-opal": {
       "destination": "assets/screenshots/opal/elixir.png",
@@ -2267,7 +2267,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -2339,7 +2339,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "fc785e89da1ba1197cdfd78c451cbdc454ddaf82fd774d67ea21a30811e9fd4d",
-      "sidecar_sha256": "e587d0b6d53134d574e3b7fd4b18941a3774edb537c222ab0fda495621ade3ac"
+      "sidecar_sha256": "62b7080e78b3ca48260bed9ee5a877cbc8da0f2a1d59c71b7734dce4ede7aa14"
     },
     "neovim-go-dusk": {
       "destination": "assets/screenshots/dusk/go.png",
@@ -2383,7 +2383,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -2455,7 +2455,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "f7e7ed125f0aee424f1def1f092607ab50d2090abc3b07453f4998a135052027",
-      "sidecar_sha256": "c89d24bc40c33de0cf7952a760456aaa50e21ff1f458aa245b8fb5fefb4c4084"
+      "sidecar_sha256": "8a9db0b3c34ea7339f7f6edb2dc018af7ac57da1cdf261f24087039e063d96e5"
     },
     "neovim-go-mesa": {
       "destination": "assets/screenshots/mesa/go.png",
@@ -2499,7 +2499,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -2571,7 +2571,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8481fcfb16e8692a4ce7065faac1664a61b797f6a2d5450894b0e83c7ac42651",
-      "sidecar_sha256": "6f9f4e64bf2ff9374d4b226411261edfadde7ede6911ece158a1dcec5a23aadb"
+      "sidecar_sha256": "0c4fd6424f2147fb7e8d86db9a1dea956223687d8f6aa2d16d11208d5242afe9"
     },
     "neovim-go-mira": {
       "destination": "assets/screenshots/mira/go.png",
@@ -2615,7 +2615,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -2687,7 +2687,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "743c557ed8561de2ef5d281f5bd35e0e6eb61da9bc136d7377e10d7b585603f4",
-      "sidecar_sha256": "66140b95d2fc5941877b0c827d664e2b8299f427021bf9c7809fa875000af9d4"
+      "sidecar_sha256": "0b46f4d49b91d9555bb0be77af37502c09b25a3c51c71a2fe402f6de1eb4af61"
     },
     "neovim-go-opal": {
       "destination": "assets/screenshots/opal/go.png",
@@ -2731,7 +2731,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -2803,7 +2803,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "bbd2bcd7d89dc2855834913736cf880a94ab76c6d8163beddc6e6a8f87b2e417",
-      "sidecar_sha256": "bbfb3fc642675be138d4f1cc32410c059a237a55ad6762cd9de7abe7155ae69c"
+      "sidecar_sha256": "ed6de1863411e1bce76acd112177ad685e5dd668c042ec22c9f572f2513f7819"
     },
     "neovim-lsp-go-dusk": {
       "destination": "assets/screenshots/lsp/dusk/go.png",
@@ -2847,7 +2847,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -2919,7 +2919,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "c7feac8833310b8f08373a5e604155b72299f7c00f23707fdf73a2c6c23c3d71",
-      "sidecar_sha256": "93055ccdc0d5d8b1cd5606777ffacf9fb48c434f3cdb86edc41589095083ed57"
+      "sidecar_sha256": "291567080aac797b4b9e2c01e863291dba668e5402e0ddd291f20960fd79e08a"
     },
     "neovim-lsp-go-mesa": {
       "destination": "assets/screenshots/lsp/mesa/go.png",
@@ -2963,7 +2963,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -3035,7 +3035,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "b806b36b8c8e7fca1fc67c0bc4a238ebf3da459d4c5abbf795963dfa82780be0",
-      "sidecar_sha256": "e0212a450ab6c1d5ee436cb4ad0f0376fca6830b683f1e17432924ec63638de5"
+      "sidecar_sha256": "0fa5971df18017e6053056fc7d95416b7b72651f7eb33683a3d14d938b58f506"
     },
     "neovim-lsp-go-mira": {
       "destination": "assets/screenshots/lsp/mira/go.png",
@@ -3079,7 +3079,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -3151,7 +3151,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "dde3c536a44e97cbb7d1a442b25429b011f382240698e6c15a8794b401f8220e",
-      "sidecar_sha256": "07c390a4c225ac73a02546815a60147c5a87416b20f24ced6045a601f7f8fd8a"
+      "sidecar_sha256": "b4f4f3ce97a405c833fc97f3e938cf6681eb6d86eac278dc2021740c02e200d2"
     },
     "neovim-lsp-go-opal": {
       "destination": "assets/screenshots/lsp/opal/go.png",
@@ -3195,7 +3195,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -3267,7 +3267,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "a713615437fa608abfdcbc3b31b2a3718fe6cffc7bc711a0c99513e92bfa138c",
-      "sidecar_sha256": "67c383157379a80df89a5cd75778cf405d077e3f278b811ff24cfb2ed5e97256"
+      "sidecar_sha256": "c2aefadf47235f5125934427ea80b475420d690f6aa71a38d0f85c22a4677d54"
     },
     "neovim-lsp-zig-dusk": {
       "destination": "assets/screenshots/lsp/dusk/zig.png",
@@ -3311,7 +3311,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -3383,7 +3383,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "184c2824d119d4270aee04cc65f7c1c97c1cb6980b1d28240bffe1132af46790",
-      "sidecar_sha256": "7c2b08cbc8ff6813558a2d68d7475a147b5739e5dd41277b8323dfc893a5ed47"
+      "sidecar_sha256": "9ac576458ba523c1c3a4ea8820fa0f66824da9f94f7f757455ec52470967ef0c"
     },
     "neovim-lsp-zig-mesa": {
       "destination": "assets/screenshots/lsp/mesa/zig.png",
@@ -3427,7 +3427,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -3499,7 +3499,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "4c8c7fd9ea0ed50d48fad3684c37d985b83b947755db9f18cb305da6a3d7842d",
-      "sidecar_sha256": "3d7f73df6dde8a72185b6ff11ad5a124f6d8c3699d289bfd0d2472d56409e29e"
+      "sidecar_sha256": "d7ee6fc4029b6dac9df33ef278e281ce2bd1914b4eea578aa679460a6820121a"
     },
     "neovim-lsp-zig-mira": {
       "destination": "assets/screenshots/lsp/mira/zig.png",
@@ -3543,7 +3543,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -3615,7 +3615,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8634640f87c9c0b81d59336e0fdf44b9ce8a2c133b8d7d9ce488b547938a03c4",
-      "sidecar_sha256": "1aca9bcbf7ce5cf1fe8a61c937ffa366d7712b7cd8638a523e5711237a5ca2c4"
+      "sidecar_sha256": "903cc7973bdad1535e27aec9dfca1804e8f362464bfb551aede71d976aaeb774"
     },
     "neovim-lsp-zig-opal": {
       "destination": "assets/screenshots/lsp/opal/zig.png",
@@ -3659,7 +3659,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -3731,7 +3731,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "6ba4e5cd78d917affd74165c962629c3f333df9dd9d9444ce1a74f2600473eb1",
-      "sidecar_sha256": "35781200194406d26ac31934d272660d96f9caed22f7cbbf0ff181a31bc3efd9"
+      "sidecar_sha256": "c5ac6aac8bbfae1ca722fd5b137b725e0bdc4df2acf5f0549c3fd7a131099220"
     },
     "neovim-lualine-dusk": {
       "destination": "assets/screenshots/lualine/dusk/go.png",
@@ -3775,7 +3775,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -3847,7 +3847,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "22109323c3c10bb615a52fbb61bf77bf07bffacbe27c2cdbe43ae38457aed77f",
-      "sidecar_sha256": "ee45147b55e96fbc514b67a4c0c4ef6489ca208e937bb56b8f9d3e400c072fc0"
+      "sidecar_sha256": "ffa3d316c14d696273fcd00af1d5d5f2c0a5ae64edd7788e46a68f1880ac279d"
     },
     "neovim-lualine-mesa": {
       "destination": "assets/screenshots/lualine/mesa/go.png",
@@ -3891,7 +3891,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -3963,7 +3963,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8d2f0355a4d9a31e77b5eb6832fe18ebf08d3dfb656a6af283a14551a3ad9512",
-      "sidecar_sha256": "7bf3120a103be7ddab9e0af5abbd865e3fc24399ddac9087f3d8fee27b3a7da1"
+      "sidecar_sha256": "4e8e82d07b673e4198b63523d1672e35e9dc1e25711485f5521a648fac426cfc"
     },
     "neovim-lualine-mira": {
       "destination": "assets/screenshots/lualine/mira/go.png",
@@ -4007,7 +4007,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -4079,7 +4079,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "82fd2c00407ad51561a741b8cb2f0cf29bf217501cb7e130fc511501a405ab6d",
-      "sidecar_sha256": "37d66af9cf75ea8ce572295acc8cc7e5963ce913cfc44c6ec1365eee7f8fe69d"
+      "sidecar_sha256": "c31b61765eacb681504a07a25a1edf5f8e1a6ccfd3f6edd26ab253f6b65e027f"
     },
     "neovim-lualine-opal": {
       "destination": "assets/screenshots/lualine/opal/go.png",
@@ -4123,7 +4123,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -4195,7 +4195,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "1a3237aca4235fc10b64f51bd0ab6e0bb5d15bcd19d29e2901f373ef015852fe",
-      "sidecar_sha256": "ea5a4e47498f5c0ca1039c38554379acbcdd19e242262b26ea5f73e2d8f1cd3c"
+      "sidecar_sha256": "f6beee2393f5bd5454e07504a1e2d138accf7e8abd3433d47e0244cfd0eb36f1"
     },
     "neovim-neotree-dusk": {
       "destination": "assets/screenshots/neotree/dusk/go.png",
@@ -4239,7 +4239,7 @@
           "rows": 44,
           "titlebar_height": 43
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -4311,7 +4311,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "1170c05ceecedb83d7f52ed33881eec0065b7784fbac640bee49f7b2c902f1b0",
-      "sidecar_sha256": "2bdff081488bb227d46d169bcbc8d2a5bc07e5f921ffe03df21100ef64813412"
+      "sidecar_sha256": "6c1f96389672b5ec6ca0f51d9611bda0b03aac7d7b0a757447ea976675979f10"
     },
     "neovim-neotree-mesa": {
       "destination": "assets/screenshots/neotree/mesa/go.png",
@@ -4355,7 +4355,7 @@
           "rows": 44,
           "titlebar_height": 43
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -4427,7 +4427,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "709349351fcd2b179d55094e746f32fbbe257e35ad61caebb894954b5bd0635b",
-      "sidecar_sha256": "3be6a49d32ffe25a7f01342e46bef660851670b907c808e9628ab71786fb5a34"
+      "sidecar_sha256": "6e31350adaf1f192dd462eb48cbf520ea11cd15eea2ed6760e13427bfe5f10e6"
     },
     "neovim-neotree-mira": {
       "destination": "assets/screenshots/neotree/mira/go.png",
@@ -4471,7 +4471,7 @@
           "rows": 44,
           "titlebar_height": 43
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -4543,7 +4543,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8c3b705517b6f391a3e6a8e5b7ab0377d0776523c958fd00938f32cef22aba5f",
-      "sidecar_sha256": "47788cdd9baeb8db45fa14d911455803ea70a696e185e3b03e95aa63976d9886"
+      "sidecar_sha256": "886be0ced700bced07d9ca6fafde35fc905ab27b71f71b2a39b484dcdefd3145"
     },
     "neovim-neotree-opal": {
       "destination": "assets/screenshots/neotree/opal/go.png",
@@ -4587,7 +4587,7 @@
           "rows": 44,
           "titlebar_height": 43
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -4659,7 +4659,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "9e0cdb96d45946598db8a5e9308cae5f23761bd54d3d3bd407afb2eca329bc71",
-      "sidecar_sha256": "51212e7eb82b1692e546d64da53ba8277e04980a1bd263e88b6f762f4e7650bb"
+      "sidecar_sha256": "88b59ec78841ce7c2cdb90b9c0a4d1f28c32c4402005467b0cfa8430638a7c61"
     },
     "neovim-python-dusk": {
       "destination": "assets/screenshots/dusk/python.png",
@@ -4703,7 +4703,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -4775,7 +4775,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "74172511e7d374b2b114d49c5c7c04aed8244750724059ca0f6ca6fde037f64c",
-      "sidecar_sha256": "bf7739bf73a0cf2874ad95a54ff63d0efe6b758b13aa7e4568bfd9bfe992f29f"
+      "sidecar_sha256": "fa1deca278db836bd85bdae2c585a32a85d68e240e30b94abfbf081da79f0951"
     },
     "neovim-python-mesa": {
       "destination": "assets/screenshots/mesa/python.png",
@@ -4819,7 +4819,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -4891,7 +4891,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "ef43729f36ee0e8c0f95b0086bdc555fbb7aab9b45e553317d39d0416e2b1f50",
-      "sidecar_sha256": "71695b2a4f041e5e383a1cd7d87681ca82691383a7892565a95b09921b842018"
+      "sidecar_sha256": "e2386ef51b87b293017b415cac4429155da97ec7160fd9e28641c374ebb8b3d0"
     },
     "neovim-python-mira": {
       "destination": "assets/screenshots/mira/python.png",
@@ -4935,7 +4935,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -5007,7 +5007,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "f834576f24dae506cc96238acf9cfc4a2cd3b1a3335d068b5515a9751fbd6fea",
-      "sidecar_sha256": "885c3fb07a9b854b7a7a14b893f07dbd381b52f95a14e3a85ef083f15cc0c301"
+      "sidecar_sha256": "e0b231469e7cbb7fa62b91a2fbd5796051947f1ff7089c4b51b10ca5fc80f27f"
     },
     "neovim-python-opal": {
       "destination": "assets/screenshots/opal/python.png",
@@ -5051,7 +5051,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -5123,7 +5123,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "a3144e80e26020ad50ac628fefd649bc29b2cab2586cec87072907a070c0de55",
-      "sidecar_sha256": "c81077b3a26551a61e27111ed4ea02205efa2943643e369b3fa554fecd4c8918"
+      "sidecar_sha256": "900fcadd7ca022765b560fc706f5c1f0fa65faf355e24e12d877b255f097bf7c"
     },
     "neovim-rust-dusk": {
       "destination": "assets/screenshots/dusk/rust.png",
@@ -5167,7 +5167,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -5239,7 +5239,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "b9061fecfe0d8bf692868ee038ccb509fde7566990def04bd6e794c9b53852ac",
-      "sidecar_sha256": "e55806a4bbd82b1d6983581aa8c8073429bae3ac4c48847164e9b86192002fc5"
+      "sidecar_sha256": "9935377e7534627d22a9bbd08ed81e927ebb994f7338730a3ee226707c036bbb"
     },
     "neovim-rust-mesa": {
       "destination": "assets/screenshots/mesa/rust.png",
@@ -5283,7 +5283,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -5355,7 +5355,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "399b3b7ee8dcbbf60f51f5e3dbc6fbbe2c382b06ea4b25b024207bd947fb3963",
-      "sidecar_sha256": "0f4fcdf8d08835272b88ccb576f32e453023eed185e81c71c4feddf673f77981"
+      "sidecar_sha256": "a943bb5b4992515a5ed02968668829d4ea825f5deaff3e1a705a9859852807d4"
     },
     "neovim-rust-mira": {
       "destination": "assets/screenshots/mira/rust.png",
@@ -5399,7 +5399,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -5471,7 +5471,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "6ccdbac3aa8bd103c5d9d8a16bec349078425b254524fdd564de5d499d59ce87",
-      "sidecar_sha256": "e1d0bf8d833d03f42477c5dbb2539340275b000803dca00830bac9dc7ab89348"
+      "sidecar_sha256": "6dbff01dbbd6608c5919fc6cfe99b92b7994bb4a86ca0fc026bdb21b6d62293c"
     },
     "neovim-rust-opal": {
       "destination": "assets/screenshots/opal/rust.png",
@@ -5515,7 +5515,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -5587,7 +5587,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "ebe3f09cf89df48581cc6596ebea5a4c3a03ba874379974903dcb026c3d3e231",
-      "sidecar_sha256": "c6bdb5f14a7e4025c9bda1d70042ac835c509985d5e651350511d07d90eaad4c"
+      "sidecar_sha256": "58789223c31af414fb45446e24443764cf66e920c69541628d27b7f0824b8747"
     },
     "neovim-selection-go-dusk": {
       "destination": "assets/screenshots/selection/dusk/go.png",
@@ -5631,7 +5631,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -5703,7 +5703,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "c5023cb6f665d710d07f30e2c2f6b2eb03da3227f15dff5109daf754d98e0067",
-      "sidecar_sha256": "102aa83da4473ca4b080f545430b0b4bfd8462854af78631c1e1f7685667664c"
+      "sidecar_sha256": "1c3fbae4f689c1f932e4a7df5496dd8c4dbb62a56b35ce71bb935cbcb53eaed5"
     },
     "neovim-selection-go-mesa": {
       "destination": "assets/screenshots/selection/mesa/go.png",
@@ -5747,7 +5747,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -5819,7 +5819,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "1057600ef95853e0e9c6ad1f9bf0e097d56970a01d307ba4c6019337aca7aaf5",
-      "sidecar_sha256": "cf0208ee8770eb152d3bec742a9289949929ebfc5df5ae7e444148a782ef0bbd"
+      "sidecar_sha256": "b663ce6160d1fcf10eef770490e549e62f5aa43c33cc7b5a150e142e3c850d35"
     },
     "neovim-selection-go-mira": {
       "destination": "assets/screenshots/selection/mira/go.png",
@@ -5863,7 +5863,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -5935,7 +5935,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "73637bd2127a2291baaf828024f968b0f23814fbce776270f6dbe7fade028ce4",
-      "sidecar_sha256": "ccfbb0f515fffa85cee2e50ddcccfab13f324f0d5dfd60a5cd164af90f863c8d"
+      "sidecar_sha256": "6d831e602829f2d02c370015c12767e8662d5950f7000fae70b98ae05c2642b0"
     },
     "neovim-selection-go-opal": {
       "destination": "assets/screenshots/selection/opal/go.png",
@@ -5979,7 +5979,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -6051,7 +6051,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "e3b7b47437ad2de8a2beb8faa37c7f7df35ad8d13b48b3fdc3532ce6e95a2aea",
-      "sidecar_sha256": "84b9c8bb9bb00f497f20a037cbd524fadae1d738c6ea928512fd5bd1ddb7dca1"
+      "sidecar_sha256": "1f3cd0eca8a3f17a9600598f3fdd19a16ed71d5761b58723eb93682478ce37d2"
     },
     "neovim-toml-dusk": {
       "destination": "assets/screenshots/dusk/toml.png",
@@ -6095,7 +6095,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -6167,7 +6167,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "71f961179c198dc9059591c6988ad0c93b1a994e30539d99ad53936acc4b355b",
-      "sidecar_sha256": "2af1abcfd640ddf5fa437c66f65455de69c78de246accc1367c8126292225568"
+      "sidecar_sha256": "159c9fbbab156bad2f21b780f14673ae94cd5b8a7e78efc50b0238d10dffd02b"
     },
     "neovim-toml-mesa": {
       "destination": "assets/screenshots/mesa/toml.png",
@@ -6211,7 +6211,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -6283,7 +6283,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "7f385ef837cb7882d92f8da032b4ee2744cf604ca224b453c339e63cd9c75363",
-      "sidecar_sha256": "c3ce1e0cfa9174e5b790acf50bfc4488762e73d9dd76a371234450eb30784105"
+      "sidecar_sha256": "6b526b81ed97aa6d61bc630ce8d5c44212ec2d91529bfc5c84ea0eb99096e2f7"
     },
     "neovim-toml-mira": {
       "destination": "assets/screenshots/mira/toml.png",
@@ -6327,7 +6327,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -6399,7 +6399,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "ce8b7eff909ea171ec296e2036688c7d1041b9a725a95ccdc2f82f96d448b6cb",
-      "sidecar_sha256": "67573e9bbddc1ad7d75ba3dcd0fcfce755c8ecec719bff8d663279f64d871535"
+      "sidecar_sha256": "7dd4690fa95de2f7b41228ed574c60bc11c72aff1a56317bd2cedc52c190caee"
     },
     "neovim-toml-opal": {
       "destination": "assets/screenshots/opal/toml.png",
@@ -6443,7 +6443,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -6515,7 +6515,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "fbe2e864b9a8286460db4c97f8c479e767899b58b6fa274fcf06786790c6b1c1",
-      "sidecar_sha256": "139bad3678f726caf9f1c845e7a3cfc639295a88287470ab9c8c4e16201451a1"
+      "sidecar_sha256": "07ac7007b32c50ae1a257c9769d9ec6d09e4aaa11697dd73bb980835ddb04c88"
     },
     "neovim-tsx-dusk": {
       "destination": "assets/screenshots/dusk/tsx.png",
@@ -6559,7 +6559,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -6631,7 +6631,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "7986db526bc1aaa4c9c73eeb25707378b7d74d83c493b2db4b90ef0ec71ee143",
-      "sidecar_sha256": "3a75b441d943a11d6b889164602a670dcf573f953d90ed64f61e490751d803ff"
+      "sidecar_sha256": "bf87936e67d3717468cdfa9f3a67e928f83cb7191c203069663108cf4a2b3df1"
     },
     "neovim-tsx-mesa": {
       "destination": "assets/screenshots/mesa/tsx.png",
@@ -6675,7 +6675,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -6747,7 +6747,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "3f12de6f89d3b39cc1b14e00e4392744f2b5f3d4aa8a3d31748e091f22104e96",
-      "sidecar_sha256": "700cfcbfe33c21a3fd1c74aeb5b23e3e897d52fc83c9ed6981bbca5f6e9759bb"
+      "sidecar_sha256": "47cb27687d007bff2eaac36859267089f9d235b0ac0c8334817f117dfe877131"
     },
     "neovim-tsx-mira": {
       "destination": "assets/screenshots/mira/tsx.png",
@@ -6791,7 +6791,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -6863,7 +6863,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "84bb32d43d85064345c23fb6b70e0b972a96926a6ebb2f076df6c6c8bf7ad11d",
-      "sidecar_sha256": "474e237a4dbf2d84ca0d842235dc134abc9ec71b37c552b10e3abdd7e2de9a05"
+      "sidecar_sha256": "c58c828ecbd250be0f3668ed09057bcfafe3e8e2ef722dec0e9ae465681fcbfe"
     },
     "neovim-tsx-opal": {
       "destination": "assets/screenshots/opal/tsx.png",
@@ -6907,7 +6907,7 @@
           "rows": 48,
           "titlebar_height": 33
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -6979,7 +6979,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "4d5f078cc5f8193cae490b86b34544fe51c458cb651ab0fd58ff47f10805715e",
-      "sidecar_sha256": "53d57100125eff8d106112d3c70cfc23be9b707d06cd5d1bd5862612796e3cea"
+      "sidecar_sha256": "7673b63d956ac23e6dbe063616aca69bc32e533d30ddd7ab483ffcd838a5ed65"
     },
     "neovim-zig-dusk": {
       "destination": "assets/screenshots/dusk/zig.png",
@@ -7023,7 +7023,7 @@
           "rows": 32,
           "titlebar_height": 61
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7095,7 +7095,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "f47d7df417d0ee335ea637f8cda2ad12ceec12ff2346bd275f2e63e2fce58bd4",
-      "sidecar_sha256": "d511a976d1650182fa95fde5d37bf884f11e8193d84b47bea04faa37067c8544"
+      "sidecar_sha256": "33d47881dc4a0db081efe0bb4ea3897fa7bb7cc73f126ffb5d9f67c99752adda"
     },
     "neovim-zig-mesa": {
       "destination": "assets/screenshots/mesa/zig.png",
@@ -7139,7 +7139,7 @@
           "rows": 32,
           "titlebar_height": 61
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7211,7 +7211,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "7023b85403f1bc5023ec58df0e9f94b943fc50c859805d9703429989cb9549c9",
-      "sidecar_sha256": "59f90e11c3c4265a1a195d31fd24b58e8b9ca8c27850ee8d03ab87bc1827e623"
+      "sidecar_sha256": "7a285b486748ebfbc9618eb557a4f97eb31f28f6832ded9997884cf40e5c4f69"
     },
     "neovim-zig-mira": {
       "destination": "assets/screenshots/mira/zig.png",
@@ -7255,7 +7255,7 @@
           "rows": 32,
           "titlebar_height": 61
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7327,7 +7327,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "59fe1df1ae578fec22549eea3207c181d55d8eaa6880ce99fc64431a97de14d3",
-      "sidecar_sha256": "a9613cea6c61eed3178a6e33a97c910bc8385b08e4805b6acc0c5331402a123c"
+      "sidecar_sha256": "bffec1eab3c273b818ae9e42af308663a28d90f3ea7a2eb05ad8cf9d58ae9eaa"
     },
     "neovim-zig-opal": {
       "destination": "assets/screenshots/opal/zig.png",
@@ -7371,7 +7371,7 @@
           "rows": 32,
           "titlebar_height": 61
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7443,7 +7443,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "df2300731f937a313507b2ba8ab78d599a976c0655852d7187209c82015917f7",
-      "sidecar_sha256": "cab894028be982c0d906e4f785624958fc8bfb98e4219940574a907d40550dc2"
+      "sidecar_sha256": "6828b168ebf513b11f54d4e0ccad18a80378c2dfc401fc2a43bd67f567148e14"
     },
     "opencode-dusk": {
       "destination": "assets/screenshots/integrations/opencode/dusk.png",
@@ -7487,7 +7487,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7517,7 +7517,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/opencode.tape": "bb5df60643e8dc230405b597fc8bfcdc104fc58f42f26adabab17a79b691299a",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -7566,7 +7566,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7596,7 +7596,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/opencode.tape": "bb5df60643e8dc230405b597fc8bfcdc104fc58f42f26adabab17a79b691299a",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -7645,7 +7645,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7675,7 +7675,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/opencode.tape": "bb5df60643e8dc230405b597fc8bfcdc104fc58f42f26adabab17a79b691299a",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -7724,7 +7724,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7754,7 +7754,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/opencode.tape": "bb5df60643e8dc230405b597fc8bfcdc104fc58f42f26adabab17a79b691299a",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
@@ -7803,7 +7803,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7882,7 +7882,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -7961,7 +7961,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -8040,7 +8040,7 @@
           "rows": 40,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -8084,7 +8084,7 @@
         1720
       ],
       "environment": {
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
@@ -8139,7 +8139,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -8218,7 +8218,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -8297,7 +8297,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {
@@ -8376,7 +8376,7 @@
           "rows": 16,
           "titlebar_height": 54
         },
-        "image_recipe_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c",
+        "image_recipe_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c",
         "mesa_version": "25.0.7-2+deb13u1",
         "platform": "linux/amd64",
         "render_environment": {

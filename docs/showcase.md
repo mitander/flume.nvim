@@ -16,14 +16,16 @@ Compare fresh captures with the committed images:
 ./scripts/snapshots test
 ```
 
-`test` freezes its inputs, captures the selected scenes, generates their derived images, and
-compares exact pixels against the published images. It never changes those images or the baseline
-manifest. Missing evidence, changed environment, changed pixels, or failed capture produces a
-nonzero exit status. There is no pixel tolerance or automatic approval.
+`test` freezes its inputs, runs the existing native editor checkers when editor scenes are selected,
+captures the selected scenes, generates their derived images, and compares exact pixels against the
+published images. It never changes those images or the baseline manifest. Missing evidence, changed
+environment, changed pixels, or failed capture produces a nonzero exit status. There is no pixel
+tolerance or automatic approval.
 
 The command prints a temporary HTML report with expected, actual, and visible difference images.
-Capture failures retain partial captures and logs instead. CI runs the same command in a separate
-job and retains its report.
+Capture failures retain partial captures and logs instead. `native.log` retains the highlight,
+tweak and installed-lualine checker output, including failures before capture. CI runs the same
+command in a separate job and retains its report.
 
 When the source change intentionally requires new captures, update the published images:
 
@@ -92,10 +94,12 @@ notifications, and language servers.
 
 The environment compiles grammars pinned by nvim-treesitter revision
 `4916d6592ede8c07973490d9322f187e07dfefac`, with its matching queries and inherited queries. These
-are capture dependencies, not requirements for using Flume. Each capture records parser
-revision/checksum, query fingerprints, fixture and theme inputs, image checksum, and renderer
-identity. Rendering inputs include `init.lua`, the canonical palette and language mappings. Command
-registration, reload and sync orchestration live separately in `commands.lua`, so changes to that
+are capture dependencies, not requirements for using Flume. The runtime builds both standalone
+TypeScript and TSX from the same locked grammar archive, so native checks cover both file types.
+Each capture records parser revision/checksum, query fingerprints, fixture and theme inputs, image
+checksum, and renderer identity. Rendering inputs include `init.lua`, the canonical palette and
+language mappings. Command registration, reload and sync orchestration live separately in
+`commands.lua`, so changes to that
 plumbing do not invalidate editor capture provenance. Changes to palette application or highlight
 mapping still require new captures. Neovim itself reports readiness before Ghostty captures the
 painted terminal state. The capture fixture reveals the real statusline location field only after

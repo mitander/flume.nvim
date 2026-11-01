@@ -59,9 +59,10 @@ def stage_source(destination_root, apps):
     shutil.copytree(SNAPSHOTS, destination_root / 'tests/snapshots', ignore=shutil.ignore_patterns('baselines', '__pycache__'))
     for app in dict.fromkeys([*(app for app in apps if app != 'neovim'), 'ghostty', 'palette']):
         shutil.copytree(ROOT / f'extras/{app}', destination_root / f'extras/{app}')
-    for directory in ('lua', 'colors', 'examples'):
+    for directory in ('lua', 'colors', 'plugin', 'examples'):
         shutil.copytree(ROOT / directory, destination_root / directory, ignore=shutil.ignore_patterns('__pycache__'))
-    for file in ('scripts/preflight-screenshots.py', 'assets/background.png'):
+    for file in ('scripts/preflight-screenshots.py', 'scripts/check-highlights.lua',
+                 'scripts/check-tweak.lua', 'tests/lualine.lua', 'assets/background.png'):
         target = destination_root / file
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / file, target)
@@ -125,6 +126,10 @@ def execute(mode, apps, schemas, scenes=None):
         cached = subprocess.run(['docker', 'image', 'inspect', image], capture_output=True, timeout=20)
         if cached.returncode:
             subprocess.run(['docker', 'build', '--platform', PLATFORM, '-t', image, str(source / 'tests/snapshots')], check=True, timeout=1200)
+        if any(case.startswith('neovim-') for case in cases):
+            if container(image, source, report, ['/repo/tests/snapshots/native.py'], entrypoint='python3'):
+                print(f'Native editor checks failed; log: {report / "native.log"}', file=sys.stderr)
+                return 1
         captured = {'format_version': 1, 'cases': {}}
         failed = False
         capture_errors = {}

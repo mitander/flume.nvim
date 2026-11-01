@@ -107,6 +107,9 @@ cd /absolute/path/to/flume-native-...
   establish that adjacent tab backgrounds communicate the active state.
 - **Pi:** keep the same process open and check that message/tool panels and text change without a
   restart. Leave the host terminal's theme unchanged, so its background cannot account for the result.
+  If the running UI keeps its old colors, record that failure before reselecting the theme or
+  restarting Pi. Then check that the fallback reads the new palette through the same installed link.
+  A successful restart is not hot-reload evidence. Watcher behavior can differ by version and platform.
 
 Switching publishes only into the copied trial and runs Pi's filesystem notification adapter.
 Ghostty and Tmux reload commands are disabled. Do not use your normal `:FlumeSync` for this test:
@@ -182,9 +185,11 @@ pairs. Preserve it as generated output rather than reformatting or hand-editing 
 ## Hosted CI
 
 [Quality](../.github/workflows/quality.yml) runs `./scripts/check` on Neovim 0.9.5 and stable.
-Snapshots run once in a separate Linux job, not once per Neovim version. Its comparison report is
-retained for seven days. A workflow definition or local commit is not evidence that a hosted run
-passed.
+Snapshots run once in a separate Linux job, not once per Neovim version. Before editor captures,
+that lane runs the full native highlight checker, all seven tweak samples in all four palettes and
+the installed-lualine check in the pinned runtime. It retains `native.log` with the comparison
+report for seven days. These checks do not observe external application reloads. A workflow
+definition or local commit is not evidence that a hosted run passed.
 
 Report the source or artifact, command, observed result and missing evidence. Configuration-contract
 checks, parser captures, native rendering and actual reload observations establish different facts.

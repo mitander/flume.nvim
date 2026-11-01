@@ -27,6 +27,7 @@ def load(name, path):
 commands = load('snapshot_commands', ROOT / 'scripts/snapshots')
 capture = load('snapshot_capture', DIRECTORY / 'capture.py')
 comparison = load('snapshot_compare', DIRECTORY / 'compare.py')
+native = load('snapshot_native', DIRECTORY / 'native.py')
 
 
 def evidence(directory, cases, content=b'pixels', environment=None):
@@ -149,6 +150,55 @@ class SnapshotCommands(unittest.TestCase):
         installer = source / 'tests/snapshots/install.py'
         installer.write_text(installer.read_text() + '\n# build change\n')
         self.assertNotEqual(environment_digest(source), before)
+
+    def test_typescript_companion_uses_the_same_locked_grammar_as_tsx(self):
+        tools = json.loads((DIRECTORY / 'tools.json').read_text())
+        typescript, tsx = tools['parser-typescript'], tools['parser-tsx']
+        for field in ('url', 'sha256', 'revision'):
+            self.assertEqual(typescript[field], tsx[field])
+        self.assertEqual(typescript['location'], 'typescript')
+        self.assertEqual(tsx['location'], 'tsx')
+
+    def test_native_checks_run_every_existing_checker_and_retain_output(self):
+        with (
+            patch.dict(os.environ, HOME=str(self.directory / 'home')),
+            patch.object(native.subprocess, 'run') as run,
+        ):
+            run.return_value.returncode = 0
+            self.assertEqual(native.main(ROOT, self.directory), 0)
+        self.assertEqual(
+            [call.args[0][-1] for call in run.call_args_list],
+            ["lua dofile('scripts/check-highlights.lua')",
+             "lua dofile('scripts/check-tweak.lua')", "lua dofile('tests/lualine.lua')"])
+        for call in run.call_args_list:
+            self.assertEqual(call.kwargs['cwd'], ROOT)
+            self.assertEqual(call.kwargs['env']['FLUME_LUALINE_RUNTIME'], '/opt/tools/lualine')
+        self.assertEqual((self.directory / 'native.log').read_text().count('Exit: 0'), 3)
+
+    def test_failed_native_check_stops_before_remaining_checkers(self):
+        with (
+            patch.dict(os.environ, HOME=str(self.directory / 'home')),
+            patch.object(native.subprocess, 'run') as run,
+        ):
+            run.return_value.returncode = 7
+            self.assertEqual(native.main(ROOT, self.directory), 7)
+        self.assertEqual(run.call_count, 1)
+        self.assertIn('Exit: 7', (self.directory / 'native.log').read_text())
+
+    def test_failed_native_checks_prevent_captures_and_publication(self):
+        with (
+            patch.object(tempfile, 'tempdir', str(self.directory)),
+            patch.object(commands.shutil, 'which', return_value='docker'),
+            patch.object(commands.subprocess, 'run') as run,
+            patch.object(commands, 'container', return_value=1) as container,
+            patch.object(commands, 'capture_case') as capture_case,
+            patch.object(commands, 'update_baselines') as publish,
+        ):
+            run.return_value.returncode = 0
+            self.assertEqual(commands.execute('update', ['neovim'], ['dusk']), 1)
+            self.assertEqual(container.call_args.args[3], ['/repo/tests/snapshots/native.py'])
+            capture_case.assert_not_called()
+            publish.assert_not_called()
 
     def test_help_requires_neither_docker_nor_a_running_daemon(self):
         result = subprocess.run([sys.executable, str(ROOT / 'scripts/snapshots'), '--help'],
@@ -387,6 +437,9 @@ class SnapshotCommands(unittest.TestCase):
         staged.write_bytes(b'private edit')
         self.assertEqual((ROOT / 'extras/fzf/flume-dusk.opts').read_bytes(), original)
         self.assertFalse((destination / '.git').exists())
+        for checker in ('scripts/check-highlights.lua', 'scripts/check-tweak.lua',
+                        'plugin/flume.lua', 'tests/lualine.lua'):
+            self.assertEqual((destination / checker).read_bytes(), (ROOT / checker).read_bytes())
 
     def test_container_is_offline_readonly_and_cleaned_up(self):
         output = self.directory / 'output'

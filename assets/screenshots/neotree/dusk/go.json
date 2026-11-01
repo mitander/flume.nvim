@@ -32,13 +32,11 @@
     "script_sha256": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
     "backend_sha256": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
     "compositor_sha256": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1",
-    "environment_sha256": "8b3e0f9dfa50e32027764e26b5b2d8e241bd89c57c86a0870dff473608e8ff4c"
+    "environment_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c"
   },
   "editor_integration": {
-    "icons": true,
     "git_status": true,
     "selected_file": "src/main.go",
-    "plugin": "neo-tree",
     "sidebar_lines": [
       " \ue5fe /tmp/flume-demo",
       "   \ue5ff docs",
@@ -51,6 +49,8 @@
       "   \uf48a notes.md                 \uf128 ",
       "   (1 hidden item)"
     ],
-    "source": "filesystem"
+    "source": "filesystem",
+    "plugin": "neo-tree",
+    "icons": true
   }
 }
