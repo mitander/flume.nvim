@@ -62,6 +62,31 @@ class IntegrationReviewTests(unittest.TestCase):
         )
         self.assertEqual(lsd["user (LSD host)"].foreground, "#514e57")
 
+    def test_tmux_semantic_pairs_use_readable_roles_not_ansi_surrogates(self):
+        expected = {
+            "Message text": ("fg", "surface"),
+            "Command message": ("accent", "surface"),
+            "Inactive label": ("muted", "bg"),
+            "Accent badge": ("on_accent", "accent"),
+            "Context badge": ("on_accent", "magenta"),
+            "Warning badge": ("on_accent", "yellow"),
+        }
+        for schema in review.SCHEMAS:
+            colors = json.loads(
+                (ROOT / f"extras/palette/flume-{schema}.json").read_text()
+            )["colors"]
+            pairs = {pair.label: pair for pair in review.integration_pairs(ROOT, "tmux", schema)}
+            for label, (foreground, background) in expected.items():
+                with self.subTest(schema=schema, pair=label):
+                    pair = pairs[label + " (illustrative)"]
+                    self.assertEqual(pair.foreground, colors[foreground])
+                    self.assertEqual(pair.background, colors[background])
+                    self.assertEqual(pair.target, 4.5)
+                    self.assertGreaterEqual(pair.ratio, 4.5)
+            decoration = pairs["Decorative separator (illustrative)"]
+            self.assertEqual(decoration.foreground, colors["placeholder"])
+            self.assertEqual(decoration.target, 1.0)
+
     def test_retained_delta_inks_meet_contrast_on_every_diff_surface(self):
         # Slots 0/8 remain terminal black/decorative inks, not syntax foregrounds.
         ansi_roles = (

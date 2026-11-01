@@ -261,13 +261,19 @@ def integration_pairs(
         pairs.extend(delta_diff_pairs(backgrounds, ansi, terminal["foreground"]))
     elif app == "tmux":
         values = dict(re.findall(r'%hidden (\w+)="(#[\da-fA-F]{6})"', text))
-        for role in ("thm_fg", "thm_lgray", "thm_accent", "thm_red", "thm_green"):
-            add(role + " on thm_bg (illustrative)", values[role], values["thm_bg"])
-        add(
-            "thm_black on accent (illustrative)",
-            values["thm_black"],
-            values["thm_accent"],
-        )
+        for label, foreground, background in (
+            ("Message text", "thm_fg", "thm_surface"),
+            ("Command message", "thm_accent", "thm_surface"),
+            ("Inactive label", "thm_muted", "thm_bg"),
+            ("Accent badge", "thm_on_accent", "thm_accent"),
+            ("Context badge", "thm_on_accent", "thm_pink"),
+            ("Warning badge", "thm_on_accent", "thm_yellow"),
+        ):
+            # Older revisions lack the additive UI roles. Do not invent baseline pairs.
+            if foreground in values and background in values:
+                add(label + " (illustrative)", values[foreground], values[background])
+        # Decorative placeholder ink is intentionally not graded as ordinary text.
+        add("Decorative separator (illustrative)", values["thm_lgray"], values["thm_bg"], 1.0)
     elif app == "lsd":
         section = ""
         for line in text.splitlines():

@@ -106,13 +106,13 @@
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
-        "pi-dusk": "b1f101f5e535f32bcb5a4f0e315721e65b3436a74c688717a52746f630882243",
-        "pi-mesa": "f4020ab653d03837ae6c01dff9e315bd8e295b6582a2b268e7fdf28c7ded6cc6",
-        "pi-mira": "1673a87c3fd3398f27ce0319e6ae4961b026d78d3b43b53dc4015a194572fedd",
-        "pi-opal": "eaed97ec5ec8f668f324c22dc501ec1356c111e6a63570b8fca02e05d9d305d0",
+        "pi-dusk": "488c4799205f2f12eb9e7cf569175ffb5ce120bf0f7e6458c31a4bd692fbd0be",
+        "pi-mesa": "2a678bbb8dbd5c0c09d24b90f89841250ebc4391e36e0a7519f893ae335ed00d",
+        "pi-mira": "2da41baf36fa950b522cfe88a2b90d57d89c0d8292e10e54f513cad46f2043d0",
+        "pi-opal": "44a32133788cdd07b76ab74a710d64f66ce1bbc69ffa9225ba142942832927fc",
         "tests/snapshots/compose.py": "a0a62dc8ad5e9aa5f93846fdf7000ea58faf49724c462199cbf731a40ed77171"
       },
-      "png_sha256": "5fec8c30ab722860ee4ee207e47a7ab41c561e052508f2058956d55477af29a8"
+      "png_sha256": "3ead81786750d241db6b06b77526e3c987e1f88eac6d8df3388f550fabbbd0ab"
     },
     "contact-tmux": {
       "destination": "assets/screenshots/integrations/tmux/contact-sheet.png",
@@ -127,11 +127,11 @@
       "inputs": {
         "tests/snapshots/compose.py": "a0a62dc8ad5e9aa5f93846fdf7000ea58faf49724c462199cbf731a40ed77171",
         "tmux-dusk": "51b1196432fb688f26acdc4ab085dae4f548b93ee361e82c9325dc9ccb2c635f",
-        "tmux-mesa": "bf385c1acf0df1ec71dbd8c25e7fd85b597e35a7ff4395eba6cd984e91b25ec8",
+        "tmux-mesa": "0e06a3e2082114ca4c17115500392eaeaa750309bd7985478c572da5f104ac06",
         "tmux-mira": "2525f4d3c58844891d20c61ef25dc2290a7de26252e81f9a430e521ad9304143",
-        "tmux-opal": "3ebeb14afbfdab3943839c030ebd89f9684871acfe082b76ebd8285fbd045174"
+        "tmux-opal": "f66b380cc0aab00876bf6e86e658794ad7414513584170680cd29279aa29faac"
       },
-      "png_sha256": "90e2ac1b8e4d3d698ea2fb67b885d409d4998a6fe495fc0d3f3cab0f61c956c2"
+      "png_sha256": "e4ab1e79b47fdeeccdf4b0791136233b967b063066fe001e504a0adf6c15c85d"
     },
     "delta-dusk": {
       "destination": "assets/screenshots/integrations/delta/dusk.png",
@@ -7763,7 +7763,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-dusk": "5da727853c6fb8d66f97eda9bd42d1adbd7c09186a6751c230719cbce509b8cb",
-        "extras/pi/flume-dusk.json": "675940853bde47ee4d1330f6600fce075aa5cc976cc4595d1471ba601d4cb001",
+        "extras/pi/flume-dusk.json": "effbc334d6fe531c3ad4f7214685b738b7fcb749ef0a8c8174864898c6519a77",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -7781,12 +7781,12 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/pi.tape": "df63968034bbe330aee7ae01e562d7178dd7f18b089e63ed7827bfd875f9c75f",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "b1f101f5e535f32bcb5a4f0e315721e65b3436a74c688717a52746f630882243"
+      "png_sha256": "488c4799205f2f12eb9e7cf569175ffb5ce120bf0f7e6458c31a4bd692fbd0be"
     },
     "pi-mesa": {
       "destination": "assets/screenshots/integrations/pi/mesa.png",
@@ -7842,7 +7842,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mesa": "78154c62d27b5839af4d747aa6c61b35be0a0d7c96a93e39f9b60638da3a38b5",
-        "extras/pi/flume-mesa.json": "de29af2b479877886e3c87c1d4104879ec1a848b1abe760d508c6a7763771fce",
+        "extras/pi/flume-mesa.json": "26c14615028dc401370d512f14f50e74e29bd26fd6bbf18e05e71ceb47c4a3fb",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -7860,12 +7860,12 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/pi.tape": "df63968034bbe330aee7ae01e562d7178dd7f18b089e63ed7827bfd875f9c75f",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "f4020ab653d03837ae6c01dff9e315bd8e295b6582a2b268e7fdf28c7ded6cc6"
+      "png_sha256": "2a678bbb8dbd5c0c09d24b90f89841250ebc4391e36e0a7519f893ae335ed00d"
     },
     "pi-mira": {
       "destination": "assets/screenshots/integrations/pi/mira.png",
@@ -7921,7 +7921,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mira": "4da988efc94f7408ac663233227fe61378c556224fe690769f22fce531dc2618",
-        "extras/pi/flume-mira.json": "1e197e54dcd391c20ba890da83e9b71e1af361a313e5dbd93aec031aec9bdbe2",
+        "extras/pi/flume-mira.json": "556fb5ba5af0e7e689dbae399d4816ae00b25f8aaf0f8c98d38596b0a88652dd",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -7939,12 +7939,12 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/pi.tape": "df63968034bbe330aee7ae01e562d7178dd7f18b089e63ed7827bfd875f9c75f",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "1673a87c3fd3398f27ce0319e6ae4961b026d78d3b43b53dc4015a194572fedd"
+      "png_sha256": "2da41baf36fa950b522cfe88a2b90d57d89c0d8292e10e54f513cad46f2043d0"
     },
     "pi-opal": {
       "destination": "assets/screenshots/integrations/pi/opal.png",
@@ -8000,7 +8000,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
-        "extras/pi/flume-opal.json": "002090e23d063d46a8170704e23960a7fded13b225e43e9764134291f7b38bc1",
+        "extras/pi/flume-opal.json": "8b1dd226fdc0026d7bf4f6c42d50d3ab63d17910bcf49300d16bf1772d05c20e",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -8018,12 +8018,12 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/pi.tape": "df63968034bbe330aee7ae01e562d7178dd7f18b089e63ed7827bfd875f9c75f",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "eaed97ec5ec8f668f324c22dc501ec1356c111e6a63570b8fca02e05d9d305d0"
+      "png_sha256": "44a32133788cdd07b76ab74a710d64f66ce1bbc69ffa9225ba142942832927fc"
     },
     "showcase": {
       "destination": "assets/screenshots/showcase.png",
@@ -8099,7 +8099,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-dusk": "5da727853c6fb8d66f97eda9bd42d1adbd7c09186a6751c230719cbce509b8cb",
-        "extras/tmux/colors-dusk.conf": "a24facd860d7fef6519af7b0be87ef25ff225161f44dd654a48b2d569f4b2f0a",
+        "extras/tmux/colors-dusk.conf": "764adf15ab43ec8e40be9901a927236d84e18fca364b7a62cd43d1eb17cb03ae",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -8117,7 +8117,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1",
         "tests/snapshots/tmux.tape": "3d31e8bf737f3cb6ab1cbbbba277e4919f8f70a9646ed3411022abaa9ae9f75d"
@@ -8178,7 +8178,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mesa": "78154c62d27b5839af4d747aa6c61b35be0a0d7c96a93e39f9b60638da3a38b5",
-        "extras/tmux/colors-mesa.conf": "2769be3c838f14d2f11725a553b89d2baa0318321f084f46048087162509ec1e",
+        "extras/tmux/colors-mesa.conf": "6606cc9217ab177b474323d700de41bfb43c0d7bf3a81be2ff53e561f0c2987f",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -8196,12 +8196,12 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1",
         "tests/snapshots/tmux.tape": "3d31e8bf737f3cb6ab1cbbbba277e4919f8f70a9646ed3411022abaa9ae9f75d"
       },
-      "png_sha256": "bf385c1acf0df1ec71dbd8c25e7fd85b597e35a7ff4395eba6cd984e91b25ec8"
+      "png_sha256": "0e06a3e2082114ca4c17115500392eaeaa750309bd7985478c572da5f104ac06"
     },
     "tmux-mira": {
       "destination": "assets/screenshots/integrations/tmux/mira.png",
@@ -8257,7 +8257,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mira": "4da988efc94f7408ac663233227fe61378c556224fe690769f22fce531dc2618",
-        "extras/tmux/colors-mira.conf": "dc6845b305218c6a106f0d5d0814be3ba08033f0783270f9e25403cdc3b88a9a",
+        "extras/tmux/colors-mira.conf": "3e2e40bce505e7ba70c44ca6f80914cfb1c9803923077a101966395a2f3335cf",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -8275,7 +8275,7 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1",
         "tests/snapshots/tmux.tape": "3d31e8bf737f3cb6ab1cbbbba277e4919f8f70a9646ed3411022abaa9ae9f75d"
@@ -8336,7 +8336,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
-        "extras/tmux/colors-opal.conf": "be6945a8f21b98604a1f59637f0b2b58b9edeac5d0718834501564563f471ec1",
+        "extras/tmux/colors-opal.conf": "74074b4022dd38e63c33203aa4a7b41b8f09b19ad6b4e6d10f4ac2c3c2806fbd",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -8354,12 +8354,12 @@
         "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
         "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
-        "tests/snapshots/fixtures/tmux.sh": "dc372fef03f8034afd57e7f2cbfe060a77b381707bb355888916f69e7a9188e2",
+        "tests/snapshots/fixtures/tmux.sh": "c915f88599940e8d93f05f7c932697f17f216df1f391af3310cdaa1ffb167485",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1",
         "tests/snapshots/tmux.tape": "3d31e8bf737f3cb6ab1cbbbba277e4919f8f70a9646ed3411022abaa9ae9f75d"
       },
-      "png_sha256": "3ebeb14afbfdab3943839c030ebd89f9684871acfe082b76ebd8285fbd045174"
+      "png_sha256": "f66b380cc0aab00876bf6e86e658794ad7414513584170680cd29279aa29faac"
     }
   },
   "format_version": 1

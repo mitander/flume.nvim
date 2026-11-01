@@ -306,6 +306,9 @@ function M.register(test, equal, truthy)
         local tmux_keys = keyset({
             "thm_bg",
             "thm_fg",
+            "thm_surface",
+            "thm_muted",
+            "thm_on_accent",
             "thm_black",
             "thm_gray",
             "thm_lgray",
@@ -377,6 +380,28 @@ function M.register(test, equal, truthy)
                 tmux[key] = value
             end
             equal(sorted_keys(tmux), sorted_keys(tmux_keys), schema .. " Tmux keys")
+            -- Keep legacy meanings while adding semantic UI roles, independent of renderer order.
+            local tmux_roles = {
+                thm_bg = "bg",
+                thm_fg = "fg",
+                thm_surface = "surface",
+                thm_muted = "muted",
+                thm_on_accent = "on_accent",
+                thm_black = "black",
+                thm_gray = "black",
+                thm_lgray = "placeholder",
+                thm_accent = "accent",
+                thm_red = "red",
+                thm_green = "green",
+                thm_yellow = "yellow",
+                thm_blue = "blue",
+                thm_pink = "magenta",
+                thm_cyan = "cyan",
+                thm_orange = "bright_red",
+            }
+            for variable, role in pairs(tmux_roles) do
+                equal(tmux[variable], palettes[schema][role], schema .. " Tmux " .. variable)
+            end
 
             local lsd, section = {}, nil
             for line in read_all(path("lsd", schema)):gmatch("[^\n]+") do
@@ -436,6 +461,10 @@ function M.register(test, equal, truthy)
             equal(pi.vars.bg, colors.bg, schema .. " Pi background")
             equal(pi.vars.diffAdd, colors.diff_add, schema .. " Pi added color")
             equal(pi.colors.syntaxVariable, "fg", schema .. " Pi neutral variables")
+            equal(pi.colors.toolPendingBg, "surfaceAlt", schema .. " Pi neutral pending panel")
+            equal(pi.colors.toolSuccessBg, "surface", schema .. " Pi neutral successful panel")
+            equal(pi.vars[pi.colors.toolSuccessBg], colors.surface, schema .. " Pi success surface")
+            equal(pi.colors.toolErrorBg, "diffDeleteBg", schema .. " Pi distinct error panel")
 
             local opencode = vim.json.decode(read_all(path("opencode", schema)))
             equal(sorted_keys(opencode), sorted_keys(opencode_top), schema .. " OpenCode top-level keys")

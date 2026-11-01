@@ -324,6 +324,22 @@ Installation reports the destination and next setup step, not application
 readiness. For examples and manual recipes, see docs/workflows.md. Other tools
 have no automatic installer because their include locations vary.
 
+TMUX COLORS ~
+
+The Tmux fragment supplies variables, not a statusline layout. Source it before
+consumer styles. thm_bg and thm_fg are the canvas and primary text. Use
+thm_surface for raised UI backgrounds, thm_muted for readable secondary text,
+and thm_on_accent for text on filled accent/state colors. For example: >
+    set -g message-style "bg=#{thm_surface},fg=#{thm_fg}"
+    set -g message-command-style "bg=#{thm_surface},fg=#{thm_accent}"
+    set -g window-status-style "bg=#{thm_bg},fg=#{thm_muted}"
+    set -g window-status-current-style "bg=#{thm_accent},fg=#{thm_on_accent}"
+<
+Existing variable meanings are unchanged. thm_black and thm_gray are ANSI black,
+not UI surfaces. thm_lgray is decorative placeholder ink, not readable labels.
+message-command-style applies to vi command mode, not prompt insertion mode.
+The consumer owns the actual pairs, layout and reload behavior.
+
 RELOAD BEHAVIOR ~
 
 :FlumeSync requests Ghostty reloads through AppleScript on macOS, or SIGUSR2

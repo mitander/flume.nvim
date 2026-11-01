@@ -61,7 +61,17 @@ Tmux's `#{...}` formats read the colors when rendering; for example:
 
 ```tmux
 set -g status-style "bg=#{thm_bg},fg=#{thm_fg}"
+set -g window-status-style "bg=#{thm_bg},fg=#{thm_muted}"
+set -g window-status-current-style "bg=#{thm_accent},fg=#{thm_on_accent},bold"
+set -g message-style "bg=#{thm_surface},fg=#{thm_fg}"
+set -g message-command-style "bg=#{thm_surface},fg=#{thm_accent}"
 ```
+
+`message-command-style` applies to the vi command-mode prompt, not prompt insertion mode.
+`thm_surface` is a raised UI background, `thm_muted` is readable secondary text, and
+`thm_on_accent` is text on a filled accent or state color. The existing variables keep their
+meanings. In particular, `thm_black` and `thm_gray` are ANSI black, not UI surfaces, and
+`thm_lgray` is decorative placeholder ink, not inactive-label text.
 
 Run `tmux source-file ~/.tmux.conf` to apply your configuration. Future `:FlumeSync` calls source
 that file when Neovim is running inside Tmux. See the

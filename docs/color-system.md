@@ -143,6 +143,10 @@ explicit selected text uses the `selection_fg` / `selection_bg` pair; success an
 state use their corresponding semantic roles. This prevents light-mode defaults such as fzf-lua's
 `MediumSpringGreen` from leaking into any schema.
 
+Pi keeps successful tool results on the neutral `surface` and pending tools on `surface_alt`.
+Failures retain their tinted error panel. Routine success should not turn a transcript into large
+green blocks or borrow version-control addition fills.
+
 ### File icon colors
 
 `icon_neutral`, `icon_red`, `icon_copper`, `icon_orange`, `icon_yellow`, `icon_green`,

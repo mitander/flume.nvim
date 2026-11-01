@@ -45,8 +45,9 @@ quantization.
   embedded Delta pager's retained-ink diff pairs.
 - LSD: actual xterm-256 metadata colors, including customized ANSI slots 0–15.
 - Delta: default terminal text and syntax ANSI slots on added/deleted and emphasized diff backgrounds.
-- Tmux: illustrative variable pairs. The user's statusline owns the actual foreground/background
-  combinations.
+- Tmux: illustrative semantic message, inactive-label and filled-badge pairs. Placeholder separators
+  are decorative, not text-contrast obligations. The user's statusline owns the actual
+  foreground/background combinations.
 
 Ordinary text targets 4.5:1. State-bearing boundaries target 3:1. Ratios use sRGB relative luminance
 and are compared before rounding. Decorative separators can be quieter; assess their purpose rather

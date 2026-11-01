@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Use neutral raised panels for successful Pi tool results instead of green diff-addition fills.
+  Keep failed tool results visibly tinted.
+
 - Keep Delta and Lazygit diff syntax readable with quieter emphasis fills and underlined changed
   words. Lighten Mesa's add/delete surfaces without changing its canvas or ANSI inks. Measure
   OpenCode labels and signs on their actual surfaces and capture a real edit diff. Qualify native

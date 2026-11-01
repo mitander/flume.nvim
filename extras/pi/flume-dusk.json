@@ -52,7 +52,7 @@
     "customMessageText": "fg",
     "customMessageLabel": "accent",
     "toolPendingBg": "surfaceAlt",
-    "toolSuccessBg": "diffAddBg",
+    "toolSuccessBg": "surface",
     "toolErrorBg": "diffDeleteBg",
     "toolTitle": "accent",
     "toolOutput": "softFg",

@@ -279,6 +279,10 @@ function renderers.tmux(schema)
 
 %%hidden thm_bg="%s"
 %%hidden thm_fg="%s"
+# UI roles. ANSI black/gray and placeholder inks are not readable UI surfaces/text.
+%%hidden thm_surface="%s"
+%%hidden thm_muted="%s"
+%%hidden thm_on_accent="%s"
 %%hidden thm_black="%s"
 %%hidden thm_gray="%s"
 %%hidden thm_lgray="%s"
@@ -295,6 +299,9 @@ function renderers.tmux(schema)
         template,
         palette.bg,
         palette.fg,
+        palette.surface,
+        palette.muted,
+        palette.on_accent,
         palette.black,
         palette.black, -- thm_gray
         palette.placeholder,
@@ -476,7 +483,7 @@ function renderers.pi(schema)
     "customMessageText": "fg",
     "customMessageLabel": "accent",
     "toolPendingBg": "surfaceAlt",
-    "toolSuccessBg": "diffAddBg",
+    "toolSuccessBg": "surface",
     "toolErrorBg": "diffDeleteBg",
     "toolTitle": "accent",
     "toolOutput": "softFg",
