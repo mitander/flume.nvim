@@ -14,10 +14,10 @@
         "delta-dusk": "e69d55470818910ad28ad7cc81dd6dc63bee72767b1f8915ed13c0c6abbda9b7",
         "delta-mesa": "0baeae33eef0d78bdd6b86b31cb475b4fcd15d3e52faf0e7d6fbc18f9022d8c4",
         "delta-mira": "cc7039e36e44013405c020eac1eb0e67cdac5583b4bef8e43d040f46dc6bbe8b",
-        "delta-opal": "9e45c6db3e234c0c3afbe66a156dbac0e4196fc8749d7f03d5a8afb36544ab01",
+        "delta-opal": "cb719dd015a8e5d0424f6b063aad1fe97e89b4ff46deacd44ed93a6a40828323",
         "tests/snapshots/compose.py": "a0a62dc8ad5e9aa5f93846fdf7000ea58faf49724c462199cbf731a40ed77171"
       },
-      "png_sha256": "64b9abef3995a0b68b910507598ccd294e957b6b67c0391fbd9b7cca00d0ab79"
+      "png_sha256": "11ff484a2f22bfc12b699e9078c788531be14899b9fdaee9f2237f7c845d3b87"
     },
     "contact-fzf": {
       "destination": "assets/screenshots/integrations/fzf/contact-sheet.png",
@@ -33,10 +33,10 @@
         "fzf-dusk": "9a8701c64b8e3632eb69518d94fcc28c8c612663b91c877d688504573d6a7960",
         "fzf-mesa": "792daa0832e536dd8528729701e9ea7725ea03c2435a0b67c09c06b1be7dbb27",
         "fzf-mira": "dc885423c88df1359b64b14ed87d077e7b06401cf0f2bbceb1a836a66bbbda2f",
-        "fzf-opal": "e2c86ce4363080180e524217dc78b49c0163390d1cecdfeaf969071b2fb89063",
+        "fzf-opal": "324844466d299e4ada45a8810287510ab3653dffda843d69290c5d6eb8c2361a",
         "tests/snapshots/compose.py": "a0a62dc8ad5e9aa5f93846fdf7000ea58faf49724c462199cbf731a40ed77171"
       },
-      "png_sha256": "a4b64d7391b0888c8f0501fd7515affc857db41e8dec9a471224a55c41bfaac9"
+      "png_sha256": "36b8319a27e25c1e76c50362c27be8a081fd1e495d94dbfd471254a63e7465f7"
     },
     "contact-lazygit": {
       "destination": "assets/screenshots/integrations/lazygit/contact-sheet.png",
@@ -52,10 +52,10 @@
         "lazygit-dusk": "0b6233b8cdc9383b5953796ac62c4f5135f012ddef3b44456290acd1e19a14a9",
         "lazygit-mesa": "0dbbef55eda5db28e0829f200cd3e95ddba35e58e8928c0cdaa8e7b7934c6132",
         "lazygit-mira": "e90d93a7d4cb5ceeabad2cf8639386980678210a277cf2d9b39fca4d7ba8ee36",
-        "lazygit-opal": "ec2d92ee2ab5746d2b855a57c96a0f74e1ab479bff1ecaf6f7971db0e0cd9193",
+        "lazygit-opal": "8bd9b51693849fccda8a562cccb5ad814536e83200b8771d3a6f74b0bd0693a8",
         "tests/snapshots/compose.py": "a0a62dc8ad5e9aa5f93846fdf7000ea58faf49724c462199cbf731a40ed77171"
       },
-      "png_sha256": "4ff1d09a3a2c77e6d8d1d8452180c9032d1a9aa7ed77dc27374fc288a36aa9f4"
+      "png_sha256": "534961d7069475bb9d12966b89be5bf24166f20cda3b3d10da98ce8b03756654"
     },
     "contact-lsd": {
       "destination": "assets/screenshots/integrations/lsd/contact-sheet.png",
@@ -90,10 +90,10 @@
         "opencode-dusk": "77383915d80b76ee40890e688697b96e0aa011d72e481e3090d90273dfff0ae3",
         "opencode-mesa": "08ad90e11a4d373f8432c269f9cf7e58acf383eb007bf360e02a4f3f5741c628",
         "opencode-mira": "4e711b1cf7b9ac006b235287c015b54b2734def688b55aaa9e61295c5e74fc28",
-        "opencode-opal": "f6571fbf62dfa710915e27960593e8308e41ba7b88472577252d1ad4912137d9",
+        "opencode-opal": "f467596e9d736d527337b0041d11110a6266cbe04ed6a47b6e29b4e528ada3a4",
         "tests/snapshots/compose.py": "a0a62dc8ad5e9aa5f93846fdf7000ea58faf49724c462199cbf731a40ed77171"
       },
-      "png_sha256": "606062fb84699bcd0c56724859159d4765eb483f4e855e217ab0507bcc030c15"
+      "png_sha256": "d2a74dff349fa7dc53e428756ec4bc81973a86c154f60630b0f2843335c5c7fe"
     },
     "contact-pi": {
       "destination": "assets/screenshots/integrations/pi/contact-sheet.png",
@@ -109,10 +109,10 @@
         "pi-dusk": "b1f101f5e535f32bcb5a4f0e315721e65b3436a74c688717a52746f630882243",
         "pi-mesa": "5898f17401bb72546d08c9b239f79307bc6fb61bfa17c25de4d6ef15eb60a9cd",
         "pi-mira": "1673a87c3fd3398f27ce0319e6ae4961b026d78d3b43b53dc4015a194572fedd",
-        "pi-opal": "5cc3d69c72d9fe276f3e7bd5f7f7b60517ecb4d0546f1caac8d4ccac0037e570",
+        "pi-opal": "eaed97ec5ec8f668f324c22dc501ec1356c111e6a63570b8fca02e05d9d305d0",
         "tests/snapshots/compose.py": "a0a62dc8ad5e9aa5f93846fdf7000ea58faf49724c462199cbf731a40ed77171"
       },
-      "png_sha256": "018c33adca1b9e6916b841cba33a02d676d918510942565b07467f88d7ccf07f"
+      "png_sha256": "06fd9cde3eca05ee64f3e903c5de49695c1278cbd8a6c02eb51260783370d327"
     },
     "contact-tmux": {
       "destination": "assets/screenshots/integrations/tmux/contact-sheet.png",
@@ -423,7 +423,7 @@
         "renderer": "Ghostty 1.3.1 / Xvfb / Mesa llvmpipe / RGB PNG / Pillow RGBA"
       },
       "inputs": {
-        "extras/delta/flume-opal.gitconfig": "655a4770c3c9f5f9b08902eb8b77eb9f8b0d9e45643343f080b9b1ecc8aef2f1",
+        "extras/delta/flume-opal.gitconfig": "3bb9d377ff2869697326f2d6a711699a5cf7f2c06b74727899c1db3f5e4ff83d",
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
         "tests/snapshots/capture.py": "d775a84df727b72ad47604805a20c55782e3b5af477619d8712053c231fe735a",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
@@ -447,7 +447,7 @@
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "9e45c6db3e234c0c3afbe66a156dbac0e4196fc8749d7f03d5a8afb36544ab01"
+      "png_sha256": "cb719dd015a8e5d0424f6b063aad1fe97e89b4ff46deacd44ed93a6a40828323"
     },
     "fzf-dusk": {
       "destination": "assets/screenshots/integrations/fzf/dusk.png",
@@ -739,7 +739,7 @@
         "renderer": "Ghostty 1.3.1 / Xvfb / Mesa llvmpipe / RGB PNG / Pillow RGBA"
       },
       "inputs": {
-        "extras/fzf/flume-opal.opts": "a22cc422af88ecb0521e7beb47de183b9b94dc3d4f6b629f2050f29d55748227",
+        "extras/fzf/flume-opal.opts": "d378984964040490c7e38bdec5d5753df70c1f77b82a8144334cbbd70655bb48",
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
         "tests/snapshots/capture.py": "d775a84df727b72ad47604805a20c55782e3b5af477619d8712053c231fe735a",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
@@ -763,7 +763,7 @@
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "e2c86ce4363080180e524217dc78b49c0163390d1cecdfeaf969071b2fb89063"
+      "png_sha256": "324844466d299e4ada45a8810287510ab3653dffda843d69290c5d6eb8c2361a"
     },
     "lazygit-dusk": {
       "destination": "assets/screenshots/integrations/lazygit/dusk.png",
@@ -1056,7 +1056,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
-        "extras/lazygit/flume-opal.yml": "ec4e72313427ef66edf9ae03fb3f62099962d79dba2963b1c002e12147677daa",
+        "extras/lazygit/flume-opal.yml": "12b2f09dc8e99d24435dada887c2c35dd2788998ca72913e6e081a9e24d1a0e0",
         "tests/snapshots/capture.py": "d775a84df727b72ad47604805a20c55782e3b5af477619d8712053c231fe735a",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -1079,7 +1079,7 @@
         "tests/snapshots/lazygit.tape": "43b400ccf952b69cece9b34745e16c4ab81cdf218d4e22764276a23db64debea",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "ec2d92ee2ab5746d2b855a57c96a0f74e1ab479bff1ecaf6f7971db0e0cd9193"
+      "png_sha256": "8bd9b51693849fccda8a562cccb5ad814536e83200b8771d3a6f74b0bd0693a8"
     },
     "lsd-dusk": {
       "destination": "assets/screenshots/integrations/lsd/dusk.png",
@@ -1478,8 +1478,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -1510,7 +1510,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "b3951174cb6882add383b82f18b828d23680e692c998be20bdaafa00d7ea660b",
-      "sidecar_sha256": "e849f24b9a43fc1f3919f9ab261e4e39ca0a08f80237fe58eac2954b104f41cd"
+      "sidecar_sha256": "1569916021f1cb2871aeec7b3a7187110b722d1a6da3b93e977a6984323ce8b9"
     },
     "neovim-completion-go-mesa": {
       "destination": "assets/screenshots/completion/mesa/go.png",
@@ -1593,8 +1593,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -1625,7 +1625,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "d35d2ed326b7a4ef76953eb06e0a406026e26109beae2841b16bbbbbf9b1c6bc",
-      "sidecar_sha256": "21aede5b25749f7eb5008ac1640217cb372aaf93162e873702526609b5b421a3"
+      "sidecar_sha256": "0c2d498a6535186628a2d85f70defb002f354197794af45b310079082dcacc93"
     },
     "neovim-completion-go-mira": {
       "destination": "assets/screenshots/completion/mira/go.png",
@@ -1708,8 +1708,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -1740,7 +1740,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "6c8c8d536d54a5950ab1dc83e5201605f3322c7b8f31c5a47c156f3f5a56bab5",
-      "sidecar_sha256": "d22ebe87513f44be300ac6066bdd0949c00026c02a846d7d989194a680a3fb22"
+      "sidecar_sha256": "bb0fe2c85a3a7fd618a9cbea531ff30116b41a1d1f823747e4023c1db653c657"
     },
     "neovim-completion-go-opal": {
       "destination": "assets/screenshots/completion/opal/go.png",
@@ -1823,8 +1823,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -1854,8 +1854,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "141b4bf2246fe8ba028ddde9261103e6a0666e10935fe0eca87eaec1c287f435",
-      "sidecar_sha256": "2b7bed7a3da9bd402f557f6674c162e04def62e491da5c5ad8fc042b84a9c334"
+      "png_sha256": "d78f82511ee191ad7e49ef5b117714a1ce7c655ae58764f21cfa49a7ed316c2d",
+      "sidecar_sha256": "e30e1f47c851e85eab5b7c23eaf5276ee4b96a8090ae6401a766cdf7f8263b49"
     },
     "neovim-elixir-dusk": {
       "destination": "assets/screenshots/dusk/elixir.png",
@@ -1938,8 +1938,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -1970,7 +1970,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8c4ffaa7ed44a79e6b063c8f91d6e4cbfeddec40aba11ea37c1fbea8d6d0e8e9",
-      "sidecar_sha256": "5084834476ce2cbaaff616f10195a9edd90571866669013229635f9e8ad25f16"
+      "sidecar_sha256": "977688ecfc57036c14a20a3dac31753ebad74b55a13a78c7ea6a4f0734bb4453"
     },
     "neovim-elixir-mesa": {
       "destination": "assets/screenshots/mesa/elixir.png",
@@ -2053,8 +2053,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -2085,7 +2085,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "88888c4d996162bc9e741b11ca594de350b42fda3a3257f14e4d073187673dcf",
-      "sidecar_sha256": "c8e8338f16d689629ae6ddc30fa83d24de7676cd6420ab584a7e5dd6c495feb4"
+      "sidecar_sha256": "8b3097e09ae79b6464aea5f20e108dbdab144bacf323f38a9be342126301bc8b"
     },
     "neovim-elixir-mira": {
       "destination": "assets/screenshots/mira/elixir.png",
@@ -2168,8 +2168,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -2200,7 +2200,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "9967a2e7b5ee9f17b816d92a333435a7fb7ed66f07ecfccc82b4dc5348dbd85e",
-      "sidecar_sha256": "714a27aed0db3c23edccacd68aaf7cbb9f7eaaa2f603225b48cb93b9e265a5be"
+      "sidecar_sha256": "aab0e6cd4533741c1359b4e9479529117c5830ad6378bf08a76066711aa21b2e"
     },
     "neovim-elixir-opal": {
       "destination": "assets/screenshots/opal/elixir.png",
@@ -2283,8 +2283,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -2314,8 +2314,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "2de69bf3a06c97d85c3196a337f6f9002f3f78782cf31088ec20bb04a23963f0",
-      "sidecar_sha256": "08c128f43065001f0347c8fb9ea2c307517aa76dd87e637547a4035ae72c7261"
+      "png_sha256": "fc785e89da1ba1197cdfd78c451cbdc454ddaf82fd774d67ea21a30811e9fd4d",
+      "sidecar_sha256": "c868226a439ead7271274c723a50c25d71442aff214366d9b62140b5c7529a65"
     },
     "neovim-go-dusk": {
       "destination": "assets/screenshots/dusk/go.png",
@@ -2398,8 +2398,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -2430,7 +2430,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "f7e7ed125f0aee424f1def1f092607ab50d2090abc3b07453f4998a135052027",
-      "sidecar_sha256": "c552b58eed97a9f2129e4db9751f62d88005a508406680cb18a6f78c3fa19f8d"
+      "sidecar_sha256": "4535cfc1e7a38ec57f9c9c798ff3d505569074496f92004dd98c4c0e6840fb1d"
     },
     "neovim-go-mesa": {
       "destination": "assets/screenshots/mesa/go.png",
@@ -2513,8 +2513,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -2545,7 +2545,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8481fcfb16e8692a4ce7065faac1664a61b797f6a2d5450894b0e83c7ac42651",
-      "sidecar_sha256": "09e3a09b6d166af73c724ca85d0f14ccd7d0166ca35b76cbbd23b11318c451f1"
+      "sidecar_sha256": "ff36466564c5f6ed834166749bf31580606a658559fc98ea88d83362e6f88241"
     },
     "neovim-go-mira": {
       "destination": "assets/screenshots/mira/go.png",
@@ -2628,8 +2628,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -2660,7 +2660,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "743c557ed8561de2ef5d281f5bd35e0e6eb61da9bc136d7377e10d7b585603f4",
-      "sidecar_sha256": "5f7a9b492bbc024f4c06c3d2819397496cefa740d1e8e746bec775ef80b607d9"
+      "sidecar_sha256": "da4e70b69d32c4803c765d9d8c1e046a0c735b26caed96eacd2dd90172554093"
     },
     "neovim-go-opal": {
       "destination": "assets/screenshots/opal/go.png",
@@ -2743,8 +2743,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -2774,8 +2774,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "2007ee938c5d761cbb1ec42a0caab60e1499a0870217d85045064cee761c05c0",
-      "sidecar_sha256": "8fb0923eae83f72395baeb3c865c89e876fc7fc56372b4439e52d98080490519"
+      "png_sha256": "bbd2bcd7d89dc2855834913736cf880a94ab76c6d8163beddc6e6a8f87b2e417",
+      "sidecar_sha256": "ed30ab99a16568372d41cdfd6830c0f74293c091d35f15482b4e6debf66a1c5f"
     },
     "neovim-lsp-go-dusk": {
       "destination": "assets/screenshots/lsp/dusk/go.png",
@@ -2858,8 +2858,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -2890,7 +2890,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "c7feac8833310b8f08373a5e604155b72299f7c00f23707fdf73a2c6c23c3d71",
-      "sidecar_sha256": "7ed23849e67cdeee9eb6e03ddade54b636613083c18098bfe2518ca62b327b51"
+      "sidecar_sha256": "be9460a14202981d6edd70fd10df7303cf8439331703b99680f8dbcb42460873"
     },
     "neovim-lsp-go-mesa": {
       "destination": "assets/screenshots/lsp/mesa/go.png",
@@ -2973,8 +2973,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -3005,7 +3005,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "b806b36b8c8e7fca1fc67c0bc4a238ebf3da459d4c5abbf795963dfa82780be0",
-      "sidecar_sha256": "c1b232dbaae2f2eb827a582ebffcac1e22098c948a44e3306c5b3e8d2eee5fc4"
+      "sidecar_sha256": "777043b6dacd502b5466f35cb9aaa785131838eb25b96ad1f1fe700836f68632"
     },
     "neovim-lsp-go-mira": {
       "destination": "assets/screenshots/lsp/mira/go.png",
@@ -3088,8 +3088,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -3120,7 +3120,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "dde3c536a44e97cbb7d1a442b25429b011f382240698e6c15a8794b401f8220e",
-      "sidecar_sha256": "295ee546a37bbe28a4da0da8adc572f2bb2073253ae4458bc8adbfc203031d19"
+      "sidecar_sha256": "4615232c1feec7fa623e1c84235101c3277af1d8cc3f427619efa7f5e76faec9"
     },
     "neovim-lsp-go-opal": {
       "destination": "assets/screenshots/lsp/opal/go.png",
@@ -3203,8 +3203,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -3234,8 +3234,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "6832192650c2674a5c4e40dfed5008369c7005afd94c65fb9ab5c5d88fcd47b1",
-      "sidecar_sha256": "a430916b7e182ed4eae1690823057f3f7848ace85cee357a0fa32ddb41be774d"
+      "png_sha256": "a713615437fa608abfdcbc3b31b2a3718fe6cffc7bc711a0c99513e92bfa138c",
+      "sidecar_sha256": "594b5c97157922c1241e5a6fc9fdd587b794e145af5e961d34fbf08c32c41668"
     },
     "neovim-lsp-zig-dusk": {
       "destination": "assets/screenshots/lsp/dusk/zig.png",
@@ -3318,8 +3318,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -3350,7 +3350,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "184c2824d119d4270aee04cc65f7c1c97c1cb6980b1d28240bffe1132af46790",
-      "sidecar_sha256": "3bca0c1b2e29cab5e10f906f2bbd12a00c62c89b8881f7c5eab8c3fb23576829"
+      "sidecar_sha256": "8f42c8518974e00eb9da0678ecc8c763645d42d255fc9f93ddd235faa15a6d90"
     },
     "neovim-lsp-zig-mesa": {
       "destination": "assets/screenshots/lsp/mesa/zig.png",
@@ -3433,8 +3433,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -3465,7 +3465,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "4c8c7fd9ea0ed50d48fad3684c37d985b83b947755db9f18cb305da6a3d7842d",
-      "sidecar_sha256": "59376049e30d7d431a2fec7ca8d97bea4527ddb40331df7209d09fdea863ab07"
+      "sidecar_sha256": "c7e38a09259262d991391ea720ff6fcc4b16d3538f0f3a5f4077b315789e2226"
     },
     "neovim-lsp-zig-mira": {
       "destination": "assets/screenshots/lsp/mira/zig.png",
@@ -3548,8 +3548,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -3580,7 +3580,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8634640f87c9c0b81d59336e0fdf44b9ce8a2c133b8d7d9ce488b547938a03c4",
-      "sidecar_sha256": "afd2735feeb260fbba026ea469043f316cc5611906cae8127d1490ae8e634b8c"
+      "sidecar_sha256": "f980d443a647b73f2aa6ebc8214bbe1ab351d486c038dcd24cc49ae750d44820"
     },
     "neovim-lsp-zig-opal": {
       "destination": "assets/screenshots/lsp/opal/zig.png",
@@ -3663,8 +3663,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -3694,8 +3694,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "ef68585c1388c8e1feb5b297535b7f26edabbf90a010c6d63fed595dd31e6832",
-      "sidecar_sha256": "ae5405e58b2d715fd0c433415be07b4035d043261c8ee1ec9d047ba22153b7a3"
+      "png_sha256": "6ba4e5cd78d917affd74165c962629c3f333df9dd9d9444ce1a74f2600473eb1",
+      "sidecar_sha256": "a4ef3a79f9e845ec19216aca65b885372924864a40f9213450bd9674b9e35b5a"
     },
     "neovim-lualine-dusk": {
       "destination": "assets/screenshots/lualine/dusk/go.png",
@@ -3778,8 +3778,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -3810,7 +3810,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "22109323c3c10bb615a52fbb61bf77bf07bffacbe27c2cdbe43ae38457aed77f",
-      "sidecar_sha256": "c161fad46eda14bbb8bd2416ca81f09e45ab2b68512d0749c11076ff5fb4a1d5"
+      "sidecar_sha256": "fdb1d0911aaaca02903fa43ac0d5b933f990fc4b16e5a9ce3b08c3bdc527af7a"
     },
     "neovim-lualine-mesa": {
       "destination": "assets/screenshots/lualine/mesa/go.png",
@@ -3893,8 +3893,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -3925,7 +3925,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8d2f0355a4d9a31e77b5eb6832fe18ebf08d3dfb656a6af283a14551a3ad9512",
-      "sidecar_sha256": "8b54bdbf0b95dec21d90ed40128cf6b9bd72167956c719e7b124801aed912496"
+      "sidecar_sha256": "ba4e7b3661f2a959a4ed29a3e9da26303e0a4a33bf1051232d9b9f943319d660"
     },
     "neovim-lualine-mira": {
       "destination": "assets/screenshots/lualine/mira/go.png",
@@ -4008,8 +4008,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -4040,7 +4040,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "82fd2c00407ad51561a741b8cb2f0cf29bf217501cb7e130fc511501a405ab6d",
-      "sidecar_sha256": "3a68331b66d94f71918cdf8fb92878772158492a6463af43db86fa47ae0c63de"
+      "sidecar_sha256": "da296ea52701d73befcac88cff2a8d962d805e6283f6b998d3318ea724029f9d"
     },
     "neovim-lualine-opal": {
       "destination": "assets/screenshots/lualine/opal/go.png",
@@ -4123,8 +4123,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -4154,8 +4154,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "313151807e47d336e6a2efdab435f63423ac9a9afe5102b464f74e371f615854",
-      "sidecar_sha256": "4c8c7b0ed7cebd0a0f3fd9a5565810edca747c28fd6f06b4eab9c6db68875238"
+      "png_sha256": "1a3237aca4235fc10b64f51bd0ab6e0bb5d15bcd19d29e2901f373ef015852fe",
+      "sidecar_sha256": "87bb338aca6d64359549898ae94668fca1776207f66fa3a6a86d6cbaf7459bc9"
     },
     "neovim-neotree-dusk": {
       "destination": "assets/screenshots/neotree/dusk/go.png",
@@ -4238,8 +4238,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -4270,7 +4270,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "1170c05ceecedb83d7f52ed33881eec0065b7784fbac640bee49f7b2c902f1b0",
-      "sidecar_sha256": "f26baf6f7bc0c6f282ce72742bafa0ec506ca35b38312f33dc5d8c3a9c746de8"
+      "sidecar_sha256": "720aceda46c60bee9fb49db185e7bd2c7417d8f63f97563c6b3e4178f0699f32"
     },
     "neovim-neotree-mesa": {
       "destination": "assets/screenshots/neotree/mesa/go.png",
@@ -4353,8 +4353,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -4385,7 +4385,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "709349351fcd2b179d55094e746f32fbbe257e35ad61caebb894954b5bd0635b",
-      "sidecar_sha256": "3e896362ff0d3bf3ded25b66e6de4adac111c1caabcd335c968afc3fd3a1c7c1"
+      "sidecar_sha256": "cb6fc0c6606a6a5544d3b9afe24cab5e18e1ac33b62aeca8e1db35df3d001fe5"
     },
     "neovim-neotree-mira": {
       "destination": "assets/screenshots/neotree/mira/go.png",
@@ -4468,8 +4468,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -4500,7 +4500,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "8c3b705517b6f391a3e6a8e5b7ab0377d0776523c958fd00938f32cef22aba5f",
-      "sidecar_sha256": "b659f9d5b3b64267fcb2bac6726981c636f7fbe43c6e3a7623e9401f950e4276"
+      "sidecar_sha256": "b907e44bf900bf6b8980ff976d6298fbab406efcf37a7e97c4a3ec1b54255d7a"
     },
     "neovim-neotree-opal": {
       "destination": "assets/screenshots/neotree/opal/go.png",
@@ -4583,8 +4583,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -4614,8 +4614,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "aa6ed0b75c2fe9c6dcd9d50d00dfe061554b84cc20e0d1b0c5cd13c8d0358547",
-      "sidecar_sha256": "05cae3a2e49c8c8cbe5e6ddbcecce79a251ccc14297c544ea1b55817ea169f34"
+      "png_sha256": "9e0cdb96d45946598db8a5e9308cae5f23761bd54d3d3bd407afb2eca329bc71",
+      "sidecar_sha256": "f4d6841e1ae71d844580f3ec5aefd6b4a7e1ec715119381e8edd6f757f81bb9b"
     },
     "neovim-python-dusk": {
       "destination": "assets/screenshots/dusk/python.png",
@@ -4698,8 +4698,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -4730,7 +4730,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "74172511e7d374b2b114d49c5c7c04aed8244750724059ca0f6ca6fde037f64c",
-      "sidecar_sha256": "2c1e8368af5d3b26630d82c84700a1178b0892bb4d99c7dac3321060dfe9397b"
+      "sidecar_sha256": "ebdc0ed8055035846df82f0ddfd5cf7832ab769399dbcb2bd1ff382f256b79c1"
     },
     "neovim-python-mesa": {
       "destination": "assets/screenshots/mesa/python.png",
@@ -4813,8 +4813,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -4845,7 +4845,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "ef43729f36ee0e8c0f95b0086bdc555fbb7aab9b45e553317d39d0416e2b1f50",
-      "sidecar_sha256": "618e7e50adecad5eef65e1d173e5b8632162604bcd01f6eeb47baed7df064d31"
+      "sidecar_sha256": "ed9b1dd9c92d181949d1d3f6b407fb9fbb9a65010735fba18e222786192211f6"
     },
     "neovim-python-mira": {
       "destination": "assets/screenshots/mira/python.png",
@@ -4928,8 +4928,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -4960,7 +4960,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "f834576f24dae506cc96238acf9cfc4a2cd3b1a3335d068b5515a9751fbd6fea",
-      "sidecar_sha256": "8bbe14438a0b4065c1546e8e45a5ae4207e70852f25199be6273a196cc595180"
+      "sidecar_sha256": "052bce510cc0a6e47ce2e28898920825dcb09ae6d58b69d0fc0790580f5ea7c1"
     },
     "neovim-python-opal": {
       "destination": "assets/screenshots/opal/python.png",
@@ -5043,8 +5043,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -5074,8 +5074,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "158756684839664ffb1135af69c4ba0a546458f4e576d0c00dd3970a3706fc57",
-      "sidecar_sha256": "f1b49cb527ae7cc3ca8a3302186eb22d0de8f7e31d6e36be0799bc8fb0f1d713"
+      "png_sha256": "a3144e80e26020ad50ac628fefd649bc29b2cab2586cec87072907a070c0de55",
+      "sidecar_sha256": "15251a2123ff122d313cd7f56c0580eb58bd4cb54864570c9293af3b1325013b"
     },
     "neovim-rust-dusk": {
       "destination": "assets/screenshots/dusk/rust.png",
@@ -5158,8 +5158,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -5190,7 +5190,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "b9061fecfe0d8bf692868ee038ccb509fde7566990def04bd6e794c9b53852ac",
-      "sidecar_sha256": "b6c18c73693e1b7a65550091646d5db63eac2b7491a08f03b4953cbb43837b85"
+      "sidecar_sha256": "a9987f7e41f56a0c4c0d853d443061589d38bf1606315f7286cf81ecedbe079d"
     },
     "neovim-rust-mesa": {
       "destination": "assets/screenshots/mesa/rust.png",
@@ -5273,8 +5273,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -5305,7 +5305,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "399b3b7ee8dcbbf60f51f5e3dbc6fbbe2c382b06ea4b25b024207bd947fb3963",
-      "sidecar_sha256": "a444c75f30ada1ea2432af8cbba77fe1c386ef984c97deebd0347cb508692fb1"
+      "sidecar_sha256": "1c5d052be04876c884c6f97d9dafe2bf6afa4b48211a599e264cfecee7523f88"
     },
     "neovim-rust-mira": {
       "destination": "assets/screenshots/mira/rust.png",
@@ -5388,8 +5388,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -5420,7 +5420,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "6ccdbac3aa8bd103c5d9d8a16bec349078425b254524fdd564de5d499d59ce87",
-      "sidecar_sha256": "ba6a2d8dd477e6732f3c4af2c86a04b1326246a5871319e8580bf426113146eb"
+      "sidecar_sha256": "d982b1c4f3d17e1e7fab7d2c8e3155a73a5eef77904726ceaee54c41841e675d"
     },
     "neovim-rust-opal": {
       "destination": "assets/screenshots/opal/rust.png",
@@ -5503,8 +5503,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -5534,8 +5534,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "17d5f0dacf8b6d03d20046a7f31dfacf98a6cc781ae68fad2b58afa8427f5087",
-      "sidecar_sha256": "14aa48fc88f299063b1c9db536e34d47f34378ab2e4a64ac1138819dfb02bfeb"
+      "png_sha256": "ebe3f09cf89df48581cc6596ebea5a4c3a03ba874379974903dcb026c3d3e231",
+      "sidecar_sha256": "f7f18e5efe0d81316c6fc17b71e03cb6c313a7a1d8106c4e180f30c2c1c6c7e7"
     },
     "neovim-selection-go-dusk": {
       "destination": "assets/screenshots/selection/dusk/go.png",
@@ -5618,8 +5618,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -5650,7 +5650,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "c5023cb6f665d710d07f30e2c2f6b2eb03da3227f15dff5109daf754d98e0067",
-      "sidecar_sha256": "f5a6dc215f8f2af8d7c1f872e406638881465b66e649deb31ce979724c869dfc"
+      "sidecar_sha256": "745c50dcac10ef385637ba178f7c3e7b85f977a55d6cbfa667562e68038450e9"
     },
     "neovim-selection-go-mesa": {
       "destination": "assets/screenshots/selection/mesa/go.png",
@@ -5733,8 +5733,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -5765,7 +5765,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "f5dcee34c80fa64b141c7ff15ef68eeab751b35060b323773250c467306f9988",
-      "sidecar_sha256": "5d0b63d81071e3209eacaf28046c0566b601dc37d2cf55a9ed29b3c2c2f0f85f"
+      "sidecar_sha256": "49599bbc94d8df80d080f3eb43ce26afac3f26992a514e16cda84363ce230920"
     },
     "neovim-selection-go-mira": {
       "destination": "assets/screenshots/selection/mira/go.png",
@@ -5848,8 +5848,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -5880,7 +5880,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "73637bd2127a2291baaf828024f968b0f23814fbce776270f6dbe7fade028ce4",
-      "sidecar_sha256": "d8e02bd2a684029c4466aa9deb4fd75d7827860d493dcbb99ac7a8a001dbe6b0"
+      "sidecar_sha256": "0aa0e903b61da9c3e57b57103c81a5b0e5985ef326acc5da8a1d9299b2d088ae"
     },
     "neovim-selection-go-opal": {
       "destination": "assets/screenshots/selection/opal/go.png",
@@ -5963,8 +5963,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -5994,8 +5994,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "1a01e08688a5533e5a9d692762ca1ed58c2129c98ca7a322cd7628eb1003c1c1",
-      "sidecar_sha256": "8fc9a5f1db11dcb02df6097f6141e3f3f6b390dfaa6d9f4f754a707fa83a24fb"
+      "png_sha256": "e3b7b47437ad2de8a2beb8faa37c7f7df35ad8d13b48b3fdc3532ce6e95a2aea",
+      "sidecar_sha256": "7ab7ea4ce23de875e64ea310f8ba1edf7f7266546f4959ec360e71b2197f1592"
     },
     "neovim-toml-dusk": {
       "destination": "assets/screenshots/dusk/toml.png",
@@ -6078,8 +6078,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -6110,7 +6110,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "71f961179c198dc9059591c6988ad0c93b1a994e30539d99ad53936acc4b355b",
-      "sidecar_sha256": "26d273f185f61006445fdd3254a8d1c7017157fc251c85ff95b4750d083b58cd"
+      "sidecar_sha256": "9ba9b74f123b2b478414d6bdf078b2546c53b93dc106d7b5dece664f5aeb409f"
     },
     "neovim-toml-mesa": {
       "destination": "assets/screenshots/mesa/toml.png",
@@ -6193,8 +6193,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -6225,7 +6225,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "7f385ef837cb7882d92f8da032b4ee2744cf604ca224b453c339e63cd9c75363",
-      "sidecar_sha256": "cd4d7b784742eff269629983235541efd41525853372e995f30bec6f7cb8495d"
+      "sidecar_sha256": "7ccc6eb91066bdfce7980599f43f61f8cdc8c740484aaba44e990cce5b991c1c"
     },
     "neovim-toml-mira": {
       "destination": "assets/screenshots/mira/toml.png",
@@ -6308,8 +6308,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -6340,7 +6340,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "ce8b7eff909ea171ec296e2036688c7d1041b9a725a95ccdc2f82f96d448b6cb",
-      "sidecar_sha256": "546e8dd5981a4734de24ef84f13e550083ac534a244d069d3898ae1c542d38f0"
+      "sidecar_sha256": "fb108fef53f3e808fcbd5f367f8deba456187304de316632dad775bc3abf13d5"
     },
     "neovim-toml-opal": {
       "destination": "assets/screenshots/opal/toml.png",
@@ -6423,8 +6423,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -6454,8 +6454,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "c25948ea886511c649388dabace53e90bc11288283b75a2177c3a2c2f2738a6f",
-      "sidecar_sha256": "b0f34b2bff1e0609994535f30b0effd0aa9ba597e2f6585389aabeeddec84678"
+      "png_sha256": "fbe2e864b9a8286460db4c97f8c479e767899b58b6fa274fcf06786790c6b1c1",
+      "sidecar_sha256": "2deadde8facea88bb1207a9a74eb9b2123a3c6330616239fe3ebe07ebb468636"
     },
     "neovim-tsx-dusk": {
       "destination": "assets/screenshots/dusk/tsx.png",
@@ -6538,8 +6538,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -6570,7 +6570,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "7986db526bc1aaa4c9c73eeb25707378b7d74d83c493b2db4b90ef0ec71ee143",
-      "sidecar_sha256": "bb9100a7f6a6496825db96d1fed9db906e2a74e0fd4172cf161216d6ab320240"
+      "sidecar_sha256": "a28455b76f2707cabad5f4fcd5ee724af62deaf92b9643ff8fb1b048df8fb46c"
     },
     "neovim-tsx-mesa": {
       "destination": "assets/screenshots/mesa/tsx.png",
@@ -6653,8 +6653,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -6685,7 +6685,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "3f12de6f89d3b39cc1b14e00e4392744f2b5f3d4aa8a3d31748e091f22104e96",
-      "sidecar_sha256": "d0caff6726d6442056a1379cd531f44a1a7a52137cdadc96ce96e8b18a88392e"
+      "sidecar_sha256": "5ee724e4961809f093bfef9a26b0e04e9cad9c92612f6f89743e9fc1154c0850"
     },
     "neovim-tsx-mira": {
       "destination": "assets/screenshots/mira/tsx.png",
@@ -6768,8 +6768,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -6800,7 +6800,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "84bb32d43d85064345c23fb6b70e0b972a96926a6ebb2f076df6c6c8bf7ad11d",
-      "sidecar_sha256": "9e4d48cd2e29ed1b8df6760955b551ba64d6072aefa4a9d6fa7deeb242d53828"
+      "sidecar_sha256": "9eb587119bd71e7c023728cfa07226acc216ab859f2b6d1a628be971b8af9cbc"
     },
     "neovim-tsx-opal": {
       "destination": "assets/screenshots/opal/tsx.png",
@@ -6883,8 +6883,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -6914,8 +6914,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "4acacb422f249f1c219e0a92637e4786e92cb6f43537d708a534879579233b93",
-      "sidecar_sha256": "36ac4ae8f41e94dd42d59e3059dc529fc86fdf11f64bc148e1a044f3c6de46c5"
+      "png_sha256": "4d5f078cc5f8193cae490b86b34544fe51c458cb651ab0fd58ff47f10805715e",
+      "sidecar_sha256": "b9a59519a1ce05c61cf2c570abdd90196d404eb997995ae27ecd6b4d35e8dc43"
     },
     "neovim-zig-dusk": {
       "destination": "assets/screenshots/dusk/zig.png",
@@ -6998,8 +6998,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -7030,7 +7030,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "f47d7df417d0ee335ea637f8cda2ad12ceec12ff2346bd275f2e63e2fce58bd4",
-      "sidecar_sha256": "e93a02158c3eb9311f4d8cfeeff662a5b48614a8c726f75e98475555e2d3e2f7"
+      "sidecar_sha256": "834446b57811452ffbd27dc87185d67687d1f557efe17dce8a335be3242e5277"
     },
     "neovim-zig-mesa": {
       "destination": "assets/screenshots/mesa/zig.png",
@@ -7113,8 +7113,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -7145,7 +7145,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "7023b85403f1bc5023ec58df0e9f94b943fc50c859805d9703429989cb9549c9",
-      "sidecar_sha256": "274e4a9a7daa3f279991079b20ee919d206ea29e6e652843b4fa8b8872829035"
+      "sidecar_sha256": "6e76aad021da5accf2555461f0f0f96918941614af83ec620f104a79637ffef4"
     },
     "neovim-zig-mira": {
       "destination": "assets/screenshots/mira/zig.png",
@@ -7228,8 +7228,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -7260,7 +7260,7 @@
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
       "png_sha256": "59fe1df1ae578fec22549eea3207c181d55d8eaa6880ce99fc64431a97de14d3",
-      "sidecar_sha256": "18c1947397b5ac1152fd7a25a011237eaa8fdd65b745a776a549d8ed7aa8feda"
+      "sidecar_sha256": "f033b4c80a0a267cf97eb69e7d2ac3f4ee427904fd4eae4cadd1327e5253dc6d"
     },
     "neovim-zig-opal": {
       "destination": "assets/screenshots/opal/zig.png",
@@ -7343,8 +7343,8 @@
         "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
         "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
         "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-        "lua/flume/manifest.lua": "75dd7b035af406c4cd3d7544c0f307f9c0031e3d2389e796b85046e187774d2a",
-        "lua/flume/palette.lua": "aac9b1c8cc678af31ba51c72d020d75b0e70aa7f56ef61e78c44828d90cd84f9",
+        "lua/flume/manifest.lua": "af6ee67f086ac9ea2b6a11f64ef6da3175062bc86503930b43df8842c2544feb",
+        "lua/flume/palette.lua": "ff75db88075fc06a48b5b91873dbfaef56e288c31be6ed58471421b45cd96f5f",
         "lua/flume/state.lua": "68cd773bd738046b99bcacba4de399f1ee4dc0121fbd950ff9a14f2c679431b8",
         "lua/flume/sync.lua": "e934d1836eab88a7218522d5b42a698ffdb9c1eea162e1dbf9f3d0902ef2beca",
         "lua/flume/tweak.lua": "e8d95db25b776693a7d8aaf4a07d999cf7c859dcfc00fa45c4c277b5b594d8f1",
@@ -7374,8 +7374,8 @@
         "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "e52eb7f1bac42a15741a9e2c4a0ac863cf7317410407696f3c86c0dc8cc980ff",
-      "sidecar_sha256": "c4ffb67b3ea6afa5a706072c6790bdc0d24a7f43d616ff10dc03ffe8c11fee71"
+      "png_sha256": "df2300731f937a313507b2ba8ab78d599a976c0655852d7187209c82015917f7",
+      "sidecar_sha256": "b5a61e8bfbf65987c44264398487699b3c8372cb2164f1d75d32d854cb17403f"
     },
     "opencode-dusk": {
       "destination": "assets/screenshots/integrations/opencode/dusk.png",
@@ -7668,7 +7668,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
-        "extras/opencode/flume-opal.json": "6418d734f8dffe8f3d0a5f947817a2fe07bb91f0028dbbed26d3b3919d16d8de",
+        "extras/opencode/flume-opal.json": "08eb6c63f6e99e7934004bc81ca187902b0eff45f0cf026a5f7c7f8f1f2ef973",
         "tests/snapshots/capture.py": "d775a84df727b72ad47604805a20c55782e3b5af477619d8712053c231fe735a",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -7691,7 +7691,7 @@
         "tests/snapshots/opencode.tape": "95a58cf2f0691bfcc09fbb99b49a98cfd481cec2d9a80c2ad36499f551c6dcf8",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "f6571fbf62dfa710915e27960593e8308e41ba7b88472577252d1ad4912137d9"
+      "png_sha256": "f467596e9d736d527337b0041d11110a6266cbe04ed6a47b6e29b4e528ada3a4"
     },
     "pi-dusk": {
       "destination": "assets/screenshots/integrations/pi/dusk.png",
@@ -7984,7 +7984,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
-        "extras/pi/flume-opal.json": "8258487527ec9049637bd50522cff225172bab5e2368836d361648c39f8692de",
+        "extras/pi/flume-opal.json": "002090e23d063d46a8170704e23960a7fded13b225e43e9764134291f7b38bc1",
         "tests/snapshots/capture.py": "d775a84df727b72ad47604805a20c55782e3b5af477619d8712053c231fe735a",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -8007,7 +8007,7 @@
         "tests/snapshots/pi.tape": "df63968034bbe330aee7ae01e562d7178dd7f18b089e63ed7827bfd875f9c75f",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "5cc3d69c72d9fe276f3e7bd5f7f7b60517ecb4d0546f1caac8d4ccac0037e570"
+      "png_sha256": "eaed97ec5ec8f668f324c22dc501ec1356c111e6a63570b8fca02e05d9d305d0"
     },
     "showcase": {
       "destination": "assets/screenshots/showcase.png",
@@ -8024,10 +8024,10 @@
         "neovim-zig-dusk": "f47d7df417d0ee335ea637f8cda2ad12ceec12ff2346bd275f2e63e2fce58bd4",
         "neovim-zig-mesa": "7023b85403f1bc5023ec58df0e9f94b943fc50c859805d9703429989cb9549c9",
         "neovim-zig-mira": "59fe1df1ae578fec22549eea3207c181d55d8eaa6880ce99fc64431a97de14d3",
-        "neovim-zig-opal": "e52eb7f1bac42a15741a9e2c4a0ac863cf7317410407696f3c86c0dc8cc980ff",
+        "neovim-zig-opal": "df2300731f937a313507b2ba8ab78d599a976c0655852d7187209c82015917f7",
         "tests/snapshots/compose.py": "a0a62dc8ad5e9aa5f93846fdf7000ea58faf49724c462199cbf731a40ed77171"
       },
-      "png_sha256": "7ef5826981e3d785b14e91319a6105faa90d30ada32c4bd9d1a4f033b0954e77"
+      "png_sha256": "d9320a74eaf978c68f4de92994f38430cb519a50fbc2faaadf6aa2b9155f1ad9"
     },
     "tmux-dusk": {
       "destination": "assets/screenshots/integrations/tmux/dusk.png",

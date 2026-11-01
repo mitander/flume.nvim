@@ -33,10 +33,10 @@
   rose-red fields and namespaces, peach literals, and sage strings. Coordinate the clearer red family
   across terminal slots, errors, and deletions. Temper bright UI and terminal text while retaining
   readable selections, diagnostics, and diff surfaces.
-- Refine Opal's syntax around purple types, red fields/imports, copper literals, sea-glass strings,
-  and softened teal functions on its existing cool paper canvas. Deepen the inks for readable
-  working states and use a clearer yellow warning fill. Keep neutral identifiers, semantic state
-  inks, and ANSI slots unchanged.
+- Refine Opal's syntax around gold types, purple keywords, red fields/imports, copper literals,
+  sea-glass strings, and softened teal functions on its existing cool paper canvas. Lighten tinted
+  raised and diff surfaces to preserve text contrast without darkening the gold. Keep neutral
+  identifiers, semantic state inks, the clearer yellow warning fill, and ANSI slots unchanged.
 - Move Mesa from warm beige paper to soft rose-gray with a slight mauve undertone. Coordinate
   raised, selection, and diff surfaces while retaining its restrained syntax and ANSI inks.
 - Add explicit selection foreground/background roles for Visual, completion, command-line menus,

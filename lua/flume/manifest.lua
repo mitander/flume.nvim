@@ -44,6 +44,9 @@ function M.render()
     local pairs = {
         { "syntax_primary", "bg", 4.5 },
         { "syntax_primary", "diff_text_bg", 4.5 },
+        { "syntax_type", "bg", 4.5 },
+        { "syntax_type", "element_active", 4.5 },
+        { "syntax_type", "diff_text_bg", 4.5 },
         { "syntax_comment", "active_line", 4.5 },
         { "syntax_comment", "element_active", 4.5 },
         { "syntax_function", "element_active", 4.5 },

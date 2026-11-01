@@ -5,9 +5,9 @@
     syntax-theme = ansi
 
 [delta "flume"]
-    minus-style = syntax "#eadadd"
+    minus-style = syntax "#fbeaed"
     minus-emph-style = syntax "#dfc4ca"
-    plus-style = syntax "#e0e8dc"
+    plus-style = syntax "#eaf0e6"
     plus-emph-style = syntax "#cadbc3"
     line-numbers = true
     line-numbers-minus-style = "#9d395e"

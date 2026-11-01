@@ -16,10 +16,11 @@ Pastel teal functions, creamy amber types, lavender keywords, rose-red fields an
 literals, and sage strings stand out against quiet surfaces. The red family keeps a clearer hue in
 syntax, terminal slots, errors, and deletion surfaces while retaining distinct emphasis. Neutral body
 and UI text use softer inks rather than bright white, without dimming the pastel accents.
-Opal pairs cool lilac paper with purple types and keywords, red fields and imports, copper literals,
-sea-glass strings, and softened teal functions. Types stay in the purple family rather than adding
-another warm accent beside red fields. The inks retain contrast on raised and diff surfaces, not
-only on the canvas. Amber warning ink sits on a clearer yellow fill, independent of syntax colors.
+Opal pairs cool lilac paper with gold types, purple keywords, red fields and imports, copper
+literals, sea-glass strings, and softened teal functions. Like the other palettes, it separates warm
+types from purple control flow. Light lilac raised surfaces and pale green, gold, rose and blue diff
+fills keep the gold readable without darkening the ink into brown. The canvas remains unchanged.
+Amber warning ink sits on a clearer yellow fill, independent of syntax colors.
 Mesa pairs softer rose-gray paper with restrained mineral inks.
 Mesa's slight mauve undertone avoids a yellow cast without making it a second Opal. Dusk and Opal
 carry the stronger violet character, while Mira and Mesa provide more neutral foundations.

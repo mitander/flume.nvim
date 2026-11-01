@@ -113,7 +113,7 @@ M.opal = {
     text = "#413b49",
     muted = "#615a68",
     placeholder = "#817987",
-    active_line = "#ebe6f0",
+    active_line = "#f1ecf6",
     line_number = "#766f7d",
     active_line_number = "#413b49",
     indent_guide = "#d3ccd5",
@@ -121,11 +121,11 @@ M.opal = {
     border_variant = "#c8c0ca",
     border_focused = "#00667e",
     accent = "#00667e",
-    surface = "#ebe6f0",
-    surface_alt = "#e4dee9",
+    surface = "#f1ecf6",
+    surface_alt = "#f3e9fb",
     element = "#f2eff7",
-    element_hover = "#ebe6f0",
-    element_active = "#e4dee9",
+    element_hover = "#f1ecf6",
+    element_active = "#f3e9fb",
     selection_bg = "#756681",
     selection_fg = "#fff9ff",
     on_accent = "#fbf8fa",
@@ -180,8 +180,8 @@ M.opal = {
     icon_purple = "#873a9d",
     icon_pink = "#ad4386",
 
-    -- Purple types balance red fields on porcelain paper. Keep the trial's hue
-    -- relationships, with deeper inks for contrast on raised and diff surfaces.
+    -- Gold types stay distinct from purple keywords and copper literals. Lighter
+    -- tinted surfaces keep this ink readable without darkening it into brown.
     -- State colors and ANSI slots remain independent of these text-sized accents.
     syntax_attribute = "#356475",
     syntax_boolean = "#8d513c",
@@ -189,7 +189,7 @@ M.opal = {
     syntax_doc_comment = "#5d626b",
     syntax_constant = "#514e57",
     syntax_function = "#356475",
-    syntax_type = "#705883",
+    syntax_type = "#856719",
     syntax_keyword = "#70558a",
     syntax_namespace = "#9c4260",
     syntax_primary = "#514e57",
@@ -202,11 +202,11 @@ M.opal = {
     predictive = "#817987",
 
     -- Git Diff / Diagnostics
-    diff_add_bg = "#e0e8dc",
+    diff_add_bg = "#eaf0e6",
     diff_add_emphasis = "#cadbc3",
-    diff_change_bg = "#e8e0cf",
-    diff_text_bg = "#dbdfe9",
-    diff_delete_bg = "#eadadd",
+    diff_change_bg = "#f6eedc",
+    diff_text_bg = "#ebeef8",
+    diff_delete_bg = "#fbeaed",
     diff_delete_emphasis = "#dfc4ca",
     hint = "#00667e",
     hint_bg = "#dce7e9",

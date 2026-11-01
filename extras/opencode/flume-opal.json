@@ -2,8 +2,8 @@
   "$schema": "https://opencode.ai/theme.json",
   "defs": {
     "bg":                    "#f2eff7",
-    "surface":               "#ebe6f0",
-    "element_active":        "#e4dee9",
+    "surface":               "#f1ecf6",
+    "element_active":        "#f3e9fb",
     "fg":                    "#554e5d",
     "muted":                 "#615a68",
     "placeholder":           "#817987",
@@ -26,10 +26,10 @@
     "syntax_primary":        "#514e57",
     "syntax_string":         "#2d6a60",
     "syntax_boolean":        "#8d513c",
-    "syntax_type":           "#705883",
+    "syntax_type":           "#856719",
     "syntax_punctuation":    "#615a68",
-    "diff_add_bg":           "#e0e8dc",
-    "diff_delete_bg":        "#eadadd"
+    "diff_add_bg":           "#eaf0e6",
+    "diff_delete_bg":        "#fbeaed"
   },
   "theme": {
     "primary":                    "accent",
