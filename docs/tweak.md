@@ -38,6 +38,64 @@ styles. It uses opaque surfaces and bypasses exact highlight-group overrides so 
 editing stays visible. Compare an edit on selections, diagnostics and diff surfaces before keeping
 it. A candidate color is not automatically contrast-checked.
 
+## Import a palette draft
+
+Load a group of proposed colors without changing your setup:
+
+```vim
+:FlumeTweakImport /path/to/draft.json
+```
+
+The command opens or reuses the preview and selects the file's palette. Imported colors become
+edits, not a new starting palette. `r` restores the selected role to its resolved starting color,
+`h`/`l` explore shades around the imported ink, and `y` copies imported changes together with your
+later edits. Closing the preview discards them. Neither the draft file nor your configuration is
+written, and no global or shared theme is activated.
+
+If that palette already has edits, the command refuses to replace them. Use
+`:FlumeTweakImport! /path/to/draft.json` to explicitly replace its entire draft. Drafts for other
+palettes remain intact. Invalid input is rejected before opening or changing the preview, even with
+`!`.
+
+Try the [Dusk pastel candidate](../examples/dusk-pastel.json) from the plugin checkout:
+
+```vim
+:FlumeTweakImport examples/dusk-pastel.json
+```
+
+This is an exploratory plum-and-pastel draft, not a fifth palette or a change to canonical Dusk. It
+leaves Dusk's state and ANSI inks unchanged. Compare it with selections, diffs and diagnostics
+before keeping it. Imported colors are not automatically contrast-checked.
+
+### Draft file format
+
+Drafts are JSON data, never Lua or executable configuration. Version 1 requires exactly these three
+fields:
+
+```json
+{
+  "version": 1,
+  "schema": "dusk",
+  "colors": {
+    "bg": "#282332",
+    "syntax_keyword": "#c4abd8",
+    "syntax_property": "#d6a5bd"
+  }
+}
+```
+
+`schema` must name an installed palette. `colors` must be a nonempty object of known role names and
+six-digit `#RRGGBB` strings. Hexadecimal letters are case-insensitive. Omitted roles retain their
+resolved starting values. Unknown fields, roles, schemas and versions are rejected. Input must be a
+regular file no larger than 64 KiB. Relative paths resolve from Neovim's current directory. Filename
+completion is available, and escaped spaces are accepted.
+
+Tools can write this format without loading Neovim or changing canonical palette files. A Lua
+caller can use `require("flume.tweak").import_file(path, replace)`, where `replace` defaults to
+`false`. It returns `true` after import, or `false` with a notification for invalid input, existing
+edits or unmet preview prerequisites. The file contains the colors themselves, so loading it needs
+no hash lookup, registry or network service.
+
 ## Keep an edit
 
 Press `y` to copy only edited roles to the unnamed register. Merge the copied field into your setup,

@@ -136,7 +136,10 @@ isolation/command checks and skips this installed-application lane.
 The ordinary Lua gate exercises namespace isolation, draft editing/export, late callbacks, foreign
 theme takeover, reload and scratch-buffer cleanup, including modified work without its old tab. It
 checks the complete global highlight map with parsers unavailable and compares rendered normal
-colors after last-window reuse. Plain-text fallback does not establish real language captures.
+colors after last-window reuse. Draft-import checks cover bounded regular-file reads, whole-document
+validation, reset/export behavior, explicit replacement, late input and unchanged editor/shared
+state. The bundled pastel candidate is loaded through the public command. Plain-text fallback does
+not establish real language captures.
 
 With the seven sample parsers and their highlight queries already installed, run:
 
@@ -147,8 +150,8 @@ FLUME_TS_RUNTIME=/path/to/treesitter-runtime \
 
 The checker parses every fixture, requires a real highlighter and compares rendered screen-cell
 attributes with independently checked role-color swatches in all four palettes. It edits a string
-role live and keeps a contrasting global ink as a negative control. Merely reading highlight
-configuration would not establish namespace resolution in actual parser output.
+role live, imports a JSON draft and keeps a contrasting global ink as a negative control. Merely
+reading highlight configuration would not establish namespace resolution in actual parser output.
 
 `FLUME_TWEAK_LANGUAGES=lua,rust,python,tsx,zig,go` selects an explicit subset when native parsers
 are split across prepared runtimes. Unselected samples are not qualified. Requested missing parsers

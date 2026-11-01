@@ -51,7 +51,18 @@ local fixture = vim.fn.tempname()
 vim.fn.mkdir(fixture, "p")
 fixture = assert((vim.uv or vim.loop).fs_realpath(fixture))
 local copy = { "cp", "-R" }
-for _, name in ipairs({ "lua", "colors", "plugin", "extras", "tests", "scripts", "docs", "doc", "README.md" }) do
+for _, name in ipairs({
+    "lua",
+    "colors",
+    "plugin",
+    "extras",
+    "examples",
+    "tests",
+    "scripts",
+    "docs",
+    "doc",
+    "README.md",
+}) do
     copy[#copy + 1] = repository .. "/" .. name
 end
 copy[#copy + 1] = fixture
@@ -834,6 +845,7 @@ test("public commands are registered", function()
     require("flume").setup({})
     for _, command in ipairs({
         "FlumeTweak",
+        "FlumeTweakImport",
         "FlumeReload",
         "FlumeCompile",
         "FlumeSync",
@@ -1453,6 +1465,7 @@ require("tests.migration").register(test, equal, truthy)
 require("tests.extras").register(test, equal, truthy)
 require("tests.fish_tools").register(test, equal, truthy)
 require("tests.tweak").register(test, equal, truthy)
+require("tests.tweak_draft").register(test, equal, truthy)
 require("tests.workflows").register(test, equal, truthy)
 require("tests.state").register(test, equal, truthy)
 

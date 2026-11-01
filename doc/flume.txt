@@ -245,6 +245,20 @@ Commands become available when Flume is loaded.
     language-server output or live menus. No parser or server is installed.
     Changing colorscheme or reloading Flume closes it. See docs/tweak.md.
 
+:FlumeTweakImport[!] {file}                              *:FlumeTweakImport*
+    Import a version 1 JSON draft into the isolated preview. The file contains
+    version, schema and a nonempty colors object of known roles with #RRGGBB
+    values. Unknown fields and invalid values are rejected before preview changes.
+    Input must be a regular file no larger than 64 KiB. Paths are relative to
+    Neovim's current directory, with filename completion and escaped spaces.
+
+    Imported colors are edits. r resets to the resolved starting color, h/l
+    explore the imported ink, and y includes imported changes in its export.
+    Existing edits for that palette require ! to replace the whole draft.
+    Other palette drafts survive. No configuration, source file, global palette
+    or shared theme is changed. Colors are not automatically contrast-checked.
+    See docs/tweak.md for the format and examples/dusk-pastel.json for a candidate.
+
 :FlumeReload                                                    *:FlumeReload*
     Reload source modules and the editor-local palette. Preserves options and
     notifies ColorScheme integrations without synchronizing external themes.

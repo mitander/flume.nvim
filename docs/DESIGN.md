@@ -23,6 +23,7 @@ obligations. The [semantic export](semantic-export.md) owns the versioned consum
 | `lua/flume/sync.lua`                          | Shared activation and application reload requests                                   |
 | `lua/flume/watch.lua` and `dev.lua`           | Shared-palette following and local development reload                               |
 | `lua/flume/tweak.lua` and `tweak_samples.lua` | Opt-in, window-local role exploration and reading fixtures                          |
+| `lua/flume/tweak_draft.lua`                  | Bounded JSON draft admission without executing configuration                        |
 
 ## Resolve an editor palette
 
@@ -63,6 +64,13 @@ samples, with explicit plain-text fallback status. Vim syntax files are not sour
 write global highlight definitions. FileType hooks are suppressed for the scratch buffers. Labelled
 UI swatches and example diagnostics are not evidence of live plugin menus or language-server
 behavior.
+
+JSON draft import validates the complete bounded file before opening or modifying a preview. Colors
+enter the existing edit layer, so reset and export retain the same meaning as manual edits. Import
+refuses an edited target palette unless replacement is explicit, and preserves drafts for other
+palettes. It invalidates pending color-input callbacks before replacing a draft. The
+[preview guide](tweak.md#draft-file-format) owns the versioned data format. This is not the semantic
+palette export or a shared activation operation.
 
 The session owns only its scratch buffers, windows and autocommands. Closing it, deleting a sample,
 changing the global colorscheme or reloading Flume releases those resources without rolling back a

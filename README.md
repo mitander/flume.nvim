@@ -97,7 +97,9 @@ other options, see `:help flume-options` ([online](doc/flume.txt)).
 Run `:FlumeTweak` to compare role-color edits in a scratch tab without changing your editor theme.
 Use `h`/`l` for darker/lighter candidates, Enter for a hex color, `y` to copy edited
 `schema_overrides`, and `q` to discard the draft. The [preview guide](docs/tweak.md) explains how to
-keep an edit and what the samples show. Local overrides do not change external themes.
+keep an edit and what the samples show. Use `:FlumeTweakImport /path/to/draft.json` to audition a
+whole set of role edits from a JSON file, including the
+[Dusk pastel candidate](examples/dusk-pastel.json). Local overrides do not change external themes.
 
 ## Integrations
 

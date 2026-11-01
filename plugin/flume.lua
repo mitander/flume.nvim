@@ -8,3 +8,12 @@ end, {
         return require("flume.palette").schema_order
     end,
 })
+
+vim.api.nvim_create_user_command("FlumeTweakImport", function(opts)
+    require("flume.tweak").import_file(opts.fargs[1], opts.bang)
+end, {
+    nargs = 1,
+    bang = true,
+    complete = "file",
+    desc = "Import a JSON draft into the isolated Flume preview (! replaces existing palette edits)",
+})

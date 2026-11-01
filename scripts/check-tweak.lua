@@ -1,5 +1,6 @@
 -- Native preview qualification. Requires actual parsers/queries for every selected sample.
 -- FLUME_TS_RUNTIME may point to an installed Tree-sitter runtime. No tools are installed.
+local draft_path = vim.fn.tempname()
 local ok, failure = xpcall(function()
     vim.opt.runtimepath:prepend(vim.fn.getcwd())
     if vim.env.FLUME_TS_RUNTIME and vim.env.FLUME_TS_RUNTIME ~= "" then
@@ -136,6 +137,22 @@ local ok, failure = xpcall(function()
                     vim.deep_equal(config, flume.config) and vim.deep_equal(colors, flume.colors),
                     "editor state changed"
                 )
+                vim.fn.writefile({
+                    vim.json.encode({ version = 1, schema = schema, colors = { syntax_string = "#654321" } }),
+                }, draft_path)
+                vim.cmd("FlumeTweakImport! " .. vim.fn.fnameescape(draft_path))
+                assert(vim.wait(1000, matches_swatch, 10), sample.name .. " did not render imported ink")
+                assert(
+                    vim.api.nvim_get_hl(namespace, { name = "FlumeTweakSwatch_syntax_string", link = false }).fg
+                        == 0x654321,
+                    "imported RGB was not applied"
+                )
+                assert(
+                    vim.deep_equal(config, flume.config)
+                        and vim.deep_equal(colors, flume.colors)
+                        and vim.api.nvim_get_hl(0, { name = "@string", link = false }).fg == 0x010203,
+                    "import changed the editor theme"
+                )
                 press(windows.roles, "r")
                 count = count + 1
             end
@@ -143,8 +160,9 @@ local ok, failure = xpcall(function()
         end
         press(windows.roles, "q")
     end
-    print("PASS: " .. count .. " real parser previews, rendered namespace inks and live edits; global theme unchanged")
+    print("PASS: " .. count .. " real parser previews, rendered edits and JSON imports; global theme unchanged")
 end, debug.traceback)
+vim.fn.delete(draft_path)
 if not ok then
     print(failure)
     vim.cmd("cquit 1")

@@ -237,9 +237,9 @@ local function enter_color(state)
     if not role then
         return
     end
-    local schema = state.schema
+    local schema, revision = state.schema, state.revision
     vim.ui.input({ prompt = role .. " (#RRGGBB): ", default = colors_for(state)[role] }, function(value)
-        if not active(state) or state.schema ~= schema or value == nil then
+        if not active(state) or state.schema ~= schema or state.revision ~= revision or value == nil then
             return
         end
         value = type(value) == "string" and vim.trim(value) or value
@@ -258,14 +258,14 @@ local function choose_ink(state)
     if not role then
         return
     end
-    local schema, colors = state.schema, colors_for(state)
+    local schema, colors, revision = state.schema, colors_for(state), state.revision
     vim.ui.select(vim.deepcopy(state.roles), {
         prompt = "Candidate ink for " .. role,
         format_item = function(candidate)
             return candidate .. " " .. colors[candidate]
         end,
     }, function(candidate)
-        if not active(state) or state.schema ~= schema or not colors[candidate] then
+        if not active(state) or state.schema ~= schema or state.revision ~= revision or not colors[candidate] then
             return
         end
         state.anchors[schema][role] = colors[candidate]
@@ -405,10 +405,11 @@ end
 
 ---Open a scratch-tab preview. Drafts only affect its highlight namespace.
 ---@param schema? string
+---@return boolean opened
 function M.open(schema)
     if not vim.o.termguicolors then
         vim.notify("FlumeTweak needs true-color rendering. Enable :set termguicolors first.", vim.log.levels.WARN)
-        return
+        return false
     end
     local palettes = require("flume.palette")
     if session and active(session) and vim.api.nvim_tabpage_is_valid(session.tab) then
@@ -417,7 +418,7 @@ function M.open(schema)
             session.schema = palettes.resolve(schema)
             render(session)
         end
-        return
+        return true
     end
     if session then
         close(session)
@@ -425,10 +426,11 @@ function M.open(schema)
     schema = palettes.resolve(schema or require("flume").config.schema)
     if vim.o.columns < 80 or vim.o.lines < 22 then
         vim.notify("FlumeTweak needs at least 80 columns and 22 rows.", vim.log.levels.WARN)
-        return
+        return false
     end
     local state = {
         schema = schema,
+        revision = 0,
         sample = 1,
         base = {},
         edits = {},
@@ -524,6 +526,42 @@ function M.open(schema)
         close(state)
         error(failure)
     end
+    return true
+end
+
+---Import validated colors as preview edits, retaining the resolved starting palette.
+---Existing edits for the target schema require explicit replacement. Other drafts survive.
+---@param path string
+---@param replace? boolean
+---@return boolean imported
+function M.import_file(path, replace)
+    local draft, failure = require("flume.tweak_draft").read(path)
+    if not draft then
+        vim.notify("FlumeTweak import: " .. failure, vim.log.levels.ERROR)
+        return false
+    end
+    if session and active(session) and next(session.edits[draft.schema]) and not replace then
+        vim.notify(
+            "FlumeTweak import: this palette already has edits. Use :FlumeTweakImport! to replace its draft.",
+            vim.log.levels.WARN
+        )
+        return false
+    end
+    if not M.open(draft.schema) then
+        return false
+    end
+
+    local state = session
+    state.revision = state.revision + 1
+    state.edits[draft.schema], state.anchors[draft.schema], state.candidates[draft.schema] = {}, {}, {}
+    for role, value in pairs(draft.colors) do
+        if value ~= state.base[draft.schema][role] then
+            state.edits[draft.schema][role] = value
+        end
+        state.anchors[draft.schema][role] = value
+    end
+    render(state)
+    return true
 end
 
 return M

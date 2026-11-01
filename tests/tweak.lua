@@ -263,6 +263,163 @@ function M.register(test, equal, truthy)
         end
     end)
 
+    test("draft import previews the candidate without changing editor or shared state", function()
+        dofile("plugin/flume.lua")
+        local flume = require("flume")
+        flume.setup({ schema = "opal", watch_sync = false, overrides = { syntax_function = "#abcdef" } })
+        local config, colors = vim.deepcopy(flume.config), vim.deepcopy(flume.colors)
+        local highlights = vim.api.nvim_get_hl(0, {})
+        local colors_name, background, terminal = vim.g.colors_name, vim.o.background, vim.g.terminal_color_1
+        local activate = require("flume.state").activate
+        require("flume.state").activate = function()
+            error("import must not publish shared themes")
+        end
+        local ns = vim.api.nvim_create_namespace("FlumeTweak")
+        local ok, failure = xpcall(function()
+            vim.cmd("FlumeTweakImport examples/dusk-pastel.json")
+            truthy(panes().roles, "candidate preview opened")
+            equal(vim.api.nvim_get_hl(ns, { name = "Normal", link = false }).bg, 0x282332, "candidate canvas")
+            equal(vim.api.nvim_get_hl(ns, { name = "Function", link = false }).fg, 0x9bbec5, "candidate function")
+            press("y")
+            local draft = assert(loadstring("return {" .. vim.fn.getreg('"') .. "}"))().schema_overrides
+            equal(draft.dusk.bg, "#282332", "import included in exported edits")
+            equal(draft.dusk.syntax_property, "#d6a5bd", "rose fields exported")
+            equal(draft.opal, nil, "unmodified editor palette omitted")
+            press("r")
+            equal(vim.api.nvim_get_hl(ns, { name = "Function", link = false }).fg, 0xabcdef, "reset uses resolved base")
+            press("y")
+            draft = assert(loadstring("return {" .. vim.fn.getreg('"') .. "}"))().schema_overrides
+            equal(draft.dusk.syntax_function, nil, "reset role removed from export")
+            equal(draft.dusk.bg, "#282332", "other imported edits retained")
+            press("q")
+            truthy(vim.deep_equal(config, flume.config), "import changed config")
+            truthy(vim.deep_equal(colors, flume.colors), "import changed resolved colors")
+            truthy(vim.deep_equal(highlights, vim.api.nvim_get_hl(0, {})), "import changed global highlights")
+            equal(vim.g.colors_name, colors_name, "import changed colorscheme")
+            equal(vim.o.background, background, "import changed appearance")
+            equal(vim.g.terminal_color_1, terminal, "import changed terminal ink")
+            vim.cmd("FlumeTweak dusk")
+            equal(vim.api.nvim_get_hl(ns, { name = "Function", link = false }).fg, 0xabcdef, "close discarded import")
+            press("q")
+        end, debug.traceback)
+        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name or "default" })
+        require("flume.state").activate = activate
+        if not ok then
+            error(failure)
+        end
+    end)
+
+    test("draft replacement requires consent and preserves other palettes", function()
+        local root = vim.fn.tempname()
+        vim.fn.mkdir(root, "p")
+        local path = root .. "/draft with spaces.json"
+        vim.fn.writefile({ '{"version":1,"schema":"dusk","colors":{"syntax_function":"#123456"}}' }, path)
+        local notify, input = vim.notify, vim.ui.input
+        local notice, pending
+        vim.notify = function(message)
+            notice = message
+        end
+        vim.ui.input = function(_, done)
+            pending = done
+        end
+        local ns = vim.api.nvim_create_namespace("FlumeTweak")
+        local ok, failure = xpcall(function()
+            require("flume").setup({ schema = "dusk", watch_sync = false })
+            vim.cmd("FlumeTweakImport examples/dusk-pastel.json")
+            press("p")
+            press("<CR>")
+            pending("#010203")
+            local header = vim.api.nvim_buf_get_lines(panes().roles_buffer, 0, 1, false)[1]
+            vim.cmd("FlumeTweakImport " .. vim.fn.fnameescape(path))
+            truthy(notice:find("FlumeTweakImport!", 1, true), "replacement refusal explains explicit consent")
+            equal(
+                vim.api.nvim_buf_get_lines(panes().roles_buffer, 0, 1, false)[1],
+                header,
+                "refusal retains current palette"
+            )
+            press("P")
+            press("<CR>")
+            local stale_input = pending
+            vim.cmd("FlumeTweakImport! " .. vim.fn.fnameescape(path))
+            stale_input("#ffffff")
+            equal(
+                vim.api.nvim_get_hl(ns, { name = "Function", link = false }).fg,
+                0x123456,
+                "late input cannot undo import"
+            )
+            equal(
+                vim.api.nvim_get_hl(ns, { name = "Normal", link = false }).bg,
+                0x232136,
+                "replacement removes old edits"
+            )
+            press("y")
+            local draft = assert(loadstring("return {" .. vim.fn.getreg('"') .. "}"))().schema_overrides
+            equal(draft.dusk.syntax_function, "#123456", "replacement exported")
+            equal(draft.dusk.bg, nil, "old target draft replaced, not merged")
+            equal(draft.opal.syntax_function, "#010203", "other palette draft preserved")
+            press("l")
+            equal(
+                vim.api.nvim_get_hl(ns, { name = "Function", link = false }).fg,
+                0x254464,
+                "shade starts around imported ink"
+            )
+            press("r")
+            equal(
+                vim.api.nvim_get_hl(ns, { name = "Function", link = false }).fg,
+                0x73a6b6,
+                "reset returns to original palette"
+            )
+            press("q")
+        end, debug.traceback)
+        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name or "default" })
+        vim.notify, vim.ui.input = notify, input
+        vim.fn.delete(root, "rf")
+        if not ok then
+            error(failure)
+        end
+    end)
+
+    test("invalid imports and preview prerequisites leave existing state untouched", function()
+        local path = vim.fn.tempname()
+        vim.fn.writefile({ '{"version":1,"schema":"dusk","colors":{"bg":"#123456","unknown":"#abcdef"}}' }, path)
+        local notify, rgb = vim.notify, vim.o.termguicolors
+        vim.notify = function() end
+        local tweak = require("flume.tweak")
+        local ok, failure = xpcall(function()
+            local tabs, buffers = #vim.api.nvim_list_tabpages(), #vim.api.nvim_list_bufs()
+            equal(tweak.import_file(path, true), false, "invalid draft rejected")
+            equal(#vim.api.nvim_list_tabpages(), tabs, "invalid import creates no tab")
+            equal(#vim.api.nvim_list_bufs(), buffers, "invalid import creates no buffers")
+            vim.o.termguicolors = false
+            equal(tweak.import_file("examples/dusk-pastel.json"), false, "RGB prerequisite retained")
+            equal(#vim.api.nvim_list_tabpages(), tabs, "prerequisite refusal creates no tab")
+            vim.o.termguicolors = true
+            vim.cmd("FlumeTweakImport examples/dusk-pastel.json")
+            local ns = vim.api.nvim_create_namespace("FlumeTweak")
+            local before = vim.api.nvim_get_hl(ns, {})
+            equal(tweak.import_file(path, true), false, "force does not bypass validation")
+            truthy(vim.deep_equal(before, vim.api.nvim_get_hl(ns, {})), "invalid import partially changed highlights")
+            local uv = vim.uv or vim.loop
+            local fd = assert(uv.fs_open(path, "w", 384))
+            local payload = '{"version":1,"schema":"dusk","colors":{"bg":"#112233"}}' .. "\0invalid suffix"
+            local written, write_error = uv.fs_write(fd, payload, 0)
+            assert(uv.fs_close(fd))
+            assert(written == #payload, write_error)
+            equal(tweak.import_file(path, true), false, "raw NUL cannot hide an invalid suffix")
+            truthy(vim.deep_equal(before, vim.api.nvim_get_hl(ns, {})), "NUL import replaced the draft")
+            press("y")
+            local draft = assert(loadstring("return {" .. vim.fn.getreg('"') .. "}"))().schema_overrides
+            equal(draft.dusk.bg, "#282332", "invalid import preserved the draft")
+            press("q")
+        end, debug.traceback)
+        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name or "default" })
+        vim.notify, vim.o.termguicolors = notify, rgb
+        vim.fn.delete(path)
+        if not ok then
+            error(failure)
+        end
+    end)
+
     test("FlumeTweak closes on theme takeover, buffer deletion and module reload", function()
         local flume = require("flume")
         flume.setup({ schema = "dusk", watch_sync = false })
