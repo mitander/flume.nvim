@@ -1,136 +1,111 @@
 # Changelog
 
-## Unreleased
-
-- Keep sync feedback brief, with manual reload hints only for installed integrations whose reload
-  request failed. Ask only whether to install Fish tool setup, then print separate commands for
-  preserving configured tools or adopting Flume's current-session settings.
-- Separate command and reload plumbing from rendering inputs so nonvisual command changes do not
-  invalidate editor captures. Collapse extra language examples in each palette gallery.
-
-- Use neutral raised panels for successful Pi tool results instead of green diff-addition fills.
-  Keep failed tool results visibly tinted.
-
-- Keep Delta and Lazygit diff syntax readable with quieter emphasis fills and underlined changed
-  words. Lighten Mesa's add/delete surfaces without changing its canvas or ANSI inks. Measure
-  OpenCode labels and signs on their actual surfaces and capture a real edit diff. Qualify native
-  Delta output alongside snapshots.
-
-- Add `:FlumeTweak [schema]` for isolated role-color exploration, shade/ink candidates, custom RGB
-  input and copyable per-palette overrides. Include realistic code samples with actual parser or
-  explicit plain-text fallback status, example diagnostics and labelled UI swatches. Keep editor configuration,
-  global highlights, terminal colors and shared integrations unchanged.
-
-- Add dedicated `icon_*` palette roles for consistent file-icon hue families across all four
-  schemas. Keep muted, earthy copper distinct from brighter orange and gold/yellow without borrowing
-  syntax or ANSI colors. Export the roles in the version 1 semantic palette.
-
-- Render named constants in the neutral identifier ink across all four palettes. Keep numbers,
-  booleans, built-in constants, tags, and symbol literals accented.
-
-- Add opt-in `:FlumeInstallExtras fish_tools` for shared fzf and Lazygit setup and idempotent
-  `LS_COLORS` configuration in Fish 3.5+. Offer a one-command session adoption or preservation of
-  explicit tool choices, without restarting Fish or changing persistent variables. Refresh stale
-  setup fragments without switching the shared palette. Keep syntax colors separate and leave
-  `config.fish` untouched. Add Pi theme linking and installation results with next steps.
-- Give artifact names, install destinations and setup hints one integration inventory. Separate
-  palette renderers from file writes while preserving existing compiler entry points and output.
-
-- Refine Dusk's warm syntax with muted amber types, clearer rose-red fields, quiet rose namespaces,
-  and softened coral literals. Retain its violet canvas, teal functions, lavender keywords, sage
-  strings, and stronger state and ANSI inks.
-- Add editor-local `schema_overrides` for per-palette role customization. Resolve global overrides
-  first, then the selected palette's overrides, with exact highlight overrides last.
-- Add LSD shell setup to `:FlumeExtras` for pink world-writable directory names without a background.
-- Give Mira a neutral graphite foundation with Dusk-derived pastel syntax and ANSI inks.
-  Pair clear, softened neutral identifiers with teal functions, creamy amber types, lavender keywords,
-  rose-red fields and namespaces, peach literals, and sage strings. Coordinate the clearer red family
-  across terminal slots, errors, and deletions. Temper bright UI and terminal text while retaining
-  readable selections, diagnostics, and diff surfaces.
-- Refine Opal's syntax around gold types, purple keywords, red fields/imports, copper literals,
-  sea-glass strings, and softened teal functions on its existing cool paper canvas. Lighten tinted
-  raised and diff surfaces to preserve text contrast without darkening the gold. Keep neutral
-  identifiers, semantic state inks, the clearer yellow warning fill, and ANSI slots unchanged.
-- Move Mesa from warm beige paper to soft rose-gray with a slight mauve undertone. Coordinate
-  raised, selection, and diff surfaces while retaining its restrained syntax and ANSI inks.
-- Add explicit selection foreground/background roles for Visual, completion, command-line menus,
-  Ghostty, and Kitty. Retain quieter active-control surfaces.
-- Use readable muted ink for hidden and ignored filenames, fold controls, inactive lualine text, LSD
-  metadata, and OpenCode quoted prose and line numbers.
-- Use restrained cool-gray comments in all four palettes. Share ordinary and documentation-comment
-  inks within each palette, keeping prose secondary to code while preserving readable contrast.
-
-## v0.3.0
+## v0.3.0 (unreleased)
 
 ### Upgrade notes
 
 - Active integration sets now live in `stdpath("data")/flume`, outside the plugin checkout. Run
-  `:FlumeInstallExtras` to relink installable integrations and update manual includes to the shared
-  data directory. Recognized checkout links are forwarded when writable, but do not survive checkout
-  replacement. See the
+  `:FlumeSync`, then `:FlumeInstallExtras` to relink installable integrations. Update manual includes
+  to the shared data directory. Recognized checkout links are forwarded when writable, but do not
+  survive checkout replacement. See the
   [migration procedure](docs/semantic-export.md#migration-from-checkout-owned-state).
-- Running Flume editors follow `:FlumeSync` switches by default. To keep an editor independent at
-  startup and while running, set both `follow_sync = false` and `watch_sync = false`. Startup
-  following remains opt-in.
+- Running Flume editors follow `:FlumeSync` switches by default. Startup following remains opt-in
+  through `follow_sync = true`. To keep an editor independent at startup and while running, set both
+  `follow_sync = false` and `watch_sync = false`.
+- All four palettes have visual changes. Pin a release tag or commit if you need a fixed appearance.
 - Remove Tuxedo themes and integration support.
 
 ### Palettes and highlighting
 
-- Give changed words a semantic `diff_text_bg` surface that retains syntax colors.
-- Strengthen syntax contrast on cursor-line, selection, and diff surfaces in all four palettes.
-  Improve diagnostic and menu text without changing the canvases or ANSI slots. Keep search matches
-  readable when Visual replaces their background; distinguish current matches with bold and
-  underlined text.
-- Align legacy, Tree-sitter, and LSP macro roles; align imports, directives, and string escapes
-  across providers.
-- Add real Neovim selection, diagnostic, diff, search, completion, and Go/Zig LSP captures through
-  headless Ghostty with runtime provenance. Refresh the clean palette specimens.
+- Refine Dusk's warm syntax with muted amber types, rose-red fields, quiet rose namespaces and
+  softened coral literals. Retain its violet canvas, teal functions, lavender keywords and sage
+  strings.
+- Give Mira a neutral graphite foundation with clear identifiers and Dusk-derived pastel syntax.
+  Coordinate its red family across terminal slots, errors and deletions.
+- Refine Opal around gold types, purple keywords, red fields/imports, copper literals, sea-glass
+  strings and softened teal functions on cool porcelain paper. Lighten raised and diff surfaces.
+- Move Mesa from warm beige paper to soft rose-gray with a slight mauve undertone. Coordinate
+  raised, selection and diff surfaces while retaining its restrained syntax and ANSI inks.
+- Use restrained cool-gray comments in all four palettes. Keep ordinary and documentation comments
+  subordinate to code, with readable muted text for inactive labels, hidden files and metadata.
+- Render named constants in neutral identifier ink. Keep numbers, booleans, built-in constants,
+  tags and symbol literals accented. Keep readonly/static bindings and fields in their normal
+  syntax roles, and use the namespace color for ZLS namespace tokens.
+- Add explicit selection foreground/background roles for Visual, completion, command-line menus,
+  Ghostty and Kitty. Give changed words a semantic `diff_text_bg` surface that retains syntax colors.
+  Strengthen text contrast on cursor-line, selection and diff surfaces. Preserve search underlines
+  through Visual selection and distinguish current matches with bold, underlined text.
+- Align legacy, Tree-sitter and LSP macro roles. Align imports, directives and string escapes across
+  providers.
+- Add dedicated `icon_*` roles for file-icon hue families across all four schemas. Keep muted copper
+  distinct from brighter orange and gold/yellow without borrowing syntax or ANSI colors. Include
+  these roles in the version 1 semantic palette export.
+
+### Editor features
+
+- Add `:FlumeTweak [schema]` for isolated role-color exploration, shade/ink candidates, custom RGB
+  input and copyable per-palette drafts. Samples use installed parsers or an explicit plain-text
+  fallback, with example diagnostics and labelled UI swatches. Previewing does not change editor
+  configuration, global highlights, terminal colors or shared integrations.
+- Add editor-local `schema_overrides` for per-palette customization. Resolve global role overrides
+  first, selected-schema overrides next and exact highlight overrides last.
+- Add opt-in development reload-on-save that preserves the editor palette. With `dev = true`,
+  `:FlumeSync` reloads source and regenerates canonical extras before synchronizing. Failed source
+  reloads restore the previous modules and theme. Normal users sync bundled artifacts without
+  regeneration.
+- Supply a palette-aware named lualine theme and the tree statusline highlight.
+- Stop shared-palette watching when another colorscheme takes over, including already queued
+  changes. Reloading preserves the editor's current palette rather than rereading the startup
+  preference.
 
 ### Shared themes and integrations
 
-- Store synchronized integration sets in `stdpath("data")/flume`, independent of plugin checkout
-  replacement. Support `FLUME_DATA_DIR` and `get_sync_dir()`.
-- Forward recognized legacy checkout links when writable; installers now link directly to shared
-  state. Preserve unrelated paths and report migration failures.
-- Publish a versioned generic semantic palette export for custom consumers.
-- Add a four-palette integration contrast report with actual exported pairs, palette hierarchy,
-  before/after Git comparisons, and optional JSON measurements. Native visual review remains
-  separate from deterministic contrast checks.
-- Report shared state, stale integration links, and reload requirements in health checks.
-- Isolate activation tests from user state and the working checkout.
-
-- Add opt-in startup selection from the synchronized integration schema with `follow_sync`, while
-  keeping the configured schema as a fallback.
-- Add opt-in development reload-on-save that preserves the editor palette.
-- Supply a palette-aware named lualine theme and the tree statusline highlight.
-- Publish portable fzf, Lazygit, and Delta activation recipes.
-- Let running Neovim instances follow synchronized palettes by default; disable this with
-  `watch_sync = false`.
-- Stop synchronization watching when another colorscheme takes over, including already queued
-  palette changes.
-- Retain immutable integration sets so concurrent activations cannot delete each other's files.
-- Keep readonly/static bindings and fields in their normal syntax roles, and let ZLS namespace
-  tokens use the namespace color.
+- Store synchronized integration sets outside the checkout, with `FLUME_DATA_DIR` and
+  `get_sync_dir()` support. Retain complete immutable sets so concurrent activations cannot delete
+  files another reader still uses. Preserve unrelated paths during legacy-link migration and report
+  failures.
+- Publish a versioned generic semantic palette export for custom consumers. Report shared state,
+  stale integration links and reload requirements in health checks.
+- Add Lazygit and Pi theme linking. Installation reports its destination and next setup step
+  separately from application selection or reload. Refuse existing regular files and directories.
+- Add Fish syntax and pager themes with consent-based installation that leaves `config.fish`
+  untouched. Existing shells can source the active fragment again after synchronization.
+- Add optional `:FlumeInstallExtras fish_tools` for Fish 3.5+ setup of fzf, Lazygit and the
+  world-writable-directory `LS_COLORS` rule. Ask whether to install, then print separate source
+  commands to preserve configured tools or replace current-session exports. Neither command changes
+  persistent variables. Refresh stale setup fragments without switching the shared palette.
+- Publish portable fzf, Lazygit and Delta activation recipes and manual LSD filename-color setup.
+  Give artifact names, install destinations and setup hints one integration inventory. Separate
+  palette renderers from file writes while preserving compiler entry points and output.
+- Request Ghostty reloads through AppleScript on macOS or `SIGUSR2` on Linux, source Tmux's
+  configuration when attached, and notify a linked Pi theme. Keep sync feedback brief, with manual
+  reload hints only for installed adapter links whose refresh failed. Other applications still need
+  their own reload action or a new invocation.
+- Add Tmux UI variables `thm_surface`, `thm_muted` and `thm_on_accent` for raised panels,
+  secondary labels and text on filled accents. Keep the existing ANSI and placeholder variables'
+  meanings unchanged.
+- Keep Delta and Lazygit diff syntax readable with quieter emphasis fills and underlined changed
+  words. Use neutral raised panels for successful Pi tool results and tinted panels for failures.
+  Measure OpenCode labels and signs on their actual surfaces and capture its real edit diff.
 
 ### Documentation and visual evidence
 
-- Restore the constant-folding Zig specimen and wider, shorter windows in the cascading README hero.
-  Add labelled palette previews and an expandable language gallery; keep application state and LSP
-  evidence on the showcase page.
-- Use actual Tree-sitter highlighting for canonical screenshots and record parser/query provenance
-  instead of manually assigning token colors.
-- Add native parser fixtures and role checks for Zig, Rust, Python, TypeScript/TSX, Go, and Elixir.
-- Unify editor, lualine, and seven terminal-app snapshots behind headless `scripts/snapshots test`
-  and `update` commands. Generate and test the README hero and integration contact sheets through
-  the same pinned pipeline. Preserve real parser, diagnostic, completion, and language-server
-  evidence, with exact pixel comparisons and visual reports. Keep Ghostty/Kitty configuration checks
-  separate from native renderer qualification.
-- Pin JetBrains Mono Nerd Font Mono SemiBold and its real bold/italic faces for high-resolution
-  captures across every palette and application. Preserve exact RGB colors from Ghostty's X11
-  output through PNG composition, and add rounded corners with a restrained macOS-style title bar.
-  Keep complete foreground windows visible in the hero and use compact viewports for short app fixtures. Use larger showcase typography, clean title bars, and
-  mode-specific non-blinking cursors. Signal capture readiness through real status information
-  instead of adding preview labels to the images.
+- Add palette and language galleries, with extra languages collapsed on palette pages. Restore the
+  constant-folding Zig specimen and cascading README hero.
+- Unify editor, lualine, Neo-tree and seven terminal-app snapshots behind `scripts/snapshots test`
+  and `update`. Generate the hero and integration contact sheets through the same pinned, isolated
+  Linux Ghostty pipeline with exact pixel comparisons and review reports.
+- Capture actual Tree-sitter highlighting, selection, diagnostics, diffs, search, completion and
+  Go/Zig language-server output. Record parser, query, server, source and image provenance. Keep
+  Ghostty/Kitty configuration checks separate from native renderer qualification.
+- Pin JetBrains Mono Nerd Font Mono SemiBold and its bold/italic faces. Preserve exact RGB pixels
+  through PNG composition, with rounded frames, compact integration viewports and non-blinking
+  mode-specific cursors. Reveal real status information only after capture readiness.
+- Separate command registration, reload and sync orchestration from rendering inputs so nonvisual
+  command changes do not invalidate editor capture provenance.
+- Add native parser fixtures and role checks for Zig, Rust, Python, TypeScript/TSX, Go and Elixir.
+  Qualify native Delta output alongside snapshots and add four-palette integration contrast reports.
+  Keep activation tests isolated from user state and the working checkout.
 
 ## v0.2.0 — 2026-07-27
 
