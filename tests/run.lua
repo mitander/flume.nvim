@@ -628,6 +628,8 @@ test("supported plugin highlights stay inside every schema palette", function()
         IblIndent = { fg = "indent_guide" },
         IblWhitespace = { fg = "indent_guide" },
         IblScope = { fg = "line_number", bg = "bg" },
+        IndentLine = { fg = "indent_guide" },
+        IndentLineCurrent = { fg = "line_number" },
         NvimTreeWindowPicker = { fg = "on_accent", bg = "accent" },
     }
 
@@ -1447,6 +1449,7 @@ test("activation rejects sets with obsolete artifacts", function()
     end
 end)
 
+require("tests.migration").register(test, equal, truthy)
 require("tests.extras").register(test, equal, truthy)
 require("tests.fish_tools").register(test, equal, truthy)
 require("tests.tweak").register(test, equal, truthy)

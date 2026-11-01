@@ -1,25 +1,43 @@
 # External-tool recipes
 
-Use these includes when you want external tools to follow `:FlumeSync`. The
-[help reference](../doc/flume.txt) lists installation destinations, active filenames, shared-data
-options, and reload behavior. For a fixed palette instead, use the palette-suffixed files in
-[`extras/`](../extras).
+Extras are color configuration files for applications outside Neovim. Choose a
+[fixed palette](#fixed-palettes) if you want an application to stay on one palette, or use the
+shared paths below to follow `:FlumeSync`. Neither is required to use Flume in Neovim.
 
-## Lualine
-
-Lualine setup and palette changes are covered by `:help flume-lualine` ([online](../doc/flume.txt)).
+The [help reference](../doc/flume.txt) lists exact installation destinations, active filenames and
+shared-data options.
 
 ## External tools
 
-Run `:FlumeSync` once to create the active set before using these examples. Print
-`require("flume").get_sync_dir()` in Neovim and replace `/absolute/path/to/flume-data` with that
-directory. Select or include the active file in each application. Keep these includes in your own
-shell and application configuration. Merge the examples into existing settings rather than replacing
-your whole configuration.
+Choose your application below. Installing a link does not select its theme or reload it.
 
-For the installable tools below, run the named `:FlumeInstallExtras` command in Neovim first. It
-refuses regular files and directories but replaces symlinks; check the destination if you already
-manage a theme there.
+| Application                         | One-time setup                                                         | After `:FlumeSync`                                               |
+| ----------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [Ghostty](#ghostty)                 | Install `ghostty`, then set `theme = flume`                            | Reload requested on macOS/Linux, manual reload if needed         |
+| [Kitty](#kitty)                     | Install `kitty`, then include `themes/flume.conf`                      | Reload manually or open a new instance                           |
+| [Tmux](#tmux)                       | Install `tmux`, source its variables and use them in your styles       | Configuration sourced when Neovim is inside Tmux                 |
+| [LSD](#lsd)                         | Install `lsd`, then select `color.theme: custom`                       | New invocations read the theme                                   |
+| [OpenCode](#opencode)               | Install `opencode`, then select `flume`                                | Restart if the running UI keeps the old palette                  |
+| [Lazygit](#lazygit)                 | Install `lazygit`, then layer it with `LG_CONFIG_FILE`                 | New invocations read the theme                                   |
+| [Pi](#pi)                           | Install `pi`, then select `flume`                                      | Theme link refreshed to notify Pi, reselect or restart if needed |
+| [Fish colors](#fish)                | Install `fish` with consent, or source the fragment yourself           | Source again in existing shells, new shells load it at startup   |
+| [Fish tool setup](#fish-tool-setup) | Install `fish_tools` with consent for fzf, Lazygit and filename colors | New tool invocations follow the shared paths                     |
+| [fzf](#fzf)                         | Set `FZF_DEFAULT_OPTS_FILE`                                            | New invocations read the options                                 |
+| [Delta](#delta)                     | Include the generated Git configuration                                | New invocations read the theme                                   |
+
+Here, “install `ghostty`” means `:FlumeInstallExtras ghostty`, and likewise for the other named
+installers. They refuse regular files and directories but replace symlinks. Check the destination
+before installing if you already manage a theme there. fzf and Delta use manual includes instead.
+
+Run `:FlumeSync` once to publish the active set. For recipes that need its absolute path, run:
+
+```vim
+:lua print(require("flume").get_sync_dir())
+```
+
+Replace `/absolute/path/to/flume-data` below with that directory. Keep includes in your own shell
+and application configuration. Merge the examples into existing settings rather than replacing your
+whole configuration. Shared themes use the palette's default colors, not editor-local overrides.
 
 ### Ghostty
 
@@ -68,10 +86,10 @@ set -g message-command-style "bg=#{thm_surface},fg=#{thm_accent}"
 ```
 
 `message-command-style` applies to the vi command-mode prompt, not prompt insertion mode.
-`thm_surface` is a raised UI background, `thm_muted` is readable secondary text, and
-`thm_on_accent` is text on a filled accent or state color. The existing variables keep their
-meanings. In particular, `thm_black` and `thm_gray` are ANSI black, not UI surfaces, and
-`thm_lgray` is decorative placeholder ink, not inactive-label text.
+`thm_surface` is a raised UI background, `thm_muted` is readable secondary text, and `thm_on_accent`
+is text on a filled accent or state color. The existing variables keep their meanings. In
+particular, `thm_black` and `thm_gray` are ANSI black, not UI surfaces, and `thm_lgray` is
+decorative placeholder ink, not inactive-label text.
 
 Run `tmux source-file ~/.tmux.conf` to apply your configuration. Future `:FlumeSync` calls source
 that file when Neovim is running inside Tmux. See the
@@ -122,6 +140,15 @@ Restart OpenCode after changing the shared palette if it still shows the old col
 request an OpenCode reload. These instructions follow the
 [current OpenCode theme guide](https://opencode.ai/docs/themes/); older versions may keep the theme
 setting in `opencode.json` instead.
+
+### Pi
+
+Run `:FlumeInstallExtras pi`, then select `flume` in Pi's theme settings. The installer links
+`~/.pi/agent/themes/flume.json` to the shared active theme.
+
+After `:FlumeSync`, Flume refreshes that link to notify Pi's theme watcher. If the running UI keeps
+the old palette, reselect the theme or restart Pi. The notification does not prove that the UI
+applied it.
 
 ### Fish
 
@@ -177,14 +204,14 @@ The installer then prints two quoted `source` commands. Run one in Fish:
 - The first preserves configured tools' exports and supplies Flume defaults for unset tools.
 - The second adds `--adopt` to replace the current session's fzf/Lazygit exports instead.
 
-Both commands apply the filename-color rule described below. Neovim cannot change the parent
-shell's environment. There is no need to clear variables or restart Fish.
+Both commands apply the filename-color rule described below. Neovim cannot change the parent shell's
+environment. There is no need to clear variables or restart Fish.
 
 This is separate from `:FlumeInstallExtras fish`, which only installs command-line syntax and pager
 colors. Neither command edits `config.fish`. Normal startup respects explicit tool exports.
 `--adopt` is a one-time source argument, not a persistent preference, and it does not modify Fish's
-persistent universal variables. Reinstalling a stale tool fragment refreshes the complete
-shared set without changing its selected palette.
+persistent universal variables. Reinstalling a stale tool fragment refreshes the complete shared set
+without changing its selected palette.
 
 The tool fragment keeps fzf on the stable shared `current/fzf.opts` path. It asks installed Lazygit
 for its config directory and layers its personal `config.yml`, when present, before
@@ -203,7 +230,9 @@ reloaded. The manual recipes below remain available for other shells or custom a
 
 fzf supports `FZF_DEFAULT_OPTS_FILE` and reads the file for each invocation. Use this instead of
 copying theme options into `FZF_DEFAULT_OPTS` at shell startup. Keep unrelated options in
-`FZF_DEFAULT_OPTS`.
+`FZF_DEFAULT_OPTS`. FZF reads the options file first, then `FZF_DEFAULT_OPTS`, then command-line
+options. Remove copied `--color` settings from the latter two if they override the file's colors.
+This route follows the shared `:FlumeSync` choice, not editor-local colorscheme switches.
 
 Fish:
 
@@ -220,6 +249,42 @@ export FZF_DEFAULT_OPTS_FILE=/absolute/path/to/flume-data/current/fzf.opts
 This follows future synchronizations for new fzf invocations, including shell integrations. An
 already running fzf instance does not reload. If your fzf lacks this option, upgrade it or load the
 file in a wrapper per invocation.
+
+#### fzf inside Neovim
+
+For fzf.vim or Fzfx, configure the FZF Vim plugin's `g:fzf_colors` once in your picker setup:
+
+```lua
+vim.g.fzf_colors = {
+    fg = { "fg", "Normal" },
+    bg = { "bg", "Normal" },
+    query = { "fg", "Normal" },
+    hl = { "fg", "Search" },
+    ["fg+"] = { "fg", "CursorLine", "Normal" },
+    ["bg+"] = { "bg", "CursorLine", "Normal" },
+    ["hl+"] = { "fg", "Search" },
+    info = { "fg", "Comment" },
+    header = { "fg", "Comment" },
+    border = { "fg", "FloatBorder" },
+    gutter = { "bg", "Normal" },
+    prompt = { "fg", "Directory" },
+    pointer = { "fg", "Special" },
+    marker = { "fg", "Statement" },
+    spinner = { "fg", "Special" },
+}
+```
+
+Merge this with any existing `g:fzf_colors` mapping. The plugin resolves the current highlights
+when opening a picker, so new pickers follow Flume palette changes, local overrides and switches to
+other colorschemes. No `ColorScheme` callback or `:FlumeSync` is needed. Leave layout preferences
+such as `--reverse` in `FZF_DEFAULT_OPTS`, but remove copied color settings from your appearance
+callbacks and per-picker arguments. Already open pickers do not reload. Highlight colors that the
+FZF Vim plugin cannot resolve fall back to FZF defaults.
+
+This recipe follows editor highlights rather than reproducing the canonical external FZF export
+exactly. An opaque `Normal` background is recommended for predictable surfaces. fzf-lua is a
+separate plugin with its own highlight integration. See the
+[FZF Vim color mapping reference](https://github.com/junegunn/fzf/blob/master/README-VIM.md#explanation-of-gfzf_colors).
 
 ### Lazygit
 
@@ -251,3 +316,24 @@ Include the active generated configuration after your personal Delta options:
 
 Remove duplicated fixed Flume colors and any later `light` or theme settings that override the
 include. New Delta invocations then use the synchronized palette and its correct light/dark mode.
+
+## Fixed palettes
+
+Each application directory in [`extras/`](../extras) contains one file per palette. Use that file
+instead of the shared `current/` path when you do not want the application to follow `:FlumeSync`.
+For example, Kitty can use Opal directly:
+
+```conf
+include /absolute/path/to/flume.nvim/extras/kitty/flume-opal.conf
+```
+
+Replace the checkout path and reload Kitty. This needs no installation command or shared state.
+“Fixed” means the palette name does not follow synchronization. Its colors can still change when you
+update Flume, so pin a release or commit if the appearance must stay unchanged. The
+[artifact reference](../doc/flume.txt) lists filenames for the other applications.
+
+## Lualine
+
+Lualine is an editor-plugin integration, not a generated extra. Select `theme = "flume"` in your
+existing lualine options. See `:help flume-lualine` ([online](../doc/flume.txt)) for the full
+example and palette-following behavior.

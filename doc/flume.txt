@@ -2,6 +2,7 @@
 *flume.nvim* *flume*
 
 Flume keeps ordinary identifiers neutral and uses color for syntax and state.
+The Neovim colorscheme works on its own. External themes are optional.
 
 ==============================================================================
 CONTENTS                                                      *flume-contents*
@@ -39,14 +40,41 @@ but does not install or configure those providers.
 ==============================================================================
 PALETTES                                                      *flume-palettes*
 
-Schema  Appearance  Character ~
-    dusk    dark    quiet violet
-    opal    light   purple, red, and sea-glass on cool porcelain
-    mira    dark    Dusk-derived pastels on neutral graphite
-    mesa    light   restrained mineral inks on soft rose-gray paper
+A palette is a complete set of colors for code and editor UI. The `schema`
+option selects its name:
+
+Palette Appearance  Character ~
+    dusk    dark    violet background, amber types and teal functions
+    opal    light   lilac-tinted background, gold types and teal functions
+    mira    dark    graphite background with pastel accents
+    mesa    light   rose-gray background with dark, low-saturation accents
 
 The colorscheme names are flume-dusk, flume-opal, flume-mira, and flume-mesa.
 Each palette sets 'background' to its appearance.
+
+MIGRATION ~                                                 *flume-migration*
+    Prefer setup({ schema = "mira" }) or :colorscheme flume-mira. The legacy
+    :colorscheme flume entry remains available for old configurations and theme
+    pickers. It keeps the editor's selected Flume palette, or Dusk before setup,
+    and records the canonical flume-<palette> name in g:colors_name.
+
+    setup() also accepts style or variant as compatibility spellings of schema
+    when their value is dusk, opal, mira, or mesa. Each spelling and the legacy
+    colorscheme entry warn once per Neovim session, with guidance here. Reloads
+    and palette switches do not repeat the warning. Update your configuration
+    rather than suppressing it. No removal date is scheduled.
+
+    Conflicting selectors and unknown palette names fail before changing the
+    editor. Old experimental names are not guessed or mapped to another palette.
+    Keep styles = { comments = { italic = true } } for syntax attributes; styles
+    is not a palette selector. A plugin-manager lockfile can retain v0.2 even
+    when its plugin specification follows master. Update the plugin explicitly
+    to receive these compatibility fixes.
+
+    External includes are separate. Replace old checkout paths such as
+    extras/ghostty/flume and extras/tmux/colors.conf with a named fixed-palette
+    file or a shared current/ path. See docs/workflows.md and |flume-extras|.
+    This editor compatibility layer does not publish or activate external themes.
 
 ==============================================================================
 EVERYDAY USE                                                     *flume-usage*
@@ -95,7 +123,8 @@ Defaults:
 <
 
 schema ~                                                        *flume-schema*
-    Selects one of the IDs in |flume-palettes|.
+    Selects one of the named palettes in |flume-palettes|. Compatibility names
+    and one-time migration warnings are described in |flume-migration|.
 
 transparent ~                                              *flume-transparent*
     Removes primary editor and sign-column backgrounds. Raised surfaces,
@@ -135,8 +164,9 @@ dev ~                                                              *flume-dev*
     Fix the source and retry. See docs/DEVELOPMENT.md for development commands.
 
 overrides ~                                                  *flume-overrides*
-    Changes palette colors by role before highlights are built. Exact roles
-    and default values are listed in docs/palette-manifest.md.
+    Changes palette colors by role before highlights are built. A role names
+    a color's job, such as syntax_comment or selection_bg. Exact roles and
+    default values are listed in docs/palette-manifest.md.
 >
     require("flume").setup({
         schema = "opal",
@@ -180,6 +210,13 @@ highlights ~                                         *flume-highlights-option*
     })
 <
 
+    An exact Comment override does not change independently defined @comment
+    or @comment.documentation captures. Use overrides.syntax_comment and
+    overrides.syntax_doc_comment to change those role colors consistently.
+    A Visual override replaces the whole group, including its foreground. Set
+    both fg and bg for a complete selection pair, or override selection_fg and
+    selection_bg by role instead.
+
 SYSTEM APPEARANCE ~                                         *flume-appearance*
     Flume does not watch OS appearance. Call setup() from your appearance hook
     after that hook updates 'background':
@@ -203,8 +240,8 @@ Commands become available when Flume is loaded.
     and discards the draft. No global palette, config or shared theme is changed.
 
     The preview uses actual installed Tree-sitter captures or explicitly labelled
-    plain text. It does not source global Vim syntax definitions. It uses opaque surfaces and bypasses exact
-    highlight overrides. Diagnostic examples and labelled UI swatches are not
+    plain text. It does not source global Vim syntax definitions. Surfaces are
+    opaque and exact highlight overrides are bypassed. Diagnostic examples and labelled UI swatches are not
     language-server output or live menus. No parser or server is installed.
     Changing colorscheme or reloading Flume closes it. See docs/tweak.md.
 
@@ -222,8 +259,9 @@ Commands become available when Flume is loaded.
     With |flume-dev| enabled, reload source and regenerate extras first. With
     dev disabled (the default), use bundled artifacts without compilation or
     source reload. Plugin-manager version pins select the installed release.
-    Reports reload requests separately from file synchronization. External apps
-    may still need restarting. See |flume-extras| for per-app behavior.
+    Prints a sync confirmation, with manual reload hints for installed adapter
+    links that could not be refreshed. External apps may still need restarting.
+    See |flume-extras| for per-app behavior.
 
 :FlumeInstallExtras [app]                                *:FlumeInstallExtras*
     Link an external theme at a standard destination. With no argument, link
@@ -241,8 +279,9 @@ Commands become available when Flume is loaded.
 ==============================================================================
 EXTRAS                                                          *flume-extras*
 
-For a fixed theme, use a palette-suffixed file under extras/. For themes that
-follow |:FlumeSync|, use the active filenames under <data-dir>/current/:
+Extras are optional color configuration files for applications outside Neovim.
+For a fixed palette, use a palette-suffixed file under extras/. To follow
+|:FlumeSync|, use the active filenames under <data-dir>/current/:
 
 Tool      Fixed Dusk artifact                      Active filename ~
 Ghostty   extras/ghostty/flume-dusk                 ghostty
@@ -252,7 +291,7 @@ LSD       extras/lsd/colors-dusk.yaml               lsd.yaml
 OpenCode  extras/opencode/flume-dusk.json           opencode.json
 Lazygit   extras/lazygit/flume-dusk.yml             lazygit.yml
 Fish      extras/fish/flume-dusk.fish               fish.fish
-Tools     extras/fish/flume-tools.fish              fish-tools.fish
+Fish tools extras/fish/flume-tools.fish             fish-tools.fish
 fzf       extras/fzf/flume-dusk.opts                fzf.opts
 Delta     extras/delta/flume-dusk.gitconfig         delta.gitconfig
 Pi        extras/pi/flume-dusk.json                 pi.json
@@ -379,8 +418,11 @@ HIGHLIGHTS                                                  *flume-highlights*
 
 Flume defines Neovim UI, diagnostics, Tree-sitter, and LSP semantic groups.
 Plugin highlights cover GitSigns, Oil, Telescope, nvim-cmp, lazy.nvim,
-WhichKey, Mason, Trouble, Neo-tree, nvim-tree, Snacks, and fzf-lua. These
-plugins are not dependencies. BlinkCmpGhostText is also defined.
+WhichKey, Mason, Trouble, Neo-tree, nvim-tree, Snacks, indentmini, and fzf-lua. These
+plugins are not dependencies. Their highlight groups load with the colorscheme;
+configure the plugins themselves normally. BlinkCmpGhostText is also defined.
+Lualine's named theme needs the option shown below. fzf.vim uses g:fzf_colors
+rather than fzf-lua highlight groups; see docs/workflows.md#fzf-inside-neovim.
 
 LUALINE ~                                                      *flume-lualine*
 

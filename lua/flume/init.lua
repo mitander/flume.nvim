@@ -51,7 +51,31 @@ end
 
 function M.setup(opts)
     opts = vim.deepcopy(opts or {})
-    local fallback = require("flume.palette").resolve(opts.schema or default_config.schema)
+    -- Recover unambiguous palette selectors without silently choosing Dusk.
+    -- Normalize before applying anything so conflicting or unknown names leave
+    -- the current editor untouched. Internal reloads retain only schema.
+    local palette_module = require("flume.palette")
+    for _, key in ipairs({ "style", "variant" }) do
+        if opts[key] ~= nil then
+            assert(type(opts[key]) == "string", "Flume " .. key .. " must name a palette. See :help flume-migration.")
+            local schema = palette_module.resolve(opts[key])
+            assert(
+                opts.schema == nil or opts.schema == schema,
+                "Conflicting Flume palette selectors; use a single schema value. See :help flume-migration."
+            )
+            opts.schema = schema
+        end
+    end
+    local fallback = palette_module.resolve(opts.schema or default_config.schema)
+    for _, key in ipairs({ "style", "variant" }) do
+        if opts[key] ~= nil then
+            opts[key] = nil
+            vim.notify_once(
+                "Flume: use schema instead of " .. key .. " to select a palette. See :help flume-migration.",
+                vim.log.levels.WARN
+            )
+        end
+    end
     opts.schema = (opts.follow_sync and M.get_active_schema()) or fallback
     M.config = vim.tbl_deep_extend("force", vim.deepcopy(default_config), opts)
     M.apply()
@@ -115,6 +139,8 @@ function M.set_highlights(namespace, c, config)
     hi("IblIndent", { fg = c.indent_guide })
     hi("IblWhitespace", { fg = c.indent_guide })
     hi("IblScope", { fg = c.line_number, bg = c.bg })
+    hi("IndentLine", { fg = c.indent_guide })
+    hi("IndentLineCurrent", { fg = c.line_number })
     hi("ColorColumn", { bg = c.surface })
     hi("CursorLine", { bg = c.active_line })
     hi("CursorLineNr", { fg = c.active_line_number, bg = c.active_line, bold = true })
