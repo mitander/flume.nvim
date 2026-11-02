@@ -9,7 +9,9 @@
   includes to the shared data directory. Recognized checkout links are forwarded when writable, but
   do not survive checkout replacement. See the
   [migration procedure](docs/semantic-export.md#migration-from-checkout-owned-state).
-- Running Flume editors follow `:FlumeSync` switches by default. Startup following remains opt-in
+- Running Flume editors follow `:FlumeSync` switches and same-palette color updates by default.
+  Refresh the receiver's canonical palette cache while retaining local options. Failed refreshes
+  keep the previous palette and can retry the same published set. Startup following remains opt-in
   through `follow_sync = true`. To keep an editor independent at startup and while running, set both
   `follow_sync = false` and `watch_sync = false`.
 - Restore `colorscheme flume` as a compatibility entry that keeps the selected editor palette, or

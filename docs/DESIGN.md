@@ -38,8 +38,20 @@ state. Conflicts and unknown names fail rather than guessing. This keeps old edi
 usable without creating alternate semantic-export identities or silently publishing shared themes.
 The [help reference](../doc/flume.txt) owns migration instructions.
 
-Startup following is opt-in. Running Flume editors watch shared palette changes by default. An
-independent editor disables both `follow_sync` and `watch_sync`. The help reference
+Startup following is opt-in. Running Flume editors watch shared activations by default. A changed
+activation refreshes the receiver's canonical palette module from its installed source, even when
+the schema name is unchanged. Local overrides, styles and exact highlights remain in effect. This
+refresh does not reload the whole plugin or read another editor's source files. Other installations
+need updated palette source. Identical palette metadata does not repaint the editor when only other
+shared artifacts change.
+
+Palette read failures leave the editor unchanged. If applying fresh colors fails, the watcher
+restores the previous palette cache and options and attempts to repaint the old theme. A newer setup
+or foreign colorscheme owns the editor instead of that rollback. Only successful refreshes advance
+the observed activation, so publishing the same set again can retry a failure. Errors, including a
+failed recovery repaint, are reported.
+
+An independent editor disables both `follow_sync` and `watch_sync`. The help reference
 ([online](../doc/flume.txt)) owns the complete option and command behavior.
 
 ## Compile without activating

@@ -1077,6 +1077,114 @@ test("sync watcher stops when another colorscheme takes over", function()
     end
 end)
 
+test("failed watched refresh cannot roll back a reentrant foreign theme", function()
+    local flume = require("flume")
+    local state = require("flume.state")
+    state.activate("dusk")
+    flume.setup({ schema = "dusk" })
+    local original_notify, original_highlights = vim.notify, flume.set_highlights
+    local errors, foreign_highlights = {}, nil
+    vim.notify = function(message, level)
+        if level == vim.log.levels.ERROR then
+            errors[#errors + 1] = message
+        end
+    end
+    flume.set_highlights = function(namespace, colors, config)
+        original_highlights(namespace, colors, config)
+        if config.schema == "opal" then
+            vim.cmd.colorscheme("habamax")
+            foreign_highlights = vim.api.nvim_get_hl(0, {})
+            error("injected failure after foreign-theme takeover")
+        end
+    end
+
+    local ok, err = xpcall(function()
+        state.activate("opal")
+        truthy(
+            vim.wait(2000, function()
+                return #errors == 1
+            end, 10),
+            "reentrant refresh failure was not reported"
+        )
+        equal(vim.g.colors_name, "habamax", "failed refresh rolled back a foreign theme")
+        truthy(vim.deep_equal(vim.api.nvim_get_hl(0, {}), foreign_highlights), "rollback repainted the foreign theme")
+        equal(
+            pcall(vim.api.nvim_get_autocmds, { group = "FlumeSyncWatch" }),
+            false,
+            "foreign theme left watching active"
+        )
+    end, debug.traceback)
+
+    flume.set_highlights = original_highlights
+    vim.notify = original_notify
+    state.activate("dusk")
+    flume.setup({ schema = "dusk" })
+    if not ok then
+        error(err)
+    end
+end)
+
+test("watched refresh recovery respects a non-nested foreign-theme takeover", function()
+    local flume = require("flume")
+    local state = require("flume.state")
+    state.activate("dusk")
+    flume.setup({ schema = "dusk" })
+    local original_notify, original_apply = vim.notify, flume.apply
+    local errors, foreign_highlights = {}, nil
+    local watching_during_takeover = false
+    vim.notify = function(message, level)
+        if level == vim.log.levels.ERROR then
+            errors[#errors + 1] = message
+        end
+    end
+    local group = vim.api.nvim_create_augroup("FlumeNonNestedWatchProbe", { clear = true })
+    vim.api.nvim_create_autocmd("ColorScheme", {
+        group = group,
+        pattern = "flume-opal",
+        once = true,
+        callback = function()
+            vim.cmd.colorscheme("habamax")
+            foreign_highlights = vim.api.nvim_get_hl(0, {})
+            watching_during_takeover = pcall(vim.api.nvim_get_autocmds, { group = "FlumeSyncWatch" })
+        end,
+    })
+    flume.apply = function(schema, colorscheme)
+        original_apply(schema, colorscheme)
+        -- Neovim can report callback errors without throwing from the API.
+        -- Inject the transaction failure after dispatch to exercise recovery.
+        if schema == "opal" then
+            error("injected failure after non-nested event dispatch")
+        end
+    end
+
+    local ok, err = xpcall(function()
+        state.activate("opal")
+        truthy(
+            vim.wait(2000, function()
+                return #errors == 1
+            end, 10),
+            "post-dispatch failure was not reported"
+        )
+        truthy(watching_during_takeover, "foreign event was not suppressed by the non-nested callback")
+        equal(vim.g.colors_name, "habamax", "recovery replaced the non-nested foreign theme")
+        truthy(vim.deep_equal(vim.api.nvim_get_hl(0, {}), foreign_highlights), "recovery repainted the foreign theme")
+        equal(
+            pcall(vim.api.nvim_get_autocmds, { group = "FlumeSyncWatch" }),
+            false,
+            "foreign theme left watching active"
+        )
+    end, debug.traceback)
+
+    vim.api.nvim_del_augroup_by_id(group)
+    flume.apply = original_apply
+    vim.notify = original_notify
+    state.activate("dusk")
+    flume.setup({ schema = "dusk" })
+    if not ok then
+        error(err)
+    end
+end)
+
 test("queued sync cannot replace another colorscheme", function()
     local flume = require("flume")
     local compiler = require("flume.compiler")

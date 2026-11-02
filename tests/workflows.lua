@@ -396,6 +396,244 @@ function M.register(test, equal, truthy)
         end
     end)
 
+    test("cross-process sync refreshes rendered palette colors without losing local options", function()
+        local uv = vim.uv or vim.loop
+        local flume = require("flume")
+        local root = require("flume.extras").get_plugin_dir()
+        local palette_path = root .. "/lua/flume/palette.lua"
+        local tools_path = root .. "/extras/fish/flume-tools.fish"
+        local original_palette, original_tools = vim.fn.readfile(palette_path), vim.fn.readfile(tools_path)
+        local original_data, original_notify = vim.env.FLUME_DATA_DIR, vim.notify
+        local original_loader = package.preload["flume.palette"]
+        local original_highlights = flume.set_highlights
+        local errors = {}
+        vim.notify = function(message, level)
+            if level == vim.log.levels.ERROR then
+                errors[#errors + 1] = message
+            end
+        end
+        local legacy = root .. "/extras/current"
+        local original_legacy = uv.fs_readlink(legacy)
+        local data = vim.fn.tempname()
+        vim.fn.mkdir(data .. "/home", "p")
+        vim.env.FLUME_DATA_DIR = data .. "/state"
+        local source = table.concat(original_palette, "\n")
+        local events = 0
+        local group = vim.api.nvim_create_augroup("FlumeCrossProcessProbe", { clear = true })
+        vim.api.nvim_create_autocmd("ColorScheme", {
+            group = group,
+            callback = function()
+                events = events + 1
+            end,
+        })
+
+        -- The publisher has its own Lua cache. Disable host reload adapters even
+        -- after development sync reloads its modules, and keep Pi's home private.
+        local publisher = data .. "/publish.lua"
+        vim.fn.writefile({
+            "vim.opt.runtimepath:prepend(vim.fn.getcwd())",
+            "vim.fn.executable = function() return 0 end",
+            "local ok, err = xpcall(function()",
+            "  local schema = vim.env.FLUME_TEST_SCHEMA",
+            '  require("flume").setup({ schema = schema, dev = true, watch_sync = false })',
+            '  vim.cmd("FlumeSync " .. schema)',
+            "end, debug.traceback)",
+            'if not ok then vim.api.nvim_err_writeln(err); vim.cmd("cquit 1") end',
+        }, publisher)
+        local function publish(schema)
+            local output = vim.fn.system({
+                "env",
+                "HOME=" .. data .. "/home",
+                "FLUME_DATA_DIR=" .. data .. "/state",
+                "FLUME_TEST_SCHEMA=" .. schema,
+                vim.v.progpath,
+                "--headless",
+                "--clean",
+                "-c",
+                "lua dofile(" .. vim.fn.string(publisher) .. ")",
+                "-c",
+                "qa!",
+            })
+            equal(vim.v.shell_error, 0, "publisher failed: " .. output)
+        end
+        local function change_color(schema, role, color)
+            local start = assert(source:find("M." .. schema .. " = ", 1, true))
+            local changed, replacements =
+                source:sub(start):gsub("(\n    " .. role .. ' = )"#%x%x%x%x%x%x"', '%1"' .. color .. '"', 1)
+            equal(replacements, 1, "fixture must edit the selected canonical role")
+            source = source:sub(1, start - 1) .. changed
+            vim.fn.writefile(vim.split(source, "\n", { plain = true }), palette_path)
+        end
+        local function await_background(background)
+            truthy(
+                vim.wait(2000, function()
+                    return vim.api.nvim_get_hl(0, { name = "Normal" }).bg == background
+                end, 10),
+                "receiver did not repaint from the publisher's changed palette"
+            )
+        end
+
+        local ok, err = xpcall(function()
+            if original_legacy then
+                assert(uv.fs_unlink(legacy))
+            end
+            require("flume.state").activate("mira")
+            flume.setup({
+                schema = "mira",
+                follow_sync = false,
+                overrides = { syntax_property = "#123456" },
+                schema_overrides = { mira = { syntax_function = "#aabbcc" } },
+                styles = { keywords = { italic = true } },
+                highlights = { FlumeSyncProbe = { fg = "#fedcba" } },
+            })
+            vim.cmd.colorscheme("flume")
+            local editor_name = vim.g.colors_name
+            local old_set = uv.fs_readlink(data .. "/state/current")
+
+            change_color("mira", "bg", "#202b35")
+            change_color("mira", "syntax_string", "#b9c5e2")
+            change_color("mira", "red", "#d6a7bf")
+            publish("mira")
+            truthy(uv.fs_readlink(data .. "/state/current") ~= old_set, "publisher did not create a new activation")
+            local exported = vim.json.decode(table.concat(vim.fn.readfile(data .. "/state/current/palette.json"), "\n"))
+            equal(exported.colors.bg, "#202b35", "publisher exported stale colors")
+            await_background(0x202b35)
+            equal(vim.api.nvim_get_hl(0, { name = "String" }).fg, 0xb9c5e2, "receiver kept stale syntax ink")
+            equal(vim.g.terminal_color_1, "#d6a7bf", "receiver kept stale terminal ink")
+            equal(require("flume"), flume, "following sync unnecessarily reloaded the whole plugin")
+            equal(vim.g.colors_name, editor_name, "same-schema refresh replaced the editor entry point")
+            equal(vim.api.nvim_get_hl(0, { name = "@variable.member" }).fg, 0x123456, "global override was lost")
+            equal(vim.api.nvim_get_hl(0, { name = "Function" }).fg, 0xaabbcc, "schema override was lost")
+            equal(vim.api.nvim_get_hl(0, { name = "Keyword" }).italic, true, "syntax style was lost")
+            equal(vim.api.nvim_get_hl(0, { name = "FlumeSyncProbe" }).fg, 0xfedcba, "exact highlight was lost")
+            equal(flume.config.follow_sync, false, "following sync changed the startup preference")
+            equal(flume.config.dev, false, "receiving fresh colors must not require development mode")
+
+            -- A different schema must also come from fresh source, not the
+            -- palette table loaded by the receiver's preceding activation.
+            change_color("opal", "bg", "#eee7f4")
+            publish("opal")
+            await_background(0xeee7f4)
+            equal(flume.config.schema, "opal", "receiver did not follow the schema switch")
+            equal(vim.g.colors_name, "flume-opal", "schema switch kept the old entry point")
+            equal(vim.api.nvim_get_hl(0, { name = "@variable.member" }).fg, 0x123456, "switch lost local options")
+
+            local previous_events = events
+            publish("opal")
+            vim.wait(200, function()
+                return false
+            end, 10)
+            equal(events, previous_events, "identical publication repainted the receiver")
+
+            local previous_set = uv.fs_readlink(data .. "/state/current")
+            vim.fn.writefile({ "# Cross-process static-artifact change" }, tools_path, "a")
+            publish("opal")
+            truthy(
+                uv.fs_readlink(data .. "/state/current") ~= previous_set,
+                "static artifact did not change activation"
+            )
+            vim.wait(200, function()
+                return false
+            end, 10)
+            equal(events, previous_events, "unchanged palette colors repainted after a static-artifact update")
+
+            local working_palette = require("flume.palette")
+            package.preload["flume.palette"] = function()
+                error("injected palette read failure")
+            end
+            change_color("opal", "bg", "#e9e3ef")
+            publish("opal")
+            local failed_set = uv.fs_readlink(data .. "/state/current")
+            truthy(
+                vim.wait(2000, function()
+                    return #errors == 1
+                end, 10),
+                "source failure was not reported"
+            )
+            truthy(errors[1]:find("injected palette read failure", 1, true), "source failure lost its cause")
+            equal(require("flume.palette"), working_palette, "source failure discarded the working palette cache")
+            equal(vim.api.nvim_get_hl(0, { name = "Normal" }).bg, 0xeee7f4, "source failure repainted the editor")
+            equal(events, previous_events, "source failure emitted a colorscheme change")
+
+            package.preload["flume.palette"] = original_loader
+            publish("opal")
+            equal(uv.fs_readlink(data .. "/state/current"), failed_set, "retry unexpectedly needed a different set")
+            await_background(0xe9e3ef)
+
+            working_palette = require("flume.palette")
+            flume.set_highlights = function(namespace, colors, config)
+                original_highlights(namespace, colors, config)
+                if colors.bg == "#e5dfeb" then
+                    error("injected palette application failure")
+                end
+            end
+            change_color("opal", "bg", "#e5dfeb")
+            publish("opal")
+            failed_set = uv.fs_readlink(data .. "/state/current")
+            truthy(
+                vim.wait(2000, function()
+                    return #errors == 2
+                end, 10),
+                "application failure was not reported"
+            )
+            truthy(
+                errors[2]:find("injected palette application failure", 1, true),
+                "application failure lost its cause"
+            )
+            equal(require("flume.palette"), working_palette, "application failure discarded the working palette cache")
+            equal(flume.colors.bg, "#e9e3ef", "application failure retained failed color data")
+            equal(
+                vim.api.nvim_get_hl(0, { name = "Normal" }).bg,
+                0xe9e3ef,
+                "application failure left partial highlights"
+            )
+            equal(vim.api.nvim_get_hl(0, { name = "@variable.member" }).fg, 0x123456, "rollback lost local options")
+
+            flume.set_highlights = original_highlights
+            publish("opal")
+            equal(uv.fs_readlink(data .. "/state/current"), failed_set, "application retry changed the published set")
+            await_background(0xe5dfeb)
+
+            flume.setup({ schema = "opal", watch_sync = false })
+            publish("mira")
+            vim.wait(200, function()
+                return false
+            end, 10)
+            equal(flume.config.schema, "opal", "disabled receiver followed publication")
+            equal(vim.api.nvim_get_hl(0, { name = "Normal" }).bg, 0xe5dfeb, "disabled receiver repainted")
+
+            flume.setup({ schema = "opal" })
+            vim.cmd.colorscheme("habamax")
+            local foreign_background = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
+            publish("opal")
+            vim.wait(200, function()
+                return false
+            end, 10)
+            equal(vim.g.colors_name, "habamax", "publication replaced a foreign colorscheme")
+            equal(vim.api.nvim_get_hl(0, { name = "Normal" }).bg, foreign_background, "foreign theme repainted")
+        end, debug.traceback)
+
+        require("flume.watch").stop()
+        vim.api.nvim_del_augroup_by_id(group)
+        package.preload["flume.palette"] = original_loader
+        flume.set_highlights = original_highlights
+        vim.notify = original_notify
+        vim.fn.writefile(original_palette, palette_path)
+        vim.fn.writefile(original_tools, tools_path)
+        require("flume").reload({ quiet = true })
+        require("flume.compiler").compile_all({ activate = false })
+        uv.fs_unlink(legacy)
+        if original_legacy then
+            assert(uv.fs_symlink(original_legacy, legacy, { dir = true, junction = false }))
+        end
+        vim.env.FLUME_DATA_DIR = original_data
+        vim.fn.delete(data, "rf")
+        require("flume").setup({ watch_sync = false })
+        if not ok then
+            error(err)
+        end
+    end)
+
     test("development reload clears source caches and preserves the editor choice", function()
         local extras = require("flume.extras")
         local original_dir = extras.get_plugin_dir

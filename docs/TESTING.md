@@ -27,6 +27,13 @@ whitespace, syntax and Python tooling. It launches headless Neovim but needs no 
 language servers or external application instances. Preflight validates existing screenshot
 provenance and dimensions. It does not capture a new scene.
 
+Cross-process sync checks keep one editor running while a separate headless Neovim publishes with
+`FlumeSync`. They inspect the receiver's live global highlight RGB values, not just its schema name.
+They cover same-schema color edits, fresh colors on schema switches, local options, unchanged
+palettes, failed reads/applications and retrying the same published set. Host reload adapters are
+disabled and shared state, source edits and the publisher's home stay private. These checks do not
+qualify different installed palette versions or external-application reloads.
+
 [Native language checks](color-system.md#verify-language-highlighting) open representative fixtures
 with real Tree-sitter parsers and queries in all four palettes. They do not run language servers.
 LSP checks additionally need the relevant server and inspection of semantic-token modifiers.

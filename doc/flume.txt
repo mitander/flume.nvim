@@ -137,8 +137,13 @@ terminal_colors ~                                      *flume-terminal_colors*
     use |flume-extras| for that.
 
 watch_sync ~                                                *flume-watch_sync*
-    Applies palettes synchronized by other editors sharing the data directory.
-    Enabled by default. Set to false to ignore switches while the editor runs.
+    Follows shared palette activations, including new colors for the same schema.
+    Refreshes canonical palette data from this editor's installed Flume source,
+    retaining local overrides, styles and exact highlights. The receiving editor
+    does not need dev enabled. Other installations need updated palette source.
+    Unchanged palettes do not repaint, even if other shared artifacts change.
+    A failed refresh reports an error and can retry when the same set is synced
+    again. Enabled by default. Set to false to ignore runtime updates.
     Selecting a non-Flume colorscheme stops watching. Call setup() to resume.
 
 follow_sync ~                                              *flume-follow_sync*

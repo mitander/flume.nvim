@@ -8,31 +8,88 @@ local active_set = nil
 
 local state = require("flume.state")
 
+local function refresh_palette(flume, current_set)
+    local previous_palette = require("flume.palette")
+    local previous_config = vim.deepcopy(flume.config)
+    local previous_name = vim.g.colors_name
+    local started_generation = generation
+    local applying = false
+
+    -- A publication can change RGB values without changing the schema name.
+    -- Refresh only canonical palette data, not the plugin or editor-local options.
+    package.loaded["flume.palette"] = nil
+    local ok, refreshed = xpcall(function()
+        local palette = require("flume.palette")
+        local resolved = flume.get_active_schema()
+        if not resolved or uv.fs_readlink(state.get_current()) ~= current_set then
+            return false
+        end
+        if
+            resolved == previous_config.schema and vim.deep_equal(palette.get(resolved), previous_palette.get(resolved))
+        then
+            return true
+        end
+
+        local colorscheme = resolved == previous_config.schema and previous_config.colorscheme or nil
+        applying = true
+        flume.apply(resolved, colorscheme)
+        return true
+    end, debug.traceback)
+
+    -- Non-nested ColorScheme handlers can suppress the foreign theme's event,
+    -- leaving generation unchanged. A nil or previous name can be partial load.
+    if
+        applying
+        and generation == started_generation
+        and vim.g.colors_name ~= nil
+        and vim.g.colors_name ~= previous_name
+        and not flume.is_active()
+    then
+        M.stop()
+    end
+    if ok and refreshed then
+        return true
+    end
+
+    -- A newer setup or foreign theme owns the editor after a reentrant event.
+    if generation == started_generation then
+        package.loaded["flume.palette"] = previous_palette
+        if applying then
+            flume.config = previous_config
+            local restored, restore_error = pcall(flume.apply)
+            if not restored then
+                refreshed = tostring(refreshed)
+                    .. "\nPrevious palette could not be reapplied: "
+                    .. tostring(restore_error)
+            end
+        end
+    end
+    if not ok then
+        vim.notify("Flume sync refresh failed:\n" .. tostring(refreshed), vim.log.levels.ERROR)
+    end
+    return false
+end
+
 local function apply_active_schema()
     -- A callback can already be scheduled when setup() disables the watcher.
     if not watcher then
         return
     end
-    if not require("flume").is_active() then
+    local flume = require("flume")
+    if not flume.is_active() then
         M.stop()
         return
     end
     local current_set = uv.fs_readlink(state.get_current())
-    if not current_set or current_set == active_set then
-        return
-    end
-    local resolved = require("flume").get_active_schema()
-    if not resolved then
+    if not flume.config.watch_sync or not current_set or current_set == active_set then
         return
     end
 
-    active_set = current_set
-    local flume = require("flume")
-    if not flume.config.watch_sync or flume.config.schema == resolved then
-        return
+    local started_generation = generation
+    if refresh_palette(flume, current_set) and generation == started_generation then
+        -- Failed refreshes remain retryable when the same set is published again.
+        active_set = current_set
     end
-
-    flume.apply(resolved, nil)
 end
 
 function M.stop()
