@@ -81,6 +81,8 @@
   stale integration links and reload requirements in health checks.
 - Add Lazygit and Pi theme linking. Installation reports its destination and next setup step
   separately from application selection or reload. Refuse existing regular files and directories.
+- Keep Lazygit selected rows readable by retaining filename and Git-status inks on quiet active-row
+  surfaces instead of applying the foreground meant for stronger selections.
 - Add Fish syntax and pager themes with consent-based installation that leaves `config.fish`
   untouched. Existing shells can source the active fragment again after synchronization.
 - Add optional `:FlumeInstallExtras fish_tools` for Fish 3.5+ setup of fzf, Lazygit and the

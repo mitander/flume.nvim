@@ -240,6 +240,10 @@ belongs to the Neovim scenes.
 | Delta       | Added/changed/deleted diff lines and line numbers                                                                 |
 | Pi          | Markdown, code, thinking, and successful/failed tool results                                                      |
 
+The pinned Lazygit 0.55.1 ignores `selectedLineFgColor`, so these images cannot qualify that
+setting. Use the [installed-Lazygit selected-row check](TESTING.md#lazygit-selected-rows) as well
+when changing active-row colors.
+
 The palette galleries embed each app's snapshot. Each integration directory also contains
 `contact-sheet.png`, generated and tested from its four raw captures.
 

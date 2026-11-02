@@ -68,6 +68,21 @@ Application configuration repositories should test only their own composition, s
 inherited colors and tool settings. Product installation and native tool checks belong here rather
 than requiring a particular dotfiles checkout.
 
+### Lazygit selected rows
+
+For Lazygit active-row changes, also run the installed application with Git and Tmux available:
+
+```sh
+FLUME_NATIVE_LAZYGIT=1 python3 -m unittest discover -s tests -p 'integration_review.py'
+```
+
+This uses a private Tmux server and Git fixture to observe selected-folder foreground and background
+RGB values in all four palettes. It retains ANSI captures and the application version in the printed
+temporary directory. A negative control restores the old unreadable foreground, so a binary that
+ignores `selectedLineFgColor` cannot pass this lane. Lazygit 0.66.2 supports the setting. The gallery's
+pinned 0.55.1 does not. These are native terminal-cell observations, not macOS renderer screenshots.
+No shared theme or user repository is changed.
+
 ## Native theme qualification
 
 Use an isolated trial to inspect Ghostty or Kitty rendering and Pi's live theme reload. Have Neovim,

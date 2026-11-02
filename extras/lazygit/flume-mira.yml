@@ -5,7 +5,7 @@ gui:
     inactiveBorderColor: ["#4c4856"]
     searchingActiveBorderColor: ["#dcc18f", bold]
     optionsTextColor: ["#a59aaa"]
-    selectedLineFgColor: ["#121116"]
+    selectedLineFgColor: ["default"]
     selectedLineBgColor: ["#372c4b"]
     inactiveViewSelectedLineBgColor: ["#29253f"]
     cherryPickedCommitBgColor: ["#372c4b"]

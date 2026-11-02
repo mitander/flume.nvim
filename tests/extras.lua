@@ -524,6 +524,14 @@ function M.register(test, equal, truthy)
             end
             equal(sorted_keys(lazygit), sorted_keys(lazygit_keys), schema .. " Lazygit theme keys")
             truthy(
+                lazygit_content:find('selectedLineFgColor: ["default"]', 1, true),
+                schema .. " Lazygit active row must retain filename and status inks"
+            )
+            truthy(
+                lazygit_content:find('selectedLineBgColor: ["' .. colors.element_active .. '"]', 1, true),
+                schema .. " Lazygit active row must use its quiet control surface"
+            )
+            truthy(
                 lazygit_content:find('authorColors:\n      "*": "' .. colors.syntax_primary .. '"', 1, true),
                 schema .. " Lazygit author color"
             )

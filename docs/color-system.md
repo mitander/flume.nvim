@@ -108,6 +108,9 @@ surface that retains syntax inks. `selection_bg` and `selection_fg` form a stron
 selection, completion selection, command-line menus, and terminal selection. These states replace
 the original text color; they do not require brighter syntax throughout the palette.
 
+Lazygit active rows use `element_active` with `selectedLineFgColor: ["default"]`, retaining filename
+and Git-status inks. Do not put `selection_fg` on that quiet surface.
+
 `text` and `fg` are primary inks. `muted` renders readable secondary content, including hidden and
 ignored filenames, fold controls, inactive status text, exported metadata, and quoted prose.
 `placeholder` is for decoration or intentionally suppressed content, not filenames. `on_accent` is

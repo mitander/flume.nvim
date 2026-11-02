@@ -827,7 +827,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-dusk": "5da727853c6fb8d66f97eda9bd42d1adbd7c09186a6751c230719cbce509b8cb",
-        "extras/lazygit/flume-dusk.yml": "5f5fc3bc0d690a5f1a3fd382fc239f4ad0b75042f9d455bf435d8437b118a574",
+        "extras/lazygit/flume-dusk.yml": "74df39dc0cc2f917ec55866abf2955520eeb7823f3c7c9fb4baed1183f094575",
         "extras/palette/flume-dusk.json": "2732e4bc1799df5d03706fdccbbbd89e834ccc6b89eaf28ca6a3a33efb62b0f2",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/check_delta.py": "e00ea5ebe61c9e1d165bd4bbc9482043fb0464713a8284e4c6fa36eeea4b1721",
@@ -908,7 +908,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mesa": "0e54eb94a469e93bfeb0da537da6b057a964973ce0c33cc9512c969b508c4876",
-        "extras/lazygit/flume-mesa.yml": "24447191b1355208f83e119c1ee1064a9e6e68249e546e884356de30b844591e",
+        "extras/lazygit/flume-mesa.yml": "3493c2670d9cc09679b52bc13b78ae285f5e0cb330ab5460a50186f90012e604",
         "extras/palette/flume-mesa.json": "a52ef23a96f98315c256c36f52a08790baa8d80ebbdbbafadb6caae680bd4fb8",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/check_delta.py": "e00ea5ebe61c9e1d165bd4bbc9482043fb0464713a8284e4c6fa36eeea4b1721",
@@ -989,7 +989,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mira": "913669694237ee6889d2e1f228436ed694f56ce943bf527932d311177387913c",
-        "extras/lazygit/flume-mira.yml": "841e6d99568c0ff41f5c1477e26e81302972dc0400aae2f4fbd72b460aa9b1a7",
+        "extras/lazygit/flume-mira.yml": "de7ee81c2ff58488f885c09ec8d1fc9378e280d78b7b743f50fc3e4d94e38347",
         "extras/palette/flume-mira.json": "f32e5b2788b8bb5e46bad79a0d5eeee1edf0b03727eedf6d7afdb99b2def1ad1",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/check_delta.py": "e00ea5ebe61c9e1d165bd4bbc9482043fb0464713a8284e4c6fa36eeea4b1721",
@@ -1070,7 +1070,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
-        "extras/lazygit/flume-opal.yml": "7e449c29952b4f34976153c913a25168bee6195d04f5067669ab6bdaf1ec6c12",
+        "extras/lazygit/flume-opal.yml": "7d115c55fa7fa8ea4d6d4f6d0145c474056da7a548a470fa0697562a136eaf62",
         "extras/palette/flume-opal.json": "3df4cfb1df636d80c3686a314d1f64fcbc75f62fb9d6d24d8d474f764aa64705",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/check_delta.py": "e00ea5ebe61c9e1d165bd4bbc9482043fb0464713a8284e4c6fa36eeea4b1721",

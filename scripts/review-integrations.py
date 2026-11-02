@@ -235,12 +235,19 @@ def integration_pairs(
         add("Focused boundary on palette canvas", values["borderAccent"], bg, 3)
     elif app == "lazygit":
         values = dict(
-            re.findall(r'^\s+(\w+): \["(#[\da-fA-F]{6})"', text, re.MULTILINE)
+            re.findall(r'^\s+(\w+): \["(#[\da-fA-F]{6}|default)"', text, re.MULTILINE)
         )
         for role in ("defaultFgColor", "optionsTextColor", "unstagedChangesColor"):
             add(role + " on terminal", values[role], terminal_bg)
-        for role in ("selectedLineBgColor", "inactiveViewSelectedLineBgColor"):
-            add(role, values["defaultFgColor"], values[role])
+        selected_foreground = values.get("selectedLineFgColor", "default")
+        if selected_foreground == "default":
+            selected_foreground = values["defaultFgColor"]
+        add("selectedLineBgColor", selected_foreground, values["selectedLineBgColor"])
+        add(
+            "inactiveViewSelectedLineBgColor",
+            values["defaultFgColor"],
+            values["inactiveViewSelectedLineBgColor"],
+        )
         add(
             "Cherry-picked commit",
             values["cherryPickedCommitFgColor"],
