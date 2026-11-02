@@ -200,8 +200,18 @@ example, a consumer can use blue for Python, copper for Rust, purple for Lua, go
 cyan for Go, and pink for Gleam. Brand colors are not mandatory. Review source, declaration,
 compiled and configuration companions together so an alias does not gain an unrelated color. Assign
 aliases sharing an icon highlight identity to the same family. Keep unreviewed formats quiet rather
-than inferring their meaning from upstream RGB. File-type inventories belong to the consumer, not
-Flume.
+than inferring their meaning from upstream RGB. Currently, consumers supply the file-type inventory
+and the adapter that applies these roles.
+
+The selected direction, not yet implemented, is an opt-in `nvim-web-devicons` integration with a
+Flume-owned, reviewed identity-to-family catalog. Highlight definitions alone are insufficient:
+consumers such as fzf-lua read provider RGB data and cache it across same-background palette
+switches. Flume will own the provider updates, highlight agreement and picker-cache invalidation
+needed to keep those colors coherent, while preserving upstream terminal fallbacks and restoring
+pre-theming provider colors when another colorscheme takes over. This deliberately accepts upstream
+catalog review as a maintenance responsibility. Unreviewed identities stay neutral, without RGB
+classification. Picker layouts and file-discovery policy remain consumer-owned. Until the
+integration ships, the inventory and adapter remain consumer-supplied.
 
 Icon inks target 3:1 on the canvas, raised surfaces, cursor line, and retained-ink active rows. Keep
 a filename or distinct glyph alongside color. Strong selections that replace foregrounds should use
