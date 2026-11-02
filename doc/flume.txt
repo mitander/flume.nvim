@@ -44,10 +44,10 @@ A palette is a complete set of colors for code and editor UI. The `schema`
 option selects its name:
 
 Palette Appearance  Character ~
-    dusk    dark    violet background, amber types and teal functions
+    dusk    dark    violet background, amber types, teal functions and purple keywords
     opal    light   lilac-tinted background, gold types and teal functions
-    mira    dark    graphite background with pastel accents
-    mesa    light   rose-gray background with dark, low-saturation accents
+    mira    dark    deeper violet background with soft pastel accents
+    mesa    light   warm-neutral paper with dark, low-saturation accents
 
 The colorscheme names are flume-dusk, flume-opal, flume-mira, and flume-mesa.
 Each palette sets 'background' to its appearance.
@@ -262,7 +262,7 @@ Commands become available when Flume is loaded.
     Existing edits for that palette require ! to replace the whole draft.
     Other palette drafts survive. No configuration, source file, global palette
     or shared theme is changed. Colors are not automatically contrast-checked.
-    See docs/tweak.md for the format and examples/dusk-pastel.json for a candidate.
+    See docs/tweak.md for the format and examples/dusk-pastel.json for an example.
 
 :FlumeReload                                                    *:FlumeReload*
     Reload source modules and the editor-local palette. Preserves options and

@@ -44,12 +44,12 @@ colors their output but does not install them.
 A **palette** is a complete set of colors for code and editor UI. The `schema` option selects its
 name. Each palette has a matching Neovim colorscheme name, such as `flume-dusk`.
 
-| Palette                     | Background         | Color direction                                         |
-| --------------------------- | ------------------ | ------------------------------------------------------- |
-| [Dusk](docs/themes/dusk.md) | Violet dark        | Amber types, teal functions and lavender keywords       |
-| [Opal](docs/themes/opal.md) | Lilac-tinted light | Gold types, teal functions and purple keywords          |
-| [Mira](docs/themes/mira.md) | Graphite dark      | Dusk's hue families with pastel accents on neutral gray |
-| [Mesa](docs/themes/mesa.md) | Rose-gray light    | Dark, low-saturation syntax colors    |
+| Palette                     | Background           | Color direction                                                  |
+| --------------------------- | -------------------- | ---------------------------------------------------------------- |
+| [Dusk](docs/themes/dusk.md) | Violet dark          | Amber types, teal functions, purple keywords and rose-red fields |
+| [Opal](docs/themes/opal.md) | Lilac-tinted light   | Gold types, teal functions and purple keywords                   |
+| [Mira](docs/themes/mira.md) | Deep violet dark     | Pastel teal, almond, lilac and dusty rose accents                |
+| [Mesa](docs/themes/mesa.md) | Warm-neutral light   | Dark, low-saturation syntax colors                               |
 
 They share the same role assignments. Choose by background and accent intensity, not by programming
 language. See the [design explanation](docs/color-system.md#palette-direction) for the reasoning.
@@ -99,7 +99,7 @@ Use `h`/`l` for darker/lighter candidates, Enter for a hex color, `y` to copy ed
 `schema_overrides`, and `q` to discard the draft. The [preview guide](docs/tweak.md) explains how to
 keep an edit and what the samples show. Use `:FlumeTweakImport /path/to/draft.json` to audition a
 whole set of role edits from a JSON file, including the
-[Dusk pastel candidate](examples/dusk-pastel.json). Local overrides do not change external themes.
+[Dusk plum draft example](examples/dusk-pastel.json). Local overrides do not change external themes.
 
 ## Integrations
 

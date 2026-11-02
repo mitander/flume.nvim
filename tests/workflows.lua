@@ -321,8 +321,9 @@ function M.register(test, equal, truthy)
             local flume = require("flume")
             flume.setup({ schema = "dusk", watch_sync = false })
             require("flume.compiler") -- Cache both modules before the source edits.
-            local changed_palette =
-                table.concat(palette_source, "\n"):gsub('accent = "#7dacbb"', 'accent = "#abcdef"', 1)
+            local changed_palette, replacements =
+                table.concat(palette_source, "\n"):gsub('(\n    accent = )"#%x%x%x%x%x%x"', '%1"#abcdef"', 1)
+            equal(replacements, 1, "source-edit fixture must replace the canonical accent")
             vim.fn.writefile(vim.split(changed_palette, "\n", { plain = true }), palette_path)
             local changed_compiler =
                 table.concat(compiler_source, "\n"):gsub("# Flume Theme for Ghostty", "# Edited Ghostty exporter", 1)

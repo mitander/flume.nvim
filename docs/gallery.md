@@ -25,13 +25,13 @@ Lilac-tinted light background with gold types, purple keywords and blue-green st
 
 ### [Mira](themes/mira.md)
 
-Graphite dark background with Dusk's hue families and pastel accents.
+Deep violet dark background with Dusk's hue families and softer pastel accents.
 
 [![Mira palette in Neovim](../assets/screenshots/mira/zig.png)](themes/mira.md)
 
 ### [Mesa](themes/mesa.md)
 
-Rose-gray light background with dark, low-saturation syntax colors.
+Warm-neutral light paper with dark, low-saturation mineral inks.
 
 [![Mesa palette in Neovim](../assets/screenshots/mesa/zig.png)](themes/mesa.md)
 

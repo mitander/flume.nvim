@@ -57,15 +57,16 @@ If that palette already has edits, the command refuses to replace them. Use
 palettes remain intact. Invalid input is rejected before opening or changing the preview, even with
 `!`.
 
-Try the [Dusk pastel candidate](../examples/dusk-pastel.json) from the plugin checkout:
+Try the [Dusk plum draft example](../examples/dusk-pastel.json) from the plugin checkout:
 
 ```vim
 :FlumeTweakImport examples/dusk-pastel.json
 ```
 
-This is an exploratory plum-and-pastel draft, not a fifth palette or a change to canonical Dusk. It
-leaves Dusk's state and ANSI inks unchanged. Compare it with selections, diffs and diagnostics
-before keeping it. Imported colors are not automatically contrast-checked.
+The example gives Dusk softer pastel inks and a warmer plum canvas. It demonstrates draft import,
+not a separate canonical palette. It leaves state and ANSI inks unchanged. Compare it with
+selections, diffs and diagnostics before keeping it. Imported colors are not automatically
+contrast-checked.
 
 ### Draft file format
 

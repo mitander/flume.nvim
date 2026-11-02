@@ -5,17 +5,17 @@
     syntax-theme = ansi
 
 [delta "flume"]
-    minus-style = syntax "#3b292d"
-    minus-emph-style = syntax ul "#53343d"
-    plus-style = syntax "#29342c"
-    plus-emph-style = syntax ul "#324132"
+    minus-style = syntax "#2f2836"
+    minus-emph-style = syntax ul "#352c3a"
+    plus-style = syntax "#2c2a36"
+    plus-emph-style = syntax ul "#302f3a"
     line-numbers = true
-    line-numbers-minus-style = "#ee9da7"
-    line-numbers-plus-style = "#b9cba5"
-    line-numbers-left-style = "#484a55"
-    line-numbers-right-style = "#484a55"
-    commit-decoration-style = "#98c4d0" box
-    file-style = "#cac7d3"
-    file-decoration-style = "#98c4d0" ul
-    hunk-header-style = "#cac7d3"
-    hunk-header-decoration-style = "#484a55" box
+    line-numbers-minus-style = "#e8a1b0"
+    line-numbers-plus-style = "#b6c7ad"
+    line-numbers-left-style = "#4c4856"
+    line-numbers-right-style = "#4c4856"
+    commit-decoration-style = "#9bbec5" box
+    file-style = "#d3cbd8"
+    file-decoration-style = "#9bbec5" ul
+    hunk-header-style = "#d3cbd8"
+    hunk-header-decoration-style = "#4c4856" box

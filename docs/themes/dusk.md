@@ -1,6 +1,7 @@
 # Dusk examples
 
-Dark palette with a violet background, amber types, teal functions and lavender keywords.
+Dark palette with a violet background, amber types, teal functions, purple keywords and rose-red
+fields.
 [Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·

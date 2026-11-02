@@ -39,27 +39,37 @@ pairs. The sections below explain the design and the mapping rules behind them.
 ## Palette direction
 
 Dusk, Opal, Mira and Mesa share semantic roles but differ in background hue, saturation and
-foreground lightness. Dusk and Opal use violet-tinted backgrounds. Mira and Mesa are more neutral.
+foreground lightness. Dusk and Mira use related violet dark canvases with different ink intensity.
+Opal uses cool lilac paper, while Mesa uses warmer neutral paper.
 
-**Dusk** uses a violet dark canvas with amber types, teal functions, lavender keywords, sage
-strings, rose-red properties and coral literals. Fields balance the warm type and literal accents.
-State colors and ANSI inks carry stronger emphasis than ordinary syntax.
+**Dusk** retains its violet dark canvas with amber types, teal functions, purple keywords, sage
+strings, rose-red properties and softened coral literals. Clearer fields balance the warm type and
+literal accents. State colors and ANSI inks carry stronger emphasis than ordinary syntax. Refining
+this palette preserves those established color relationships rather than turning them into pastels.
 
-**Mira** carries those hue families onto neutral graphite. Pastel teal functions, amber types,
-lavender keywords, rose-red fields and namespaces, peach literals and sage strings sit alongside
-neutral identifiers. Body and UI text avoid bright white so they do not overpower the pastel
-accents. Syntax, terminal, error and deletion reds share a hue family with distinct emphasis.
+**Mira** gives related hue families a softer pastel range on a deeper blue-violet foundation. Teal
+functions, almond types, lilac keywords, dusty rose fields and namespaces, peach literals and sage
+strings sit alongside soft neutral identifiers. Diagnostics and diff inks share that pastel range.
+Raised and cursor-line surfaces stay blue-violet. Statuslines and active-row surfaces use a richer
+lilac tier rather than a neutral charcoal layer.
+
+The dark palettes are close relatives, distinguished mainly by their ink intensity and color
+relationships rather than unrelated background hues. Mira's modestly deeper canvas supports its
+pastel inks. Both retain independent ANSI and file-icon inks. These can carry more color emphasis
+than source text without changing syntax or diagnostic roles. Review them on terminal output,
+picker icons and exported diff surfaces rather than forcing their RGB values to match syntax.
 
 **Opal** pairs a light, lilac-tinted background with gold types, purple keywords, red fields and
 imports, copper literals, blue-green strings and teal functions. Light lilac raised surfaces and
 pale green, gold, rose and blue diff fills retain readable gold ink. Amber warnings use a yellow
 fill independent of syntax colors.
 
-**Mesa** uses a light rose-gray background with a slight mauve undertone and dark, low-saturation
-syntax colors. Raised surfaces stay close to the canvas. The less violet background distinguishes it
-from Opal.
+**Mesa** uses warm-neutral paper between stone and rose, with dark, low-saturation syntax colors.
+Raised and cursor-line surfaces carry a faint warm tint, while statuslines and active-row surfaces
+use soft clay-rose. Both tiers retain readable comment contrast. The restrained warm foundation and
+mineral inks distinguish it from Opal's cooler, more chromatic light palette.
 
-Choose between violet-tinted and more neutral backgrounds, then between dark and light. There is no
+Choose by light or dark surroundings, background warmth and ink intensity. There is no
 language-specific palette: a function has the same role whether you are reading Go or Rust. The
 [gallery](gallery.md) compares all four on the same fixtures.
 
@@ -131,7 +141,7 @@ retaining the search underline.
 | Values    | `syntax_string`, `syntax_boolean`, `syntax_constant`, `syntax_property` |
 | Detail    | `syntax_attribute`, `syntax_special`, `syntax_punctuation*`             |
 
-Comments use low-chroma cool-gray ink, readable but secondary to ordinary code. Documentation
+Comments use low-chroma gray inks, readable but secondary to ordinary code. Documentation
 comments share the same ink so long prose blocks do not compete with syntax accents. Both roles
 retain the syntax contrast target on canvas, raised, cursor-line, and diff surfaces rather than
 fading toward placeholder text.

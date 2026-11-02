@@ -266,7 +266,11 @@ function M.register(test, equal, truthy)
     test("draft import previews the candidate without changing editor or shared state", function()
         dofile("plugin/flume.lua")
         local flume = require("flume")
-        flume.setup({ schema = "opal", watch_sync = false, overrides = { syntax_function = "#abcdef" } })
+        flume.setup({
+            schema = "opal",
+            watch_sync = false,
+            overrides = { syntax_function = "#abcdef", syntax_property = "#667788" },
+        })
         local config, colors = vim.deepcopy(flume.config), vim.deepcopy(flume.colors)
         local highlights = vim.api.nvim_get_hl(0, {})
         local colors_name, background, terminal = vim.g.colors_name, vim.o.background, vim.g.terminal_color_1

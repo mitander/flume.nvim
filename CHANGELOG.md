@@ -24,16 +24,19 @@
 ### Palettes and highlighting
 
 - Refine Dusk's warm syntax with muted amber types, rose-red fields, quiet rose namespaces and
-  softened coral literals. Retain its violet canvas, teal functions, lavender keywords and sage
+  softened coral literals. Retain its violet canvas, teal functions, purple keywords and sage
   strings.
-- Give Mira a neutral graphite foundation with clear identifiers and Dusk-derived pastel syntax.
-  Coordinate its red family across terminal slots, errors and deletions.
+- Deepen Mira's violet canvas beneath its softer pastel syntax with teal functions, almond types,
+  lilac keywords, dusty rose fields and namespaces, peach literals and sage strings. Coordinate
+  diagnostics and diff inks with that range. Use blue-violet raised surfaces and a richer lilac
+  statusline/active-row tier. Keep ANSI and file-icon inks independent of syntax in both dark palettes.
 - Refine Opal around gold types, purple keywords, red fields/imports, copper literals, sea-glass
   strings and softened teal functions on cool porcelain paper. Lighten raised and diff surfaces.
-- Move Mesa from warm beige paper to soft rose-gray with a slight mauve undertone. Coordinate
-  raised, selection and diff surfaces while retaining its restrained syntax and ANSI inks.
-- Use restrained cool-gray comments in all four palettes. Keep ordinary and documentation comments
-  subordinate to code, with readable muted text for inactive labels, hidden files and metadata.
+- Refine Mesa around warm-neutral paper between stone and rose, with faint warm cursor-line and
+  raised surfaces and a clay-rose statusline/active-row tier. Coordinate selection and diff states
+  while retaining its restrained syntax and ANSI inks.
+- Use restrained low-chroma comment inks in all four palettes. Ordinary and documentation comments
+  stay subordinate to code. Keep muted text readable for inactive labels, hidden files and metadata.
 - Render named constants in neutral identifier ink. Keep numbers, booleans, built-in constants, tags
   and symbol literals accented. Keep readonly/static bindings and fields in their normal syntax
   roles, and use the namespace color for ZLS namespace tokens.
@@ -55,7 +58,7 @@
   configuration, global highlights, terminal colors or shared integrations.
 - Add `:FlumeTweakImport[!] {file}` for preview-only JSON palette drafts. Validate complete files
   before changing the preview, retain reset/export behavior, and require explicit replacement of an
-  edited palette. Include an exploratory Dusk pastel draft without changing canonical colors.
+  edited palette. Include a Dusk plum variation as an import example.
 - Add editor-local `schema_overrides` for per-palette customization. Resolve global role overrides
   first, selected-schema overrides next and exact highlight overrides last.
 - Add opt-in development reload-on-save that preserves the editor palette. With `dev = true`,

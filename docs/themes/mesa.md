@@ -1,6 +1,6 @@
 # Mesa examples
 
-Light palette with a rose-gray background and dark, low-saturation syntax colors.
+Light palette with warm-neutral paper and dark, low-saturation mineral inks.
 [Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·

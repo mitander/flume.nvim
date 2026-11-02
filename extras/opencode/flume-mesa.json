@@ -1,9 +1,9 @@
 {
   "$schema": "https://opencode.ai/theme.json",
   "defs": {
-    "bg":                    "#f0ebef",
-    "surface":               "#e8e1e7",
-    "element_active":        "#e2dae2",
+    "bg":                    "#f1ebe7",
+    "surface":               "#eee4df",
+    "element_active":        "#edddd7",
     "fg":                    "#58515d",
     "muted":                 "#5f5964",
     "placeholder":           "#817988",

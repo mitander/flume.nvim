@@ -13,12 +13,12 @@
       "sha256": "81698c638abbf4c3a3ec8ccc3c6110be2cc725ad740bf87e6fa9ac685ecad267"
     }
   ],
-  "fixture_sha256": "7d60c058b838447acc8881a8daf8719bd797b5515750a1cdb131306c1c005889",
+  "fixture_sha256": "f0a3ae50ea45945114ccbd45da64878aa19fa1e289af9044423f2c0abb44f5a2",
   "renderer_sha256": "91bd2fb1cc5d55f5a510a5649b7cfb9e179f1e59f46ba9bf8e8bea9f40c65160",
-  "image_sha256": "d78f82511ee191ad7e49ef5b117714a1ce7c655ae58764f21cfa49a7ed316c2d",
+  "image_sha256": "70da9b37c41ddfbc2c3320d2cd40484fad413c4e901887f430e591f14f006d93",
   "theme_inputs": {
     "lua/flume/init.lua": "719cb44f39a59e8a2fb611def93f7dde8d769c327126b1b5a9efe61da4343bdc",
-    "lua/flume/palette.lua": "78c7ebfe1918eba46ac6ee38252b36b9898efed2c156c5a07fcfe72330885967",
+    "lua/flume/palette.lua": "70e485c46b61419cdd59dfdbd6806f04463f338993caf66831d6d248ac826792",
     "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
     "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
     "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",
@@ -54,9 +54,9 @@
     ],
     "documentation": "func(s string) string\n\nTrimSpace returns a slice of the string s, with all leading and trailing white space removed, as defined by Unicode.",
     "frontend": {
-      "treesitter_highlighting": true,
       "name": "blink.cmp",
-      "border": "single"
+      "border": "single",
+      "treesitter_highlighting": true
     },
     "documentation_highlights": 9
   }

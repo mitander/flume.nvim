@@ -145,7 +145,7 @@ theme takeover, reload and scratch-buffer cleanup, including modified work witho
 checks the complete global highlight map with parsers unavailable and compares rendered normal
 colors after last-window reuse. Draft-import checks cover bounded regular-file reads, whole-document
 validation, reset/export behavior, explicit replacement, late input and unchanged editor/shared
-state. The bundled pastel candidate is loaded through the public command. Plain-text fallback does
+state. The bundled plum draft example is loaded through the public command. Plain-text fallback does
 not establish real language captures.
 
 With the seven sample parsers and their highlight queries already installed, run:

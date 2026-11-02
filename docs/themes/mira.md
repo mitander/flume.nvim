@@ -1,6 +1,7 @@
 # Mira examples
 
-Dark palette with a graphite background and Dusk's hue families in pastel accents.
+Deep violet dark palette with pastel teal functions, almond types, lilac keywords and dusty rose
+fields.
 [Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·
