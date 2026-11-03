@@ -1,6 +1,7 @@
 # Mesa examples
 
-Light palette with warm-neutral paper and dark, low-saturation mineral inks.
+Light palette with faint violet-gray paper, ochre types, deeper violet keywords, petrol-blue calls, jade
+strings and lighter berry fields.
 [Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·

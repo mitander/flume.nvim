@@ -1,9 +1,9 @@
 # Flume Theme for Ghostty
-background = #1f1d30
-foreground = #d3cbd8
+background = #292938
+foreground = #cbcccf
 selection-background = #868091
-selection-foreground = #121116
-cursor-color = #9bbec5
+selection-foreground = #17151d
+cursor-color = #95bbc9
 cursor-text = #24212f
 
 palette = 0=#3a3b45

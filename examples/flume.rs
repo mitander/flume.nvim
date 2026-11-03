@@ -1,44 +1,37 @@
-#[derive(Debug)]
-struct Locked;
-#[derive(Debug)]
-struct Unlocked;
+use std::{fmt, io};
 
-/// State is part of the type: a locked door has no `open` method.
-#[derive(Debug)]
-struct Door<State> {
-    key: u32,
-    _state: State,
+/// Rejection returns the offered input without exposing it in logs.
+struct Rejected<T> {
+    error: io::Error,
+    owned: T,
 }
 
-impl Door<Locked> {
-    fn unlock(self, key: u32) -> Result<Door<Unlocked>, Self> {
-        if key != self.key {
-            return Err(self); // Keep the door so the caller can retry.
-        }
-        Ok(Door {
-            key,
-            _state: Unlocked,
-        })
+impl<T> fmt::Debug for Rejected<T> {
+    fn fmt(&self, output: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // Log the error, never an owned file, buffer or payload.
+        fmt::Debug::fmt(&self.error, output)
     }
 }
 
-impl Door<Unlocked> {
-    fn open(&self) -> &'static str {
-        "Welcome in!"
+fn submit<T>(input: T, ready: bool) -> Result<T, Rejected<T>> {
+    if ready {
+        return Ok(input);
     }
+    Err(Rejected {
+        error: io::Error::new(io::ErrorKind::WouldBlock, "worker is busy"),
+        owned: input,
+    })
 }
-
-const KEY: u32 = 42;
 
 fn main() {
-    let door = Door {
-        key: KEY,
-        _state: Locked,
-    };
-    // door.open(); // This would fail to compile.
-    let door = door.unlock(7).expect_err("wrong key");
-    match door.unlock(KEY) {
-        Ok(unlocked) => println!("{}", unlocked.open()),
-        Err(locked) => eprintln!("Still locked: {locked:?}"),
+    let payload = vec![40_u8, 2, 7];
+    match submit(payload, false) {
+        Ok(bytes) => println!("accepted {} bytes", bytes.len()),
+        Err(rejected) => {
+            eprintln!("{rejected:?}");
+            let Rejected { error, owned } = rejected;
+            assert_eq!(error.kind(), io::ErrorKind::WouldBlock);
+            println!("retry keeps {} bytes: {owned:?}", owned.len());
+        }
     }
 }

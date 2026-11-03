@@ -462,7 +462,9 @@ function M.set_highlights(namespace, c, config)
     hi("@lsp.typemod.property.readonly", {})
     hi("@lsp.type.struct", { link = "Type" })
     hi("@lsp.type.type", { link = "Type" })
-    hi("@lsp.type.typeParameter", { link = "Type" })
+    -- Parameters stand for a type supplied by the caller, not a named type.
+    -- Parsers without this distinction retain their ordinary type fallback.
+    hi("@lsp.type.typeParameter", { link = "Identifier" })
     -- Regular variable tokens are often less precise than Tree-sitter. An
     -- empty group lets captures such as function.call and variable.member win.
     hi("@lsp.type.variable", {})

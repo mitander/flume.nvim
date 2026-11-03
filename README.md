@@ -66,12 +66,13 @@ name. Each palette has a matching Neovim colorscheme name, such as `flume-dusk`.
 | Palette                     | Background           | Color direction                                                  |
 | --------------------------- | -------------------- | ---------------------------------------------------------------- |
 | [Dusk](docs/themes/dusk.md) | Violet dark          | Amber types, teal functions, purple keywords and rose-red fields |
-| [Opal](docs/themes/opal.md) | Lilac-tinted light   | Gold types, teal functions and purple keywords                   |
-| [Mira](docs/themes/mira.md) | Deep violet dark     | Pastel teal, almond, lilac and dusty rose accents                |
-| [Mesa](docs/themes/mesa.md) | Warm-neutral light   | Dark, low-saturation syntax colors                               |
+| [Opal](docs/themes/opal.md) | Lilac-tinted light   | Apricot types, clear blue calls, violet keywords and vivid berry fields |
+| [Mira](docs/themes/mira.md) | Lifted blue-violet dark | Matte honey types, sky-blue calls, lavender keywords and mint strings |
+| [Mesa](docs/themes/mesa.md) | Faint violet-gray light | Ochre types, deeper violet keywords, petrol-blue calls and jade strings |
 
-They share the same role assignments. Choose by background and accent intensity, not by programming
-language. See the [design explanation](docs/color-system.md#palette-direction) for the reasoning.
+They share semantic roles with palette-specific hues. Choose by background and accent intensity,
+not by programming language. See the [design explanation](docs/color-system.md#palette-direction)
+for the reasoning.
 
 Palettes are still evolving. Pin a release tag or commit for a fixed appearance. Significant color
 changes are recorded in the [changelog](CHANGELOG.md).

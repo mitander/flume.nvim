@@ -45,9 +45,9 @@ option selects its name:
 
 Palette Appearance  Character ~
     dusk    dark    violet background, amber types, teal functions and purple keywords
-    opal    light   lilac-tinted background, gold types and teal functions
-    mira    dark    deeper violet background with soft pastel accents
-    mesa    light   warm-neutral paper with dark, low-saturation accents
+    opal    light   lilac-tinted paper, apricot types, blue calls and berry fields
+    mira    dark    lifted blue-violet with matte honey, sky-blue and rose accents
+    mesa    light   faint violet-gray paper with restrained mineral inks
 
 The colorscheme names are flume-dusk, flume-opal, flume-mira, and flume-mesa.
 Each palette sets 'background' to its appearance.

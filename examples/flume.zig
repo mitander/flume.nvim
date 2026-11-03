@@ -1,29 +1,27 @@
-/// A tiny expression tree with constant folding.
 const std = @import("std");
 
-const Ast = union(enum) {
-    num: i64,
-    ident: []const u8,
-    add: struct { lhs: *const Ast, rhs: *const Ast },
+/// Fixed storage keeps per-tick work bounded without allocations.
+fn FixedQueue(comptime T: type, comptime capacity: usize) type {
+    return struct {
+        items: [capacity]T = undefined,
+        count: usize = 0,
+        const Self = @This();
 
-    // Fold constants; identifiers remain dynamic.
-    fn fold(self: *const Ast) ?i64 {
-        return switch (self.*) {
-            .num => |n| n,
-            .ident => null,
-            .add => |a| blk: {
-                const l = a.lhs.fold() orelse break :blk null;
-                const r = a.rhs.fold() orelse break :blk null;
-                break :blk l + r;
-            },
-        };
-    }
-};
+        pub fn push(self: *Self, item: T) error{Full}!void {
+            if (self.count == self.items.len) return error.Full;
+            self.items[self.count] = item;
+            self.count += 1;
+        }
 
-pub fn main() void {
-    // Build and evaluate 40 + 2.
-    const lhs = Ast{ .num = 40 };
-    const rhs = Ast{ .num = 2 };
-    const expr = Ast{ .add = .{ .lhs = &lhs, .rhs = &rhs } };
-    std.debug.print("{s} folded = {}\n", .{ @tagName(expr), expr.fold().? });
+        pub fn slice(self: *const Self) []const T {
+            return self.items[0..self.count];
+        }
+    };
+}
+
+pub fn main() !void {
+    var queue: FixedQueue(u16, 4) = .{};
+    try queue.push(40);
+    try queue.push(2);
+    std.debug.print("{s}: {any}\n", .{ "queued", queue.slice() });
 }

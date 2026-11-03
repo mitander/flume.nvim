@@ -1,42 +1,35 @@
-import argparse
-import json
-from collections import Counter
-from pathlib import Path
+import re
+from dataclasses import dataclass
 
 
-# Input: one JSON object per line, e.g. {"event": "page_view"}.
-def count_events(path: Path) -> Counter[str]:
-    counts: Counter[str] = Counter()
-    with path.open(encoding="utf-8") as log:
-        for number, line in enumerate(log, start=1):
-            if not line.strip():
-                continue
-            record = json.loads(line)
-            event = record.get("event") if isinstance(record, dict) else None
-            if not isinstance(event, str) or not event.strip():
-                raise ValueError(f"line {number}: expected a non-empty event name")
-            counts[event] += 1
-    return counts
+@dataclass(frozen=True)
+class Pair:
+    label: str
+    foreground: str
+    background: str
+    target: float = 4.5
+
+    def __post_init__(self) -> None:
+        for color in (self.foreground, self.background):
+            if not re.fullmatch(r"#[0-9a-fA-F]{6}", color):
+                raise ValueError(f"Non-literal color in {self.label}")
+
+    @property
+    def ratio(self) -> float:
+        low, high = sorted(map(luminance, (self.foreground, self.background)))
+        return (high + 0.05) / (low + 0.05)
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Summarize a JSON-lines event log.")
-    parser.add_argument("log", type=Path)
-    parser.add_argument("--limit", type=int, default=5, help="number of events to show")
-    args = parser.parse_args()
-    if args.limit < 1:
-        parser.error("--limit must be positive")
-
-    try:
-        counts = count_events(args.log)
-    except (OSError, ValueError) as error:
-        parser.exit(1, f"{args.log}: {error}\n")
-
-    total = counts.total()
-    print(f"{total:,} events across {len(counts)} names")
-    for event, count in counts.most_common(args.limit):
-        print(f"{event:<24} {count:>6,}  {count / total:>6.1%}")
+def luminance(color: str) -> float:
+    channels = [int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    linear = [
+        value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4
+        for value in channels
+    ]
+    return sum(value * weight for value, weight in zip(linear, (0.2126, 0.7152, 0.0722)))
 
 
 if __name__ == "__main__":
-    main()
+    pair = Pair("editor text", "#d0d2da", "#292938")
+    verdict = "PASS" if pair.ratio >= pair.target else "FAIL"
+    print(f"{pair.label}: {pair.ratio:.2f}:1 {verdict}")

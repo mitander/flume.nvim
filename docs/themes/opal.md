@@ -1,6 +1,7 @@
 # Opal examples
 
-Light palette with a lilac-tinted background, gold types, purple keywords and teal functions.
+Light palette with lilac-tinted paper, deep apricot types, vivid violet keywords, blue functions and
+pink-berry fields.
 [Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·

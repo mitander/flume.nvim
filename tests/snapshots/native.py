@@ -5,7 +5,7 @@ import subprocess
 from pathlib import Path
 
 
-CHECKERS = ('scripts/check-highlights.lua', 'tests/lualine.lua')
+CHECKERS = ('scripts/check-highlights.lua', 'scripts/check-semantic-tokens.lua', 'tests/lualine.lua')
 
 
 def main(root: Path = Path('/repo'), output: Path = Path('/output')) -> int:
@@ -22,7 +22,7 @@ def main(root: Path = Path('/repo'), output: Path = Path('/output')) -> int:
             log.flush()
             if result.returncode:
                 return result.returncode
-    print('PASS: native highlights and installed lualine')
+    print('PASS: native highlights, gopls semantic tokens and installed lualine')
     return 0
 
 

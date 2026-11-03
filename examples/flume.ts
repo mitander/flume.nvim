@@ -1,22 +1,39 @@
-namespace Expressions {
-    export type Ast =
-        | { kind: "num"; value: number }
-        | { kind: "add"; lhs: Ast; rhs: Ast };
+interface SelectItem {
+    label: string;
+    detail?: string;
+}
 
-    /** Fold a tiny expression tree. */
-    export function fold(expr: Ast): number {
-        switch (expr.kind) {
-            case "num":
-                return expr.value;
-            case "add":
-                return fold(expr.lhs) + fold(expr.rhs);
-        }
+/** Filtering resets selection so a hidden item cannot stay active. */
+export class Selection<T extends SelectItem> {
+    private visible: readonly T[];
+    private index = 0;
+
+    constructor(private readonly items: readonly T[]) {
+        this.visible = items;
+    }
+
+    setFilter(input: string): void {
+        const prefix = input.trim().toLowerCase();
+        this.visible = this.items.filter(item =>
+            item.label.toLowerCase().startsWith(prefix)
+        );
+        this.index = 0;
+    }
+
+    get selected(): T | undefined {
+        return this.visible[this.index];
+    }
+
+    render(): string[] {
+        return this.visible.map(({ label, detail }) =>
+            detail ? `${label} — ${detail}` : label
+        );
     }
 }
 
-const expr: Expressions.Ast = {
-    kind: "add",
-    lhs: { kind: "num", value: 40 },
-    rhs: { kind: "num", value: 2 },
-};
-console.log(`folded = ${Expressions.fold(expr)}`);
+const picker = new Selection([
+    { label: "Read", detail: "Open a document" },
+    { label: "Retry", detail: "Keep the owned input" },
+]);
+picker.setFilter("re");
+console.log(picker.selected?.label ?? "No match", picker.render());

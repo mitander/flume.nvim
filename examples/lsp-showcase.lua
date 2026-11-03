@@ -50,7 +50,7 @@ assert(vim.wait(45000, function()
     return next(tokens) ~= nil
 end, 100), "Server must attach and render semantic tokens")
 -- Show a useful server result, not only the subtle semantic-token differences.
-local target = language == "go" and "Count(" or "fold("
+local target = language == "go" and "Drain(" or "push("
 local hover_row, hover_col
 for row, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
     local col = line:find(target, 1, true)

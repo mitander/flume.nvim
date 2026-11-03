@@ -38,40 +38,60 @@ pairs. The sections below explain the design and the mapping rules behind them.
 
 ## Palette direction
 
-Dusk, Opal, Mira and Mesa share semantic roles but differ in background hue, saturation and
-foreground lightness. Dusk and Mira use related violet dark canvases with different ink intensity.
-Opal uses cool lilac paper, while Mesa uses warmer neutral paper.
+Dusk, Opal, Mira and Mesa share semantic roles but may assign different hue families to them.
+Provider mappings and contrast targets stay consistent. Dusk and Mira use related violet dark
+canvases with different ink intensity. Opal uses cool lilac paper, while Mesa uses quieter,
+nearly neutral violet-gray paper and restrained mineral inks.
 
 **Dusk** retains its violet dark canvas with amber types, teal functions, purple keywords, sage
 strings, rose-red properties and softened coral literals. Clearer fields balance the warm type and
 literal accents. State colors and ANSI inks carry stronger emphasis than ordinary syntax. Refining
 this palette preserves those established color relationships rather than turning them into pastels.
 
-**Mira** gives related hue families a softer pastel range on a deeper blue-violet foundation. Teal
-functions, almond types, lilac keywords, dusty rose fields and namespaces, peach literals and sage
-strings sit alongside soft neutral identifiers. Diagnostics and diff inks share that pastel range.
-Raised and cursor-line surfaces stay blue-violet. Statuslines and active-row surfaces use a richer
-lilac tier rather than a neutral charcoal layer.
+**Mira** is the more open, easygoing dark palette, with a slightly lifted blue-violet canvas.
+Matte honey types, sky-blue calls, lavender keywords, rose-red fields and namespaces, mint strings
+and peach literals provide gentle landmarks rather than competing accents. Nearly achromatic text
+avoids a blue cast, while lower-luminance syntax avoids an evenly bright pastel band without
+changing the canvas. Honey and peach keep their warm relationship. Rose-red fields gain a little
+chroma at essentially the same lightness. Types and calls still lead fields and secondary ink.
+Comments and punctuation use readable neutral grays, retaining the contrast target on diff surfaces.
+Coral-red errors and gold warnings keep stronger emphasis.
+UI focus and informational states retain their independent teal ink.
+Raised surfaces, cursor lines, statuslines and active rows stay quiet and close to the canvas.
 
-The dark palettes are close relatives, distinguished mainly by their ink intensity and color
-relationships rather than unrelated background hues. Mira's modestly deeper canvas supports its
-pastel inks. Both retain independent ANSI and file-icon inks. These can carry more color emphasis
-than source text without changing syntax or diagnostic roles. Review them on terminal output,
-picker icons and exported diff surfaces rather than forcing their RGB values to match syntax.
+The dark palettes are close relatives rather than unrelated hue collections. Dusk keeps a deeper
+violet foundation, while Mira softens contrast between syntax families on a lighter, less violet
+canvas without sacrificing text readability. Both retain independent ANSI and file-icon
+inks. These can carry more color emphasis than source text without changing syntax or diagnostic
+roles. Review them on terminal output, picker icons and exported diff surfaces rather than forcing
+their RGB values to match syntax.
 
-**Opal** pairs a light, lilac-tinted background with gold types, purple keywords, red fields and
-imports, copper literals, blue-green strings and teal functions. Light lilac raised surfaces and
-pale green, gold, rose and blue diff fills retain readable gold ink. Amber warnings use a yellow
-fill independent of syntax colors.
+**Opal** pairs light lilac paper with deep apricot types, vivid violet keywords, pink-berry fields
+and imports, copper literals, eucalyptus strings and clear blue functions. Apricot replaces the
+gold that dominated type-heavy code without introducing another blue family. It is a darkened
+peach-family ink, not Mira's pale peach copied onto light paper. Types and copper literals share a
+warm family, balanced by blue calls, violet keywords and green strings. The intended balance is
+colorful, not uniformly muted. Light lilac cursor-line and raised surfaces separate from the airy
+canvas, with a deeper pink-lilac statusline tier. Both tiers and the pale green, gold, rose and blue
+diff fills retain readable syntax ink. Amber warnings keep their independent yellow fill.
 
-**Mesa** uses warm-neutral paper between stone and rose, with dark, low-saturation syntax colors.
-Raised and cursor-line surfaces carry a faint warm tint, while statuslines and active-row surfaces
-use soft clay-rose. Both tiers retain readable comment contrast. The restrained warm foundation and
-mineral inks distinguish it from Opal's cooler, more chromatic light palette.
+**Mesa** uses nearly neutral violet-gray paper, with deeper violet keywords, ochre types,
+petrol-blue calls, clear jade strings and lighter berry fields and namespaces. Hue and lightness
+both separate these families rather than clustering every ink into one dark band. Ochre remains
+one local accent rather than an undertone across the whole editor. The canvas, raised surfaces,
+cursor lines, statuslines and active rows share the faint cool tint, replacing the warm paper and
+clay-colored panels. Both raised tiers retain readable comment contrast. These inks stay independent
+of diagnostics, success colors and UI focus. A slightly darker, less chromatic canvas and restrained
+mineral inks distinguish Mesa from Opal without requiring a warm/cool split between light palettes.
 
-Choose by light or dark surroundings, background warmth and ink intensity. There is no
+Choose by light or dark surroundings, canvas tint and ink intensity. There is no
 language-specific palette: a function has the same role whether you are reading Go or Rust. The
 [gallery](gallery.md) compares all four on the same fixtures.
+
+Review balance in type-heavy code with few strings as well as mixed examples. Repeated named types
+and constructors can dominate a real file even when a short, string-rich specimen looks balanced.
+Keep useful counterweights in frequently occurring roles rather than depending on rare literals or
+changing correct language-provider mappings to conceal a palette imbalance.
 
 Light palettes are not inverted dark palettes. Pale backgrounds leave less room for a lighter
 selection or diff fill, so they need dark text and deliberately chosen foreground/background pairs.
@@ -91,8 +111,8 @@ preserving each palette's identity. Record significant visual changes in the
    neutral.
 4. **Stable hierarchy.** Color families keep the same meaning across Tree-sitter, LSP, plugins, and
    generated extras.
-5. **Palette intensity.** A palette may change chroma, as Opal does, without changing semantic
-   assignments or surface hierarchy.
+5. **Palette identity.** A palette may change hue and chroma without changing provider role
+   assignments or surface hierarchy. Balance repeated syntax in complete files, not just swatches.
 6. **Explicit contrast.** Syntax text targets 4.5:1 on the canvas, cursor line, raised surfaces, and
    diff surfaces. Selected text uses a separate pair targeting 4.5:1; its fill targets 3:1 against
    the canvas and raised surfaces. Menu text, diagnostic virtual text, and filled labels also target
@@ -158,7 +178,19 @@ Specific Tree-sitter captures and LSP token types resolve through these families
 follow these rules:
 
 - Constructors use `syntax_type`; they create typed values rather than behaving like ordinary
-  functions.
+  functions. TypeScript and TSX `new` expressions share this rule. JSX component and native-element
+  names retain their tag captures instead of recoloring every TSX constructor as a tag. Go factory
+  calls named `New...` or `Make...` remain ordinary functions, despite the query's naming-based
+  constructor capture. Composite literals retain their type captures.
+- LSP `typeParameter` tokens use each palette's neutral identifier ink, distinguishing a parameter
+  such as `T` from a named type such as `Box` without adding another accent family. This is not
+  literal white or a comment-like dimming rule. Parser-only highlighting retains the type capture
+  when its queries cannot distinguish parameters from named types. Do not guess symbol identity
+  from names.
+- Receiver captures for Rust `self`, Python `self`/`cls`, Lua `self`, and TypeScript/TSX
+  `this`/`super` use neutral identifier ink. The TypeScript queries also place built-in object
+  references in this family. More specific call, property and module captures still win. Literal
+  captures remain accented, and other languages keep their existing built-in-variable fallback.
 - Enumeration members remain `syntax_constant` by default because most language servers model them
   as values. A language-qualified override may use `syntax_type` when a server also uses that token
   for constructors, as rust-analyzer does for enum variants.
@@ -181,8 +213,8 @@ should correct a parser or language-server mismatch, not establish a new languag
 system.
 
 Language-qualified corrections live in `lua/flume/languages/`, one file per language, so they remain
-independently reviewable. The set covers Lua table constructors, Python namespaces, Rust enum
-constructors, TSX component constructors, and Zig's legacy built-in fallback. ZLS namespace tokens
+independently reviewable. The set covers Go factory calls, Lua table constructors, Python namespaces, Rust enum
+constructors, receiver captures, and Zig's legacy built-in fallback. ZLS namespace tokens
 use the generic namespace role. Languages that are represented correctly by the generic Tree-sitter
 and LSP groups should not receive an empty override file.
 
@@ -257,8 +289,9 @@ staged GitSigns.
 ## Verify language highlighting
 
 Role-definition tests do not prove which captures a parser emits. The optional native lane opens
-representative Zig, Rust, Python, TypeScript, TSX, Go, and Elixir sources from `examples/` and
-checks actual captures in all four palettes.
+representative Zig, Rust, Python, TypeScript, TSX, Go, and Elixir sources from `examples/`, plus
+focused receiver, constructor, binding and generic-fallback specimens including Lua. It checks
+actual captures and effective role colors in all four palettes.
 
 Install the corresponding parsers and queries, then run from the repository root:
 
@@ -269,6 +302,18 @@ FLUME_TS_RUNTIME=/path/to/treesitter-runtime \
 
 Replace the example path with a runtime containing `parser/` and `queries/`. This lane does not run
 language servers or replace the parser-free `./scripts/check` gate.
+
+With Go and gopls installed, separately check real semantic tokens:
+
+```sh
+nvim --headless --clean -c "lua dofile('scripts/check-semantic-tokens.lua')"
+```
+
+This uses a private Go module, home and caches with dependency and toolchain downloads disabled.
+It checks generic declarations and references against named-type, function, factory-call and
+literal controls in every palette. Field tokens vary across gopls versions: older versions can
+emit broad variable tokens that defer to the separately checked parser roles. It observes actual gopls tokens and their resolved highlight roles,
+not rendered pixels or other language servers. The pinned snapshot lane runs both checkers.
 
 For LSP-backed checks, open the same fixtures with the relevant server and use `:Inspect`. Inspect
 semantic token modifiers as well as their base types.

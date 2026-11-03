@@ -1,39 +1,37 @@
 package main
 
-import (
-	"context"
-	"fmt"
-)
+import "fmt"
 
-// Count stops even when nobody is receiving from its output.
-func Count(ctx context.Context, start int) (<-chan int, <-chan struct{}) {
-	values := make(chan int)
-	done := make(chan struct{})
-	go func() {
-		defer close(done)
-		defer close(values)
-		for n := start; ; n++ {
-			select {
-			case <-ctx.Done():
-				return
-			case values <- n:
-			}
-		}
-	}()
-	return values, done
+type Queue[T any] struct {
+	items []T
+	limit int
+}
+
+// NewQueue keeps a bounded batch until the caller drains it.
+func NewQueue[T any](limit int) *Queue[T] {
+	return &Queue[T]{limit: limit}
+}
+
+func (q *Queue[T]) Push(item T) error {
+	if len(q.items) >= q.limit {
+		return fmt.Errorf("queue is full: limit %d", q.limit)
+	}
+	q.items = append(q.items, item)
+	return nil
+}
+
+func (q *Queue[T]) Drain() []T {
+	items := q.items
+	q.items = nil
+	return items
 }
 
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	values, done := Count(ctx, 40)
-
-	for range 3 {
-		fmt.Printf("received: %d\n", <-values)
+	queue := NewQueue[string](2)
+	for _, item := range []string{"read", "write", "close"} {
+		if err := queue.Push(item); err != nil {
+			fmt.Println(err)
+		}
 	}
-	cancel()
-	<-done // Wait for cleanup, not an arbitrary sleep.
-	_, open := <-values
-	fmt.Printf("channel open: %t\n", open)
-	// received: 40, 41, 42; channel open: false
+	fmt.Printf("ready: %q\n", queue.Drain())
 }

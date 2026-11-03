@@ -23,9 +23,9 @@ environment, changed pixels, or failed capture produces a nonzero exit status. T
 tolerance or automatic approval.
 
 The command prints a temporary HTML report with expected, actual, and visible difference images.
-Capture failures retain partial captures and logs instead. `native.log` retains the highlight
-and installed-lualine checker output, including failures before capture. CI runs the same
-command in a separate job and retains its report.
+Capture failures retain partial captures and logs instead. `native.log` retains the parser,
+gopls semantic-token and installed-lualine checker output, including failures before capture.
+CI runs the same command in a separate job and retains its report.
 
 When the source change intentionally requires new captures, update the published images:
 
@@ -61,8 +61,11 @@ Filters are repeatable:
 
 Integration runs also generate that app's contact sheet. Zig syntax runs generate the README hero.
 For partial palette updates, composition combines the new captures with committed, verified
-unselected captures. Refresh all palettes when changing the environment; do not combine captures
-from different tool versions.
+unselected captures. Unselected records retain their original input fingerprints. Because those
+fingerprints cover the staged source broadly, an unrelated fixture edit can leave historical hashes
+in unselected records even when their pixels are unaffected. Run a full update after the last fixture
+edit when the whole portfolio must describe the finished source. Refresh all palettes when changing
+the environment; do not combine captures from different tool versions.
 
 Palette/exporter changes still need the generated-extra refresh described in the
 [development commands](DEVELOPMENT.md#regenerate-palette-artifacts). App fixtures consume the
@@ -193,22 +196,33 @@ inactive-window surfaces. No host repository or personal file names appear.
 ## Code examples
 
 Sources live in `examples/`. They use each language's conventions rather than translating the same
-exercise. Role coverage spans the examples; no single file demonstrates every highlight group.
+exercise. The Rust owned-input envelope adapts Kuna's rejection pattern, the Zig queue adapts
+Depthbound's bounded per-tick storage, and Python uses Flume's contrast-pair calculation. Go and
+TypeScript provide self-contained queue and picker implementations. These are runnable adaptations,
+not dependency-heavy excerpts loaded from other checkouts. No source imports a personal project or
+reads live project data.
+
+Specimens balance declarations, ordinary bindings, receivers, fields, calls, control flow, comments
+and literals within a single viewport. Generic declarations and uses appear where they belong to
+the implementation rather than being added to every language. Role coverage spans the examples;
+no single file demonstrates every highlight group.
 
 | Source                         | Mechanism                                                               |
 | ------------------------------ | ----------------------------------------------------------------------- |
-| [Go](../examples/flume.go)     | A channel producer stops on cancellation; its caller waits for cleanup. |
-| [Rust](../examples/flume.rs)   | Typestate permits opening only after unlocking.                         |
-| [Python](../examples/flume.py) | A JSON-lines event counter reports frequencies and percentages.         |
+| [Go](../examples/flume.go)     | A bounded generic queue reports overflow and transfers its batch to the caller. |
+| [Rust](../examples/flume.rs)   | A rejected generic input stays owned while Debug logs only the error.    |
+| [Python](../examples/flume.py) | A validated color pair calculates contrast from linear-light luminance. |
+| [TypeScript](../examples/flume.ts) | A generic picker resets selection when its visible items change.   |
 | [TSX](../examples/flume.tsx)   | A React counter records undo history through functional updates.        |
-| [Zig](../examples/flume.zig)   | Recursive constant folding over a tagged expression union.              |
+| [Zig](../examples/flume.zig)   | A generic fixed-capacity queue rejects overflow without allocating.     |
 | [Elixir](../examples/flume.ex) | A regex parser feeds a frequency-counting pipeline.                     |
 | [TOML](../examples/flume.toml) | Illustrative preview-server configuration, not Flume configuration.     |
 
-Go requires 1.22+, Python 3.10+, and Elixir 1.10+. TSX requires React and its TypeScript types. `zig
-run examples/flume.zig` prints `add folded = 42` with Zig 0.16.0. Run `python3 examples/flume.py
-events.jsonl --limit 3` with records such as `{"event":"play"}`, or `elixir tests/examples.exs` to
-check its parser.
+Go requires 1.22+, Python 3.10+, and Elixir 1.10+. Rust uses only the standard library. TSX requires
+React and its TypeScript types. `zig run examples/flume.zig` prints `queued: { 40, 2 }` with Zig
+0.16.0. `go run examples/flume.go` reports a full queue and then prints its retained batch.
+`python3 examples/flume.py` reports the example color pair's contrast. Run `elixir tests/examples.exs`
+to check the log parser. The native capture lane checks actual parser roles, not program execution.
 
 ## README composite
 
@@ -232,7 +246,7 @@ belongs to the Neovim scenes.
 
 | Integration | Exercised surface                                                                                                 |
 | ----------- | ----------------------------------------------------------------------------------------------------------------- |
-| Tmux        | Exported status variables and active window                                                                       |
+| Tmux        | Teal session identity, lilac active window, muted inactive windows and state inks                                                                       |
 | LSD         | File types, permissions, sizes, dates, symlinks, and Git state                                                    |
 | OpenCode    | Core UI colors, Markdown emphasis, inline code, plain code and a real text-file edit diff from an offline session |
 | Lazygit     | Repository files and add/change/delete diff state                                                                 |

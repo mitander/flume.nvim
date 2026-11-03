@@ -62,7 +62,7 @@ def stage_source(destination_root, apps):
     for directory in ('lua', 'colors', 'examples'):
         shutil.copytree(ROOT / directory, destination_root / directory, ignore=shutil.ignore_patterns('__pycache__'))
     for file in ('scripts/preflight-screenshots.py', 'scripts/check-highlights.lua',
-                 'tests/lualine.lua', 'assets/background.png'):
+                 'scripts/check-semantic-tokens.lua', 'tests/lualine.lua', 'assets/background.png'):
         target = destination_root / file
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / file, target)

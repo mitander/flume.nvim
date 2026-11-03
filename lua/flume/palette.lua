@@ -106,14 +106,14 @@ M.dusk = {
 }
 
 M.opal = {
-    -- Base UI
+    -- Raised layers stay distinct without darkening the lilac canvas.
     bg = "#f2eff7",
     terminal_bg = "#f2eff7",
     fg = "#554e5d",
     text = "#413b49",
     muted = "#615a68",
     placeholder = "#817987",
-    active_line = "#f1ecf6",
+    active_line = "#eeebf5",
     line_number = "#766f7d",
     active_line_number = "#413b49",
     indent_guide = "#d3ccd5",
@@ -121,11 +121,11 @@ M.opal = {
     border_variant = "#c8c0ca",
     border_focused = "#00667e",
     accent = "#00667e",
-    surface = "#f1ecf6",
-    surface_alt = "#f3e9fb",
+    surface = "#eeebf5",
+    surface_alt = "#f1e7f9",
     element = "#f2eff7",
-    element_hover = "#f1ecf6",
-    element_active = "#f3e9fb",
+    element_hover = "#eeebf5",
+    element_active = "#f1e7f9",
     selection_bg = "#756681",
     selection_fg = "#fff9ff",
     on_accent = "#fbf8fa",
@@ -180,25 +180,24 @@ M.opal = {
     icon_purple = "#873a9d",
     icon_pink = "#ad4386",
 
-    -- Gold types stay distinct from purple keywords and copper literals. Lighter
-    -- tinted surfaces keep this ink readable without darkening it into brown.
-    -- State colors and ANSI slots remain independent of these text-sized accents.
-    syntax_attribute = "#356475",
+    -- Apricot types keep a warm counterpoint without a mustard band or more blue.
+    -- Darken the peach family for light paper, with related copper literals and colorful berry fields.
+    syntax_attribute = "#23638a",
     syntax_boolean = "#8d513c",
     syntax_comment = "#5d626b",
     syntax_doc_comment = "#5d626b",
     syntax_constant = "#514e57",
-    syntax_function = "#356475",
-    syntax_type = "#856719",
-    syntax_keyword = "#70558a",
-    syntax_namespace = "#9c4260",
+    syntax_function = "#23638a",
+    syntax_type = "#975a3e",
+    syntax_keyword = "#784d96",
+    syntax_namespace = "#974670",
     syntax_primary = "#514e57",
-    syntax_property = "#9c4260",
+    syntax_property = "#974670",
     syntax_punctuation = "#615a68",
     syntax_punctuation_bracket = "#615b67",
     syntax_punctuation_special = "#8d513c",
     syntax_string = "#2d6a60",
-    syntax_special = "#356475",
+    syntax_special = "#23638a",
     predictive = "#817987",
 
     -- Git Diff / Diagnostics
@@ -220,42 +219,43 @@ local function complete_palette(colors)
     colors.diff_add = colors.success
     colors.diff_change = colors.warning
     colors.diff_delete = colors.error
-    colors.syntax_attribute = colors.accent
+    -- Function-family inks stay independent of UI focus and informational states.
+    colors.syntax_attribute = colors.syntax_function
     colors.syntax_constant = colors.syntax_primary
-    colors.syntax_function = colors.accent
-    colors.syntax_special = colors.accent
+    colors.syntax_special = colors.syntax_function
     colors.hint = colors.hint or colors.info
     return colors
 end
 
 M.mira = complete_palette({
-    -- Pastel inks share Dusk's hue families on a deeper blue-violet canvas.
-    bg = "#1f1d30",
-    fg = "#d3cbd8",
-    text = "#ded6e3",
-    muted = "#a59aaa",
+    -- Keep the lifted blue-violet canvas, but avoid a uniformly bright band of syntax.
+    -- Neutral text leads, with calls, fields and secondary ink at lower luminance.
+    bg = "#292938",
+    fg = "#cbcccf",
+    text = "#d5d7df",
+    muted = "#a1a5b3",
     placeholder = "#635e6c",
-    active_line = "#29253f",
-    line_number = "#5c5765",
-    active_line_number = "#ded6e3",
-    indent_guide = "#363240",
-    border = "#4c4856",
-    border_variant = "#393543",
-    border_focused = "#9bbec5",
-    accent = "#9bbec5",
-    surface = "#29253f",
-    surface_alt = "#372c4b",
-    element_hover = "#29253f",
-    element_active = "#372c4b",
+    active_line = "#2e3040",
+    line_number = "#696b7b",
+    active_line_number = "#d5d7df",
+    indent_guide = "#353847",
+    border = "#515568",
+    border_variant = "#3e4252",
+    border_focused = "#95bbc9",
+    accent = "#95bbc9",
+    surface = "#2e3040",
+    surface_alt = "#343345",
+    element_hover = "#2e3040",
+    element_active = "#343345",
     selection_bg = "#868091",
-    selection_fg = "#121116",
+    selection_fg = "#17151d",
     on_accent = "#24212f",
 
-    -- Semantic states share the pastel range without borrowing ANSI ink roles.
-    error = "#e8a1b0",
-    warning = "#dcc18f",
-    success = "#b6c7ad",
-    info = "#9bbec5",
+    -- Coral diagnostics remain separate from rose syntax.
+    error = "#ec929b",
+    warning = "#e3bf70",
+    success = "#9cbeac",
+    info = "#95bbc9",
 
     -- Terminal / Base 16 Palette
     black = "#3a3b45",
@@ -295,41 +295,45 @@ M.mira = complete_palette({
     icon_purple = "#d5bfee",
     icon_pink = "#e3b7d2",
 
-    -- Syntax Highlighting
-    syntax_boolean = "#ddb5a5",
-    syntax_comment = "#a59aaa",
-    syntax_doc_comment = "#a59aaa",
-    syntax_type = "#d7bea5",
-    syntax_keyword = "#c4abd8",
-    syntax_namespace = "#d6a5bd",
-    syntax_primary = "#d3cbd8",
-    syntax_property = "#d6a5bd",
-    syntax_punctuation = "#a49aac",
-    syntax_punctuation_bracket = "#a49aac",
-    syntax_punctuation_special = "#b69eb2",
-    syntax_string = "#b6c7ad",
+    -- Honey and peach retain their warm pigment. Blue calls separate from mint strings,
+    -- while rose-red fields gain pigment, not brightness, and retain diff-surface contrast.
+    -- Syntax brightness stays independent of stronger state, ANSI and icon inks.
+    syntax_boolean = "#bfa593",
+    syntax_comment = "#9fa3b0",
+    syntax_doc_comment = "#9fa3b0",
+    syntax_function = "#91b0ce",
+    syntax_type = "#c6b48e",
+    syntax_keyword = "#b29fce",
+    syntax_namespace = "#c699a2",
+    syntax_primary = "#cbcccf",
+    syntax_property = "#c699a2",
+    syntax_punctuation = "#9fa3b0",
+    syntax_punctuation_bracket = "#9fa3b0",
+    syntax_punctuation_special = "#bfa593",
+    syntax_string = "#94b8a5",
     predictive = "#535969",
 
     -- Git Diff / Diagnostics
-    diff_add_bg = "#2c2a36",
-    diff_add_emphasis = "#302f3a",
-    diff_change_bg = "#2d2938",
-    diff_text_bg = "#342f40",
-    diff_delete_bg = "#2f2836",
-    diff_delete_emphasis = "#352c3a",
-    hint = "#9bbec5",
-    hint_bg = "#30313e",
-    warn_bg = "#363139",
+    diff_add_bg = "#2c3337",
+    diff_add_emphasis = "#30383b",
+    diff_change_bg = "#30313f",
+    diff_text_bg = "#393849",
+    diff_delete_bg = "#38303b",
+    diff_delete_emphasis = "#3d333e",
+    hint = "#95bbc9",
+    hint_bg = "#303542",
+    warn_bg = "#3c3639",
 })
 
 M.mesa = complete_palette({
-    -- Warm-neutral paper balances stone and rose without a strong yellow cast.
-    bg = "#f1ebe7",
+    -- Nearly neutral violet-gray paper stays quieter and less tinted than Opal's lilac.
+    -- Carry the cool undertone through raised surfaces instead of retaining clay-colored panels.
+    bg = "#edecef",
     fg = "#58515d",
     text = "#423d47",
     muted = "#5f5964",
     placeholder = "#817988",
-    active_line = "#eee4df",
+    active_line = "#e7e5ea",
     line_number = "#766f7d",
     active_line_number = "#423d47",
     indent_guide = "#d3cbd5",
@@ -337,10 +341,10 @@ M.mesa = complete_palette({
     border_variant = "#c7bdc9",
     border_focused = "#2f6271",
     accent = "#2f6271",
-    surface = "#eee4df",
-    surface_alt = "#edddd7",
-    element_hover = "#eee4df",
-    element_active = "#edddd7",
+    surface = "#e7e5ea",
+    surface_alt = "#e0dee5",
+    element_hover = "#e7e5ea",
+    element_active = "#e0dee5",
     selection_bg = "#766878",
     selection_fg = "#fffaff",
     on_accent = "#fbf8fa",
@@ -389,19 +393,22 @@ M.mesa = complete_palette({
     icon_purple = "#79559b",
     icon_pink = "#9c4b80",
 
-    -- Syntax Highlighting
-    syntax_boolean = "#8b4940",
+    -- Deeper violet keywords separate from lighter berry fields and clear jade strings.
+    -- Blue calls and cool paper keep ochre a local accent rather than the cast of the whole editor.
+    -- Diagnostic, success, ANSI and icon inks remain independent.
+    syntax_boolean = "#6f5470",
     syntax_comment = "#5e6069",
     syntax_doc_comment = "#5e6069",
+    syntax_function = "#3c5e76",
     syntax_type = "#7d521e",
-    syntax_keyword = "#695187",
-    syntax_namespace = "#89455f",
+    syntax_keyword = "#5f4a81",
+    syntax_namespace = "#815071",
     syntax_primary = "#524f50",
-    syntax_property = "#89455f",
+    syntax_property = "#815071",
     syntax_punctuation = "#5f5965",
     syntax_punctuation_bracket = "#5f5964",
-    syntax_punctuation_special = "#8b4940",
-    syntax_string = "#43615a",
+    syntax_punctuation_special = "#6f5470",
+    syntax_string = "#326550",
     predictive = "#817988",
 
     -- Git Diff / Diagnostics

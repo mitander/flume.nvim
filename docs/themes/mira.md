@@ -1,7 +1,7 @@
 # Mira examples
 
-Deep violet dark palette with pastel teal functions, almond types, lilac keywords and dusty rose
-fields.
+Easygoing dark palette with a lifted blue-violet canvas, softened neutral text and matte sky-blue
+functions, honey types, lavender keywords, rose-red fields, mint strings and peach literals.
 [Compare palettes](../gallery.md) · [Design ideas](../color-system.md#palette-direction).
 
 [Go](#go) · [Working states](#diagnostics-and-working-states) · [Completion](#completion) ·

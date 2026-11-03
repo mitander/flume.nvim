@@ -29,15 +29,21 @@
 - Refine Dusk's warm syntax with muted amber types, rose-red fields, quiet rose namespaces and
   softened coral literals. Retain its violet canvas, teal functions, purple keywords and sage
   strings.
-- Deepen Mira's violet canvas beneath its softer pastel syntax with teal functions, almond types,
-  lilac keywords, dusty rose fields and namespaces, peach literals and sage strings. Coordinate
-  diagnostics and diff inks with that range. Use blue-violet raised surfaces and a richer lilac
-  statusline/active-row tier. Keep ANSI and file-icon inks independent of syntax in both dark palettes.
-- Refine Opal around gold types, purple keywords, red fields/imports, copper literals, sea-glass
-  strings and softened teal functions on cool porcelain paper. Lighten raised and diff surfaces.
-- Refine Mesa around warm-neutral paper between stone and rose, with faint warm cursor-line and
-  raised surfaces and a clay-rose statusline/active-row tier. Coordinate selection and diff states
-  while retaining its restrained syntax and ANSI inks.
+- Make Mira a more open, easygoing dark palette with a lifted blue-violet canvas and matte honey,
+  sky-blue, lavender, rose, mint and peach syntax. Soften neutral text and lower the syntax brightness
+  band while keeping types and calls above fields and secondary ink. Use nearly achromatic text
+  and slightly more chromatic rose-red fields at similar lightness, preserving the warm honey/peach
+  relationship. Keep quiet surfaces and independent teal UI focus, diagnostics, ANSI and file-icon inks.
+- Refine Opal around deep apricot types, vivid violet keywords, pink-berry fields/imports, copper
+  literals, eucalyptus strings and clear blue functions on cool porcelain paper. Replace gold types
+  with a readable peach-family ink rather than adding more blue or muting the colorful accents.
+  Make cursor-line/raised and statusline tiers clearer while retaining pale diff fills and readable
+  syntax ink.
+- Refine Mesa around nearly neutral violet-gray paper, ochre types, deeper violet keywords,
+  petrol-blue calls, clear jade strings, lighter berry fields and muted plum literals. Separate
+  frequent syntax by hue and lightness rather than accumulating similarly dark brown and yellow-green
+  inks. Replace warm paper and clay-colored panels with coordinated cool cursor-line, raised and
+  active-row surfaces. Preserve independent diagnostic, success, UI focus, ANSI and file-icon inks.
 - Use restrained low-chroma comment inks in all four palettes. Ordinary and documentation comments
   stay subordinate to code. Keep muted text readable for inactive labels, hidden files and metadata.
 - Render named constants in neutral identifier ink. Keep numbers, booleans, built-in constants, tags
@@ -49,6 +55,11 @@
   underlines through Visual selection and distinguish current matches with bold, underlined text.
 - Align legacy, Tree-sitter and LSP macro roles. Align imports, directives and string escapes across
   providers.
+- Use neutral ink for semantic type parameters and supported language receiver captures while
+  retaining named-type, call, field and literal families. Keep TypeScript and TSX `new` expressions
+  in the type family without changing JSX tags. Keep Go `New...`/`Make...` factory calls in the
+  function family. Preserve parser-only generic fallbacks where queries cannot distinguish type
+  parameters.
 - Add dedicated `icon_*` roles for file-icon hue families across all four schemas. Keep muted copper
   distinct from brighter orange and gold/yellow without borrowing syntax or ANSI colors. Include
   these roles in the version 1 semantic palette export.
@@ -103,8 +114,10 @@
 
 ### Documentation and visual evidence
 
-- Add palette and language galleries, with extra languages collapsed on palette pages. Restore the
-  constant-folding Zig specimen and cascading README hero.
+- Add palette and language galleries, with extra languages collapsed on palette pages and a
+  cascading README hero. Use runnable, self-contained specimens covering generic queues, owned
+  rejection envelopes, contrast calculations and picker state alongside the existing React,
+  Elixir and TOML examples.
 - Unify editor, lualine, Neo-tree and seven terminal-app snapshots behind `scripts/snapshots test`
   and `update`. Generate the hero and integration contact sheets through the same pinned, isolated
   Linux Ghostty pipeline with exact pixel comparisons and review reports.
@@ -116,8 +129,9 @@
   mode-specific cursors. Reveal real status information only after capture readiness.
 - Separate command registration, reload and sync orchestration from rendering inputs so nonvisual
   command changes do not invalidate editor capture provenance.
-- Add native parser fixtures and role checks for Zig, Rust, Python, TypeScript/TSX, Go and Elixir.
-  Qualify native Delta output alongside snapshots and add four-palette integration contrast reports.
+- Add native parser fixtures and role checks for Zig, Rust, Python, TypeScript/TSX, Go, Lua and
+  Elixir, plus real gopls generic-token checks. Qualify native Delta output alongside snapshots and
+  add four-palette integration contrast reports.
   Keep activation tests isolated from user state and the working checkout.
 
 - Add a disposable native-theme trial for manual Ghostty/Kitty rendering and Pi reload checks,

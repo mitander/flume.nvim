@@ -1,11 +1,11 @@
 # Flume colors for Fish. Source this file after other color settings.
 # Session-local globals only. No universal variables or prompt changes.
 set -g fish_color_normal 423d47
-set -g fish_color_command 2f6271
-set -g fish_color_builtin 2f6271
-set -g fish_color_function 2f6271
-set -g fish_color_keyword 695187
-set -g fish_color_quote 43615a
+set -g fish_color_command 3c5e76
+set -g fish_color_builtin 3c5e76
+set -g fish_color_function 3c5e76
+set -g fish_color_keyword 5f4a81
+set -g fish_color_quote 326550
 set -g fish_color_redirection 5f5965
 set -g fish_color_end 5f5965
 set -g fish_color_error 89455f
@@ -14,7 +14,7 @@ set -g fish_color_option 524f50
 set -g fish_color_valid_path --underline
 set -g fish_color_comment 5e6069
 set -g fish_color_operator 5f5965
-set -g fish_color_escape 2f6271
+set -g fish_color_escape 3c5e76
 set -g fish_color_autosuggestion 5f5964
 set -g fish_color_selection fffaff --background=766878
 set -g fish_color_search_match 7d521e --background=e9ded1 --underline

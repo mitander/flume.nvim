@@ -20,30 +20,32 @@ local function check()
             "rs",
             "rust",
             {
-                { "struct Door", "Door", "type", "syntax_type" },
-                { "let door = Door", "door", "variable", "syntax_primary" },
-                { "const KEY", "KEY", "constant", "syntax_constant" },
-                { "fn unlock", "unlock", "function", "syntax_function" },
+                { "struct Rejected<T>", "Rejected", "type", "syntax_type" },
+                { "struct Rejected<T>", "T", "type", "syntax_type" },
+                { "let payload =", "payload", "variable", "syntax_primary" },
+                { "fn submit<T>", "submit", "function", "syntax_function" },
+                { "&self.error", "error", "variable.member", "syntax_property" },
             },
         },
         {
             "py",
             "python",
             {
-                { "def count_events", "count_events", "function", "syntax_function" },
-                { "counts: Counter", "counts", "variable", "syntax_primary" },
-                { "counts: Counter", "Counter", "type", "syntax_type" },
-                { "args.limit <", "limit", "variable.member", "syntax_property" },
-                { "counts.most_common", "most_common", "function.method.call", "syntax_function" },
+                { "class Pair:", "Pair", "type", "syntax_type" },
+                { "def luminance", "luminance", "function", "syntax_function" },
+                { "channels =", "channels", "variable", "syntax_primary" },
+                { "for color in", "foreground", "variable.member", "syntax_property" },
+                { "def ratio(self)", "ratio", "function", "syntax_function" },
             },
         },
         {
             "ts",
             "typescript",
             {
-                { "const expr:", "expr", "variable", "syntax_primary" },
-                { "export function fold", "fold", "function", "syntax_function" },
-                { "return expr.value", "value", "variable.member", "syntax_property" },
+                { "class Selection<T", "Selection", "type", "syntax_type" },
+                { "const picker =", "picker", "variable", "syntax_primary" },
+                { "this.items.filter", "filter", "function.method.call", "syntax_function" },
+                { "return this.visible[this.index]", "index", "variable.member", "syntax_property" },
             },
         },
         {
@@ -59,9 +61,10 @@ local function check()
             "go",
             "go",
             {
-                { "func Count", "Count", "function", "syntax_function" },
-                { "values :=", "values", "variable", "syntax_primary" },
-                { "context.Context", "Context", "type", "syntax_type" },
+                { "type Queue[T", "Queue", "type", "syntax_type" },
+                { "func NewQueue[T", "NewQueue", "function", "syntax_function" },
+                { "queue := NewQueue", "queue", "variable", "syntax_primary" },
+                { "q.items = nil", "items", "property", "syntax_property" },
                 { "fmt.Printf", "Printf", "function.method.call", "syntax_function" },
             },
         },
@@ -74,14 +77,124 @@ local function check()
                 { "Enum.frequencies", "frequencies", "function.call", "syntax_function" },
             },
         },
+        {
+            "Go factory calls and named types",
+            "go",
+            {
+                { "first := NewCount()", "NewCount", "constructor", "syntax_function" },
+                { "second := MakeCount()", "MakeCount", "constructor", "syntax_function" },
+                { "box := Box{", "Box", "type", "syntax_type" },
+                { "box := Box{", "Value", "variable.member", "syntax_property" },
+            },
+            source = {
+                "package fixture",
+                "type Box struct { Value int }",
+                "func NewCount() int { return 1 }",
+                "func MakeCount() int { return 2 }",
+                "func Use() {",
+                "    first := NewCount()",
+                "    second := MakeCount()",
+                "    box := Box{Value: first + second}",
+                "    _ = box",
+                "}",
+            },
+        },
+        {
+            "Rust receivers and parser-only generics",
+            "rust",
+            {
+                { "fn read(&self)", "self", "variable.builtin", "syntax_primary" },
+                { "&self.value", "self", "variable.builtin", "syntax_primary" },
+                { "&self.value", "value", "variable.member", "syntax_property" },
+                { "struct Box<T>", "T", "type", "syntax_type" },
+                { "value: T", "T", "type", "syntax_type" },
+                { "use self::", "self", "module", "syntax_namespace" },
+                { "const READY", "READY", "constant", "syntax_constant" },
+                { "const READY", "true", "boolean", "syntax_boolean" },
+            },
+            source = {
+                "struct Box<T> { value: T }",
+                "impl<T> Box<T> {",
+                "    fn read(&self) -> &T { &self.value }",
+                "}",
+                "mod support { pub const READY: bool = true; }",
+                "use self::support::READY;",
+            },
+        },
+        {
+            "Python receivers and literals",
+            "python",
+            {
+                { "def read(self)", "self", "variable.builtin", "syntax_primary" },
+                { "return self.value", "self", "variable.builtin", "syntax_primary" },
+                { "return self.value", "value", "variable.member", "syntax_property" },
+                { "def build(cls)", "cls", "variable.builtin", "syntax_primary" },
+                { "return cls()", "cls", "function.call", "syntax_function" },
+                { "enabled = True", "True", "boolean", "syntax_boolean" },
+                { "missing = None", "None", "constant.builtin", "syntax_boolean" },
+            },
+            source = {
+                "class Box:",
+                "    def read(self):",
+                "        return self.value",
+                "    @classmethod",
+                "    def build(cls):",
+                "        return cls()",
+                "enabled = True",
+                "missing = None",
+            },
+        },
+        {
+            "Lua receiver and table roles",
+            "lua",
+            {
+                { "return self.value", "self", "variable.builtin", "syntax_primary" },
+                { "return self.value", "value", "variable.member", "syntax_property" },
+                { "function box:read()", "read", "function.method", "syntax_function" },
+                { "local box =", "self", "property", "syntax_property" },
+                { "local box =", "true", "boolean", "syntax_boolean" },
+            },
+            source = {
+                "local box = { self = true, value = 1 }",
+                "function box:read() return self.value end",
+            },
+        },
     }
+    for _, language in ipairs({ "typescript", "tsx" }) do
+        fixtures[#fixtures + 1] = {
+            language .. " receivers, constructors and bindings",
+            language,
+            {
+                { "return this.value", "this", "variable.builtin", "syntax_primary" },
+                { "return this.value", "value", "variable.member", "syntax_property" },
+                { "new Box()", "Box", "constructor", "syntax_type" },
+                { "const { value }", "value", "variable", "syntax_primary" },
+                { "const copy =", "value", "variable.member", "syntax_property" },
+                { "const enabled", "true", "boolean", "syntax_boolean" },
+                { "const missing", "undefined", "constant.builtin", "syntax_boolean" },
+                { "type Holder<T>", "T", "type", "syntax_type" },
+            },
+            source = {
+                "class Box { value = 1; read() { return this.value; } }",
+                "const box = new Box();",
+                "const { value } = box;",
+                "const copy = { value };",
+                "const enabled = true;",
+                "const missing = undefined;",
+                "type Holder<T> = { item: T };",
+            },
+        }
+    end
     local palette = require("flume.palette")
     local count = 0
     for _, fixture in ipairs(fixtures) do
-        local path, language = "examples/flume." .. fixture[1], fixture[2]
-        vim.cmd.edit(path)
-        local buf = vim.api.nvim_get_current_buf()
-        local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+        local path = fixture.source and fixture[1] or "examples/flume." .. fixture[1]
+        local language = fixture[2]
+        local lines = fixture.source or vim.fn.readfile(path)
+        local buf = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_set_current_buf(buf)
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+        vim.bo[buf].filetype = language
         vim.treesitter.start(buf, language)
         assert(not vim.treesitter.get_parser(buf, language):parse()[1]:root():has_error(), path .. " has parse errors")
 
@@ -115,7 +228,8 @@ local function check()
                 count = count + 1
             end
         end
-        print("ok - real " .. language .. " captures in all four palettes")
+        print("ok - real " .. language .. " captures in all four palettes: " .. path)
+        vim.api.nvim_buf_delete(buf, { force = true })
     end
     print(count .. " real-parser highlight checks passed")
 end

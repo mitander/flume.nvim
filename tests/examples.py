@@ -16,55 +16,30 @@ example = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(example)
 
 
-class EventSummaryExample(unittest.TestCase):
-    def setUp(self):
-        temporary = tempfile.TemporaryDirectory()
-        self.addCleanup(temporary.cleanup)
-        self.log = Path(temporary.name) / "events.jsonl"
+class ContrastPairExample(unittest.TestCase):
+    def test_black_and_white_have_the_standard_contrast(self):
+        self.assertEqual(example.luminance("#000000"), 0)
+        self.assertEqual(example.luminance("#ffffff"), 1)
+        self.assertEqual(example.Pair("text", "#000000", "#ffffff").ratio, 21)
+        self.assertEqual(example.Pair("text", "#ffffff", "#000000").ratio, 21)
 
-    def write_events(self, events):
-        self.log.write_text("\n".join(json.dumps(event) for event in events), encoding="utf-8")
+    def test_identical_colors_have_no_contrast(self):
+        self.assertEqual(example.Pair("text", "#292938", "#292938").ratio, 1)
 
-    def run_script(self, *args):
-        return subprocess.run(
-            [sys.executable, str(ROOT / "examples/flume.py"), str(self.log), *args],
+    def test_non_literal_colors_are_rejected_on_either_side(self):
+        for color in ("red", "#fff", "#ffffff00", "#gggggg", "#ffffff\n"):
+            for foreground, background in ((color, "#000000"), ("#ffffff", color)):
+                with self.subTest(foreground=foreground, background=background):
+                    with self.assertRaisesRegex(ValueError, "Non-literal color in text"):
+                        example.Pair("text", foreground, background)
+
+    def test_script_reports_the_example_pair(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "examples/flume.py")],
             text=True, capture_output=True, check=False,
         )
-
-    def test_counts_and_blank_lines(self):
-        self.write_events([{"event": "play"}, {"event": "pause"}, {"event": "play"}])
-        with self.log.open("a", encoding="utf-8") as log:
-            log.write("\n\n")
-        self.assertEqual(example.count_events(self.log), {"play": 2, "pause": 1})
-        result = self.run_script("--limit", "1")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(
-            result.stdout,
-            "3 events across 2 names\n" + f"{'play':<24} {2:>6,}  {2 / 3:>6.1%}\n",
-        )
-
-    def test_empty_log(self):
-        self.log.write_text("", encoding="utf-8")
-        result = self.run_script()
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stdout, "0 events across 0 names\n")
-
-    def test_invalid_records(self):
-        for record in ({}, [], {"event": None}, {"event": 42}, {"event": "  "}):
-            with self.subTest(record=record):
-                self.write_events([record])
-                with self.assertRaisesRegex(ValueError, "line 1"):
-                    example.count_events(self.log)
-
-    def test_cli_errors_are_reported_without_tracebacks(self):
-        self.log.write_text("not JSON\n", encoding="utf-8")
-        result = self.run_script()
-        self.assertEqual(result.returncode, 1)
-        self.assertIn(str(self.log), result.stderr)
-        self.assertNotIn("Traceback", result.stderr)
-        result = self.run_script("--limit", "0")
-        self.assertEqual(result.returncode, 2)
-        self.assertIn("--limit must be positive", result.stderr)
+        self.assertRegex(result.stdout, r"^editor text: \d+\.\d{2}:1 PASS\n$")
 
 
 class ConfigExample(unittest.TestCase):
@@ -115,7 +90,7 @@ class ExampleViewport(unittest.TestCase):
         from common import SCENES
         rows = SCENES['neovim-go']['rows']
         columns = SCENES['neovim-go']['columns']
-        for extension in ("go", "rs", "py", "tsx", "zig", "ex", "toml"):
+        for extension in ("go", "rs", "py", "ts", "tsx", "zig", "ex", "toml"):
             source = ROOT / f"examples/flume.{extension}"
             with self.subTest(source=source.name):
                 lines = source.read_text().splitlines()

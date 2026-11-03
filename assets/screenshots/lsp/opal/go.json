@@ -13,17 +13,18 @@
       "sha256": "81698c638abbf4c3a3ec8ccc3c6110be2cc725ad740bf87e6fa9ac685ecad267"
     }
   ],
-  "fixture_sha256": "9c31be87f1a3644a4a70ca5ae1823577828259bcb73f05a4caccb795a6f94bb1",
-  "renderer_sha256": "b15eb60e0a5906dfceab738cdd1fa0a39dba62c67e2d6be4585b8c286105954a",
-  "image_sha256": "a713615437fa608abfdcbc3b31b2a3718fe6cffc7bc711a0c99513e92bfa138c",
+  "fixture_sha256": "525d58b073e9328e14190894f9f0a5e4207097fc8a8f464649dea437852822c5",
+  "renderer_sha256": "a6aac32cf336b4df04ae6e0cb9f01f9ede31965f303dd3f5c3cf699e9da78abe",
+  "image_sha256": "df04567ffc77a6474e44a3b2850e5e918ea9696e5ff41851dc687310bfe5c1b6",
   "theme_inputs": {
-    "lua/flume/init.lua": "719cb44f39a59e8a2fb611def93f7dde8d769c327126b1b5a9efe61da4343bdc",
-    "lua/flume/palette.lua": "70e485c46b61419cdd59dfdbd6806f04463f338993caf66831d6d248ac826792",
-    "lua/flume/languages/init.lua": "a74fda5bf2c556ee22552d4b46793ea6dbe1a06b2c35b14238ffc3a8def23717",
-    "lua/flume/languages/lua.lua": "5438cb73c27f52078ee1bc14c486a3b20a396b6729984a9400f73636fe8cb299",
-    "lua/flume/languages/python.lua": "5bcab21fc129ebc2cb09f1e5a652a5dbadb14fcec2fcddb52230e2b2a50c9273",
-    "lua/flume/languages/rust.lua": "227477340072c5e9de2eaa7050a9846f7537bab89070b0530b24d46a1ec05c26",
-    "lua/flume/languages/typescript.lua": "00978d8063eb6c4079a69f44ba3a8afdd78ca2c6f5619cc0741d71bbab70fed1",
+    "lua/flume/init.lua": "d3c7c10185c75a9609b9f6ce603915c4d1e03c08e3d9580ca4652882492d4845",
+    "lua/flume/palette.lua": "cbe3242ffbb01413e0a46aa54d4b7efd40c36df132df8e8cbed458bbed221753",
+    "lua/flume/languages/go.lua": "844c0ed2823c02e457f2a124e7e9b93e2d945d59778b0524c16102fac41bf738",
+    "lua/flume/languages/init.lua": "ac32b0e71a96b3f9f75a3e52b5beab9b66abf205e3c031111af2bcac6eb82db9",
+    "lua/flume/languages/lua.lua": "448f32d9e8291a18252434d8d0345fa027c17ca504c26c3551d7f34be6b3aa01",
+    "lua/flume/languages/python.lua": "e978ddaf09dbd92d2c7afce4e2aa4488f133cf804e42736bfe9306d96d72d860",
+    "lua/flume/languages/rust.lua": "288f964357b5b6785234adba9b1bf0c6b3f5bb695a15327159d496358217d85e",
+    "lua/flume/languages/typescript.lua": "29eaf0bc3fdfc3686c401461cb2717e03783a611f483e75626b5781a53a09c93",
     "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
     "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee"
   },
@@ -45,29 +46,28 @@
       }
     },
     "token_counts": {
-      "comment": 3,
-      "function": 12,
-      "keyword": 23,
-      "namespace": 8,
-      "number": 2,
-      "operator": 14,
+      "comment": 1,
+      "function": 10,
+      "keyword": 16,
+      "method": 2,
+      "namespace": 5,
+      "number": 1,
+      "operator": 11,
       "parameter": 4,
-      "string": 2,
-      "type": 4,
-      "variable": 22
+      "string": 5,
+      "type": 12,
+      "typeParameter": 9,
+      "variable": 32
     }
   },
   "server_executable_sha256": "f1c4ff615da01bbb205dfa406e5498503fff7ed775f0ad968e7dd7b99a1a25f9",
   "base_renderer_sha256": "00d74b4c40a1b7db029de301a9819370e8d09ac8b93c67cad0814e219c9bfc44",
   "hover": [
     "```go",
-    "func Count(ctx context.Context, start int) (<-chan int, <-chan struct{})",
+    "func (q *Queue[string]) Drain() []string",
     "```",
     "",
-    "Count stops even when nobody is receiving from its output.",
-    "",
-    "",
-    "[`main.Count` on pkg.go.dev](https://pkg.go.dev/flume.fixture#Count)"
+    "[`(main.Queue).Drain` on pkg.go.dev](https://pkg.go.dev/flume.fixture#Queue.Drain)"
   ],
   "workspace": "/tmp/flume-lsp-go"
 }

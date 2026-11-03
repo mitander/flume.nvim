@@ -3,6 +3,7 @@ local M = {}
 -- Keep this list limited to parser or language-server corrections. Generic
 -- semantic roles belong in flume/init.lua.
 local modules = {
+    "flume.languages.go",
     "flume.languages.lua",
     "flume.languages.python",
     "flume.languages.rust",

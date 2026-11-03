@@ -37,6 +37,9 @@ qualify different installed palette versions or external-application reloads.
 [Native language checks](color-system.md#verify-language-highlighting) open representative fixtures
 with real Tree-sitter parsers and queries in all four palettes. They do not run language servers.
 LSP checks additionally need the relevant server and inspection of semantic-token modifiers.
+The [native gopls checker](color-system.md#verify-language-highlighting) uses an isolated module to
+observe generic declarations and references plus control roles in all palettes. It does not prove
+rust-analyzer, ZLS, Python or TypeScript server behavior.
 
 For the named lualine integration, supply an installed checkout explicitly:
 
@@ -184,8 +187,8 @@ pairs. Preserve it as generated output rather than reformatting or hand-editing 
 
 [Quality](../.github/workflows/quality.yml) runs `./scripts/check` on Neovim 0.9.5 and stable.
 Snapshots run once in a separate Linux job, not once per Neovim version. Before editor captures,
-that lane runs the full native highlight checker and the installed-lualine check in the pinned
-runtime. It retains `native.log` with the comparison
+that lane runs the full native highlight checker, the gopls semantic-token checker and the
+installed-lualine check in the pinned runtime. It retains `native.log` with the comparison
 report for seven days. These checks do not observe external application reloads. A workflow
 definition or local commit is not evidence that a hosted run passed.
 

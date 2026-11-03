@@ -19,19 +19,19 @@ Violet dark background with amber types, teal functions and lavender keywords.
 
 ### [Opal](themes/opal.md)
 
-Lilac-tinted light background with gold types, purple keywords and blue-green strings.
+Lilac-tinted light background with apricot types, vivid violet keywords, blue calls and pink-berry fields.
 
 [![Opal palette in Neovim](../assets/screenshots/opal/zig.png)](themes/opal.md)
 
 ### [Mira](themes/mira.md)
 
-Deep violet dark background with Dusk's hue families and softer pastel accents.
+Lifted blue-violet dark background with softened text and matte honey, sky-blue and lavender accents.
 
 [![Mira palette in Neovim](../assets/screenshots/mira/zig.png)](themes/mira.md)
 
 ### [Mesa](themes/mesa.md)
 
-Warm-neutral light paper with dark, low-saturation mineral inks.
+Faint violet-gray paper with ochre types, deeper violet keywords, petrol-blue calls and jade strings.
 
 [![Mesa palette in Neovim](../assets/screenshots/mesa/zig.png)](themes/mesa.md)
 
