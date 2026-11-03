@@ -153,33 +153,6 @@ same running trial. It sends no model prompt. It proves Pi's theme watcher emitt
 not that a particular terminal painted them correctly. The ordinary gate runs only the fast
 isolation/command checks and skips this installed-application lane.
 
-## Native tweak preview
-
-The ordinary Lua gate exercises namespace isolation, draft editing/export, late callbacks, foreign
-theme takeover, reload and scratch-buffer cleanup, including modified work without its old tab. It
-checks the complete global highlight map with parsers unavailable and compares rendered normal
-colors after last-window reuse. Draft-import checks cover bounded regular-file reads, whole-document
-validation, reset/export behavior, explicit replacement, late input and unchanged editor/shared
-state. The bundled plum draft example is loaded through the public command. Plain-text fallback does
-not establish real language captures.
-
-With the seven sample parsers and their highlight queries already installed, run:
-
-```sh
-FLUME_TS_RUNTIME=/path/to/treesitter-runtime \
-    nvim --headless --clean -c "lua dofile('scripts/check-tweak.lua')"
-```
-
-The checker parses every fixture, requires a real highlighter and compares rendered screen-cell
-attributes with independently checked role-color swatches in all four palettes. It edits a string
-role live, imports a JSON draft and keeps a contrasting global ink as a negative control. Merely
-reading highlight configuration would not establish namespace resolution in actual parser output.
-
-`FLUME_TWEAK_LANGUAGES=lua,rust,python,tsx,zig,go` selects an explicit subset when native parsers
-are split across prepared runtimes. Unselected samples are not qualified. Requested missing parsers
-or queries fail rather than being silently skipped. TypeScript can be checked separately with
-`FLUME_TWEAK_LANGUAGES=typescript`. No tools or grammars are installed by this command.
-
 ## Snapshot and color evidence
 
 [Showcase](showcase.md) owns the pinned capture environment, scene inventory, source/image sidecars,
@@ -211,8 +184,8 @@ pairs. Preserve it as generated output rather than reformatting or hand-editing 
 
 [Quality](../.github/workflows/quality.yml) runs `./scripts/check` on Neovim 0.9.5 and stable.
 Snapshots run once in a separate Linux job, not once per Neovim version. Before editor captures,
-that lane runs the full native highlight checker, all seven tweak samples in all four palettes and
-the installed-lualine check in the pinned runtime. It retains `native.log` with the comparison
+that lane runs the full native highlight checker and the installed-lualine check in the pinned
+runtime. It retains `native.log` with the comparison
 report for seven days. These checks do not observe external application reloads. A workflow
 definition or local commit is not evidence that a hosted run passed.
 

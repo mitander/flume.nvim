@@ -54,7 +54,6 @@ local copy = { "cp", "-R" }
 for _, name in ipairs({
     "lua",
     "colors",
-    "plugin",
     "extras",
     "examples",
     "tests",
@@ -850,11 +849,8 @@ test("setup applies and announces one schema exactly once", function()
 end)
 
 test("public commands are registered", function()
-    dofile("plugin/flume.lua")
     require("flume").setup({})
     for _, command in ipairs({
-        "FlumeTweak",
-        "FlumeTweakImport",
         "FlumeReload",
         "FlumeCompile",
         "FlumeSync",
@@ -866,9 +862,18 @@ test("public commands are registered", function()
     local schemas = vim.fn.getcompletion("FlumeSync ", "cmdline")
     table.sort(schemas)
     equal(table.concat(schemas, ","), "dusk,mesa,mira,opal", "FlumeSync schema completion")
-    local previews = vim.fn.getcompletion("FlumeTweak ", "cmdline")
-    table.sort(previews)
-    equal(table.concat(previews, ","), "dusk,mesa,mira,opal", "FlumeTweak schema completion")
+    local commands = {}
+    for command in pairs(vim.api.nvim_get_commands({})) do
+        if command:match("^Flume") then
+            commands[#commands + 1] = command
+        end
+    end
+    table.sort(commands)
+    equal(
+        table.concat(commands, ","),
+        "FlumeCompile,FlumeExtras,FlumeInstallExtras,FlumeReload,FlumeSync",
+        "public command inventory"
+    )
 end)
 
 test("screenshot initialization uses the single setup path", function()
@@ -1581,8 +1586,31 @@ end)
 require("tests.migration").register(test, equal, truthy)
 require("tests.extras").register(test, equal, truthy)
 require("tests.fish_tools").register(test, equal, truthy)
-require("tests.tweak").register(test, equal, truthy)
-require("tests.tweak_draft").register(test, equal, truthy)
+test("namespace rendering preserves global theme and callback ordering", function()
+    local flume = require("flume")
+    local ns = vim.api.nvim_create_namespace("NamespaceRenderingTest")
+    flume.setup({ schema = "dusk", watch_sync = false })
+    local config, colors = vim.deepcopy(flume.config), vim.deepcopy(flume.colors)
+    local normal = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
+    local terminal, background = vim.g.terminal_color_1, vim.o.background
+    local palette, observed = require("flume.palette").opal, nil
+    flume.set_highlights(ns, palette, {
+        styles = { comments = { italic = true } },
+        highlights = {
+            NamespaceCallbackProbe = function(c)
+                observed = vim.api.nvim_get_hl(ns, { name = "Function", link = false }).fg
+                return { fg = c.syntax_type }
+            end,
+        },
+    })
+    equal(observed, tonumber(palette.syntax_function:sub(2), 16), "callbacks see completed base highlights")
+    equal(vim.api.nvim_get_hl(ns, { name = "Comment" }).italic, true, "namespace retains styles")
+    truthy(vim.deep_equal(config, flume.config), "namespace changed editor config")
+    truthy(vim.deep_equal(colors, flume.colors), "namespace changed resolved colors")
+    truthy(vim.deep_equal(normal, vim.api.nvim_get_hl(0, { name = "Normal", link = false })), "global Normal changed")
+    equal(vim.g.terminal_color_1, terminal, "terminal ink changed")
+    equal(vim.o.background, background, "background changed")
+end)
 require("tests.workflows").register(test, equal, truthy)
 require("tests.state").register(test, equal, truthy)
 

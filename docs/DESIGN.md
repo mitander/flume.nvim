@@ -22,8 +22,6 @@ obligations. The [semantic export](semantic-export.md) owns the versioned consum
 | `lua/flume/state.lua`                         | Shared data directory, complete active sets and legacy forwarding                   |
 | `lua/flume/sync.lua`                          | Shared activation and application reload requests                                   |
 | `lua/flume/watch.lua` and `dev.lua`           | Shared-palette following and local development reload                               |
-| `lua/flume/tweak.lua` and `tweak_samples.lua` | Opt-in, window-local role exploration and reading fixtures                          |
-| `lua/flume/tweak_draft.lua`                  | Bounded JSON draft admission without executing configuration                        |
 
 ## Resolve an editor palette
 
@@ -60,36 +58,6 @@ Compilation writes canonical files under `extras/`. Contributor regeneration exp
 `compile_all({ activate = false })`, so refreshing committed output does not switch shared themes.
 The generated palette manifest comes from the canonical Lua source, not a second hand-maintained
 color table. [Development](DEVELOPMENT.md#regenerate-palette-artifacts) owns those commands.
-
-## Preview role edits without changing the editor
-
-`FlumeTweak` draws into a dedicated highlight namespace assigned only to its scratch windows.
-`set_highlights(namespace, colors, config)` reuses the editor's mapping without selecting a palette,
-clearing global highlights, changing terminal inks or publishing state. Normal loading still applies
-that mapping globally, with exact overrides after base groups and terminal values available to
-callbacks.
-
-The preview snapshots resolved role values and syntax styles. It uses opaque surfaces and omits
-exact group overrides so role changes remain visible. Drafts stay in memory and can be copied as
-`schema_overrides`; they are never applied or persisted automatically. Actual parsers color the
-samples, with explicit plain-text fallback status. Vim syntax files are not sourced because they can
-write global highlight definitions. FileType hooks are suppressed for the scratch buffers. Labelled
-UI swatches and example diagnostics are not evidence of live plugin menus or language-server
-behavior.
-
-JSON draft import validates the complete bounded file before opening or modifying a preview. Colors
-enter the existing edit layer, so reset and export retain the same meaning as manual edits. Import
-refuses an edited target palette unless replacement is explicit, and preserves drafts for other
-palettes. It invalidates pending color-input callbacks before replacing a draft. The
-[preview guide](tweak.md#draft-file-format) owns the versioned data format. This is not the semantic
-palette export or a shared activation operation.
-
-The session owns only its scratch buffers, windows and autocommands. Closing it, deleting a sample,
-changing the global colorscheme or reloading Flume releases those resources without rolling back a
-theme: the original theme was never changed. A surviving final window must leave the preview
-namespace and restore the invoking window's options before showing ordinary work. Deferred input
-callbacks must match the current live session before editing it. [The preview guide](tweak.md) owns
-controls and user-visible limits.
 
 ## Add an integration
 

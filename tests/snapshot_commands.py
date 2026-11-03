@@ -168,12 +168,11 @@ class SnapshotCommands(unittest.TestCase):
             self.assertEqual(native.main(ROOT, self.directory), 0)
         self.assertEqual(
             [call.args[0][-1] for call in run.call_args_list],
-            ["lua dofile('scripts/check-highlights.lua')",
-             "lua dofile('scripts/check-tweak.lua')", "lua dofile('tests/lualine.lua')"])
+            ["lua dofile('scripts/check-highlights.lua')", "lua dofile('tests/lualine.lua')"])
         for call in run.call_args_list:
             self.assertEqual(call.kwargs['cwd'], ROOT)
             self.assertEqual(call.kwargs['env']['FLUME_LUALINE_RUNTIME'], '/opt/tools/lualine')
-        self.assertEqual((self.directory / 'native.log').read_text().count('Exit: 0'), 3)
+        self.assertEqual((self.directory / 'native.log').read_text().count('Exit: 0'), 2)
 
     def test_failed_native_check_stops_before_remaining_checkers(self):
         with (
@@ -437,8 +436,7 @@ class SnapshotCommands(unittest.TestCase):
         staged.write_bytes(b'private edit')
         self.assertEqual((ROOT / 'extras/fzf/flume-dusk.opts').read_bytes(), original)
         self.assertFalse((destination / '.git').exists())
-        for checker in ('scripts/check-highlights.lua', 'scripts/check-tweak.lua',
-                        'plugin/flume.lua', 'tests/lualine.lua'):
+        for checker in ('scripts/check-highlights.lua', 'tests/lualine.lua'):
             self.assertEqual((destination / checker).read_bytes(), (ROOT / checker).read_bytes())
 
     def test_container_is_offline_readonly_and_cleaned_up(self):

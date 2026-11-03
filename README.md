@@ -111,15 +111,6 @@ require("flume").setup({
 Run `:set cursorline number` to see the line number. For transparency, role-color overrides and
 other options, see `:help flume-options` ([online](doc/flume.txt)).
 
-## Tweak a palette locally
-
-Run `:FlumeTweak` to compare role-color edits in a scratch tab without changing your editor theme.
-Use `h`/`l` for darker/lighter candidates, Enter for a hex color, `y` to copy edited
-`schema_overrides`, and `q` to discard the draft. The [preview guide](docs/tweak.md) explains how to
-keep an edit and what the samples show. Use `:FlumeTweakImport /path/to/draft.json` to audition a
-whole set of role edits from a JSON file, including the
-[Dusk plum draft example](examples/dusk-pastel.json). Local overrides do not change external themes.
-
 ## Integrations
 
 ### Neovim plugins
@@ -164,7 +155,6 @@ the old palette, see `:help flume-troubleshooting` ([online](doc/flume.txt)).
 
 - [Gallery](docs/gallery.md): compare palettes on code, editor states and external tools.
 - [Color system](docs/color-system.md): design ideas, role meanings and contrast targets.
-- [Preview guide](docs/tweak.md): explore and copy palette edits.
 - [External-tool recipes](docs/workflows.md): install, select and reload matching themes.
 - [Help reference](doc/flume.txt): all options and commands.
 - [Semantic export](docs/semantic-export.md): use Flume colors in another application.

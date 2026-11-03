@@ -23,8 +23,8 @@ environment, changed pixels, or failed capture produces a nonzero exit status. T
 tolerance or automatic approval.
 
 The command prints a temporary HTML report with expected, actual, and visible difference images.
-Capture failures retain partial captures and logs instead. `native.log` retains the highlight,
-tweak and installed-lualine checker output, including failures before capture. CI runs the same
+Capture failures retain partial captures and logs instead. `native.log` retains the highlight
+and installed-lualine checker output, including failures before capture. CI runs the same
 command in a separate job and retains its report.
 
 When the source change intentionally requires new captures, update the published images:

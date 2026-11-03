@@ -55,13 +55,6 @@
 
 ### Editor features
 
-- Add `:FlumeTweak [schema]` for isolated role-color exploration, shade/ink candidates, custom RGB
-  input and copyable per-palette drafts. Samples use installed parsers or an explicit plain-text
-  fallback, with example diagnostics and labelled UI swatches. Previewing does not change editor
-  configuration, global highlights, terminal colors or shared integrations.
-- Add `:FlumeTweakImport[!] {file}` for preview-only JSON palette drafts. Validate complete files
-  before changing the preview, retain reset/export behavior, and require explicit replacement of an
-  edited palette. Include a Dusk plum variation as an import example.
 - Add editor-local `schema_overrides` for per-palette customization. Resolve global role overrides
   first, selected-schema overrides next and exact highlight overrides last.
 - Add opt-in development reload-on-save that preserves the editor palette. With `dev = true`,
