@@ -23,6 +23,7 @@ Requires Neovim 0.9+ and a true-color terminal. Add this to your
 ```lua
 {
     "mitander/flume.nvim",
+    version = "*",
     lazy = false,
     priority = 1000,
     config = function()
@@ -35,7 +36,25 @@ Requires Neovim 0.9+ and a true-color terminal. Add this to your
 Install the plugin and restart Neovim. Run `:echo g:colors_name` to confirm `flume-dusk`. `setup()`
 applies the theme, so you don't need a separate `:colorscheme` call.
 
-With another plugin manager, install the plugin and put the two lines inside `config` in your
+`version = "*"` follows release tags rather than commits on `master`. Updates become available
+when a new release is tagged, and are installed when you update through lazy.nvim. To migrate an
+existing installation, add this option to your Flume spec, remove any explicit `branch`, `tag` or
+`commit` override, then run `:Lazy update flume.nvim`. If you already track unreleased `master`,
+this can move you back to the latest release. Read that release's documentation before switching.
+For a fixed version and appearance, use an exact tag such as `tag = "v0.2.0"` instead of `version`.
+
+To opt into unreleased development changes, replace `version = "*"` with these fields in the same
+spec:
+
+```lua
+version = false,
+branch = "master",
+```
+
+Existing installations without a release constraint still follow their configured branch. This
+README change does not switch them automatically.
+
+With another plugin manager, select a release tag and put the two lines inside `config` in your
 `init.lua` after the plugin loads. Tree-sitter parsers and language servers are optional. Flume
 colors their output but does not install them.
 

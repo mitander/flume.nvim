@@ -4,6 +4,9 @@
 
 ### Upgrade notes
 
+- The recommended lazy.nvim spec now uses `version = "*"` to follow release tags instead of
+  `master`. Existing users must change their own spec to opt into release-based updates. See
+  [installation](README.md#install) for migration steps and the explicit development opt-in.
 - Active integration sets now live in `stdpath("data")/flume`, outside the plugin checkout. Run
   `:FlumeSync`, then `:FlumeInstallExtras` to relink installable integrations. Update manual
   includes to the shared data directory. Recognized checkout links are forwarded when writable, but
