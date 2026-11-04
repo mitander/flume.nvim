@@ -518,7 +518,7 @@ function renderers.pi(schema)
     "thinkingLow": "border",
     "thinkingMedium": "muted",
     "thinkingHigh": "border",
-    "thinkingXhigh": "magenta",
+    "thinkingXhigh": "accent",
 
     "bashMode": "yellow"
   },

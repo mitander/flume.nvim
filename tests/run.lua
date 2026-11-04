@@ -1488,6 +1488,10 @@ test("generated extras are current and machine-readable", function()
 
         local pi_theme = vim.json.decode(read_all("extras/pi/flume" .. suffix .. ".json"))
         equal(pi_theme.colors.mdHeading, "accent", schema .. " quiet Pi heading")
+        equal(pi_theme.colors.thinkingXhigh, "accent", schema .. " Pi reasoning border uses UI focus ink")
+        equal(pi_theme.vars[pi_theme.colors.thinkingXhigh], palettes[schema].accent, schema .. " Pi focus color")
+        equal(pi_theme.colors.thinkingText, "muted", schema .. " Pi thinking prose stays quiet")
+        equal(pi_theme.vars[pi_theme.colors.syntaxKeyword], palettes[schema].syntax_keyword, schema .. " Pi syntax ink")
 
         compiler.activate(schema)
         equal(read_all("extras/current/schema"), schema .. "\n", schema .. " active schema marker")

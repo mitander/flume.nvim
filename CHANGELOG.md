@@ -111,6 +111,7 @@
 - Keep Delta and Lazygit diff syntax readable with quieter emphasis fills and underlined changed
   words. Use neutral raised panels for successful Pi tool results and tinted panels for failures.
   Measure OpenCode labels and signs on their actual surfaces and capture its real edit diff.
+- Use UI focus ink for Pi's highest reasoning border without changing keyword highlighting.
 
 ### Documentation and visual evidence
 

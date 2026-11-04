@@ -106,13 +106,13 @@
         "renderer": "Pillow composition of Ghostty snapshots"
       },
       "inputs": {
-        "pi-dusk": "488c4799205f2f12eb9e7cf569175ffb5ce120bf0f7e6458c31a4bd692fbd0be",
-        "pi-mesa": "1eef8ca2b614f19f973d57e40616f1c13bb36282fe73a413059cdebe91f6fc5a",
-        "pi-mira": "d084e22b354a3881dcb8ba7f458dfb8e043bf439ae1619162808968be10160e7",
-        "pi-opal": "150e6979129aa8564c9c962f88e9b41847ddd4a1ade141d99ef532a7f6a075c4",
+        "pi-dusk": "84d8457e133c0364be4806efecaeabe0cfe4452e987092ee1d712881e2f5485a",
+        "pi-mesa": "a3c03d6ebf21e8b5f5959d0f64352d25cccdeebc10ecf1805c716f9aedf4e168",
+        "pi-mira": "0de87646585a5bd9523dcab0566e3f63085e97398ced4eb891670df54cca7a99",
+        "pi-opal": "4253ece3f94f8fad357b4a8264af09dfb84a2073cd77cd75eb58f83385374473",
         "tests/snapshots/compose.py": "a0a62dc8ad5e9aa5f93846fdf7000ea58faf49724c462199cbf731a40ed77171"
       },
-      "png_sha256": "968d5280ae9a236b80c58ace2ea9e4c8bf49243a6d8ea11bc775ed18c1883f01"
+      "png_sha256": "65571e14b0cec4a59e3d4b143fc4ac5e129479d827f63695f9428beee46fc2b9"
     },
     "contact-tmux": {
       "destination": "assets/screenshots/integrations/tmux/contact-sheet.png",
@@ -7763,7 +7763,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-dusk": "5da727853c6fb8d66f97eda9bd42d1adbd7c09186a6751c230719cbce509b8cb",
-        "extras/pi/flume-dusk.json": "effbc334d6fe531c3ad4f7214685b738b7fcb749ef0a8c8174864898c6519a77",
+        "extras/pi/flume-dusk.json": "a5610a76e04e7767c2a784ad61b950eea3d59faf132ad5e0a42483647bc64608",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -7778,15 +7778,15 @@
         "tests/snapshots/fixtures/opencode-session.json": "36f774e20901b94b1fde975440483b09ae23ef24306d8394ed0201c2a4880390",
         "tests/snapshots/fixtures/opencode.sh": "e84f4665dbc3f4e95e7de7bb33f59eb58e7d746eea97a957b13ea1ca9714f5a9",
         "tests/snapshots/fixtures/palettes.txt": "2a5cfa159210824f2a9a0a85bd2fe36acf591d7e4cefa01d114845c7f0e1a8aa",
-        "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
-        "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
+        "tests/snapshots/fixtures/pi-session.jsonl": "7edcb8377f17a8c114c247ac2e5a2df9b165525356f52d41082cac79829c469d",
+        "tests/snapshots/fixtures/pi.sh": "97884e14cf9108604f3a81f0ada5dde8772f3ff8bad9aa6687bd9dd491285fd0",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
         "tests/snapshots/fixtures/tmux.sh": "f6cd4d95f109ffcba0fda8d407c97bef387be40e80f83ef2b957685172e9e50e",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/pi.tape": "df63968034bbe330aee7ae01e562d7178dd7f18b089e63ed7827bfd875f9c75f",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "488c4799205f2f12eb9e7cf569175ffb5ce120bf0f7e6458c31a4bd692fbd0be"
+      "png_sha256": "84d8457e133c0364be4806efecaeabe0cfe4452e987092ee1d712881e2f5485a"
     },
     "pi-mesa": {
       "destination": "assets/screenshots/integrations/pi/mesa.png",
@@ -7842,7 +7842,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mesa": "75c7397e05b5cf10fb81449c0ada6263e2d806a698739146b6f31bf277e7202f",
-        "extras/pi/flume-mesa.json": "762b4cdf4c307cad17e8f449c44b2ead71eb6225f9ff586bca3a46741ba72c3b",
+        "extras/pi/flume-mesa.json": "a7a8740bbc1333d14d6c2ce0b6d3a5f01434771ffaaf1d6598fb51f733072156",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -7857,15 +7857,15 @@
         "tests/snapshots/fixtures/opencode-session.json": "36f774e20901b94b1fde975440483b09ae23ef24306d8394ed0201c2a4880390",
         "tests/snapshots/fixtures/opencode.sh": "e84f4665dbc3f4e95e7de7bb33f59eb58e7d746eea97a957b13ea1ca9714f5a9",
         "tests/snapshots/fixtures/palettes.txt": "2a5cfa159210824f2a9a0a85bd2fe36acf591d7e4cefa01d114845c7f0e1a8aa",
-        "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
-        "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
+        "tests/snapshots/fixtures/pi-session.jsonl": "7edcb8377f17a8c114c247ac2e5a2df9b165525356f52d41082cac79829c469d",
+        "tests/snapshots/fixtures/pi.sh": "97884e14cf9108604f3a81f0ada5dde8772f3ff8bad9aa6687bd9dd491285fd0",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
         "tests/snapshots/fixtures/tmux.sh": "f6cd4d95f109ffcba0fda8d407c97bef387be40e80f83ef2b957685172e9e50e",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/pi.tape": "df63968034bbe330aee7ae01e562d7178dd7f18b089e63ed7827bfd875f9c75f",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "1eef8ca2b614f19f973d57e40616f1c13bb36282fe73a413059cdebe91f6fc5a"
+      "png_sha256": "a3c03d6ebf21e8b5f5959d0f64352d25cccdeebc10ecf1805c716f9aedf4e168"
     },
     "pi-mira": {
       "destination": "assets/screenshots/integrations/pi/mira.png",
@@ -7921,7 +7921,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-mira": "9befb766bd881bc597ce0d89f1439ebeb725504dadbccd295dc34df3c8a11832",
-        "extras/pi/flume-mira.json": "97f4b844fae3a63f9735a98e583420b31a74af82da4c163fae68bd2757b52d97",
+        "extras/pi/flume-mira.json": "3dc120c92f508c3f8a2e1de8d8f37d7e227eb9a6f0fbbcc723ddfc8c2631da8c",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -7936,15 +7936,15 @@
         "tests/snapshots/fixtures/opencode-session.json": "36f774e20901b94b1fde975440483b09ae23ef24306d8394ed0201c2a4880390",
         "tests/snapshots/fixtures/opencode.sh": "e84f4665dbc3f4e95e7de7bb33f59eb58e7d746eea97a957b13ea1ca9714f5a9",
         "tests/snapshots/fixtures/palettes.txt": "2a5cfa159210824f2a9a0a85bd2fe36acf591d7e4cefa01d114845c7f0e1a8aa",
-        "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
-        "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
+        "tests/snapshots/fixtures/pi-session.jsonl": "7edcb8377f17a8c114c247ac2e5a2df9b165525356f52d41082cac79829c469d",
+        "tests/snapshots/fixtures/pi.sh": "97884e14cf9108604f3a81f0ada5dde8772f3ff8bad9aa6687bd9dd491285fd0",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
         "tests/snapshots/fixtures/tmux.sh": "f6cd4d95f109ffcba0fda8d407c97bef387be40e80f83ef2b957685172e9e50e",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/pi.tape": "df63968034bbe330aee7ae01e562d7178dd7f18b089e63ed7827bfd875f9c75f",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "d084e22b354a3881dcb8ba7f458dfb8e043bf439ae1619162808968be10160e7"
+      "png_sha256": "0de87646585a5bd9523dcab0566e3f63085e97398ced4eb891670df54cca7a99"
     },
     "pi-opal": {
       "destination": "assets/screenshots/integrations/pi/opal.png",
@@ -8000,7 +8000,7 @@
       },
       "inputs": {
         "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
-        "extras/pi/flume-opal.json": "aabecfee7cf8d182ea0e60d05eecdbc71e0e0edd86e8d0e28b69fbd7c1a5ac36",
+        "extras/pi/flume-opal.json": "be8c5d728c63f4e5b9142633e6ad57e3109235f19f4bfe7a0955c85550ffbca5",
         "tests/snapshots/capture.py": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
         "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
         "tests/snapshots/fixtures/delta.diff": "b7b3610594ea4da8c2899c8c3ecd5db54b33c04728ca974b7077f37940fb7e18",
@@ -8015,15 +8015,15 @@
         "tests/snapshots/fixtures/opencode-session.json": "36f774e20901b94b1fde975440483b09ae23ef24306d8394ed0201c2a4880390",
         "tests/snapshots/fixtures/opencode.sh": "e84f4665dbc3f4e95e7de7bb33f59eb58e7d746eea97a957b13ea1ca9714f5a9",
         "tests/snapshots/fixtures/palettes.txt": "2a5cfa159210824f2a9a0a85bd2fe36acf591d7e4cefa01d114845c7f0e1a8aa",
-        "tests/snapshots/fixtures/pi-session.jsonl": "58f18797edd00db1d5c66966bb9547ac88c50cbb697f7168f366be1e84ec9a82",
-        "tests/snapshots/fixtures/pi.sh": "3cbbc7c284b6d0100a71d0c688b55a6de7e2f9f7e10f8ae7ca3c52852209b51b",
+        "tests/snapshots/fixtures/pi-session.jsonl": "7edcb8377f17a8c114c247ac2e5a2df9b165525356f52d41082cac79829c469d",
+        "tests/snapshots/fixtures/pi.sh": "97884e14cf9108604f3a81f0ada5dde8772f3ff8bad9aa6687bd9dd491285fd0",
         "tests/snapshots/fixtures/repository.sh": "b7156dc933717b8180c191b182de74748ad75e14b02ffca5e1c5b2c41fcd092d",
         "tests/snapshots/fixtures/tmux.sh": "f6cd4d95f109ffcba0fda8d407c97bef387be40e80f83ef2b957685172e9e50e",
         "tests/snapshots/ghostty.py": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
         "tests/snapshots/pi.tape": "df63968034bbe330aee7ae01e562d7178dd7f18b089e63ed7827bfd875f9c75f",
         "tests/snapshots/render.py": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1"
       },
-      "png_sha256": "150e6979129aa8564c9c962f88e9b41847ddd4a1ade141d99ef532a7f6a075c4"
+      "png_sha256": "4253ece3f94f8fad357b4a8264af09dfb84a2073cd77cd75eb58f83385374473"
     },
     "showcase": {
       "destination": "assets/screenshots/showcase.png",
