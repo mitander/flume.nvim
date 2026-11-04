@@ -5,6 +5,7 @@ import io
 import json
 import os
 import select
+import shutil
 import signal
 import subprocess
 import sys
@@ -125,6 +126,26 @@ class NativeThemeTrial(unittest.TestCase):
             self.assertEqual(original_link.lstat().st_mtime_ns, before.st_mtime_ns)
         else:
             self.assertFalse(original_link.exists() or original_link.is_symlink())
+
+    def test_preparation_accepts_checkout_without_obsolete_plugin_directory(self):
+        source = self.directory / 'source'
+        for directory in ('lua', 'colors', 'extras'):
+            shutil.copytree(ROOT / directory, source / directory, ignore=native.source_filter)
+        for relative in ('scripts/native-themes', 'tests/native-themes.lua',
+                         'tests/snapshots/fixtures/pi-session.jsonl'):
+            destination = source / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / relative, destination)
+        self.assertFalse((source / 'plugin').exists())
+
+        root = self.directory / 'trial'
+        root.mkdir()
+        with patch.object(native.tempfile, 'mkdtemp', return_value=str(root)):
+            self.assertEqual(native.prepare(source, 'dusk'), root)
+
+        self.assertTrue((root / 'plugin/lua/flume/init.lua').is_file())
+        self.assertFalse((root / 'plugin/plugin').exists())
+        self.assertEqual((root / 'data/current/schema').read_text().strip(), 'dusk')
 
     def test_switch_driver_blocks_external_reload_commands(self):
         root = self.prepare()

@@ -26,6 +26,9 @@ jobs:
 
       - name: Setup Neovim
         uses: rhysd/action-setup-vim@v1
+        env:
+          # The action renames extracted files into HOME, which may be on a different mount than /tmp.
+          TMPDIR: ${{ runner.temp }}
         with:
           neovim: true
           version: ${{ matrix.neovim }}

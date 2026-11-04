@@ -99,7 +99,7 @@ def prepare(source: Path, schema: str) -> Path:
     print(f'Preparing {root}', file=sys.stderr)
     for relative in ('home/.pi/agent/themes', 'home/.config', 'data', 'project', 'tmp'):
         (root / relative).mkdir(parents=True, exist_ok=True)
-    for directory in ('lua', 'colors', 'plugin', 'extras'):
+    for directory in ('lua', 'colors', 'extras'):
         shutil.copytree(source / directory, root / 'plugin' / directory, ignore=source_filter)
     shutil.copyfile(source / 'scripts/native-themes', root / 'control')
     (root / 'control').chmod(0o700)
