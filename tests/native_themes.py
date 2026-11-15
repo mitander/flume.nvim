@@ -313,11 +313,20 @@ dofile(vim.env.FLUME_NATIVE_ROOT .. '/switch.lua')
                         return
             self.fail(f'Pi did not render panel color {color}; last output: {output[-2000:]!r}')
 
+        # Read expected fills from the trial's bundled themes, not historical
+        # palette literals. Native SGR output independently observes their use.
+        panels = {}
+        for schema in ('dusk', 'opal'):
+            theme = json.loads((root / 'plugin/extras/pi' / f'flume-{schema}.json').read_text())
+            self.assertEqual(theme['colors']['userMessageBg'], 'surface')
+            panels[schema] = theme['vars']['surface']
+        self.assertNotEqual(panels['dusk'], panels['opal'], 'switch must change the observed fill')
+
         # The host terminal never changes palette. These are Pi-owned SGR fills,
         # not a file-state check or the terminal background showing through.
-        observe('#262938')
+        observe(panels['dusk'])
         native.switch(root, 'opal')
-        observe('#f1ecf6')
+        observe(panels['opal'])
         self.assertIsNone(process.poll(), 'Pi exited during the live switch')
 
     def test_missing_app_does_not_install_anything(self):
