@@ -6,7 +6,9 @@ local function reload_ghostty()
         if vim.fn.executable("pkill") ~= 1 then
             return false
         end
-        vim.fn.system({ "pkill", "-USR2", "-x", "ghostty" })
+        -- Nix wrappers rename the binary to .ghostty-wrapped. Linux truncates
+        -- its process name to 15 characters. Escape the dot for pkill's regex.
+        vim.fn.system({ "pkill", "-USR2", "-x", "(ghostty|\\.ghostty-wrappe)" })
         return vim.v.shell_error == 0
     end
     if vim.fn.has("mac") ~= 1 or vim.fn.executable("osascript") ~= 1 then

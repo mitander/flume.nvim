@@ -80,20 +80,24 @@ function M.register(test, equal, truthy)
 
         local ok, err = xpcall(function()
             local sync = require("flume.sync")
-            local result = sync.run({ schema = "mira", quiet = true })
-            equal(result.ghostty_reloaded, true, "successful Linux reload")
-            equal(#calls, 1, "Linux adapter call count")
-            equal(table.concat(calls[1], ","), "pkill,-USR2,-x,ghostty", "Linux reload command")
+            for code = 0, 3 do
+                calls = {}
+                exit_code = code
+                local result = sync.run({ schema = "mira", quiet = true })
+                equal(result.ghostty_reloaded, code == 0, "Linux reload status for exit " .. code)
+                equal(#calls, 1, "Linux adapter call count")
+                equal(
+                    table.concat(calls[1], ","),
+                    "pkill,-USR2,-x,(ghostty|\\.ghostty-wrappe)",
+                    "exact plain and Nix Linux reload command"
+                )
+            end
 
-            exit_code = 1
-            result = sync.run({ schema = "mira", quiet = true })
-            equal(result.ghostty_reloaded, false, "failed Linux reload reported success")
-            equal(#calls, 2, "failed reload did not invoke adapter")
-
+            calls = {}
             pkill_available = false
-            result = sync.run({ schema = "mira", quiet = true })
+            local result = sync.run({ schema = "mira", quiet = true })
             equal(result.ghostty_reloaded, false, "missing pkill reported success")
-            equal(#calls, 2, "missing pkill invoked adapter")
+            equal(#calls, 0, "missing pkill invoked adapter")
         end, debug.traceback)
 
         state.activate = original_activate

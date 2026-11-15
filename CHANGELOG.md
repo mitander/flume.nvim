@@ -101,10 +101,10 @@
 - Publish portable fzf, Lazygit and Delta activation recipes and manual LSD filename-color setup.
   Give artifact names, install destinations and setup hints one integration inventory. Separate
   palette renderers from file writes while preserving compiler entry points and output.
-- Request Ghostty reloads through AppleScript on macOS or `SIGUSR2` on Linux, source Tmux's
-  configuration when attached, and notify a linked Pi theme. Keep sync feedback brief, with manual
-  reload hints only for installed adapter links whose refresh failed. Other applications still need
-  their own reload action or a new invocation.
+- Request Ghostty reloads through AppleScript on macOS or `SIGUSR2` on Linux, including Nix-wrapped
+  builds. Source Tmux's configuration when attached and notify a linked Pi theme. Keep sync feedback
+  brief, with manual reload hints only for installed adapter links whose refresh failed. Other
+  applications still need their own reload action or a new invocation.
 - Add Tmux UI variables `thm_surface`, `thm_muted` and `thm_on_accent` for raised panels, secondary
   labels and text on filled accents. Keep the existing ANSI and placeholder variables' meanings
   unchanged.
