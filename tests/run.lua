@@ -450,7 +450,7 @@ test("macro, import, directive and escape providers agree", function()
             styles = { functions = { italic = true } },
         })
         for _, groups in ipairs({
-            { "Macro", "@function.macro", "@lsp.type.macro" },
+            { "Macro", "@function.macro", "@lsp.type.macro", "@flume.macro.rust" },
             { "Include", "@keyword.import" },
             { "PreProc", "Define", "PreCondit", "@keyword.directive", "@keyword.directive.define" },
             { "SpecialChar", "@string.escape" },
@@ -463,6 +463,19 @@ test("macro, import, directive and escape providers agree", function()
             end
         end
     end
+end)
+
+test("Rust macro capture honors qualified overrides and clears with another colorscheme", function()
+    require("flume").setup({
+        schema = "dusk",
+        watch_sync = false,
+        highlights = { ["@function.macro.rust"] = { fg = "#abcdef", bold = true } },
+    })
+    local macro = vim.api.nvim_get_hl(0, { name = "@flume.macro.rust", link = false })
+    equal(macro.fg, 0xabcdef, "Rust macro override foreground")
+    equal(macro.bold, true, "Rust macro override style")
+    vim.cmd.colorscheme("default")
+    equal(next(vim.api.nvim_get_hl(0, { name = "@flume.macro.rust", link = false })), nil)
 end)
 
 test("stable schema registry and light foundations are preserved", function()

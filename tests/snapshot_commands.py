@@ -562,6 +562,8 @@ class SnapshotCommands(unittest.TestCase):
         self.assertFalse((destination / '.git').exists())
         for checker in ('scripts/check-highlights.lua', 'scripts/check-semantic-tokens.lua', 'tests/lualine.lua'):
             self.assertEqual((destination / checker).read_bytes(), (ROOT / checker).read_bytes())
+        query = 'queries/rust/highlights.scm'
+        self.assertEqual((destination / query).read_bytes(), (ROOT / query).read_bytes())
 
     def test_container_is_offline_readonly_and_cleaned_up(self):
         output = self.directory / 'output'

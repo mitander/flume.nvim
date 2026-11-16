@@ -46,6 +46,7 @@ class CaptureProvenance(unittest.TestCase):
         files += [
             str(path.relative_to(ROOT)) for path in (ROOT / "lua/flume/languages").glob("*.lua")
         ]
+        files += [str(path.relative_to(ROOT)) for path in (ROOT / "queries").rglob("*.scm")]
         files += [f"extras/ghostty/flume-{schema}" for schema in ("dusk", "opal", "mira", "mesa")]
         files += [f"examples/flume.{extension}" for extension in ("rs", "tsx", "py", "go", "ex", "toml")]
         files += [str(path.relative_to(ROOT)) for path in preflight.CAPTURES]
@@ -306,6 +307,7 @@ class CaptureProvenance(unittest.TestCase):
             "lua/flume/init.lua",
             "lua/flume/palette.lua",
             "lua/flume/languages/zig.lua",
+            "queries/rust/highlights.scm",
             "extras/ghostty/flume-dusk",
         ):
             with self.subTest(input=name):

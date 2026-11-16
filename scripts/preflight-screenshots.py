@@ -47,6 +47,7 @@ def digest(path: Path) -> str:
 def theme_inputs(schema: str) -> dict[str, str]:
     paths = [ROOT / "lua/flume/init.lua", ROOT / "lua/flume/palette.lua"]
     paths += sorted((ROOT / "lua/flume/languages").glob("*.lua"))
+    paths += sorted((ROOT / "queries").rglob("*.scm"))
     paths.append(ROOT / f"extras/ghostty/flume-{schema}")
     return {str(path.relative_to(ROOT)): digest(path) for path in paths}
 

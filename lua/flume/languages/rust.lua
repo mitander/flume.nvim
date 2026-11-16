@@ -2,6 +2,9 @@ local M = {}
 
 function M.highlights()
     return {
+        -- The Rust query extension gives macro names and bangs precedence over
+        -- upstream exception/debug captures without recoloring keywords such as try.
+        ["@flume.macro.rust"] = { link = "@function.macro.rust" },
         -- Receiver self is a binding, not a built-in literal. Module-path self
         -- retains the query's more specific module capture.
         ["@variable.builtin.rust"] = { link = "@variable" },

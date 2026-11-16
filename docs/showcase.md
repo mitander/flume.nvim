@@ -106,10 +106,10 @@ are capture dependencies, not requirements for using Flume. The runtime builds b
 TypeScript and TSX from the same locked grammar archive, so native checks cover both file types.
 Each capture records parser revision/checksum, query fingerprints, fixture and theme inputs, image
 checksum, and renderer identity. Rendering inputs include `init.lua`, the canonical palette,
-language mappings, shared editor fixture and launcher, tape, and scene-geometry source. Integration
-scenes also fingerprint their named theme or sidebar/project fixture. Command registration, reload
-and sync orchestration live separately in `commands.lua`, so changes to that plumbing do not
-invalidate editor capture provenance. Changes to palette application or highlight
+language highlight mappings and query extensions, shared editor fixture and launcher, tape, and
+scene-geometry source. Integration scenes also fingerprint their named theme or sidebar/project
+fixture. Command registration, reload and sync orchestration live separately in `commands.lua`, so
+changes to that plumbing do not invalidate editor capture provenance. Changes to palette application or highlight
 mapping still require new captures. Neovim itself reports readiness before Ghostty captures the
 painted terminal state. The capture fixture reveals the real statusline location field only after
 readiness. No preview label is added to the image.

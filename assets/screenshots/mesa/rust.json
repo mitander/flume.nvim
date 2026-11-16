@@ -14,7 +14,7 @@
   },
   "fixture_sha256": "33efec5a64f9cc78fc1ed9b41eee9880aa99015295984cafd675ab00f34e4426",
   "highlighting": "treesitter",
-  "image_sha256": "72e8b7ed0f96bd3f6f8803813ff527de7cb72e39cccccac4f725051c4c5cbd79",
+  "image_sha256": "aaae06a357d9297d91f694241393a9558ccdc8bb18f4b3ff1888e8d29403a5a5",
   "language": "rust",
   "nvim": "0.12.5+v0.12.5",
   "parser": {
@@ -25,6 +25,10 @@
     {
       "path": "rust/highlights.scm",
       "sha256": "4e0f5994f30ee545fc63435054a0b029c7d0222632c5c787c4e9c249dc0ef20f"
+    },
+    {
+      "path": "rust/highlights.scm",
+      "sha256": "26e1fd3747cde3540d9bee6f91d2093be5a016c16ddef43da939e9f59028a943"
     }
   ],
   "renderer_sha256": "00d74b4c40a1b7db029de301a9819370e8d09ac8b93c67cad0814e219c9bfc44",
@@ -36,9 +40,10 @@
     "lua/flume/languages/init.lua": "ac32b0e71a96b3f9f75a3e52b5beab9b66abf205e3c031111af2bcac6eb82db9",
     "lua/flume/languages/lua.lua": "448f32d9e8291a18252434d8d0345fa027c17ca504c26c3551d7f34be6b3aa01",
     "lua/flume/languages/python.lua": "e978ddaf09dbd92d2c7afce4e2aa4488f133cf804e42736bfe9306d96d72d860",
-    "lua/flume/languages/rust.lua": "288f964357b5b6785234adba9b1bf0c6b3f5bb695a15327159d496358217d85e",
+    "lua/flume/languages/rust.lua": "5692dbd19a71e5bacfe5159c2f14bce82942db6d48a19f5c9e7e3051eda9e764",
     "lua/flume/languages/typescript.lua": "29eaf0bc3fdfc3686c401461cb2717e03783a611f483e75626b5781a53a09c93",
     "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-    "lua/flume/palette.lua": "cbe3242ffbb01413e0a46aa54d4b7efd40c36df132df8e8cbed458bbed221753"
+    "lua/flume/palette.lua": "cbe3242ffbb01413e0a46aa54d4b7efd40c36df132df8e8cbed458bbed221753",
+    "queries/rust/highlights.scm": "26e1fd3747cde3540d9bee6f91d2093be5a016c16ddef43da939e9f59028a943"
   }
 }

@@ -207,8 +207,11 @@ follow these rules:
 - Import keywords follow namespaces, word-like operators follow punctuation, and preprocessor
   directives follow attributes. Legacy `Include`, `PreProc`, `Define`, and `PreCondit` follow the
   same roles.
-- Macro names use the function family across legacy syntax, Tree-sitter, and LSP. String escapes use
-  the special family, matching `SpecialChar`.
+- Macro names use the function family across legacy syntax, Tree-sitter, and LSP. Rust's query
+  extension gives macro names and their `!` the function role even when upstream queries also mark
+  them as exceptions or debugging forms. Genuine keywords such as `try` keep keyword ink. The
+  Flume-specific capture leaves upstream mappings intact under other colorschemes. String escapes
+  use the special family, matching `SpecialChar`.
 
 These mappings keep keyword-heavy languages from collapsing into one dominant hue.
 
@@ -216,11 +219,12 @@ Exact group overrides remain available for further language-specific exceptions.
 should correct a parser or language-server mismatch, not establish a new language-specific color
 system.
 
-Language-qualified corrections live in `lua/flume/languages/`, one file per language, so they remain
-independently reviewable. The set covers Go factory calls, Lua table constructors, Python namespaces, Rust enum
-constructors, receiver captures, and Zig's legacy built-in fallback. ZLS namespace tokens
-use the generic namespace role. Languages that are represented correctly by the generic Tree-sitter
-and LSP groups should not receive an empty override file.
+Language-qualified highlight corrections live in `lua/flume/languages/`, one file per language, so
+both role and style choices remain independently reviewable. `queries/rust/highlights.scm` owns the
+macro-only capture precedence correction. The set covers Go factory calls, Lua table constructors,
+Python namespaces, Rust enum constructors, receiver captures, and Zig's legacy built-in fallback.
+ZLS namespace tokens use the generic namespace role. Languages represented correctly by the generic
+Tree-sitter and LSP groups should not receive an empty override file.
 
 ### Integration colors
 

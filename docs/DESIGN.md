@@ -15,7 +15,8 @@ obligations. The [semantic export](semantic-export.md) owns the versioned consum
 | `lua/flume/palette.lua`                       | Canonical palettes, role values and schema metadata                                 |
 | `lua/flume/init.lua`                          | Editor options, palette application and resolved highlights                         |
 | `lua/flume/commands.lua`                      | User commands, source reload/rollback and sync orchestration                        |
-| `lua/flume/languages/`                        | Narrow language-provider corrections                                                |
+| `lua/flume/languages/`                        | Narrow language-provider highlight corrections                                      |
+| `queries/`                                   | Capture precedence corrections with Flume-specific highlight groups                  |
 | `lua/flume/integrations.lua`                  | Ordered integration inventory, artifact names, install destinations and setup hints |
 | `lua/flume/compiler.lua`                      | Palette-to-text renderers and canonical artifact writes                             |
 | `lua/flume/extras.lua`                        | Consent, safe installation and setup instructions                                   |
