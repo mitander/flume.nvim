@@ -48,18 +48,26 @@ function M.reload(flume, opts)
         reloaded.setup(config)
         reloaded.config.follow_sync = follow_sync
     end, debug.traceback)
+    local restored, restore_error
     if not ok then
         -- A syntax error must not strand the save hook or keep a half-loaded theme.
         clear_flume_modules()
         for name, module in pairs(previous) do
             package.loaded[name] = module
         end
-        flume.setup(config)
+        restored, restore_error = xpcall(function()
+            flume.setup(config)
+        end, debug.traceback)
         flume.config.follow_sync = follow_sync
     end
     pcall(vim.api.nvim_del_augroup_by_id, probe)
     if not ok then
-        vim.notify("Flume reload failed; previous theme restored:\n" .. err, vim.log.levels.ERROR)
+        local message = restored and "Flume reload failed; previous theme restored:\n" or "Flume reload failed:\n"
+        message = message .. tostring(err)
+        if not restored then
+            message = message .. "\nPrevious theme could not be reapplied:\n" .. tostring(restore_error)
+        end
+        vim.notify(message, vim.log.levels.ERROR)
         return false
     end
 
@@ -96,9 +104,20 @@ end
 function M.register(flume)
     vim.api.nvim_create_user_command("FlumeReload", flume.reload, {})
     vim.api.nvim_create_user_command("FlumeCompile", function()
+        -- Compile fresh source without replacing the palette cache that describes
+        -- the displayed theme and serves as the watcher's equality baseline.
+        local palette = package.loaded["flume.palette"]
+        local compiler = package.loaded["flume.compiler"]
         package.loaded["flume.palette"] = nil
         package.loaded["flume.compiler"] = nil
-        require("flume.compiler").compile_all({ activate = false })
+        local ok, err = xpcall(function()
+            require("flume.compiler").compile_all({ activate = false })
+        end, debug.traceback)
+        package.loaded["flume.palette"] = palette
+        package.loaded["flume.compiler"] = compiler
+        if not ok then
+            error(err)
+        end
     end, {})
     vim.api.nvim_create_user_command("FlumeSync", function(opts)
         flume.sync(opts.args ~= "" and opts.args or nil)

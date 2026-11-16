@@ -164,7 +164,8 @@ dev ~                                                              *flume-dev*
     the current schema and options, without synchronizing extras or replacing
     another theme. With dev enabled, |:FlumeSync| also reloads source and
     regenerates canonical extras before synchronizing. No separate compile is
-    needed. A failed reload restores the previous modules and theme. Failed
+    needed. A failed reload restores the previous modules and attempts to repaint
+    the previous theme. If recovery also fails, both errors are reported. Failed
     reload or compilation stops sync before publication and app reload requests.
     Fix the source and retry. See docs/DEVELOPMENT.md for development commands.
 

@@ -29,7 +29,8 @@ tell application "Ghostty"
 end tell
 ]]
     local output = vim.fn.system({ "osascript", "-e", script })
-    return vim.v.shell_error == 0 and tonumber(vim.trim(output)) ~= nil
+    local reload_count = tonumber(vim.trim(output))
+    return vim.v.shell_error == 0 and reload_count ~= nil and reload_count > 0
 end
 
 local function reload_tmux()

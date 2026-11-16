@@ -115,6 +115,7 @@ function M.register(test, equal, truthy)
         local state = require("flume.state")
         local apps = require("flume.integrations").apps
         local original_activate, original_current = state.activate, state.get_current
+        local original_system, original_has = vim.fn.system, vim.fn.has
         local original_executable, original_notify = vim.fn.executable, vim.notify
         local original_home, original_tmux = vim.env.HOME, vim.env.TMUX
         local root = vim.fn.tempname()
@@ -159,6 +160,41 @@ function M.register(test, equal, truthy)
                 "Flume schema opal synchronized\nGhostty: reload configuration manually.",
                 "installed adapter failure retains an actionable hint"
             )
+            vim.fn.has = function(name)
+                if name == "mac" then
+                    return 1
+                elseif name == "linux" then
+                    return 0
+                end
+                return original_has(name)
+            end
+            vim.fn.executable = function(name)
+                return name == "osascript" and 1 or 0
+            end
+            for _, case in ipairs({
+                { output = "0\n", status = 0, reloaded = false },
+                { output = "2\n", status = 0, reloaded = true },
+                { output = "invalid", status = 0, reloaded = false },
+                { output = "2", status = 1, reloaded = false },
+                { output = "-1", status = 0, reloaded = false },
+            }) do
+                local calls = 0
+                vim.fn.system = function(command)
+                    equal(command[1], "osascript", "unexpected native adapter")
+                    calls = calls + 1
+                    original_system({ "sh", "-c", "exit " .. case.status })
+                    return case.output
+                end
+                local result = sync.run({ schema = "opal" })
+                equal(calls, 1, "Ghostty count observation must invoke the stub")
+                equal(result.ghostty_reloaded, case.reloaded, "Ghostty reload count " .. case.output)
+                equal(
+                    message,
+                    "Flume schema opal synchronized"
+                        .. (case.reloaded and "" or "\nGhostty: reload configuration manually."),
+                    "Ghostty reload-count feedback"
+                )
+            end
             message = nil
             sync.run({ schema = "opal", quiet = true })
             equal(message, nil, "quiet sync stays silent")
@@ -168,6 +204,7 @@ function M.register(test, equal, truthy)
             apps[name].dest = destination
         end
         state.activate, state.get_current = original_activate, original_current
+        vim.fn.system, vim.fn.has = original_system, original_has
         vim.fn.executable, vim.notify = original_executable, original_notify
         vim.env.HOME, vim.env.TMUX = original_home, original_tmux
         vim.fn.delete(root, "rf")
@@ -498,6 +535,33 @@ function M.register(test, equal, truthy)
             change_color("mira", "bg", "#202b35")
             change_color("mira", "syntax_string", "#b9c5e2")
             change_color("mira", "red", "#d6a7bf")
+            local displayed_palette = require("flume.palette")
+            local displayed_background = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
+            local compile_events = events
+            vim.cmd("FlumeCompile")
+            equal(require("flume.palette"), displayed_palette, "compile replaced the displayed-palette baseline")
+            equal(vim.api.nvim_get_hl(0, { name = "Normal" }).bg, displayed_background, "compile repainted")
+            equal(events, compile_events, "compile emitted ColorScheme")
+            equal(uv.fs_readlink(data .. "/state/current"), old_set, "compile published state")
+            local compiled =
+                vim.json.decode(table.concat(vim.fn.readfile(root .. "/extras/palette/flume-mira.json"), "\n"))
+            equal(compiled.colors.bg, "#202b35", "compile did not read fresh palette source")
+
+            package.preload["flume.compiler"] = function()
+                require("flume.palette")
+                error("injected standalone compilation failure")
+            end
+            local compiled_ok, compile_error = pcall(vim.cmd, "FlumeCompile")
+            package.preload["flume.compiler"] = nil
+            equal(compiled_ok, false, "compile failure reported success")
+            truthy(
+                tostring(compile_error):find("injected standalone compilation failure", 1, true),
+                "compile lost cause"
+            )
+            equal(require("flume.palette"), displayed_palette, "failed compile replaced the displayed baseline")
+            equal(vim.api.nvim_get_hl(0, { name = "Normal" }).bg, displayed_background, "failed compile repainted")
+            equal(events, compile_events, "failed compile emitted ColorScheme")
+            equal(uv.fs_readlink(data .. "/state/current"), old_set, "failed compile published state")
             publish("mira")
             truthy(uv.fs_readlink(data .. "/state/current") ~= old_set, "publisher did not create a new activation")
             local exported = vim.json.decode(table.concat(vim.fn.readfile(data .. "/state/current/palette.json"), "\n"))
@@ -621,6 +685,7 @@ function M.register(test, equal, truthy)
         require("flume.watch").stop()
         vim.api.nvim_del_augroup_by_id(group)
         package.preload["flume.palette"] = original_loader
+        package.preload["flume.compiler"] = nil
         flume.set_highlights = original_highlights
         vim.notify = original_notify
         vim.fn.writefile(original_palette, palette_path)
@@ -750,6 +815,79 @@ function M.register(test, equal, truthy)
             error(err)
         end
     end)
+
+    for _, initial_error in ipairs({ "injected initial reload failure", { cause = "injected initial reload failure" } }) do
+        test(
+            "failed reload recovery reports a " .. type(initial_error) .. " cause and cleans bookkeeping before sync",
+            function()
+                local flume = require("flume")
+                local original_notify, original_system = vim.notify, vim.fn.system
+                local original_sync = require("flume.sync").run
+                local fail_repaint = false
+                local notices, publications, adapter_calls = {}, 0, 0
+                flume.setup({
+                    dev = true,
+                    follow_sync = true,
+                    watch_sync = false,
+                    highlights = {
+                        FlumeRecoveryProbe = function()
+                            if fail_repaint then
+                                error("injected recovery repaint failure")
+                            end
+                            return { fg = "#abcdef" }
+                        end,
+                    },
+                })
+                vim.notify = function(message)
+                    notices[#notices + 1] = message
+                end
+                vim.fn.system = function()
+                    adapter_calls = adapter_calls + 1
+                    error("unexpected reload adapter")
+                end
+                require("flume.sync").run = function()
+                    publications = publications + 1
+                    error("unexpected sync publication")
+                end
+                package.preload["flume"] = function()
+                    error(initial_error)
+                end
+                fail_repaint = true
+
+                local ok, err = xpcall(function()
+                    equal(flume.reload({ quiet = true }), false, "failed recovery escaped instead of returning failure")
+                    equal(flume.sync(), false, "dev sync continued after failed recovery")
+                    equal(require("flume"), flume, "failed recovery did not restore modules")
+                    equal(flume.config.follow_sync, true, "failed recovery lost startup preference")
+                    equal(
+                        pcall(vim.api.nvim_get_autocmds, { group = "FlumeReloadProbe" }),
+                        false,
+                        "reload probe leaked"
+                    )
+                    equal(#notices, 2, "reload failures must each be reported")
+                    for _, message in ipairs(notices) do
+                        truthy(message:find(tostring(initial_error), 1, true), "initial cause was lost")
+                        truthy(message:find("injected recovery repaint failure", 1, true), "recovery cause was lost")
+                        truthy(
+                            not message:find("previous theme restored", 1, true),
+                            "failed repaint claimed restoration"
+                        )
+                    end
+                    equal(publications, 0, "failed recovery published")
+                    equal(adapter_calls, 0, "failed recovery invoked adapters")
+                end, debug.traceback)
+
+                fail_repaint = false
+                package.preload["flume"] = nil
+                require("flume.sync").run = original_sync
+                vim.notify, vim.fn.system = original_notify, original_system
+                require("flume").setup({ watch_sync = false })
+                if not ok then
+                    error(err)
+                end
+            end
+        )
+    end
 
     test("named lualine theme follows palettes and runtime overrides", function()
         for _, schema in ipairs(require("flume.palette").schema_order) do
