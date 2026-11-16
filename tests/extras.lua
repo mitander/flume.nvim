@@ -698,6 +698,182 @@ function M.register(test, equal, truthy)
         end
     end)
 
+    for _, destination_type in ipairs({ "file", "dir" }) do
+        test("Fish tool installation refuses a " .. destination_type .. " before creating shared state", function()
+            local extras = require("flume.extras")
+            local app = extras.get_apps().fish_tools
+            local original_dest, original_data = app.dest, vim.env.FLUME_DATA_DIR
+            local original_select, original_notify, original_mkdir = vim.ui.select, vim.notify, vim.fn.mkdir
+            local root = vim.fn.tempname()
+            app.dest = root .. "/fish/conf.d/flume-tools.fish"
+            vim.env.FLUME_DATA_DIR = root .. "/shared"
+            vim.ui.select = function(_, _, done)
+                done("Install")
+            end
+            vim.notify = function() end
+            local ok, err = pcall(function()
+                vim.fn.mkdir(vim.fn.fnamemodify(app.dest, ":h"), "p")
+                local personal_file = app.dest
+                if destination_type == "dir" then
+                    vim.fn.mkdir(app.dest, "p")
+                    personal_file = app.dest .. "/personal"
+                end
+                vim.fn.writefile({ "# personal content" }, personal_file)
+                local mkdir_calls = 0
+                vim.fn.mkdir = function(...)
+                    mkdir_calls = mkdir_calls + 1
+                    return original_mkdir(...)
+                end
+
+                equal(vim.fn.getftype(root .. "/shared"), "", "no initial shared state")
+                local result
+                extras.install("fish_tools", function(completed)
+                    result = completed
+                end)
+                equal(result.status, "refused", "occupied destination refused")
+                equal(result.reload_command, nil, "refusal has no reload command")
+                equal(vim.fn.getftype(app.dest), destination_type, "destination type preserved")
+                equal(read_all(personal_file), "# personal content\n", "destination content preserved")
+                equal(vim.fn.getftype(root .. "/shared/current"), "", "no active set created")
+                equal(vim.fn.getftype(root .. "/shared"), "", "no shared directory created")
+                equal(mkdir_calls, 0, "refusal precedes directory creation")
+            end)
+            app.dest, vim.env.FLUME_DATA_DIR = original_dest, original_data
+            vim.ui.select, vim.notify, vim.fn.mkdir = original_select, original_notify, original_mkdir
+            vim.fn.delete(root, "rf")
+            if not ok then
+                error(err)
+            end
+        end)
+    end
+
+    for _, destination_type in ipairs({ "file", "dir" }) do
+        test("Fish tool installation preserves a " .. destination_type .. " created during activation", function()
+            local extras = require("flume.extras")
+            local state = require("flume.state")
+            local app = extras.get_apps().fish_tools
+            local original_dest, original_data = app.dest, vim.env.FLUME_DATA_DIR
+            local original_select, original_notify = vim.ui.select, vim.notify
+            local original_legacy_current = state.get_legacy_current
+            local root = vim.fn.tempname()
+            app.dest = root .. "/fish/conf.d/flume-tools.fish"
+            vim.env.FLUME_DATA_DIR = root .. "/shared"
+            state.get_legacy_current = function()
+                return root .. "/legacy/current"
+            end
+            vim.ui.select = function(_, _, done)
+                done("Install")
+            end
+            local personal_file = destination_type == "dir" and app.dest .. "/personal" or app.dest
+            local callback_calls = 0
+            vim.notify = function(message)
+                if message:find("legacy links could not be updated", 1, true) then
+                    callback_calls = callback_calls + 1
+                    equal(vim.fn.getftype(root .. "/shared/current"), "link", "callback follows publication")
+                    equal(vim.fn.getftype(app.dest), "", "destination initially absent")
+                    vim.fn.mkdir(vim.fn.fnamemodify(personal_file, ":h"), "p")
+                    vim.fn.writefile({ "# personal content from notification" }, personal_file)
+                end
+            end
+            local ok, err = pcall(function()
+                -- A personal legacy directory makes real activation notify the user.
+                vim.fn.mkdir(root .. "/legacy/current", "p")
+                local result
+                extras.install("fish_tools", function(completed)
+                    result = completed
+                end)
+                equal(callback_calls, 1, "activation invoked the user notification callback")
+                equal(
+                    read_all(personal_file),
+                    "# personal content from notification\n",
+                    "destination content preserved"
+                )
+                equal(vim.fn.getftype(app.dest), destination_type, "destination type preserved")
+                equal(result.status, "refused", "newly occupied destination refused")
+                equal(result.reload_command, nil, "refusal has no reload command")
+            end)
+            app.dest, vim.env.FLUME_DATA_DIR = original_dest, original_data
+            vim.ui.select, vim.notify = original_select, original_notify
+            state.get_legacy_current = original_legacy_current
+            vim.fn.delete(root, "rf")
+            if not ok then
+                error(err)
+            end
+        end)
+    end
+
+    test("Fish tool refusal preserves a stale set and successful reinstall refreshes it completely", function()
+        local extras = require("flume.extras")
+        local state = require("flume.state")
+        local flume = require("flume")
+        local app = extras.get_apps().fish_tools
+        local original_dest, original_data, original_schema = app.dest, vim.env.FLUME_DATA_DIR, flume.config.schema
+        local original_select, original_notify = vim.ui.select, vim.notify
+        local uv = vim.uv or vim.loop
+        local root = vim.fn.tempname()
+        local current = root .. "/shared/current"
+        app.dest = root .. "/fish/conf.d/flume-tools.fish"
+        vim.env.FLUME_DATA_DIR = root .. "/shared"
+        vim.ui.select = function(_, _, done)
+            done("Install")
+        end
+        vim.notify = function() end
+        local ok, err = pcall(function()
+            state.activate("opal")
+            flume.config.schema = "mesa"
+            vim.fn.writefile({ "# older tool setup" }, current .. "/fish-tools.fish")
+            local old_target = assert(uv.fs_readlink(current))
+            local old_set = root .. "/shared/" .. old_target
+            local published = {}
+            for _, name in ipairs(vim.fn.readdir(old_set)) do
+                published[name] = read_all(old_set .. "/" .. name)
+            end
+            local shared_entries = table.concat(vim.fn.readdir(root .. "/shared"), ",")
+            vim.fn.mkdir(vim.fn.fnamemodify(app.dest, ":h"), "p")
+            vim.fn.writefile({ "# personal fragment" }, app.dest)
+
+            local result
+            extras.install("fish_tools", function(completed)
+                result = completed
+            end)
+            equal(result.status, "refused", "stale helper cannot override refusal")
+            equal(read_all(app.dest), "# personal fragment\n", "personal fragment preserved")
+            equal(uv.fs_readlink(current), old_target, "refusal preserves active target")
+            equal(table.concat(vim.fn.readdir(root .. "/shared"), ","), shared_entries, "no replacement set created")
+            equal(sorted_keys(keyset(vim.fn.readdir(old_set))), sorted_keys(published), "published files retained")
+            for name, content in pairs(published) do
+                equal(read_all(old_set .. "/" .. name), content, "refusal preserves published bytes: " .. name)
+            end
+
+            assert(uv.fs_unlink(app.dest))
+            assert(uv.fs_symlink(current .. "/fish-tools.fish", app.dest))
+            extras.install("fish_tools", function(completed)
+                result = completed
+            end)
+            equal(result.status, "already_linked", "refresh retains installed link")
+            equal(uv.fs_readlink(app.dest), current .. "/fish-tools.fish", "stable destination retained")
+            truthy(uv.fs_readlink(current) ~= old_target, "stale set replaced before already_linked")
+            equal(read_all(current .. "/schema"), "opal\n", "refresh preserves shared schema, not editor schema")
+            equal(sorted_keys(keyset(vim.fn.readdir(current))), sorted_keys(published), "replacement set is complete")
+            for _, integration in ipairs(require("flume.integrations").list) do
+                equal(
+                    read_all(current .. "/" .. integration.current),
+                    read_all(extras.get_plugin_dir() .. "/" .. integration.source:format("-opal")),
+                    "replacement publishes bundled bytes: " .. integration.name
+                )
+            end
+            for name, content in pairs(published) do
+                equal(read_all(old_set .. "/" .. name), content, "refresh retains old published bytes: " .. name)
+            end
+        end)
+        app.dest, vim.env.FLUME_DATA_DIR, flume.config.schema = original_dest, original_data, original_schema
+        vim.ui.select, vim.notify = original_select, original_notify
+        vim.fn.delete(root, "rf")
+        if not ok then
+            error(err)
+        end
+    end)
+
     test("all-app installation waits for each completion before the next prompt", function()
         local extras = require("flume.extras")
         local original_install = extras.install

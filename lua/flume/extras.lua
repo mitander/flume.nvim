@@ -35,6 +35,15 @@ local function install_link(name, app)
         return { app = name, status = status, source = src_path, destination = dest_path, message = message }
     end
 
+    -- Refuse occupied destinations before publishing shared state or creating directories.
+    local existing_type = vim.fn.getftype(dest_path)
+    if existing_type ~= "" and existing_type ~= "link" then
+        return result(
+            "refused",
+            "Refusing to replace existing file: " .. dest_path .. "\nMove it aside or link " .. src_path .. " manually."
+        )
+    end
+
     -- A previously installed static helper may predate the source command's flags.
     -- Refresh through complete-set publication, never by editing a published file.
     local needs_activation = app.src:match("^extras/current/") and vim.fn.filereadable(src_path) == 0
@@ -55,6 +64,15 @@ local function install_link(name, app)
         end
     end
 
+    -- Activation can invoke user notification callbacks that occupy the destination.
+    existing_type = vim.fn.getftype(dest_path)
+    if existing_type ~= "" and existing_type ~= "link" then
+        return result(
+            "refused",
+            "Refusing to replace existing file: " .. dest_path .. "\nMove it aside or link " .. src_path .. " manually."
+        )
+    end
+
     local dest_dir = vim.fn.fnamemodify(dest_path, ":h")
     local created, create_error = pcall(vim.fn.mkdir, dest_dir, "p")
     if not created then
@@ -65,19 +83,7 @@ local function install_link(name, app)
         return result("failed", "Source file not found: " .. src_path .. "\nHave you compiled the extras?")
     end
 
-    local existing_type = vim.fn.getftype(dest_path)
-    if existing_type ~= "" then
-        if existing_type ~= "link" then
-            return result(
-                "refused",
-                "Refusing to replace existing file: "
-                    .. dest_path
-                    .. "\nMove it aside or link "
-                    .. src_path
-                    .. " manually."
-            )
-        end
-
+    if existing_type == "link" then
         local target = uv.fs_readlink(dest_path)
         if target == src_path or vim.fn.resolve(dest_path) == src_path then
             return result("already_linked", name .. " extra is already linked to " .. dest_path)
