@@ -63,6 +63,8 @@ local function check()
             {
                 { "type Queue[T", "Queue", "type", "syntax_type" },
                 { "func NewQueue[T", "NewQueue", "function", "syntax_function" },
+                -- The Go grammar parses this generic call as a type conversion.
+                { "queue := NewQueue[string](2)", "NewQueue", "type", "syntax_type" },
                 { "queue := NewQueue", "queue", "variable", "syntax_primary" },
                 { "q.items = nil", "items", "property", "syntax_property" },
                 { "fmt.Printf", "Printf", "function.method.call", "syntax_function" },

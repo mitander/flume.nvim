@@ -179,9 +179,13 @@ follow these rules:
 
 - Constructors use `syntax_type`; they create typed values rather than behaving like ordinary
   functions. TypeScript and TSX `new` expressions share this rule. JSX component and native-element
-  names retain their tag captures instead of recoloring every TSX constructor as a tag. Go factory
-  calls named `New...` or `Make...` remain ordinary functions, despite the query's naming-based
-  constructor capture. Composite literals retain their type captures.
+  names retain their tag captures instead of recoloring every TSX constructor as a tag. Nongeneric
+  Go factory calls named `New...` or `Make...` remain ordinary functions, despite the query's
+  naming-based constructor capture. Parser-only Go highlighting cannot always distinguish generic
+  function calls from type conversions: the pinned grammar parses the `NewQueue[string]` call in
+  `examples/flume.go` as a type conversion and emits `@type` for `NewQueue`. Retain that type-role
+  fallback rather than guessing symbol identity from the name. LSP function tokens still use the
+  function role. Composite literals retain their type captures.
 - LSP `typeParameter` tokens use each palette's neutral identifier ink, distinguishing a parameter
   such as `T` from a named type such as `Box` without adding another accent family. This is not
   literal white or a comment-like dimming rule. Parser-only highlighting retains the type capture

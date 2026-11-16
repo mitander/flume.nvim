@@ -45,6 +45,28 @@ local function contrast(a, b)
     return (lighter + 0.05) / (darker + 0.05)
 end
 
+local function check_lsd_metadata(content, colors, light)
+    local roles = {
+        read = "muted",
+        ["no-access"] = "muted",
+        unmodified = "muted",
+        ignored = "muted",
+        older = "syntax_doc_comment",
+        context = "syntax_doc_comment",
+        none = "info",
+        small = "info",
+    }
+    if light then
+        roles.write = "muted"
+        roles.exec = "muted"
+    end
+    for field, role in pairs(roles) do
+        local color = content:match("\n  " .. field:gsub("%-", "%%-") .. ': "(#[%x]+)"')
+        truthy(color, "missing LSD metadata field: " .. field)
+        equal(color, colors[role], "LSD " .. field .. " role " .. role)
+    end
+end
+
 -- Never mutate the user's active themes or checkout while testing activation.
 local repository = vim.fn.getcwd()
 local fixture = vim.fn.tempname()
@@ -1447,32 +1469,22 @@ test("generated extras are current and machine-readable", function()
         local suffix = require("flume.palette").schemas[schema].suffix
         local lsd = read_all("extras/lsd/colors" .. suffix .. ".yaml")
         truthy(not lsd:find("\nname:", 1, true), schema .. " LSD theme uses unsupported name keys")
-        local metadata_ink = lsd:match("\n  read: (#[%x]+)")
-        for _, key in ipairs({ "no%-access", "unmodified", "ignored" }) do
-            equal(
-                lsd:match("\n  " .. key .. ": (#[%x]+)"),
-                metadata_ink,
-                schema .. " LSD secondary content uses readable metadata ink"
-            )
-        end
-        equal(
-            lsd:match("\n  older: (#[%x]+)"),
-            lsd:match("\n  context: (#[%x]+)"),
-            schema .. " LSD dates use documentation ink"
-        )
-        equal(
-            lsd:match("\n  none: (#[%x]+)"),
-            lsd:match("\n  small: (#[%x]+)"),
-            schema .. " LSD sizes use a shared info ink"
-        )
+        local colors = palettes[schema]
+        local light = palettes.schemas[schema].appearance == "light"
+        check_lsd_metadata(lsd, colors, light)
+        local changed, replacements = lsd:gsub('(\n  read: ")#[%x]+"', '%1#010203"', 1)
+        equal(replacements, 1, "LSD negative control changes a quoted value")
+        local accepted, failure = pcall(check_lsd_metadata, changed, colors, light)
+        equal(accepted, false, "wrong quoted LSD metadata color escaped")
+        truthy(tostring(failure):find("LSD read role muted", 1, true), "wrong-color control failed for another reason")
+        local missing = lsd:gsub('\n  read: "#[%x]+"[^\n]*', "", 1)
+        accepted, failure = pcall(check_lsd_metadata, missing, colors, light)
+        equal(accepted, false, "missing LSD metadata field escaped")
+        truthy(tostring(failure):find("missing LSD metadata field: read", 1, true), "missing-field control lost cause")
         local opencode = vim.json.decode(read_all("extras/opencode/flume" .. suffix .. ".json"))
         equal(opencode.theme.diffLineNumber, "muted", schema .. " OpenCode line numbers are content")
         equal(opencode.theme.markdownBlockQuote, "muted", schema .. " OpenCode block quotes are content")
-        if require("flume.palette").schemas[schema].appearance == "light" then
-            local read_color = lsd:match("\n  read: (#[%x]+)")
-            equal(lsd:match("\n  write: (#[%x]+)"), read_color, schema .. " quiet write permission")
-            equal(lsd:match("\n  exec: (#[%x]+)"), read_color, schema .. " quiet exec permission")
-
+        if light then
             local selection_fg = require("flume.palette")[schema].selection_fg
             local ghostty = read_all("extras/ghostty/flume" .. suffix)
             equal(

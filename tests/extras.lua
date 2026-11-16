@@ -35,6 +35,107 @@ local function contrast(a, b)
     return (lighter + 0.05) / (darker + 0.05)
 end
 
+-- Version 1 consumers may require any of these roles. Keep this inventory independent
+-- of the current palette tables so removing a role from source and exports still fails.
+local required_v1_roles = {
+    "accent",
+    "active_line",
+    "active_line_number",
+    "bg",
+    "black",
+    "blue",
+    "border",
+    "border_focused",
+    "border_variant",
+    "bright_black",
+    "bright_blue",
+    "bright_cyan",
+    "bright_green",
+    "bright_magenta",
+    "bright_red",
+    "bright_white",
+    "bright_yellow",
+    "cyan",
+    "diff_add",
+    "diff_add_bg",
+    "diff_add_emphasis",
+    "diff_change",
+    "diff_change_bg",
+    "diff_delete",
+    "diff_delete_bg",
+    "diff_delete_emphasis",
+    "diff_text_bg",
+    "dim_black",
+    "dim_blue",
+    "dim_cyan",
+    "dim_green",
+    "dim_magenta",
+    "dim_red",
+    "dim_white",
+    "dim_yellow",
+    "element",
+    "element_active",
+    "element_hover",
+    "error",
+    "fg",
+    "green",
+    "hint",
+    "hint_bg",
+    "icon_blue",
+    "icon_copper",
+    "icon_cyan",
+    "icon_green",
+    "icon_neutral",
+    "icon_orange",
+    "icon_pink",
+    "icon_purple",
+    "icon_red",
+    "icon_yellow",
+    "indent_guide",
+    "info",
+    "line_number",
+    "magenta",
+    "match",
+    "muted",
+    "on_accent",
+    "placeholder",
+    "predictive",
+    "red",
+    "selection_bg",
+    "selection_fg",
+    "success",
+    "surface",
+    "surface_alt",
+    "syntax_attribute",
+    "syntax_boolean",
+    "syntax_comment",
+    "syntax_constant",
+    "syntax_doc_comment",
+    "syntax_function",
+    "syntax_keyword",
+    "syntax_namespace",
+    "syntax_primary",
+    "syntax_property",
+    "syntax_punctuation",
+    "syntax_punctuation_bracket",
+    "syntax_punctuation_special",
+    "syntax_special",
+    "syntax_string",
+    "syntax_type",
+    "terminal_bg",
+    "text",
+    "warn_bg",
+    "warning",
+    "white",
+    "yellow",
+}
+
+local function assert_required_v1_roles(colors)
+    for _, role in ipairs(required_v1_roles) do
+        assert(colors[role], "Missing v1 role: " .. role)
+    end
+end
+
 function M.register(test, equal, truthy)
     local palettes = require("flume.palette")
     local apps = {
@@ -104,6 +205,7 @@ function M.register(test, equal, truthy)
             local data = vim.json.decode(read_all(path("palette", schema)))
             equal(sorted_keys(data), "appearance,colors,format_version,schema", "export envelope")
             equal(data.format_version, 1, "format version")
+            assert_required_v1_roles(data.colors)
             equal(data.schema, schema, "export schema")
             equal(data.appearance, palettes.schemas[schema].appearance, "export appearance")
             equal(sorted_keys(data.colors), sorted_keys(palettes[schema]), "export role inventory")
@@ -111,6 +213,21 @@ function M.register(test, equal, truthy)
                 equal(data.colors[role], color, schema .. " semantic " .. role)
             end
         end
+    end)
+
+    test("v1 required roles reject removals even when source and export agree and allow additions", function()
+        for _, role in ipairs(required_v1_roles) do
+            local source = vim.deepcopy(palettes.dusk)
+            source[role] = nil
+            local exported = vim.json.decode(vim.json.encode(source))
+            equal(sorted_keys(source), sorted_keys(exported), "source and export still agree")
+            local ok, err = pcall(assert_required_v1_roles, exported)
+            equal(ok, false, "missing frozen role must fail: " .. role)
+            truthy(tostring(err):find("Missing v1 role: " .. role, 1, true), "specific missing role")
+        end
+        local additive = vim.deepcopy(palettes.dusk)
+        additive.future_role = "#123456"
+        assert_required_v1_roles(additive)
     end)
 
     test("terminal integration contracts parse for every schema", function()

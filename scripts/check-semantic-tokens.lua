@@ -77,13 +77,53 @@ local function check()
             end, 50),
             schema .. " gopls did not emit the expected declaration/use tokens"
         )
-        for _, probe in ipairs(probes) do
-            local group = "@lsp.type." .. probe[3] .. ".go"
-            local highlight = vim.api.nvim_get_hl(0, { name = group, link = false })
-            local expected = tonumber(palette.get(schema).colors[probe[4]]:sub(2), 16)
-            assert(highlight.fg == expected, schema .. " " .. group .. " has the wrong role color")
+        local function check_roles()
+            for index, probe in ipairs(probes) do
+                local token = observed[index]
+                -- Neovim applies type, modifier and type-modifier groups at
+                -- increasing priorities. Style-only groups retain lower ink.
+                local tiers = { { "@lsp.type." .. token.type .. ".go" }, {}, {} }
+                for modifier in pairs(token.modifiers) do
+                    tiers[2][#tiers[2] + 1] = "@lsp.mod." .. modifier .. ".go"
+                    tiers[3][#tiers[3] + 1] = "@lsp.typemod." .. token.type .. "." .. modifier .. ".go"
+                end
+                local foregrounds = {}
+                for _, groups in ipairs(tiers) do
+                    local colored = {}
+                    for _, group in ipairs(groups) do
+                        local highlight = vim.api.nvim_get_hl(0, { name = group, link = false })
+                        if highlight.fg then
+                            colored[group] = highlight.fg
+                        end
+                    end
+                    if next(colored) then
+                        foregrounds = colored
+                    end
+                end
+                local expected = tonumber(palette.get(schema).colors[probe[4]]:sub(2), 16)
+                assert(next(foregrounds), schema .. " " .. token.type .. " has no semantic foreground")
+                -- Equal-priority modifiers have no guaranteed ordering. Every
+                -- possible winning foreground must satisfy the role contract.
+                for group, foreground in pairs(foregrounds) do
+                    assert(foreground == expected, schema .. " " .. group .. " has the wrong role color")
+                end
+            end
         end
-        print("ok - gopls generic declarations, references and control roles: " .. schema)
+        check_roles()
+
+        local modifier = assert(next(observed[2].modifiers), "generic declaration needs a modifier negative control")
+        for _, group in ipairs({
+            "@lsp.mod." .. modifier .. ".go",
+            "@lsp.typemod.typeParameter." .. modifier .. ".go",
+        }) do
+            local previous = vim.api.nvim_get_hl(0, { name = group, link = true })
+            vim.api.nvim_set_hl(0, group, { fg = palette.get(schema).colors.syntax_type })
+            local accepted, failure = pcall(check_roles)
+            vim.api.nvim_set_hl(0, group, previous)
+            assert(not accepted and tostring(failure):find("wrong role color", 1, true), group .. " defect escaped")
+            check_roles()
+        end
+        print("ok - gopls effective roles and modifier negative controls: " .. schema)
     end
     print(#probes * #palette.schema_order .. " real semantic-token checks passed")
 end
