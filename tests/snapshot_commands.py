@@ -335,6 +335,129 @@ class SnapshotCommands(unittest.TestCase):
                 errors = json.loads((report / 'capture-errors.json').read_text())
                 self.assertIn(str(error), errors['fzf-dusk'])
 
+    def test_failed_stages_retain_safe_artifacts_and_preserve_publication(self):
+        faults = (
+            ('capture', 'pre-log-delta', 9), ('capture', 'pre-log-font', 8),
+            ('capture', 'malformed-manifest', 'exception'),
+            ('capture', 'incomplete-manifest', 'exception'),
+            ('capture', 'modified-image', 'exception'),
+            ('composition', 'exit', 7), ('composition', 'malformed-manifest', 'exception'),
+            ('comparison', 'exit', 6), ('comparison', 'malformed-manifest', 'exception'),
+            ('comparison', 'difference', 1),
+        )
+        self.published_evidence(['fzf-dusk'], b'old')
+        published_before = (self.published / destination('fzf-dusk')).read_bytes()
+        manifest_before = (self.baseline / 'manifest.json').read_bytes()
+        for stage, fault, expected_status in faults:
+            with self.subTest(stage=stage, fault=fault):
+                report = self.directory / f'{stage}-{fault}'
+                report.mkdir()
+                original_mkdtemp = tempfile.mkdtemp
+
+                def allocate(*args, **options):
+                    if options.get('prefix') == 'flume-snapshot-report-':
+                        return str(report)
+                    return original_mkdtemp(*args, **options)
+
+                def run_container(image, source, output, arguments, *mounts, **options):
+                    current = ('composition' if arguments[0].endswith('compose.py') else
+                               'comparison' if arguments[0].endswith('compare.py') else 'capture')
+                    options['log_path'].write_text(f'{current}: {fault} diagnostic\n')
+                    if current == 'capture':
+                        if fault.startswith('pre-log'):
+                            # Failure before the case log or final image exists.
+                            (output / 'fzf-dusk-runtime.json').write_text('{"partial": true}')
+                            (output / 'fzf-dusk-terminal.png').write_bytes(b'partial terminal')
+                            return expected_status
+                        evidence(output, ['fzf-dusk'], b'new')
+                    elif current == 'composition':
+                        evidence(output, ['fzf-dusk', 'contact-fzf'], b'new')
+                    if current == stage:
+                        if fault == 'malformed-manifest':
+                            (output / 'manifest.json').write_text('{not json')
+                        elif fault == 'incomplete-manifest':
+                            (output / 'manifest.json').write_text('{"format_version": 1, "cases": {}}')
+                        elif fault == 'modified-image':
+                            (output / 'fzf-dusk.png').write_bytes(b'corrupt')
+                        elif fault in ('exit', 'difference'):
+                            return expected_status
+                    return 0
+
+                with (
+                    patch.object(commands, 'BASELINES', self.baseline),
+                    patch.object(commands.shutil, 'which', return_value='docker'),
+                    patch.object(commands.subprocess, 'run') as run,
+                    patch.object(commands, 'container', side_effect=run_container),
+                    patch.object(commands.tempfile, 'mkdtemp', side_effect=allocate),
+                    patch.object(commands, 'update_baselines') as publish,
+                ):
+                    run.return_value.returncode = 0
+                    mode = 'test' if fault == 'difference' else 'update'
+                    if expected_status == 'exception':
+                        with self.assertRaises(ValueError):
+                            commands.execute(mode, ['fzf'], ['dusk'])
+                    else:
+                        self.assertNotEqual(commands.execute(mode, ['fzf'], ['dusk']), 0)
+                    publish.assert_not_called()
+                failure = json.loads((report / 'failure.json').read_text())
+                self.assertEqual(failure['stage'], stage)
+                self.assertEqual(failure['case'], 'fzf-dusk' if stage == 'capture' else None)
+                self.assertIn('fzf-dusk', failure['cases'])
+                self.assertEqual(failure['status'], expected_status)
+                name = 'fzf-dusk' if stage == 'capture' else stage
+                self.assertIn(f'{stage}: {fault} diagnostic', (report / f'capture/{name}.container.log').read_text())
+                if fault.startswith('pre-log'):
+                    self.assertFalse((report / 'capture/fzf-dusk.log').exists())
+                    self.assertEqual((report / 'capture/fzf-dusk-terminal.png').read_bytes(), b'partial terminal')
+                    self.assertTrue((report / 'capture/fzf-dusk-runtime.json').exists())
+                    errors = json.loads((report / 'capture-errors.json').read_text())
+                    self.assertIn(str(expected_status), errors['fzf-dusk'])
+                else:
+                    self.assertTrue((report / 'capture/fzf-dusk.png').exists())
+                self.assertEqual((self.baseline / 'manifest.json').read_bytes(), manifest_before)
+                self.assertEqual((self.published / destination('fzf-dusk')).read_bytes(), published_before)
+
+    def test_container_retains_stdout_and_stderr_before_case_log_exists(self):
+        output = self.directory / 'output'
+        output.mkdir()
+        log = self.directory / 'container.log'
+        real_run = subprocess.run
+
+        def fail_before_log(argv, **options):
+            return real_run([sys.executable, '-c',
+                             'import sys; print("font checker stdout", flush=True); '
+                             'sys.stderr.write("font fallback failure\\n"); sys.exit(8)'], **options)
+
+        with patch.object(commands.subprocess, 'run', side_effect=fail_before_log):
+            status = commands.container('image', self.directory, output, [], log_path=log)
+        self.assertEqual(status, 8)
+        self.assertIn('font checker stdout', log.read_text())
+        self.assertIn('font fallback failure', log.read_text())
+        self.assertEqual(list(output.iterdir()), [])
+
+    def test_retention_does_not_follow_artifact_or_report_symlinks(self):
+        report, work = self.directory / 'report', self.directory / 'work'
+        report.mkdir()
+        work.mkdir()
+        secret = self.directory / 'secret'
+        secret.write_text('private content')
+        case_directory = work / 'fzf-dusk'
+        case_directory.mkdir()
+        (case_directory / 'fzf-dusk.png').symlink_to(secret)
+        (case_directory / 'manifest.json').symlink_to(secret)
+        (case_directory / 'fzf-dusk.log').write_text('safe diagnostic')
+        (report / 'capture').symlink_to(self.directory, target_is_directory=True)
+        (report / 'failure.json').symlink_to(secret)
+        commands.retain_failure(report, work, ['fzf-dusk'], 'capture', 'fzf-dusk', 1, 'unsafe output')
+        retained = next(path for path in report.glob('capture-*') if path.is_dir())
+        self.assertEqual(list(path.name for path in retained.iterdir()), ['fzf-dusk.log'])
+        self.assertEqual((retained / 'fzf-dusk.log').read_text(), 'safe diagnostic')
+        self.assertEqual(secret.read_text(), 'private content')
+        self.assertFalse((report / 'failure.json').is_symlink())
+        failure = json.loads((report / 'failure.json').read_text())
+        self.assertEqual(set(failure['rejected_artifacts']),
+                         {'report/capture', 'fzf-dusk/fzf-dusk.png', 'fzf-dusk/manifest.json'})
+
     def test_interrupted_submission_cancels_already_queued_captures(self):
         from concurrent.futures import Future
         queued = Future()

@@ -288,6 +288,10 @@ separate plugin with its own highlight integration. See the
 
 ### Lazygit
 
+The optional extra requires Lazygit 0.66.2+ and Delta on `PATH`. Upgrade Lazygit before
+loading the fragment. It uses `gui.theme` author/branch maps and `git.diffRenderers` commands,
+so the supported application loads it without migrating or rewriting the published theme.
+
 Install the active fragment with `:FlumeInstallExtras lazygit`. It creates:
 
 ```text

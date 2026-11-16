@@ -52,8 +52,8 @@
     "strip": 0
   },
   "lazygit": {
-    "url": "https://github.com/jesseduffield/lazygit/releases/download/v0.55.1/lazygit_0.55.1_linux_x86_64.tar.gz",
-    "sha256": "6385a699dde302b7fdcd1cc8910ae225ed0c19a230285569c586051576f0d6a3",
+    "url": "https://github.com/jesseduffield/lazygit/releases/download/v0.66.2/lazygit_0.66.2_linux_x86_64.tar.gz",
+    "sha256": "158efc9ddfa1241fab5fb3526bb442c8dc6c4b1904d73213b9e4e93e03c52034",
     "strip": 0
   },
   "lsd": {

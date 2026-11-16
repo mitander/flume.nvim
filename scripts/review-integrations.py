@@ -184,6 +184,7 @@ def integration_pairs(
             "error",
             "warning",
             "success",
+            "info",
         ):
             add(role, values[role], values["background"])
         add("Text on element", values["text"], values["backgroundElement"])
@@ -214,6 +215,7 @@ def integration_pairs(
             "muted",
             "dim",
             "syntaxComment",
+            "mdCodeBlockBorder",
             "warning",
             "error",
             "success",
@@ -253,9 +255,11 @@ def integration_pairs(
             values["cherryPickedCommitFgColor"],
             values["cherryPickedCommitBgColor"],
         )
+        add("Inactive headings on terminal", values["inactiveBorderColor"], terminal_bg)
         add("Active border", values["activeBorderColor"], terminal_bg, 3)
         add("Searching border", values["searchingActiveBorderColor"], terminal_bg, 3)
-        command = re.search(r"^\s+pager: '(.*)'$", text, re.MULTILINE).group(1)
+        # Historical report baselines still contain the pre-0.66 pager key.
+        command = re.search(r"^\s+(?:command|pager): '(.*)'$", text, re.MULTILINE).group(1)
         options = dict(
             option[2:].split("=", 1)
             for option in shlex.split(command)
@@ -265,6 +269,10 @@ def integration_pairs(
             style: shlex.split(options[style])[-1]
             for style in ("minus-style", "minus-emph-style", "plus-style", "plus-emph-style")
         }
+        for side in ("minus", "plus", "left", "right", "zero"):
+            role = f"line-numbers-{side}-style"
+            if role in options:
+                add(role + " on terminal", options[role], terminal_bg)
         pairs.extend(delta_diff_pairs(backgrounds, ansi, terminal["foreground"]))
     elif app == "tmux":
         values = dict(re.findall(r'%hidden (\w+)="(#[\da-fA-F]{6})"', text))
@@ -302,8 +310,12 @@ def integration_pairs(
             "hunk-header-style",
             "line-numbers-minus-style",
             "line-numbers-plus-style",
+            "line-numbers-left-style",
+            "line-numbers-right-style",
+            "line-numbers-zero-style",
         ):
-            add(role + " on terminal", values[role], terminal_bg)
+            if role in values:
+                add(role + " on terminal", values[role], terminal_bg)
         backgrounds = {
             style: values[style]
             for style in ("minus-style", "minus-emph-style", "plus-style", "plus-emph-style")

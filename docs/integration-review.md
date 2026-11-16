@@ -29,8 +29,8 @@ python3 scripts/review-integrations.py \
 
 The JSON contains resolved colors, targets, and ratios. A changed snapshot requires review, not
 automatic acceptance. The committed generated themes already preserve exact exporter mappings; tests
-additionally check contrast math, alias resolution, selected-match combinations, and xterm
-quantization.
+additionally check contrast math, alias resolution, selected-match combinations, current RGB output,
+and historical xterm-256 color resolution.
 
 ## What is measured
 
@@ -38,14 +38,16 @@ quantization.
   selected surfaces.
 - Ghostty and Kitty: text, selection, cursor, ANSI slots, and Kitty tabs.
 - fzf: selected rows, matches inside selected rows, headers, prompts, and boundaries.
-- Pi: selected text, messages, tool states, and syntax/comment text on the palette canvas.
+- Pi: selected text, messages, tool states, syntax/comment text and code-language metadata on the
+  palette canvas.
 - OpenCode: text on panels/elements, diff labels on the canvas, signs and syntax inks on diff fills,
   line numbers, syntax comments, and focused boundaries.
-- Lazygit: selections, cherry-picked commits, state text, active/search boundaries, and its actual
-  embedded Delta pager's retained-ink diff pairs.
-- LSD: actual xterm-256 metadata colors, including customized ANSI slots 0–15.
-- Delta: default terminal text and syntax ANSI slots on added/deleted and emphasized diff
-  backgrounds.
+- Lazygit: selections, cherry-picked commits, state text, inactive headings, active/search boundaries,
+  and its actual embedded Delta pager's retained-ink diff and line-number pairs.
+- LSD: literal RGB metadata colors. Historical numeric exports resolve through xterm-256, including
+  customized ANSI slots 0–15.
+- Delta: ordinary and changed line numbers on the terminal canvas, plus default terminal text and
+  syntax ANSI slots on added/deleted and emphasized diff backgrounds.
 - Tmux: illustrative semantic message, inactive-label and filled-badge pairs. Placeholder separators
   are decorative, not text-contrast obligations. The user's statusline owns the actual
   foreground/background combinations.
@@ -82,3 +84,24 @@ Use the [showcase pipeline](showcase.md) for real application snapshots. A scree
 preserves a reviewed result, but cannot prove readability by itself. Visually review the application
 snapshots before claiming an integration is qualified. Ghostty/Kitty selection, tabs, and live
 reload remain separate checks. Snapshots exercise Linux Ghostty, not macOS Ghostty or Kitty.
+
+### Lazygit configuration compatibility
+
+The [optional Lazygit extra](workflows.md#lazygit) uses the 0.66.2+ configuration format.
+Author and branch colors live under `gui.theme`, and Delta uses `git.diffRenderers[].command`.
+Legacy maps and pager keys are deliberately absent: Lazygit's
+[migration writes back through the configured path](https://github.com/jesseduffield/lazygit/blob/v0.66.2/pkg/config/app_config.go),
+which would mutate an immutable published set even when the installation symlink stays unchanged.
+
+The [native installed-link check](TESTING.md#lazygit-selected-rows) observes published bytes,
+selected rows, metadata, headings and the active Delta renderer. It includes a legacy migration
+negative control. The report can still read historical pager keys for baseline comparisons, but the
+exporter does not provide a legacy runtime adapter.
+
+### Delta gutter precedence
+
+The capture fixture relies on `line-numbers = true` in the Flume feature. Passing
+`--line-numbers` again selects Delta's built-in feature styles ahead of the custom gutter styles.
+The native checker uses the fixture's invocation and observes unchanged and added/deleted digits,
+not only syntax tokens. `line-numbers-zero-style` controls unchanged digits. Left/right styles
+also color the gutter separators. All three use readable secondary ink.

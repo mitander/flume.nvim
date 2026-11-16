@@ -51,7 +51,55 @@ def theme_inputs(schema: str) -> dict[str, str]:
     return {str(path.relative_to(ROOT)): digest(path) for path in paths}
 
 
-def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax", *, image: Path) -> None:
+def capture_inputs() -> dict:
+    return {
+        'name': 'Ghostty', 'script_sha256': digest(ROOT / 'tests/snapshots/capture.py'),
+        'backend_sha256': digest(ROOT / 'tests/snapshots/ghostty.py'),
+        'compositor_sha256': digest(ROOT / 'tests/snapshots/render.py'),
+        'environment_sha256': environment_digest(ROOT),
+        'editor_inputs': {name: digest(ROOT / name) for name in (
+            'tests/snapshots/fixtures/neovim.lua', 'tests/snapshots/fixtures/neovim.sh',
+            'tests/snapshots/neovim.tape', 'tests/snapshots/common.py',
+        )},
+    }
+
+
+def integration_inputs(integration: str) -> dict[str, str]:
+    names = {
+        'lualine': ('lua/lualine/themes/flume.lua',),
+        'neotree': ('tests/snapshots/fixtures/neotree.lua',
+                    'tests/snapshots/fixtures/neotree-repository.sh'),
+    }[integration]
+    return {name: digest(ROOT / name) for name in names}
+
+
+def validate_integration(integration: str, evidence: dict) -> None:
+    if not isinstance(evidence, dict):
+        raise SystemExit('Missing editor integration evidence')
+    if integration == 'lualine':
+        statusline, highlights = evidence.get('statusline'), evidence.get('highlights')
+        if (evidence.get('plugin') != 'lualine' or evidence.get('theme') != 'flume'
+                or not isinstance(statusline, str) or not statusline.strip()
+                or not isinstance(highlights, dict)):
+            raise SystemExit('Missing lualine statusline/theme/highlight evidence')
+        applied = highlights.get('lualine_a_normal')
+        if not isinstance(applied, dict) or not all(
+            type(applied.get(channel)) is int and 0 <= applied[channel] <= 0xffffff
+            for channel in ('fg', 'bg')
+        ):
+            raise SystemExit('Missing lualine applied highlight evidence')
+    elif (evidence.get('plugin') != 'neo-tree' or evidence.get('source') != 'filesystem'
+          or evidence.get('icons') is not True or evidence.get('git_status') is not True
+          or evidence.get('selected_file') != 'src/main.go'
+          or not isinstance(evidence.get('sidebar_lines'), list)
+          or not all(isinstance(line, str) for line in evidence['sidebar_lines'])
+          or not all(any(name in line for line in evidence.get('sidebar_lines', []))
+                     for name in ('main.go', 'README.md', 'notes.md'))):
+        raise SystemExit('Missing Neo-tree sidebar evidence')
+
+
+def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax", *, image: Path,
+           integration: str | None = None, integration_evidence: dict | None = None) -> None:
     """Record parser evidence beside a staged Ghostty image; publication belongs to snapshots."""
     if kind not in ("syntax", "selection", "completion", "lsp"):
         raise SystemExit("Unknown capture kind")
@@ -104,12 +152,11 @@ def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax",
         "image_sha256": digest(image),
         "theme_inputs": theme_inputs(schema),
     }
-    metadata['capture_renderer'] = {
-        'name': 'Ghostty', 'script_sha256': digest(ROOT / 'tests/snapshots/capture.py'),
-        'backend_sha256': digest(ROOT / 'tests/snapshots/ghostty.py'),
-        'compositor_sha256': digest(ROOT / 'tests/snapshots/render.py'),
-        'environment_sha256': environment_digest(ROOT),
-    }
+    metadata['capture_renderer'] = capture_inputs()
+    if integration:
+        validate_integration(integration, integration_evidence or {})
+        metadata['editor_integration'] = integration_evidence
+        metadata['integration_inputs'] = integration_inputs(integration)
     if kind != "syntax":
         metadata["kind"] = kind
         metadata["capture_script_sha256"] = digest(ROOT / 'tests/snapshots/capture.py')
@@ -128,7 +175,7 @@ def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax",
             metadata["runtime_states"] = {
                 key: runtime[key] for key in ("diff_text", "diagnostics", "visual", "completion")
             }
-    image.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n")
+    image.with_suffix(".json").write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
 
 
 def validate_capture(path: Path) -> tuple[str, str]:
@@ -137,14 +184,13 @@ def validate_capture(path: Path) -> tuple[str, str]:
         raise SystemExit(f"{path.name} has no parser-backed capture metadata; recapture it")
     metadata = json.loads(sidecar.read_text())
     language = path.stem
-    expected = {
-        'name': 'Ghostty', 'script_sha256': digest(ROOT / 'tests/snapshots/capture.py'),
-        'backend_sha256': digest(ROOT / 'tests/snapshots/ghostty.py'),
-        'compositor_sha256': digest(ROOT / 'tests/snapshots/render.py'),
-        'environment_sha256': environment_digest(ROOT),
-    }
-    if metadata.get('capture_renderer') != expected:
+    if metadata.get('capture_renderer') != capture_inputs():
         raise SystemExit(f'{path.name} has stale Ghostty capture inputs; recapture it')
+    integration = path.parent.parent.name
+    if integration in ('lualine', 'neotree'):
+        if metadata.get('integration_inputs') != integration_inputs(integration):
+            raise SystemExit(f'{path.name} has stale integration inputs; recapture it')
+        validate_integration(integration, metadata.get('editor_integration', {}))
     kind = metadata.get("kind", "syntax")
     renderer = "showcase.lua"
     fixture = f"flume.{LANGUAGES[language]}"
@@ -305,7 +351,34 @@ def main() -> None:
     if args.ocr:
         check_capture_text(CAPTURES)
 
-    print(f"Screenshot preflight passed: {len(CAPTURES)} captures across {len(LANGUAGES)} language viewports")
+    # Compare only the same scene across palettes: integration viewports can differ.
+    additional_count = 0
+    for family, languages in (("selection", ("go",)), ("completion", ("go",)),
+                              ("lsp", ("go", "zig")), ("lualine", ("go",)), ("neotree", ("go",))):
+        for language in languages:
+            paths = [ROOT / 'assets/screenshots' / family / schema / f'{language}.png'
+                     for schema in SCHEMAS]
+            identities = set()
+            for path in paths:
+                if not path.exists():
+                    raise SystemExit(f'Missing editor capture: {path.relative_to(ROOT)}')
+                _, identity = validate_capture(path)
+                metadata = json.loads(path.with_suffix('.json').read_text())
+                if family in ('lsp', 'completion'):
+                    identity += json.dumps({
+                        'server': {key: metadata['server'][key] for key in ('name', 'version', 'settings')},
+                        'executable_sha256': metadata['server_executable_sha256'],
+                    }, sort_keys=True)
+                identities.add(identity)
+            if len(identities) != 1:
+                raise SystemExit(f'{family} captures used different parser/query/server runtimes')
+            if len({dimensions(path) for path in paths}) != 1:
+                raise SystemExit(f'{family} capture dimensions differ')
+            if args.ocr:
+                check_capture_text(paths, check_stale_text=False)
+            additional_count += len(paths)
+
+    print(f"Screenshot preflight passed: {len(CAPTURES) + additional_count} editor captures")
 
 
 if __name__ == "__main__":

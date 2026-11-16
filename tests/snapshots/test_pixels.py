@@ -1,5 +1,7 @@
 """Exercise Pillow's exact comparator in the same image used for capture."""
 
+import copy
+import json
 import tempfile
 import unittest
 from contextlib import ExitStack
@@ -8,10 +10,13 @@ from unittest.mock import Mock, patch
 
 import ghostty
 import capture
+import check_delta
+import compose
 from pathlib import Path
 
 from PIL import Image, PngImagePlugin
 
+from common import digest, environment_digest
 from compare import compare_case
 from capture import GEOMETRY, font_evidence
 from compose import contact_sheet, showcase
@@ -51,6 +56,52 @@ class ExactPixels(unittest.TestCase):
         metadata.add_text('comment', 'Different encoding, identical pixels')
         self.image.save(self.actual / f'{self.case}.png', pnginfo=metadata)
         self.assertIsNone(self.result())
+
+
+class CompositeEnvironment(unittest.TestCase):
+    def test_partial_composition_requires_the_complete_same_environment(self):
+        environment = {
+            'image_recipe_sha256': environment_digest(Path('/repo')),
+            'render_environment': {'LP_NUM_THREADS': '1'},
+            'font_faces': {'normal': {'sha256': 'font-a'}},
+            'mesa_version': 'mesa-a', 'geometry': {'rows': 16},
+        }
+        for field, changed in (
+            ('render_environment', {'LP_NUM_THREADS': '2'}),
+            ('font_faces', {'normal': {'sha256': 'font-b'}}),
+            ('mesa_version', 'mesa-b'), ('geometry', {'rows': 17}), (None, None),
+        ):
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as temporary:
+                actual, baseline = (Path(temporary) / name for name in ('actual', 'baseline'))
+                for directory in (actual, baseline):
+                    directory.mkdir()
+                recorded = {'format_version': 1, 'cases': {}}
+                for schema in ('dusk', 'opal', 'mira', 'mesa'):
+                    case = f'fzf-{schema}'
+                    image = baseline / f'{case}.png'
+                    Image.new('RGBA', (4, 4), '#123456').save(image)
+                    recorded['cases'][case] = {'png_sha256': digest(image), 'inputs': {},
+                                               'environment': copy.deepcopy(environment)}
+                (baseline / 'manifest.json').write_text(json.dumps(recorded))
+                before = (baseline / 'manifest.json').read_bytes()
+                fresh = copy.deepcopy(recorded['cases']['fzf-dusk'])
+                if field:
+                    fresh['environment'][field] = changed
+                self.assertEqual(fresh['environment']['image_recipe_sha256'], environment['image_recipe_sha256'])
+                (actual / 'fzf-dusk.png').write_bytes((baseline / 'fzf-dusk.png').read_bytes())
+                (actual / 'manifest.json').write_text(json.dumps({'format_version': 1, 'cases': {'fzf-dusk': fresh}}))
+                manifest_before = (actual / 'manifest.json').read_bytes()
+                if field:
+                    with self.assertRaisesRegex(ValueError, 'Refresh all palettes'):
+                        compose.compose(actual, baseline, ['fzf-dusk'])
+                    self.assertFalse((actual / 'contact-fzf.png').exists())
+                    self.assertEqual((actual / 'manifest.json').read_bytes(), manifest_before)
+                else:
+                    compose.compose(actual, baseline, ['fzf-dusk'])
+                    first = (actual / 'contact-fzf.png').read_bytes()
+                    compose.compose(actual, baseline, ['fzf-dusk'])
+                    self.assertEqual((actual / 'contact-fzf.png').read_bytes(), first)
+                self.assertEqual((baseline / 'manifest.json').read_bytes(), before)
 
 
 class FaithfulRendering(unittest.TestCase):
@@ -125,6 +176,19 @@ class FaithfulRendering(unittest.TestCase):
 
 
 class GhosttyScenarios(unittest.TestCase):
+    def test_native_checker_and_font_failures_precede_case_log_creation(self):
+        for checker, case in ((check_delta, 'delta-dusk'), (capture, 'fzf-dusk')):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
+                output = Path(temporary)
+                method = 'check' if checker is check_delta else 'font_evidence'
+                with patch.object(capture, 'OUTPUT', output), \
+                     patch.object(checker, method, side_effect=ValueError('pre-log checker failure')), \
+                     patch.object(ghostty, 'capture_terminal') as terminal:
+                    with self.assertRaisesRegex(ValueError, 'pre-log checker failure'):
+                        capture.capture(case)
+                    terminal.assert_not_called()
+                self.assertEqual(list(output.iterdir()), [])
+
     def test_shared_tapes_have_known_launches_and_instructions(self):
         for path in Path('/repo/tests/snapshots').glob('*.tape'):
             with self.subTest(app=path.stem), patch.object(ghostty, 'wait_screen') as wait, \

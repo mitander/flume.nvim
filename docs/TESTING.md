@@ -52,7 +52,7 @@ reload.
 
 ## Native shell-tool integration
 
-With Fish 3.5+, fzf, LSD 1.2+, Lazygit, Git, Neovim and Python already installed, run:
+With Fish 3.5+, fzf, LSD 1.2+, Lazygit 0.66.2+, Git, Neovim and Python already installed, run:
 
 ```sh
 bash tests/fish-tools.sh
@@ -73,18 +73,24 @@ than requiring a particular dotfiles checkout.
 
 ### Lazygit selected rows
 
-For Lazygit active-row changes, also run the installed application with Git and Tmux available:
+For Lazygit exporter changes, run Lazygit 0.66.2+ with Delta, Git, Neovim and Tmux available:
 
 ```sh
 FLUME_NATIVE_LAZYGIT=1 python3 -m unittest discover -s tests -p 'integration_review.py'
 ```
 
-This uses a private Tmux server and Git fixture to observe selected-folder foreground and background
-RGB values in all four palettes. It retains ANSI captures and the application version in the printed
-temporary directory. A negative control restores the old unreadable foreground, so a binary that
-ignores `selectedLineFgColor` cannot pass this lane. Lazygit 0.66.2 supports the setting. The gallery's
-pinned 0.55.1 does not. These are native terminal-cell observations, not macOS renderer screenshots.
-No shared theme or user repository is changed.
+This publishes from a private checkout through the public installer and loads the installed theme
+link in a private Tmux server and Git fixture. It checks both symlink targets and every published
+file's bytes against observations saved before Lazygit starts, while running and after exit. A legacy
+configuration control must trigger migration writes through the same link chain.
+
+The same lane observes selected-folder foreground/background, author, branch and inactive-heading
+RGB values in all four palettes. It records actual Delta invocations and checks the rendered diff
+fills, so silently falling back to Git's renderer cannot pass. Color controls change author/branch
+inks and restore the old unreadable selected foreground. ANSI captures, versions and before/after
+publication hashes remain in the printed temporary directory. These are native terminal-cell
+observations, not screenshots or live-reload evidence. No live configuration, shared theme or user
+repository is changed.
 
 ## Native theme qualification
 

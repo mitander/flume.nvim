@@ -1,6 +1,75 @@
 local M = {}
 
 function M.register(test, equal, truthy)
+    test("fresh colorscheme-only entries watch once without resurrecting disabled watchers", function()
+        local root = vim.fn.tempname()
+        vim.fn.mkdir(root .. "/home", "p")
+        local publisher = root .. "/publish.lua"
+        vim.fn.writefile({
+            "vim.opt.runtimepath:prepend(vim.fn.getcwd())",
+            "vim.fn.executable = function() return 0 end",
+            'require("flume").setup({ schema = vim.env.FLUME_TEST_TARGET, watch_sync = false })',
+            'vim.cmd("FlumeSync " .. vim.env.FLUME_TEST_TARGET)',
+        }, publisher)
+        local receiver = root .. "/receive.lua"
+        vim.fn.writefile(
+            vim.split(
+                [[
+vim.opt.runtimepath:prepend(vim.fn.getcwd())
+local ok, err = xpcall(function()
+    assert(package.loaded["flume"] == nil, "entry must be fresh")
+    vim.cmd.colorscheme(vim.env.FLUME_TEST_ENTRY)
+    local flume = require("flume")
+    local before = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
+    local output = vim.fn.system({ vim.v.progpath, "--headless", "--clean", "-c",
+        "lua dofile(" .. vim.fn.string(vim.env.FLUME_TEST_PUBLISHER) .. ")", "-c", "qa!" })
+    assert(vim.v.shell_error == 0, output)
+    local target = vim.env.FLUME_TEST_TARGET
+    local expected = tonumber(require("flume.palette")[target].bg:sub(2), 16)
+    assert(vim.wait(2000, function()
+        return flume.config.schema == target and vim.api.nvim_get_hl(0, { name = "Normal" }).bg == expected
+    end, 10), "fresh entry did not follow publication")
+    assert(before ~= expected, "probe must observe changed RGB")
+    vim.cmd.colorscheme("habamax")
+    vim.cmd.colorscheme("flume-mira")
+    assert(not pcall(vim.api.nvim_get_autocmds, { group = "FlumeSyncWatch" }), "foreign theme watcher resurrected")
+    flume.setup({ watch_sync = false })
+    vim.cmd.colorscheme("flume-mesa")
+    assert(not pcall(vim.api.nvim_get_autocmds, { group = "FlumeSyncWatch" }), "disabled watcher restarted")
+end, debug.traceback)
+if not ok then io.stderr:write(err .. "\n"); vim.cmd("cquit 1") end
+]],
+                "\n",
+                { plain = true }
+            ),
+            receiver
+        )
+        local ok, err = xpcall(function()
+            for _, entry in ipairs({ "flume-dusk", "flume-opal", "flume-mira", "flume-mesa", "flume" }) do
+                local output = vim.fn.system({
+                    "env",
+                    "HOME=" .. root .. "/home",
+                    "FLUME_DATA_DIR=" .. root .. "/" .. entry,
+                    "FLUME_TEST_ENTRY=" .. entry,
+                    "FLUME_TEST_TARGET=" .. (entry == "flume-opal" and "dusk" or "opal"),
+                    "FLUME_TEST_PUBLISHER=" .. publisher,
+                    vim.v.progpath,
+                    "--headless",
+                    "--clean",
+                    "-c",
+                    "lua dofile(" .. vim.fn.string(receiver) .. ")",
+                    "-c",
+                    "qa!",
+                })
+                equal(vim.v.shell_error, 0, entry .. " fresh-entry regression: " .. output)
+            end
+        end, debug.traceback)
+        vim.fn.delete(root, "rf")
+        if not ok then
+            error(err)
+        end
+    end)
+
     test("startup sync preference reads runtime state without replacing fixed schemas", function()
         local extras = require("flume.extras")
         local original_dir = extras.get_plugin_dir

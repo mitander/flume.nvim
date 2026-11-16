@@ -22,6 +22,7 @@ local default_config = {
 
 M.colors = {}
 M.config = vim.deepcopy(default_config)
+local watch_initialized = false
 
 local function styled(opts, style)
     return vim.tbl_deep_extend("force", opts, style or {})
@@ -78,6 +79,7 @@ function M.setup(opts)
     end
     opts.schema = (opts.follow_sync and M.get_active_schema()) or fallback
     M.config = vim.tbl_deep_extend("force", vim.deepcopy(default_config), opts)
+    watch_initialized = true
     M.apply()
     if M.config.watch_sync then
         require("flume.watch").start()
@@ -422,6 +424,7 @@ function M.set_highlights(namespace, c, config)
     hi("NeoTreeGitDeleted", { fg = c.diff_delete })
     hi("NeoTreeGitUntracked", { fg = c.syntax_boolean })
     hi("NeoTreeGitIgnored", { fg = c.muted })
+    hi("NeoTreeMessage", { fg = c.muted, italic = true })
 
     hi("NvimTreeNormal", { fg = c.fg, bg = c.bg })
     hi("NvimTreeStatusLine", { fg = c.text, bg = c.surface_alt, bold = true })
@@ -545,6 +548,14 @@ function M.load(schema, colorscheme)
     M.set_highlights(0, c, M.config)
 
     require("flume.commands").register(M)
+    -- Colorscheme-only startup gets the defaults once. Later repaints must not
+    -- resume watching after a foreign theme; explicit setup owns that transition.
+    if not watch_initialized then
+        watch_initialized = true
+        if M.config.watch_sync then
+            require("flume.watch").start()
+        end
+    end
 end
 
 return M

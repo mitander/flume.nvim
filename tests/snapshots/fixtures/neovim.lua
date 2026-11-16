@@ -32,6 +32,30 @@ vim.api.nvim_create_autocmd('VimEnter', { once = true, callback = function()
                         lualine_c = {}, lualine_x = { 'filetype' },
                         lualine_y = { 'progress' }, lualine_z = { 'location' } },
                 })
+                -- Lualine queues its first refresh. Observe it without forcing a redraw or theme.
+                local attempts = 0
+                local function observe_lualine()
+                    local rendered = vim.api.nvim_eval_statusline(vim.wo.statusline, { highlights = true })
+                    if rendered.str == '' then
+                        attempts = attempts + 1
+                        assert(attempts < 100, 'Lualine did not render a statusline')
+                        vim.defer_fn(observe_lualine, 20)
+                        return
+                    end
+                    local highlights = {}
+                    for _, span in ipairs(rendered.highlights) do
+                        for _, group in ipairs(span.groups or { span.group }) do
+                            if group:match('^lualine_') then
+                                highlights[group] = vim.api.nvim_get_hl(0, { name = group, link = false })
+                            end
+                        end
+                    end
+                    vim.fn.writefile({ vim.json.encode({
+                        plugin = 'lualine', theme = require('lualine').get_config().options.theme,
+                        statusline = rendered.str, highlights = highlights,
+                    }) }, '/tmp/lualine-ready.json')
+                end
+                observe_lualine()
             end
             if vim.env.FLUME_NEOTREE == '1' then
                 dofile('/repo/tests/snapshots/fixtures/neotree.lua')

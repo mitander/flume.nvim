@@ -582,6 +582,14 @@ function M.register(test, equal, truthy)
             equal(pi.colors.toolSuccessBg, "surface", schema .. " Pi neutral successful panel")
             equal(pi.vars[pi.colors.toolSuccessBg], colors.surface, schema .. " Pi success surface")
             equal(pi.colors.toolErrorBg, "diffDeleteBg", schema .. " Pi distinct error panel")
+            for field, role in pairs({
+                warning = "warning",
+                borderAccent = "border_focused",
+                syntaxOperator = "syntax_punctuation",
+                mdCodeBlockBorder = "muted",
+            }) do
+                equal(pi.vars[pi.colors[field]], colors[role], schema .. " Pi " .. field)
+            end
 
             local opencode = vim.json.decode(read_all(path("opencode", schema)))
             equal(sorted_keys(opencode), sorted_keys(opencode_top), schema .. " OpenCode top-level keys")
@@ -593,6 +601,18 @@ function M.register(test, equal, truthy)
             end
             equal(opencode.defs.bg, colors.bg, schema .. " OpenCode background")
             equal(opencode.theme.syntaxVariable, "syntax_primary", schema .. " OpenCode neutral variables")
+            for field, role in pairs({
+                error = "error",
+                warning = "warning",
+                success = "success",
+                info = "info",
+                diffAdded = "diff_add",
+                diffRemoved = "diff_delete",
+                diffHighlightAdded = "bright_green",
+                diffHighlightRemoved = "bright_red",
+            }) do
+                equal(opencode.defs[opencode.theme[field]], colors[role], schema .. " OpenCode " .. field)
+            end
         end
     end)
 
@@ -625,6 +645,7 @@ function M.register(test, equal, truthy)
             "delta.flume.line-numbers-plus-style",
             "delta.flume.line-numbers-left-style",
             "delta.flume.line-numbers-right-style",
+            "delta.flume.line-numbers-zero-style",
             "delta.flume.commit-decoration-style",
             "delta.flume.file-style",
             "delta.flume.file-decoration-style",
@@ -648,14 +669,36 @@ function M.register(test, equal, truthy)
                 lazygit_content:find('selectedLineBgColor: ["' .. colors.element_active .. '"]', 1, true),
                 schema .. " Lazygit active row must use its quiet control surface"
             )
+            truthy(lazygit_content:find("\ngit:\n  diffRenderers:\n", 1, true), "Lazygit diff renderer array")
+            truthy(lazygit_content:find("\n      command: 'delta ", 1, true), "Lazygit Delta command")
+            for _, legacy in ipairs({
+                "\n  authorColors:",
+                "\n  branchColorPatterns:",
+                "\n  pagers:",
+                "\n  paging:",
+                "\n      pager:",
+            }) do
+                truthy(not lazygit_content:find(legacy, 1, true), "Lazygit must not migrate " .. legacy)
+            end
+            local gui = assert(lazygit_content:match("\ngui:\n(.-)\ngit:\n"), "Lazygit gui section")
             truthy(
-                lazygit_content:find('authorColors:\n      "*": "' .. colors.syntax_primary .. '"', 1, true),
-                schema .. " Lazygit author color"
+                gui:find('\n    authorColors:\n      "*": "' .. colors.syntax_primary .. '"', 1, true),
+                schema .. " Lazygit gui.theme.authorColors mapping"
             )
             truthy(
-                lazygit_content:find('branchColorPatterns:\n      ".*": "' .. colors.accent .. '"', 1, true),
-                schema .. " Lazygit branch color"
+                gui:find('\n    branchColorPatterns:\n      ".*": "' .. colors.accent .. '"', 1, true),
+                schema .. " Lazygit gui.theme.branchColorPatterns mapping"
             )
+            truthy(
+                lazygit_content:find('inactiveBorderColor: ["' .. colors.muted .. '"]', 1, true),
+                schema .. " Lazygit inactive headings"
+            )
+            for _, side in ipairs({ "left", "right", "zero" }) do
+                truthy(
+                    lazygit_content:find("--line-numbers-" .. side .. "-style=" .. colors.muted, 1, true),
+                    schema .. " Lazygit pager ordinary numbers"
+                )
+            end
             for _, mapping in ipairs({
                 '--minus-style="syntax ' .. colors.diff_delete_bg .. '"',
                 '--minus-emph-style="syntax ul ' .. colors.diff_delete_emphasis .. '"',
@@ -683,6 +726,9 @@ function M.register(test, equal, truthy)
                 'plus-emph-style = syntax ul "' .. colors.diff_add_emphasis .. '"',
                 'line-numbers-minus-style = "' .. colors.diff_delete .. '"',
                 'line-numbers-plus-style = "' .. colors.diff_add .. '"',
+                'line-numbers-left-style = "' .. colors.muted .. '"',
+                'line-numbers-right-style = "' .. colors.muted .. '"',
+                'line-numbers-zero-style = "' .. colors.muted .. '"',
             }) do
                 truthy(delta_content:find(mapping, 1, true), schema .. " Delta missing " .. mapping)
             end

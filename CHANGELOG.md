@@ -4,6 +4,8 @@
 
 ### Upgrade notes
 
+- The optional Lazygit extra now requires Lazygit 0.66.2+. Upgrade before loading it.
+  Current theme and Delta renderer keys avoid migration writes through installed theme links.
 - The recommended lazy.nvim spec now uses `version = "*"` to follow release tags instead of
   `master`. Existing users must change their own spec to opt into release-based updates. See
   [installation](README.md#install) for migration steps and the explicit development opt-in.
@@ -12,8 +14,9 @@
   includes to the shared data directory. Recognized checkout links are forwarded when writable, but
   do not survive checkout replacement. See the
   [migration procedure](docs/semantic-export.md#migration-from-checkout-owned-state).
-- Running Flume editors follow `:FlumeSync` switches and same-palette color updates by default.
-  Refresh the receiver's canonical palette cache while retaining local options. Failed refreshes
+- Running Flume editors follow `:FlumeSync` switches and same-palette color updates by default,
+  including colorscheme-only startup. Refresh the receiver's canonical palette cache while retaining
+  local options. Failed refreshes
   keep the previous palette and can retry the same published set. Startup following remains opt-in
   through `follow_sync = true`. To keep an editor independent at startup and while running, set both
   `follow_sync = false` and `watch_sync = false`.
@@ -70,10 +73,13 @@
   first, selected-schema overrides next and exact highlight overrides last.
 - Add opt-in development reload-on-save that preserves the editor palette. With `dev = true`,
   `:FlumeSync` reloads source and regenerates canonical extras before synchronizing. Failed source
-  reloads restore the previous modules and theme. Normal users sync bundled artifacts without
+  reloads restore the previous modules and attempt to repaint the previous theme, reporting both
+  errors if recovery also fails. Standalone `:FlumeCompile` leaves the displayed palette unchanged
+  without preventing a later same-palette sync refresh. Normal users sync bundled artifacts without
   regeneration.
-- Supply a palette-aware named lualine theme and the tree statusline highlight. Define indentmini's
-  ordinary and current-scope guide groups with palette roles.
+- Supply a palette-aware named lualine theme and the tree statusline highlight. Keep Neo-tree's
+  hidden-item count readable without brightening decorative guides. Define indentmini's ordinary
+  and current-scope guide groups with palette roles.
 - Stop shared-palette watching when another colorscheme takes over, including already queued
   changes. Reloading preserves the editor's current palette rather than rereading the startup
   preference.
@@ -87,9 +93,11 @@
 - Publish a versioned generic semantic palette export for custom consumers. Report shared state,
   stale integration links and reload requirements in health checks.
 - Add Lazygit and Pi theme linking. Installation reports its destination and next setup step
-  separately from application selection or reload. Refuse existing regular files and directories.
+  separately from application selection or reload. Refuse existing regular files and directories
+  before publishing shared state or creating installation directories.
 - Keep Lazygit selected rows readable by retaining filename and Git-status inks on quiet active-row
-  surfaces instead of applying the foreground meant for stronger selections.
+  surfaces instead of applying the foreground meant for stronger selections. Use readable inactive
+  headings and canonical author/branch colors.
 - Add Fish syntax and pager themes with consent-based installation that leaves `config.fish`
   untouched. Existing shells can source the active fragment again after synchronization.
 - Add optional `:FlumeInstallExtras fish_tools` for Fish 3.5+ setup of fzf, Lazygit and the
@@ -108,9 +116,11 @@
 - Add Tmux UI variables `thm_surface`, `thm_muted` and `thm_on_accent` for raised panels, secondary
   labels and text on filled accents. Keep the existing ANSI and placeholder variables' meanings
   unchanged.
-- Keep Delta and Lazygit diff syntax readable with quieter emphasis fills and underlined changed
-  words. Use neutral raised panels for successful Pi tool results and tinted panels for failures.
-  Measure OpenCode labels and signs on their actual surfaces and capture its real edit diff.
+- Keep Delta and Lazygit diff syntax readable with quieter emphasis fills, underlined changed words
+  and readable ordinary line numbers. Use neutral raised panels for successful Pi tool results and
+  tinted panels for failures. Keep Pi code-language labels readable and map warning, focus and
+  operator colors to their semantic roles. Use semantic state and diff-label colors in OpenCode,
+  measure labels and signs on their actual surfaces and capture its real edit diff.
 - Use UI focus ink for Pi's highest reasoning border without changing keyword highlighting.
 
 ### Documentation and visual evidence
@@ -123,7 +133,9 @@
   and `update`. Generate the hero and integration contact sheets through the same pinned, isolated
   Linux Ghostty pipeline with exact pixel comparisons and review reports.
 - Capture actual Tree-sitter highlighting, selection, diagnostics, diffs, search, completion and
-  Go/Zig language-server output. Record parser, query, server, source and image provenance. Keep
+  Go/Zig language-server output. Record parser, query, server, source and image provenance for all
+  52 editor scenes, including installed lualine and Neo-tree observations. Track capture producers,
+  reject mixed rendering environments and retain diagnostic artifacts after failed captures. Keep
   Ghostty/Kitty configuration checks separate from native renderer qualification.
 - Pin JetBrains Mono Nerd Font Mono SemiBold and its bold/italic faces. Preserve exact RGB pixels
   through PNG composition, with rounded frames, compact integration viewports and non-blinking

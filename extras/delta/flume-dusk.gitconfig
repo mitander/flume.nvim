@@ -12,8 +12,9 @@
     line-numbers = true
     line-numbers-minus-style = "#f08692"
     line-numbers-plus-style = "#a4b78a"
-    line-numbers-left-style = "#464c5e"
-    line-numbers-right-style = "#464c5e"
+    line-numbers-left-style = "#a6a2bb"
+    line-numbers-right-style = "#a6a2bb"
+    line-numbers-zero-style = "#a6a2bb"
     commit-decoration-style = "#7dacbb" box
     file-style = "#c9c5d9"
     file-decoration-style = "#7dacbb" ul

@@ -379,13 +379,31 @@ test("selection is visible without brightening retained syntax", function()
             equal(actual.fg, color_number(colors.selection_fg), schema .. " " .. group .. " foreground")
             equal(actual.bg, color_number(colors.selection_bg), schema .. " " .. group .. " background")
         end
-        for _, group in ipairs({ "OilHidden", "NeoTreeGitIgnored", "NvimTreeGitIgnored", "FoldColumn" }) do
+        for _, group in ipairs({
+            "OilHidden",
+            "NeoTreeGitIgnored",
+            "NeoTreeMessage",
+            "NvimTreeGitIgnored",
+            "FoldColumn",
+        }) do
             equal(
                 vim.api.nvim_get_hl(0, { name = group, link = false }).fg,
                 color_number(colors.muted),
                 schema .. " " .. group .. " is content, not decoration"
             )
         end
+        local message = vim.api.nvim_get_hl(0, { name = "NeoTreeMessage", link = false })
+        local sidebar = vim.api.nvim_get_hl(0, { name = "NeoTreeNormal", link = false })
+        equal(message.italic, true, "Neo-tree hidden-count message retains italic styling")
+        truthy(
+            contrast(string.format("#%06x", message.fg), string.format("#%06x", sidebar.bg)) >= 4.5,
+            schema .. " Neo-tree count is readable on its sidebar"
+        )
+        equal(
+            vim.api.nvim_get_hl(0, { name = "NeoTreeIndentMarker", link = false }).fg,
+            color_number(colors.indent_guide),
+            "Neo-tree decorative guides retain their ink"
+        )
         for _, app in ipairs({ "ghostty", "kitty" }) do
             local path = "extras/" .. app .. "/flume-" .. schema .. (app == "kitty" and ".conf" or "")
             local export = table.concat(vim.fn.readfile(path), "\n")

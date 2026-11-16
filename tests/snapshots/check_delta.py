@@ -100,6 +100,35 @@ def check_output(output: str, colors: dict[str, str]) -> None:
             if ratio < 4.5:
                 raise ValueError(f"{token}: native contrast {ratio:.2f}:1 is below 4.5:1")
 
+    check_gutters(output, colors)
+
+
+def check_gutters(output: str, colors: dict[str, str]) -> None:
+    rendered = cells(output, colors)
+    plain = "".join(cell.text for cell in rendered)
+    for body, left, right, ink in (
+        ("# Select a palette without changing ordinary identifiers.", "1", "1", "muted"),
+        ("    return name", "7", "", "diff_delete"),
+        ('print(select_palette("dusk"))', "8", "", "diff_delete"),
+        ("    return name.upper()", "", "7", "diff_add"),
+        ('print(select_palette("opal"))', "", "8", "diff_add"),
+    ):
+        match = re.search(
+            r"^ *(?P<left>\d*) *⋮ *(?P<right>\d*) *│" + re.escape(body) + r"$",
+            plain, re.MULTILINE,
+        )
+        if match is None:
+            raise ValueError(f"Missing native gutter for {body}")
+        for side, expected in (("left", left), ("right", right)):
+            if match[side] != expected:
+                raise ValueError(f"{body}: unexpected {side} number {match[side]!r}")
+            for cell in rendered[match.start(side):match.end(side)]:
+                if (cell.foreground, cell.background) != (colors[ink], colors["terminal_bg"]):
+                    raise ValueError(f"{body}: unexpected native gutter attributes {cell}")
+                ratio = contrast(cell.foreground, cell.background)
+                if ratio < 4.5:
+                    raise ValueError(f"{body}: native gutter contrast {ratio:.2f}:1 is below 4.5:1")
+
 
 def check(root: Path, app: str, schema: str) -> None:
     colors = json.loads((root / f"extras/palette/flume-{schema}.json").read_text())["colors"]
@@ -111,15 +140,20 @@ def check(root: Path, app: str, schema: str) -> None:
         arguments = []
         if app == "delta":
             shutil.copyfile(root / f"extras/delta/flume-{schema}.gitconfig", home / ".gitconfig")
+            fixture = (root / "tests/snapshots/fixtures/delta.sh").read_text()
+            invocation = re.search(r"^delta (.*?) < ", fixture, re.MULTILINE)
+            if invocation is None:
+                raise ValueError("Missing Delta capture invocation")
+            arguments = shlex.split(invocation[1])
         else:
             config = (root / f"extras/lazygit/flume-{schema}.yml").read_text()
-            command = re.search(r"^\s+pager: '(.*)'$", config, re.MULTILINE)
+            command = re.search(r"^\s+command: '(.*)'$", config, re.MULTILINE)
             if command is None:
-                raise ValueError("Missing Lazygit pager")
-            pager = shlex.split(command[1])
-            if pager[0] != "delta":
-                raise ValueError("Lazygit fixture requires a Delta pager")
-            arguments = pager[1:]
+                raise ValueError("Missing Lazygit diff renderer command")
+            renderer = shlex.split(command[1])
+            if renderer[0] != "delta":
+                raise ValueError("Lazygit fixture requires a Delta diff renderer")
+            arguments = renderer[1:]
         environment = {
             "PATH": os.environ.get("PATH", os.defpath),
             "HOME": temporary,
@@ -129,7 +163,7 @@ def check(root: Path, app: str, schema: str) -> None:
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
         }
-        if not any(argument.startswith("--paging=") for argument in arguments):
+        if not any(argument == "--paging" or argument.startswith("--paging=") for argument in arguments):
             arguments.append("--paging=never")
         result = subprocess.run(
             [executable, *arguments, "--true-color=always", "--width=100"],
@@ -142,7 +176,7 @@ def check(root: Path, app: str, schema: str) -> None:
             timeout=15,
         )
         check_output(result.stdout, colors)
-    print(f"PASS: native {app}/{schema} diff inks, normal/emphasis fills and underlines")
+    print(f"PASS: native {app}/{schema} diff inks, normal/emphasis fills, underlines and context/changed gutters")
 
 
 def main() -> None:

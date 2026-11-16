@@ -72,6 +72,7 @@ def capture(case):
     runtime = OUTPUT / f'{case}-runtime.json'
     runtime.unlink(missing_ok=True)
     Path('/tmp/neotree-ready.json').unlink(missing_ok=True)
+    Path('/tmp/lualine-ready.json').unlink(missing_ok=True)
     os.environ.update({
         'FLUME_SCHEMA': schema, 'FLUME_SHOWCASE_SCHEMA': schema,
         'FLUME_SHOWCASE_LANGUAGE': spec.get('language', ''),
@@ -99,12 +100,10 @@ def capture(case):
         loader = importlib.util.spec_from_file_location('preflight', ROOT / 'scripts/preflight-screenshots.py')
         preflight = importlib.util.module_from_spec(loader)
         loader.loader.exec_module(preflight)
-        preflight.record(schema, spec['language'], OUTPUT / f'{case}-runtime.json', spec['kind'], image=image_path)
-        if spec.get('neotree'):
-            sidecar = image_path.with_suffix('.json')
-            metadata = json.loads(sidecar.read_text())
-            metadata['editor_integration'] = json.loads(Path('/tmp/neotree-ready.json').read_text())
-            sidecar.write_text(json.dumps(metadata, indent=2) + '\n')
+        integration = next((name for name in ('lualine', 'neotree') if spec.get(name)), None)
+        integration_evidence = json.loads(Path(f'/tmp/{integration}-ready.json').read_text()) if integration else None
+        preflight.record(schema, spec['language'], runtime, spec['kind'], image=image_path,
+                         integration=integration, integration_evidence=integration_evidence)
     else:
         inputs += sorted((ROOT / 'extras' / spec['app']).glob('*' + schema + '*'))
     record = {

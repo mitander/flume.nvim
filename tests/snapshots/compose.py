@@ -59,15 +59,16 @@ def compose(actual, baseline, cases):
     for name, sources, renderer in derived:
         images, inputs = [], {}
         try:
-            environments = set()
+            environments, recipes = set(), set()
             for case in sources:
                 directory, manifest = (actual, captured) if case in captured['cases'] else (baseline, recorded)
                 verify_images(directory, manifest, [case])
                 record = manifest['cases'][case]
-                environments.add(record['environment']['image_recipe_sha256'])
+                recipes.add(record['environment']['image_recipe_sha256'])
+                environments.add(json.dumps(record['environment'], sort_keys=True))
                 inputs[case] = record['png_sha256']
                 images.append(Image.open(directory / f'{case}.png'))
-            if environments != {environment_digest(ROOT)}:
+            if recipes != {environment_digest(ROOT)} or len(environments) != 1:
                 raise ValueError('Refresh all palettes when changing the capture environment')
             result = renderer(images)
             output = actual / f'{name}.png'

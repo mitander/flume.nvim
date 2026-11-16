@@ -1,7 +1,23 @@
 {
-  "schema": "opal",
-  "language": "go",
+  "capture_renderer": {
+    "backend_sha256": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
+    "compositor_sha256": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1",
+    "editor_inputs": {
+      "tests/snapshots/common.py": "63ae47b288ae8faed262e950f0c9c8cd08f7867a9ec3e4ed6974c920acf00439",
+      "tests/snapshots/fixtures/neovim.lua": "e8eaa92e9400b0675ff70f2ffdde0c00f3b623bf567c1491b115b35cd6660f2c",
+      "tests/snapshots/fixtures/neovim.sh": "5140db2eb9c5ae98193a7c4e59879e9d480eac9b200fc974e425d85f607a459d",
+      "tests/snapshots/neovim.tape": "61aa593f05ba9eb5da1279cbe82818c52ea69f501298ae1312caa958d843fcef"
+    },
+    "environment_sha256": "77ae54482d70fe0803bea873c641be49998fd6e416fcd2a414c109ddcb86d9aa",
+    "name": "Ghostty",
+    "script_sha256": "e67124e47672da01edb9bc8336bdab39051df09d95f88cd0d0e4173cb1fa5c46"
+  },
+  "capture_script_sha256": "e67124e47672da01edb9bc8336bdab39051df09d95f88cd0d0e4173cb1fa5c46",
+  "fixture_sha256": "a680a14711708fe88aa759eb539cd166be23865fde63fc0564077dfd9580b126",
   "highlighting": "treesitter",
+  "image_sha256": "41fff5423a4aebd8ca02d591e1728ea802fe0971ec366589b30271d347d33c2e",
+  "kind": "selection",
+  "language": "go",
   "nvim": "0.12.5+v0.12.5",
   "parser": {
     "revision": "2346a3ab1bb3857b48b29d779a1ef9799a248cd7",
@@ -13,12 +29,17 @@
       "sha256": "81698c638abbf4c3a3ec8ccc3c6110be2cc725ad740bf87e6fa9ac685ecad267"
     }
   ],
-  "fixture_sha256": "a680a14711708fe88aa759eb539cd166be23865fde63fc0564077dfd9580b126",
   "renderer_sha256": "90cc199d2adfcdcdfd608397e88da989fe7e66725b836ed78accfcff43ea22d8",
-  "image_sha256": "41fff5423a4aebd8ca02d591e1728ea802fe0971ec366589b30271d347d33c2e",
+  "runtime_states": {
+    "completion": false,
+    "diagnostics": 4,
+    "diff_text": true,
+    "visual": true
+  },
+  "schema": "opal",
   "theme_inputs": {
-    "lua/flume/init.lua": "d3c7c10185c75a9609b9f6ce603915c4d1e03c08e3d9580ca4652882492d4845",
-    "lua/flume/palette.lua": "cbe3242ffbb01413e0a46aa54d4b7efd40c36df132df8e8cbed458bbed221753",
+    "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee",
+    "lua/flume/init.lua": "5f817a1c1d1986df41f0ba25c863c79416f5047238f343d83b2b16803d5fcba7",
     "lua/flume/languages/go.lua": "844c0ed2823c02e457f2a124e7e9b93e2d945d59778b0524c16102fac41bf738",
     "lua/flume/languages/init.lua": "ac32b0e71a96b3f9f75a3e52b5beab9b66abf205e3c031111af2bcac6eb82db9",
     "lua/flume/languages/lua.lua": "448f32d9e8291a18252434d8d0345fa027c17ca504c26c3551d7f34be6b3aa01",
@@ -26,21 +47,6 @@
     "lua/flume/languages/rust.lua": "288f964357b5b6785234adba9b1bf0c6b3f5bb695a15327159d496358217d85e",
     "lua/flume/languages/typescript.lua": "29eaf0bc3fdfc3686c401461cb2717e03783a611f483e75626b5781a53a09c93",
     "lua/flume/languages/zig.lua": "821be3120747cc34f915755b41bf5119a88317fe04809c21c942cfd27af13f70",
-    "extras/ghostty/flume-opal": "4655d7fc6e73cd785fe98cf233643a9d1c8a3e8d4161d3ef42178294041469ee"
-  },
-  "capture_renderer": {
-    "name": "Ghostty",
-    "script_sha256": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
-    "backend_sha256": "5b90cd1c8a94971afaaa54599f372c0b2bec0bf437d475377c416f35311447d6",
-    "compositor_sha256": "52ba5799bbe8f0ef9ca6d4695e328062679001afd97e51562c3d2392e8207bf1",
-    "environment_sha256": "8a7f624b7384f1cd33569bd75588d3828f09643705d8e290c61c7c72bde55e4c"
-  },
-  "kind": "selection",
-  "capture_script_sha256": "bac0c103372e13bbe33913fb8dbb4099e1ac1c0d43b0edfdb8fcd29db1f3cf54",
-  "runtime_states": {
-    "diff_text": true,
-    "diagnostics": 4,
-    "visual": true,
-    "completion": false
+    "lua/flume/palette.lua": "cbe3242ffbb01413e0a46aa54d4b7efd40c36df132df8e8cbed458bbed221753"
   }
 }

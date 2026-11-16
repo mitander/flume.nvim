@@ -23,9 +23,12 @@ environment, changed pixels, or failed capture produces a nonzero exit status. T
 tolerance or automatic approval.
 
 The command prints a temporary HTML report with expected, actual, and visible difference images.
-Capture failures retain partial captures and logs instead. `native.log` retains the parser,
-gopls semantic-token and installed-lualine checker output, including failures before capture.
-CI runs the same command in a separate job and retains its report.
+Failed capture, manifest validation, composition and comparison retain named regular partial
+artifacts under `capture/`, plus container stdout/stderr even if the case log never opened.
+`failure.json` identifies the stage, case or selected cases, exit status or exception, and rejected
+unsafe paths. Retention never follows output symlinks. `native.log` retains the parser, gopls
+semantic-token and installed-lualine checker output. `native-container.log` also covers failures
+before that log opens. CI runs the same command in a separate job and retains its report.
 
 When the source change intentionally requires new captures, update the published images:
 
@@ -65,7 +68,9 @@ unselected captures. Unselected records retain their original input fingerprints
 fingerprints cover the staged source broadly, an unrelated fixture edit can leave historical hashes
 in unselected records even when their pixels are unaffected. Run a full update after the last fixture
 edit when the whole portfolio must describe the finished source. Refresh all palettes when changing
-the environment; do not combine captures from different tool versions.
+the environment. Composition requires identical complete recorded environments across its four
+inputs, including render settings, font checksums, Mesa version and geometry, as well as the current
+build-recipe digest. Matching recipe hashes alone do not establish compatible captures.
 
 Palette/exporter changes still need the generated-extra refresh described in the
 [development commands](DEVELOPMENT.md#regenerate-palette-artifacts). App fixtures consume the
@@ -100,10 +105,11 @@ The environment compiles grammars pinned by nvim-treesitter revision
 are capture dependencies, not requirements for using Flume. The runtime builds both standalone
 TypeScript and TSX from the same locked grammar archive, so native checks cover both file types.
 Each capture records parser revision/checksum, query fingerprints, fixture and theme inputs, image
-checksum, and renderer identity. Rendering inputs include `init.lua`, the canonical palette and
-language mappings. Command registration, reload and sync orchestration live separately in
-`commands.lua`, so changes to that
-plumbing do not invalidate editor capture provenance. Changes to palette application or highlight
+checksum, and renderer identity. Rendering inputs include `init.lua`, the canonical palette,
+language mappings, shared editor fixture and launcher, tape, and scene-geometry source. Integration
+scenes also fingerprint their named theme or sidebar/project fixture. Command registration, reload
+and sync orchestration live separately in `commands.lua`, so changes to that plumbing do not
+invalidate editor capture provenance. Changes to palette application or highlight
 mapping still require new captures. Neovim itself reports readiness before Ghostty captures the
 painted terminal state. The capture fixture reveals the real statusline location field only after
 readiness. No preview label is added to the image.
@@ -151,8 +157,10 @@ window.
 Syntax captures demonstrate Tree-sitter, not LSP semantic highlighting. Use the
 [native language checks](color-system.md#verify-language-highlighting) to inspect provider roles
 independently of screenshots. `scripts/preflight-screenshots.py` checks input and image provenance,
-matching runtimes, and geometry. Its optional OCR checks require Tesseract; the snapshot commands do
-not require host OCR tools.
+matching runtimes, and geometry for all 52 maintained editor captures, including lualine and
+Neo-tree. Geometry is compared across palettes within each scene, not between different viewports.
+`--states` limits validation to the 16 selection, completion and LSP captures. Its optional OCR checks
+require Tesseract. The snapshot commands do not require host OCR tools.
 
 ## Working-state and LSP captures
 
@@ -179,12 +187,17 @@ checksum, observed token counts, and hover content. These images do not qualify 
 versions or languages.
 
 The lualine scene loads the real checksum-locked plugin with the named `flume` theme, with real
-devicons. Its statusline uses the same palette as the editor.
+devicons. Its statusline uses the same palette as the editor. Its sidecar records the installed
+plugin's theme selection, evaluated statusline text and applied lualine highlights after the first
+refresh, rather than treating setup options alone as rendering evidence.
 
 The Neo-tree scene loads the real checksum-locked plugin, Plenary, Nui, and nvim-web-devicons. Its
 isolated project contains staged additions, modified files, and an untracked file. The sidebar
 exercises file icons, directory colors, selection, indent guides, Git indicators, and
-inactive-window surfaces. No host repository or personal file names appear.
+inactive-window surfaces. Its sidecar must include the observed sidebar lines. The `selected_file`
+field names the requested fixture target. The icon and Git-status flags describe fixture configuration,
+not independent assertions about every rendered indicator. No host repository or personal file names
+appear.
 
 | Palette | Selection and diagnostics                               | Completion                        | Tree-sitter + LSP                                                       |
 | ------- | ------------------------------------------------------- | --------------------------------- | ----------------------------------------------------------------------- |
@@ -254,9 +267,10 @@ belongs to the Neovim scenes.
 | Delta       | Added/changed/deleted diff lines and line numbers                                                                 |
 | Pi          | Markdown, code, thinking, and successful/failed tool results                                                      |
 
-The pinned Lazygit 0.55.1 ignores `selectedLineFgColor`, so these images cannot qualify that
-setting. Use the [installed-Lazygit selected-row check](TESTING.md#lazygit-selected-rows) as well
-when changing active-row colors.
+The capture environment pins Lazygit 0.66.2, which supports `selectedLineFgColor` and the
+exported Delta diff renderer. For exporter changes, also run the
+[native installed-link check](TESTING.md#lazygit-selected-rows): a screenshot alone cannot prove
+that loading the theme preserves published bytes.
 
 The palette galleries embed each app's snapshot. Each integration directory also contains
 `contact-sheet.png`, generated and tested from its four raw captures.

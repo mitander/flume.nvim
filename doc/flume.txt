@@ -143,7 +143,8 @@ watch_sync ~                                                *flume-watch_sync*
     does not need dev enabled. Other installations need updated palette source.
     Unchanged palettes do not repaint, even if other shared artifacts change.
     A failed refresh reports an error and can retry when the same set is synced
-    again. Enabled by default. Set to false to ignore runtime updates.
+    again. Enabled by default, including colorscheme-only startup without setup().
+    Set to false to ignore runtime updates.
     Selecting a non-Flume colorscheme stops watching. Call setup() to resume.
 
 follow_sync ~                                              *flume-follow_sync*
@@ -317,7 +318,10 @@ symlink destinations:
 It refuses existing regular files and directories, but replaces existing
 symlinks. Check the destination first if you already manage a theme there.
 Move an existing file aside only after preserving any personal settings.
-For Lazygit, export `LG_CONFIG_FILE` with your personal config first and
+The optional Lazygit extra requires Lazygit 0.66.2+ and Delta on PATH. Upgrade
+before loading it. The fragment uses the current, non-migrating theme and diff
+renderer keys so Lazygit does not rewrite the immutable published theme.
+Export `LG_CONFIG_FILE` with your personal config first and
 `~/.config/lazygit/flume.yml` second so the active fragment is layered.
 
 For LSD filename colors, |:FlumeExtras| prints Fish and Bash/Zsh commands that

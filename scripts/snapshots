@@ -80,7 +80,8 @@ def stage_baselines(directory):
                 shutil.copyfile(source.with_suffix('.json'), directory / f'{case}.json')
 
 
-def container(image, source, output, arguments, extra_mounts=None, entrypoint=None, readonly_output=False):
+def container(image, source, output, arguments, extra_mounts=None, entrypoint=None, readonly_output=False,
+              log_path=None):
     # Cleanup identity is private to the host and unique per concurrently running case.
     cidfile = output.parent / (output.name + '.cid')
     command = ['docker', 'run', '--rm', '--platform', PLATFORM, '--network', 'none', '--read-only',
@@ -93,7 +94,11 @@ def container(image, source, output, arguments, extra_mounts=None, entrypoint=No
     if entrypoint:
         command.extend(['--entrypoint', entrypoint])
     try:
-        return subprocess.run([*command, image, *arguments], timeout=200).returncode
+        if log_path is None:
+            return subprocess.run([*command, image, *arguments], timeout=200).returncode
+        with log_path.open('wb') as log:
+            return subprocess.run([*command, image, *arguments], timeout=200,
+                                  stdout=log, stderr=subprocess.STDOUT).returncode
     finally:
         if cidfile.exists():
             identifier = cidfile.read_text().strip()
@@ -105,7 +110,52 @@ def container(image, source, output, arguments, extra_mounts=None, entrypoint=No
 def capture_case(image, source, directory, case):
     directory.mkdir()
     scene, schema = case.rsplit('-', 1)
-    return container(image, source, directory, ['--app', SCENES[scene]['app'], '--schema', schema, '--scene', scene])
+    return container(image, source, directory, ['--app', SCENES[scene]['app'], '--schema', schema, '--scene', scene],
+                     log_path=directory.parent / f'{case}.container.log')
+
+
+def retain_failure(report: Path, work: Path, cases: list[str], stage: str,
+                   case: str | None, status: int | str, error: str) -> None:
+    """Copy only named regular artifacts, never following container-created links."""
+    retained = report / 'capture'
+    rejected = []
+    if retained.is_symlink() or (retained.exists() and not retained.is_dir()):
+        rejected.append('report/capture')
+        retained = Path(tempfile.mkdtemp(prefix='capture-', dir=report))
+    else:
+        retained.mkdir(exist_ok=True)
+
+    def copy(source: Path, name: str) -> None:
+        if source.is_symlink() or (source.exists() and not source.is_file()):
+            rejected.append(str(source.relative_to(work)))
+        elif source.is_file():
+            replace_file(source, retained / name)
+
+    for selected in cases:
+        directory = work / selected
+        if directory.is_symlink():
+            rejected.append(selected)
+            continue
+        for suffix in ('.png', '-terminal.png', '-previous.png', '.json', '-runtime.json', '.log'):
+            copy(directory / (selected + suffix), selected + suffix)
+        copy(directory / 'manifest.json', selected + '-manifest.json')
+        copy(work / f'{selected}.container.log', f'{selected}.container.log')
+    actual = work / 'actual'
+    if actual.is_symlink():
+        rejected.append('actual')
+    else:
+        for selected in [*cases, *derived_cases(cases)]:
+            for suffix in ('.png', '.json', '-runtime.json', '.log'):
+                copy(actual / (selected + suffix), selected + suffix)
+        copy(actual / 'manifest.json', 'manifest.json')
+    for name in ('composition', 'comparison'):
+        copy(work / f'{name}.container.log', f'{name}.container.log')
+    diagnostic = work / 'failure.json'
+    diagnostic.write_text(json.dumps({
+        'stage': stage, 'case': case, 'cases': cases, 'status': status, 'error': error,
+        'rejected_artifacts': rejected,
+    }, indent=2) + '\n')
+    replace_file(diagnostic, report / 'failure.json')
 
 
 def execute(mode, apps, schemas, scenes=None):
@@ -120,91 +170,123 @@ def execute(mode, apps, schemas, scenes=None):
         work = Path(temporary)
         source, actual, baseline = work / 'source', work / 'actual', work / 'baseline'
         actual.mkdir()
-        stage_source(source, apps)
-        stage_baselines(baseline)
-        image = 'flume-nvim-snapshots:' + environment_digest(source)[:16]
-        cached = subprocess.run(['docker', 'image', 'inspect', image], capture_output=True, timeout=20)
-        if cached.returncode:
-            subprocess.run(['docker', 'build', '--platform', PLATFORM, '-t', image, str(source / 'tests/snapshots')], check=True, timeout=1200)
-        if any(case.startswith('neovim-') for case in cases):
-            if container(image, source, report, ['/repo/tests/snapshots/native.py'], entrypoint='python3'):
-                print(f'Native editor checks failed; log: {report / "native.log"}', file=sys.stderr)
-                return 1
-        captured = {'format_version': 1, 'cases': {}}
-        failed = False
-        capture_errors = {}
-        with ThreadPoolExecutor(max_workers=2) as pool:
-            jobs = {}
-            try:
-                for case in cases:
-                    jobs[pool.submit(capture_case, image, source, work / case, case)] = case
-                for job in as_completed(jobs):
-                    if job.cancelled():
-                        continue
-                    case = jobs[job]
-                    try:
-                        returncode = job.result()
-                    except Exception as error:
-                        # Future failures still own useful logs in their case directory.
-                        capture_errors[case] = f'{type(error).__name__}: {error}'
-                        returncode = 1
-                    if returncode:
-                        failed = True
-                        for pending in jobs:
-                            pending.cancel()
-                    directory = work / case
-                    allowed = {'manifest.json', *(case + suffix for suffix in ('.png', '.json', '-runtime.json', '.log'))}
-                    for file in directory.glob('*'):
-                        if file.name not in allowed:
+        stage, failure_case, status = 'setup', None, 'exception'
+        completed = False
+        requested_cases = cases
+        try:
+            stage_source(source, apps)
+            stage_baselines(baseline)
+            image = 'flume-nvim-snapshots:' + environment_digest(source)[:16]
+            cached = subprocess.run(['docker', 'image', 'inspect', image], capture_output=True, timeout=20)
+            if cached.returncode:
+                subprocess.run(['docker', 'build', '--platform', PLATFORM, '-t', image, str(source / 'tests/snapshots')], check=True, timeout=1200)
+            stage = 'native'
+            if any(case.startswith('neovim-') for case in cases):
+                status = container(image, source, report, ['/repo/tests/snapshots/native.py'], entrypoint='python3',
+                                   log_path=report / 'native-container.log')
+                if status:
+                    print(f'Native editor checks failed; log: {report / "native.log"}', file=sys.stderr)
+                    return 1
+            stage = 'capture'
+            captured = {'format_version': 1, 'cases': {}}
+            failed = False
+            capture_errors = {}
+            capture_statuses = {}
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                jobs = {}
+                try:
+                    for case in cases:
+                        jobs[pool.submit(capture_case, image, source, work / case, case)] = case
+                    for job in as_completed(jobs):
+                        if job.cancelled():
                             continue
-                        if file.is_symlink() or not file.is_file():
-                            raise ValueError(f'Unsafe capture output: {file.name}')
-                        if file.name != 'manifest.json':
-                            shutil.copyfile(file, actual / file.name)
-                    if not failed:
-                        part = read_manifest(directory)
-                        if set(part['cases']) != {case}:
-                            raise ValueError(f'Capture inventory does not match {case}')
-                        captured['cases'].update(part['cases'])
-            finally:
-                for pending in jobs:
-                    pending.cancel()
-                pool.shutdown(wait=True, cancel_futures=True)
-        if failed:
-            shutil.copytree(actual, report / 'capture')
-            (report / 'capture-errors.json').write_text(json.dumps(capture_errors, indent=2) + '\n')
-            print(f'Capture failed; logs: {report / "capture"}', file=sys.stderr)
-            return 1
-        if set(captured['cases']) != set(cases):
-            raise ValueError('Capture inventory does not match the requested snapshots')
-        verify_images(actual, captured, cases)
-        (actual / 'manifest.json').write_text(json.dumps(captured, indent=2, sort_keys=True) + '\n')
-        mounts = [f'type=bind,source={baseline},target=/baseline,readonly', f'type=bind,source={report},target=/report']
-        compose = ['/repo/tests/snapshots/compose.py', '--actual', '/output', '--baseline', '/baseline']
-        compose += [item for case in cases for item in ('--case', case)]
-        if container(image, source, actual, compose, mounts, entrypoint='python3'):
-            return 2
-        expected = [*cases, *derived_cases(cases)]
-        composed = read_manifest(actual)
-        if set(composed['cases']) != set(expected):
-            raise ValueError('Composed inventory does not match the requested snapshots')
-        verify_images(actual, composed, expected)
-        cases = expected
-        comparison = ['/repo/tests/snapshots/compare.py', '--actual', '/output', '--baseline', '/baseline', '--report', '/report']
-        comparison += [item for case in cases for item in ('--case', case)]
-        result = container(image, source, actual, comparison, mounts, entrypoint='python3', readonly_output=True)
-        if result not in (0, 1):
+                        case = jobs[job]
+                        failure_case = case
+                        try:
+                            returncode = job.result()
+                            capture_statuses[case] = returncode
+                        except Exception as error:
+                            # Future failures still own useful logs in their case directory.
+                            capture_errors[case] = f'{type(error).__name__}: {error}'
+                            capture_statuses[case] = 'exception'
+                            returncode = 1
+                        if returncode:
+                            capture_errors.setdefault(case, f'Capture exited with status {returncode}')
+                            failed = True
+                            for pending in jobs:
+                                pending.cancel()
+                        directory = work / case
+                        allowed = {'manifest.json', *(case + suffix for suffix in ('.png', '.json', '-runtime.json', '.log'))}
+                        for file in directory.glob('*'):
+                            if file.name not in allowed:
+                                continue
+                            if file.is_symlink() or not file.is_file():
+                                raise ValueError(f'Unsafe capture output: {file.name}')
+                            if file.name != 'manifest.json':
+                                shutil.copyfile(file, actual / file.name)
+                        if not returncode:
+                            part = read_manifest(directory)
+                            if set(part['cases']) != {case}:
+                                raise ValueError(f'Capture inventory does not match {case}')
+                            verify_images(directory, part, [case])
+                            captured['cases'].update(part['cases'])
+                finally:
+                    for pending in jobs:
+                        pending.cancel()
+                    pool.shutdown(wait=True, cancel_futures=True)
+            if failed:
+                failure_case = next(iter(capture_errors))
+                status = capture_statuses[failure_case]
+                (report / 'capture-errors.json').write_text(json.dumps(capture_errors, indent=2) + '\n')
+                print(f'Capture failed; logs: {report / "capture"}', file=sys.stderr)
+                return 1
+            if set(captured['cases']) != set(cases):
+                raise ValueError('Capture inventory does not match the requested snapshots')
+            verify_images(actual, captured, cases)
+            (actual / 'manifest.json').write_text(json.dumps(captured, indent=2, sort_keys=True) + '\n')
+            mounts = [f'type=bind,source={baseline},target=/baseline,readonly', f'type=bind,source={report},target=/report']
+            compose = ['/repo/tests/snapshots/compose.py', '--actual', '/output', '--baseline', '/baseline']
+            compose += [item for case in cases for item in ('--case', case)]
+            stage, failure_case = 'composition', None
+            status = container(image, source, actual, compose, mounts, entrypoint='python3',
+                               log_path=work / 'composition.container.log')
+            if status:
+                return 2
+            expected = [*cases, *derived_cases(cases)]
+            composed = read_manifest(actual)
+            if set(composed['cases']) != set(expected):
+                raise ValueError('Composed inventory does not match the requested snapshots')
+            verify_images(actual, composed, expected)
+            cases = expected
+            comparison = ['/repo/tests/snapshots/compare.py', '--actual', '/output', '--baseline', '/baseline', '--report', '/report']
+            comparison += [item for case in cases for item in ('--case', case)]
+            stage = 'comparison'
+            result = container(image, source, actual, comparison, mounts, entrypoint='python3', readonly_output=True,
+                               log_path=work / 'comparison.container.log')
+            status = result
+            if result not in (0, 1):
+                return result
+            final = read_manifest(actual)
+            if set(final['cases']) != set(expected):
+                raise ValueError('Final inventory does not match the requested snapshots')
+            verify_images(actual, final, expected)
+            if result:
+                retain_failure(report, work, cases, stage, None, result, 'Comparison found differences')
+            if mode == 'update':
+                stage = 'publication'
+                update_baselines(actual, BASELINES, cases, published_root=ROOT)
+                completed = True
+                print(f'Updated {len(cases)} images. Review the report and Git diff; update is not approval.')
+                return 0
+            completed = True
+            print(f'{len(cases)} images {"match" if result == 0 else "need review"}. Report: {report / "index.html"}')
             return result
-        final = read_manifest(actual)
-        if set(final['cases']) != set(expected):
-            raise ValueError('Final inventory does not match the requested snapshots')
-        verify_images(actual, final, expected)
-        if mode == 'update':
-            update_baselines(actual, BASELINES, cases, published_root=ROOT)
-            print(f'Updated {len(cases)} images. Review the report and Git diff; update is not approval.')
-            return 0
-        print(f'{len(cases)} images {"match" if result == 0 else "need review"}. Report: {report / "index.html"}')
-        return result
+        finally:
+            if not completed:
+                error = sys.exc_info()[1]
+                retain_failure(report, work, requested_cases, stage, failure_case,
+                               'exception' if error else status,
+                               f'{type(error).__name__}: {error}' if error else f'{stage} failed')
 
 
 def main():

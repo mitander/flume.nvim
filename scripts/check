@@ -25,7 +25,7 @@ done
 # Validate documentation and screenshot provenance.
 python3 scripts/check-links.py
 python3 scripts/preflight-screenshots.py --source-only
-python3 scripts/preflight-screenshots.py --states
+python3 scripts/preflight-screenshots.py
 
 # Run Python tests.
 python3 -m unittest discover -s tests -p 'check_whitespace.py'
