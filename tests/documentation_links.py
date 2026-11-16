@@ -62,6 +62,12 @@ class DocumentationLinks(unittest.TestCase):
 
 
 class GalleryNavigation(unittest.TestCase):
+    def test_rust_provider_rules_link_targets_syntax_heading(self):
+        gallery = (ROOT / "docs/languages/rust.md").read_text()
+        owner = (ROOT / "docs/color-system.md").read_text()
+        self.assertIn("[provider rules](../color-system.md#syntax)", gallery)
+        self.assertIn("\n### Syntax\n", owner)
+
     def test_theme_and_language_sections_are_cross_linked(self):
         languages = {
             "go": "Go", "rust": "Rust", "python": "Python",
