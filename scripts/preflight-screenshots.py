@@ -44,12 +44,14 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def theme_inputs(schema: str) -> dict[str, str]:
+def theme_inputs_digest(schema: str) -> str:
     paths = [ROOT / "lua/flume/init.lua", ROOT / "lua/flume/palette.lua"]
     paths += sorted((ROOT / "lua/flume/languages").glob("*.lua"))
     paths += sorted((ROOT / "queries").rglob("*.scm"))
     paths.append(ROOT / f"extras/ghostty/flume-{schema}")
-    return {str(path.relative_to(ROOT)): digest(path) for path in paths}
+    # Hash names as well as bytes so additions, removals and renames invalidate captures.
+    inputs = {str(path.relative_to(ROOT)): digest(path) for path in paths}
+    return hashlib.sha256(json.dumps(inputs, sort_keys=True).encode()).hexdigest()
 
 
 def capture_inputs() -> dict:
@@ -151,7 +153,7 @@ def record(schema: str, language: str, runtime_file: Path, kind: str = "syntax",
         "fixture_sha256": digest(ROOT / "examples" / fixture),
         "renderer_sha256": digest(ROOT / "examples" / renderer),
         "image_sha256": digest(image),
-        "theme_inputs": theme_inputs(schema),
+        "theme_inputs_sha256": theme_inputs_digest(schema),
     }
     metadata['capture_renderer'] = capture_inputs()
     if integration:
@@ -246,7 +248,7 @@ def validate_capture(path: Path) -> tuple[str, str]:
     ):
         if metadata[key] != digest(source):
             raise SystemExit(f"{path.name} has stale {key}; recapture it")
-    if metadata.get("theme_inputs") != theme_inputs(metadata["schema"]):
+    if metadata.get("theme_inputs_sha256") != theme_inputs_digest(metadata["schema"]):
         raise SystemExit(f"{path.name} has stale theme inputs; recapture it")
 
     runtime_identity = {key: metadata[key] for key in ("nvim", "parser", "queries")}

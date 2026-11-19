@@ -318,6 +318,69 @@ class CaptureProvenance(unittest.TestCase):
                     preflight.main()
                 path.write_bytes(original)
 
+    def test_theme_input_membership_changes_invalidate_provenance(self):
+        for name in ('lua/flume/languages/new.lua', 'queries/go/highlights.scm',
+                     'queries/typescript/highlights.scm'):
+            with self.subTest(added=name):
+                source = self.root / name
+                source.parent.mkdir(parents=True, exist_ok=True)
+                source.write_text('; added input\n')
+                with self.assertRaisesRegex(SystemExit, 'stale theme inputs'):
+                    preflight.main()
+                source.unlink()
+                preflight.main()
+
+        for name in ('lua/flume/languages/rust.lua', 'queries/rust/highlights.scm'):
+            with self.subTest(removed=name):
+                source = self.root / name
+                original = source.read_bytes()
+                source.unlink()
+                with self.assertRaisesRegex(SystemExit, 'stale theme inputs'):
+                    preflight.main()
+                source.write_bytes(original)
+                preflight.main()
+
+    def test_theme_digest_includes_input_names(self):
+        before = preflight.theme_inputs_digest('dusk')
+        source = self.root / 'queries/rust/highlights.scm'
+        renamed = source.with_name('injections.scm')
+        source.rename(renamed)
+        self.assertNotEqual(before, preflight.theme_inputs_digest('dusk'))
+        with self.assertRaisesRegex(SystemExit, 'stale theme inputs'):
+            preflight.main()
+
+    def test_query_changes_remain_shared_without_changing_runtime_observations(self):
+        go = self.root / 'assets/screenshots/dusk/go.png'
+        rust = self.root / 'assets/screenshots/dusk/rust.png'
+        observations = {image: json.loads(image.with_suffix('.json').read_text())['queries']
+                        for image in (go, rust)}
+        query = self.root / 'queries/rust/highlights.scm'
+        query.write_text(query.read_text() + '\n; changed\n')
+        for image in (go, rust):
+            with self.subTest(language=image.stem):
+                with self.assertRaisesRegex(SystemExit, 'stale theme inputs'):
+                    preflight.validate_capture(image)
+                self.assertEqual(json.loads(image.with_suffix('.json').read_text())['queries'],
+                                 observations[image])
+        self.assertEqual([query['path'] for query in observations[go]], ['go/highlights.scm'])
+
+    def test_other_palette_terminal_export_does_not_invalidate_capture(self):
+        source = self.root / 'extras/ghostty/flume-opal'
+        source.write_text(source.read_text() + '\n# changed\n')
+        preflight.validate_capture(self.root / 'assets/screenshots/dusk/go.png')
+        with self.assertRaisesRegex(SystemExit, 'stale theme inputs'):
+            preflight.validate_capture(self.root / 'assets/screenshots/opal/go.png')
+
+    def test_legacy_theme_input_lists_require_recapture(self):
+        sidecar = self.root / 'assets/screenshots/dusk/go.json'
+        metadata = json.loads(sidecar.read_text())
+        del metadata['theme_inputs_sha256']
+        metadata['theme_inputs'] = {'queries/rust/highlights.scm':
+                                    preflight.digest(self.root / 'queries/rust/highlights.scm')}
+        sidecar.write_text(json.dumps(metadata))
+        with self.assertRaisesRegex(SystemExit, 'stale theme inputs'):
+            preflight.validate_capture(sidecar.with_suffix('.png'))
+
     def test_each_editor_capture_producer_invalidates_provenance(self):
         for name in ('tests/snapshots/fixtures/neovim.lua', 'tests/snapshots/fixtures/neovim.sh',
                      'tests/snapshots/neovim.tape', 'tests/snapshots/common.py'):
@@ -373,6 +436,9 @@ class CaptureProvenance(unittest.TestCase):
                 self.assertEqual(image.with_suffix('.json').read_bytes(), before)
                 metadata = json.loads(before)
                 self.assertEqual(metadata['editor_integration'], observed)
+                self.assertNotIn('theme_inputs', metadata)
+                self.assertEqual(metadata['theme_inputs_sha256'],
+                                 preflight.theme_inputs_digest('dusk'))
                 for name in ('tests/snapshots/fixtures/neovim.lua', 'tests/snapshots/fixtures/neovim.sh',
                              'tests/snapshots/neovim.tape', 'tests/snapshots/common.py'):
                     self.assertEqual(metadata['capture_renderer']['editor_inputs'][name],
@@ -428,10 +494,10 @@ class CaptureProvenance(unittest.TestCase):
                 preflight.main()
 
     def test_command_changes_do_not_invalidate_theme_provenance(self):
-        before = preflight.theme_inputs("dusk")
+        before = preflight.theme_inputs_digest("dusk")
         commands = self.root / "lua/flume/commands.lua"
         commands.write_text(commands.read_text() + "\n-- command plumbing changed\n")
-        self.assertEqual(before, preflight.theme_inputs("dusk"))
+        self.assertEqual(before, preflight.theme_inputs_digest("dusk"))
         preflight.main()
 
     def test_mixed_runtimes_are_rejected(self):

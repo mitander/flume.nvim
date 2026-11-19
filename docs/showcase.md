@@ -104,12 +104,21 @@ The environment compiles grammars pinned by nvim-treesitter revision
 `4916d6592ede8c07973490d9322f187e07dfefac`, with its matching queries and inherited queries. These
 are capture dependencies, not requirements for using Flume. The runtime builds both standalone
 TypeScript and TSX from the same locked grammar archive, so native checks cover both file types.
-Each capture records parser revision/checksum, query fingerprints, fixture and theme inputs, image
-checksum, and renderer identity. Rendering inputs include `init.lua`, the canonical palette,
-language highlight mappings and query extensions, shared editor fixture and launcher, tape, and
-scene-geometry source. Integration scenes also fingerprint their named theme or sidebar/project
-fixture. Command registration, reload and sync orchestration live separately in `commands.lua`, so
-changes to that plumbing do not invalidate editor capture provenance. Changes to palette application or highlight
+Each capture records parser revision/checksum, observed query fingerprints, fixture and theme
+inputs, image checksum, and renderer identity. `theme_inputs_sha256` is one digest of the names and
+hashes of `init.lua`, the canonical palette, all language highlight mappings, all repository query
+extensions, and that palette's Ghostty export. Adding or removing a mapping or query also changes
+the digest. This shared fingerprint deliberately invalidates every editor scene after a Rust query
+edit, even Go. All mapping modules execute during setup, and the observed highlight-query list
+alone does not cover injection or documentation dependencies. The digest avoids repeating the
+shared file list in every sidecar, without claiming language-local dependencies. The separate
+`queries` list still records the files reported by that scene's real parser, including inherited
+queries.
+
+Other rendering inputs include the shared editor fixture and launcher, tape, and scene-geometry
+source. Integration scenes also fingerprint their named theme or sidebar/project fixture. Command
+registration, reload and sync orchestration live separately in `commands.lua`, so changes to that
+plumbing do not invalidate editor capture provenance. Changes to palette application or highlight
 mapping still require new captures. Neovim itself reports readiness before Ghostty captures the
 painted terminal state. The capture fixture reveals the real statusline location field only after
 readiness. No preview label is added to the image.
