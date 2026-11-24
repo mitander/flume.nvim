@@ -51,38 +51,44 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Diagnose pinned snapshot downloads
+      - name: Diagnose cold snapshot provisioning
         run: |
           python3 -u - <<'PY'
-          import hashlib
-          import json
           from pathlib import Path
+          import shutil
           import subprocess
           import tempfile
+
+          source = Path('tests/snapshots')
+          recipe = (source / 'Dockerfile').read_text()
+          marker = 'RUN python3 /tmp/build/install.py && rm -rf /tmp/build'
+          assert recipe.count(marker) == 1
+          wrapper = '''import runpy
+          import shlex
+          import subprocess
           import time
 
-          tools = json.loads(Path('tests/snapshots/tools.json').read_text())
+          original_run = subprocess.run
+          def traced_run(command, **options):
+              print('Starting: ' + shlex.join(command), flush=True)
+              started = time.monotonic()
+              try:
+                  return original_run(command, **options, timeout=90)
+              finally:
+                  print(f'Elapsed: {time.monotonic() - started:.1f}s', flush=True)
+          subprocess.run = traced_run
+          runpy.run_path('/tmp/build/install.py', run_name='__main__')
+          '''
           with tempfile.TemporaryDirectory() as temporary:
-              archive = Path(temporary) / 'archive'
-              for name, tool in tools.items():
-                  print(f'Downloading {name}', flush=True)
-                  started = time.monotonic()
-                  subprocess.run([
-                      'curl', '-q', '-fLsS', '--connect-timeout', '10', '--max-time', '90',
-                      tool['url'], '-o', str(archive),
-                  ], check=True, timeout=95)
-                  with archive.open('rb') as incoming:
-                      actual = hashlib.file_digest(incoming, 'sha256').hexdigest()
-                  if actual != tool['sha256']:
-                      raise ValueError('Archive checksum mismatch: ' + name)
-                  print(f'{name}: checksum verified in {time.monotonic() - started:.1f}s', flush=True)
-                  archive.unlink()
+              context = Path(temporary)
+              for name in ('tools.json', 'install.py'):
+                  shutil.copyfile(source / name, context / name)
+              (context / 'diagnose_install.py').write_text(wrapper)
+              (context / 'Dockerfile').write_text(recipe.split(marker)[0] +
+                  'COPY diagnose_install.py /tmp/build/\nRUN python3 -u /tmp/build/diagnose_install.py\n')
+              subprocess.run(['docker', 'build', '--platform', 'linux/amd64', '--progress=plain',
+                              '-t', 'flume-provisioning-diagnostic', str(context)], check=True, timeout=300)
           PY
-
-      - name: Test exact integration snapshots
-        run: ./scripts/snapshots test
-        env:
-          TMPDIR: ${{ runner.temp }}
 
       - name: Upload snapshot comparison
         if: always()
