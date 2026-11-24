@@ -51,6 +51,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Diagnose pinned snapshot downloads
+        run: |
+          python3 -u - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import subprocess
+          import tempfile
+          import time
+
+          tools = json.loads(Path('tests/snapshots/tools.json').read_text())
+          with tempfile.TemporaryDirectory() as temporary:
+              archive = Path(temporary) / 'archive'
+              for name, tool in tools.items():
+                  print(f'Downloading {name}', flush=True)
+                  started = time.monotonic()
+                  subprocess.run([
+                      'curl', '-q', '-fLsS', '--connect-timeout', '10', '--max-time', '90',
+                      tool['url'], '-o', str(archive),
+                  ], check=True, timeout=95)
+                  with archive.open('rb') as incoming:
+                      actual = hashlib.file_digest(incoming, 'sha256').hexdigest()
+                  if actual != tool['sha256']:
+                      raise ValueError('Archive checksum mismatch: ' + name)
+                  print(f'{name}: checksum verified in {time.monotonic() - started:.1f}s', flush=True)
+                  archive.unlink()
+          PY
+
       - name: Test exact integration snapshots
         run: ./scripts/snapshots test
         env:
