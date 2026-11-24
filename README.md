@@ -41,7 +41,7 @@ when a new release is tagged, and are installed when you update through lazy.nvi
 existing installation, add this option to your Flume spec, remove any explicit `branch`, `tag` or
 `commit` override, then run `:Lazy update flume.nvim`. If you already track unreleased `master`,
 this can move you back to the latest release. Read that release's documentation before switching.
-For a fixed version and appearance, use an exact tag such as `tag = "v0.2.0"` instead of `version`.
+For a fixed version and appearance, use an exact tag such as `tag = "v0.3.0"` instead of `version`.
 
 To opt into unreleased development changes, replace `version = "*"` with these fields in the same
 spec:
