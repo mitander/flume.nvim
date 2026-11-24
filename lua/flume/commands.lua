@@ -49,22 +49,34 @@ function M.reload(flume, opts)
         reloaded.config.follow_sync = follow_sync
     end, debug.traceback)
     local restored, restore_error
+    local foreign_theme = false
     if not ok then
-        -- A syntax error must not strand the save hook or keep a half-loaded theme.
+        -- Recover source caches, but do not repaint over a theme selected by a callback.
+        foreign_theme = vim.g.colors_name ~= nil and vim.g.colors_name ~= colors_name
         clear_flume_modules()
         for name, module in pairs(previous) do
             package.loaded[name] = module
         end
-        restored, restore_error = xpcall(function()
-            flume.setup(config)
-        end, debug.traceback)
+        if not foreign_theme then
+            restored, restore_error = xpcall(function()
+                flume.setup(config)
+            end, debug.traceback)
+        else
+            -- Fresh setup registered callbacks that still close over its discarded module.
+            M.register(flume)
+        end
         flume.config.follow_sync = follow_sync
     end
     pcall(vim.api.nvim_del_augroup_by_id, probe)
     if not ok then
-        local message = restored and "Flume reload failed; previous theme restored:\n" or "Flume reload failed:\n"
+        local message
+        if foreign_theme then
+            message = "Flume reload failed; active colorscheme preserved:\n"
+        else
+            message = restored and "Flume reload failed; previous theme restored:\n" or "Flume reload failed:\n"
+        end
         message = message .. tostring(err)
-        if not restored then
+        if not foreign_theme and not restored then
             message = message .. "\nPrevious theme could not be reapplied:\n" .. tostring(restore_error)
         end
         vim.notify(message, vim.log.levels.ERROR)

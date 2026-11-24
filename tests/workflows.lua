@@ -885,6 +885,58 @@ if not ok then io.stderr:write(err .. "\n"); vim.cmd("cquit 1") end
         end
     end)
 
+    test("failed development reload preserves a foreign theme selected during setup", function()
+        local original_notify = vim.notify
+        local notices = {}
+        local flume = require("flume")
+        flume.setup({ schema = "dusk", dev = true, watch_sync = true, follow_sync = true })
+        local foreign_highlights
+        local group = vim.api.nvim_create_augroup("FlumeReloadTakeover", { clear = true })
+        vim.api.nvim_create_autocmd("ColorScheme", {
+            group = group,
+            pattern = vim.g.colors_name,
+            once = true,
+            callback = function()
+                vim.cmd.colorscheme("habamax")
+                foreign_highlights = vim.api.nvim_get_hl(0, {})
+            end,
+        })
+        package.preload["flume.dev"] = function()
+            error("injected development-module load failure")
+        end
+        vim.notify = function(message)
+            notices[#notices + 1] = message
+        end
+
+        local ok, err = xpcall(function()
+            equal(flume.reload({ quiet = true }), false, "failed reload reported success")
+            truthy(foreign_highlights, "foreign colorscheme was not selected")
+            equal(vim.g.colors_name, "habamax", "reload recovery replaced the foreign theme")
+            truthy(vim.deep_equal(vim.api.nvim_get_hl(0, {}), foreign_highlights), "recovery repainted highlights")
+            equal(require("flume"), flume, "failed reload did not recover source caches")
+            equal(flume.config.follow_sync, true, "recovery changed the startup preference")
+            for _, name in ipairs({ "FlumeReloadProbe", "FlumeDevReload", "FlumeSyncWatch" }) do
+                equal(pcall(vim.api.nvim_get_autocmds, { group = name }), false, name .. " survived takeover")
+            end
+            equal(#notices, 1, "reload failure was not reported once")
+            truthy(notices[1]:find("injected development-module load failure", 1, true), "reload cause was lost")
+            truthy(notices[1]:find("active colorscheme preserved", 1, true), "notice did not describe recovery")
+
+            package.preload["flume.dev"] = nil
+            vim.cmd("FlumeReload")
+            truthy(require("flume") ~= flume, "user command did not retry the corrected source")
+            equal(require("flume").config.follow_sync, true, "user command retained the discarded module's config")
+        end, debug.traceback)
+
+        package.preload["flume.dev"] = nil
+        vim.api.nvim_del_augroup_by_id(group)
+        vim.notify = original_notify
+        require("flume").setup({ watch_sync = false })
+        if not ok then
+            error(err)
+        end
+    end)
+
     for _, initial_error in ipairs({ "injected initial reload failure", { cause = "injected initial reload failure" } }) do
         test(
             "failed reload recovery reports a " .. type(initial_error) .. " cause and cleans bookkeeping before sync",
